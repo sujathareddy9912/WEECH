@@ -1,0 +1,87 @@
+{
+  "project_info": {
+    "project_number": "708041282700",
+    "firebase_url": "https://weecha-92577-default-rtdb.firebaseio.com",
+    "project_id": "weecha-92577",
+    "storage_bucket": "weecha-92577.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:708041282700:android:293ccb1a0366ba4d2e57a9",
+        "android_client_info": {
+          "package_name": "com.weecha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "708041282700-1ohmppp179ff4nmd1gqdueqka6cfl1df.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.weecha",
+            "certificate_hash": "579a3e55e4f31d9be676909f1c3861bb5847d0a8"
+          }
+        },
+        {
+          "client_id": "708041282700-gr5a0knd0jlqigncki98dni6oe4pvakd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.weecha",
+            "certificate_hash": "1a7fe79799b88f76e08d2a0d7fd28f97e9836cdb"
+          }
+        },
+        {
+          "client_id": "708041282700-rb89mr10udkddad5gjnt96ul8386dij5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.weecha",
+            "certificate_hash": "4edca0b9a0ef8dddf2cec69a86c3deb224ad4e14"
+          }
+        },
+        {
+          "client_id": "708041282700-t3njjhraqe2poo34saoau73loi5ij082.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.weecha",
+            "certificate_hash": "b93df317375e5320db61b0733e23585ccbf618c4"
+          }
+        },
+        {
+          "client_id": "708041282700-ujndil92491mi359bfgss8pt9rcia88i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.weecha",
+            "certificate_hash": "e6c7e25a09609ca2f77f4ff551829709b7de192d"
+          }
+        },
+        {
+          "client_id": "708041282700-0epu75r4oocln0k806gdg94uupril4ru.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVIRK44doxhS5Aa00hJaIuaClrN_7_MGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "708041282700-0epu75r4oocln0k806gdg94uupril4ru.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "708041282700-7ib818vclu9rkukghkcb6equha4sfm74.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.weecha"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

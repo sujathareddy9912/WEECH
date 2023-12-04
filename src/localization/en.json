@@ -1,0 +1,147 @@
+{
+  "common": {
+    "search": "Search",
+    "or": "OR",
+    "sendUpperCase": "SEND",
+    "resendCode": "Resend Code",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "pleaseSelect": "Please Select",
+    "name": "Name",
+    "otp": "OTP"
+  },
+  "landing": {
+    "welcome": "WELCOME",
+    "gladToSeeYou": "Glad to see you",
+    "signIn": "SIGN IN",
+    "signUp": "SIGN UP"
+  },
+  "login": {
+    "Login": "LOGIN",
+    "ForgotPassword": "Forgot Password",
+    "newMember": "New Member",
+    "signUp": "Sign Up",
+    "aggrementDescription": "By signing in you agree to the",
+    "termsCondition": "Terms & Conditions",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "poweredBy": "Powered by",
+    "weecha": "Weecha"
+  },
+  "forgotPassword": {
+    "ForgotPaswordUpperCase": "FORGOT PASSWORD",
+    "confirmUpperCase": "CONFIRM"
+  },
+  "signup": {
+    "signupUpperCase": "SIGN UP",
+    "alreadyMember": "Already a Member",
+    "signIn": "Sign In"
+  },
+  "validation": {
+    "requirePhone": "Please enter phone number.",
+    "validPhone": "Please enter valid phone number.",
+    "requirePassword": "Please enter password.",
+    "validPassword": "Password must contain a minimum of 8 characters, which should include at least 1 uppercase letter, 1 lowercase letter, 1 special character and  1 number to make your password strong.",
+    "requireConfPassword": "Please enter confirm Passoword.",
+    "validConfPassword": "Password and Confirm password must be same.",
+    "requireName": "Please enter name.",
+    "validName": "Please enter valid name.",
+    "dobError": "Please select your date of birth.",
+    "countryError": "Please select country",
+    "aboutError": "Please enter some brief about yourself",
+    "imapeUploadError": "Please upload atleast 3 favourite pics.",
+    "videoUploadError": "Please upload atleast 3 favourite videos.",
+    "uploadProfilePic": "Please upload profile pic."
+  },
+  "editProfile": {
+    "profileSetupUpperCase": "PROFILE SETUP",
+    "editProfileUpperCase": "EDIT PROFILE",
+    "gender": "Gender",
+    "dd_mm_yyyy": "DD-MM-YYYY",
+    "dateOfBirth": "Date of Birth",
+    "country": "Country",
+    "about": "About",
+    "photos": "Photos",
+    "videos": "Videos",
+    "upload_pic_description": "Upload three most favourite picture of you",
+    "upload_video_description": "Upload your best moments captured",
+    "save": "SAVE",
+    "male": "Male",
+    "female": "Female"
+  },
+  "filePicker": {
+    "selectVideo": "SELECT VIDEO",
+    "selectPhoto": "SELECT PHOTO",
+    "takePhoto": "Take Photo",
+    "chooseFromLibrary": "Choose from library",
+    "cancel": "Cancel"
+  },
+  "home": {
+    "trendingLive": "Trending Live",
+    "pkBattle": "PK Battle",
+    "nearBy": "Near By"
+  },
+  "letsGoLive": {
+    "letsGoLive": "Lets Go Live",
+    "addCoverPictuer": "Add Cover Picture",
+    "chooseLiveOption": "Choose Live Option",
+    "tellMeSomething": "Tell me something about you",
+    "interest": "Interest",
+    "maleLive": "Pk Battle Live",
+    "femaleLive": "Live/ Pk Battle Live",
+    "multiRoomLive": "Multi Room Live",
+    "pkbattle": "Private Multiroom",
+    "continue": "Continue",
+    "weechaId": "Weecha ID",
+    "chooseLiveOptionError": "Please select live options",
+    "liveBtn": "Live"
+  },
+  "live": {
+    "saySomething": "Say Something...",
+    "pk": "PK",
+    "level": "LV",
+    "joinedTheLive": "joined the live",
+    "welcomeMessage": "Welcome to Weecha Live Room! Warning: Pornography, vulgarity, violence, juveniles and other related situations are strictly prohibited during the live broadcast. Al system reviews it 24 hours a day. Once violating the regulations, it will be punished severely!",
+    "viewers": "Viewers",
+    "noActiveUsers": "Currently no active users found.",
+    "adminLimit": "You cross the limit of Admins",
+    "removeAdmin": "you need to remove someone from list"
+  },
+  "gift": {
+    "typeSomething": "Type something",
+    "send": "Send",
+    "giftSendError": "Insufficient Balance Please Recharge",
+    "pleaseSelectGift": "Please select some gift before sending."
+  },
+  "liveUsers": {
+    "back": "Back",
+    "viewer": "Viewer"
+  },
+  "discover": {
+    "live": "Live"
+  },
+  "profile": {
+    "profileCaps": "PROFILE",
+    "followingCaps": "FOLLOWING",
+    "unFollow": "UnFollow",
+    "followCaps": "FOLLOW",
+    "friendsCaps": "FRIENDS",
+    "groupCaps": "GROUP",
+    "sentCaps": "Sent",
+    "followersCaps": "FOLLOWERS",
+    "notEnoughDiamonds": "Sorry, Not enough diamonds",
+    "notDiamondsdescription": "Recharge your diamonds to avoid any kind of interruptions",
+    "goBack": "Go Back",
+    "recharge": "Recharge"
+  },
+  "call": {
+    "sendGifts": "Send Gifts"
+  },
+  "chat": {
+    "delete": "Delete",
+    "deleteAll": "Delete All"
+  },
+  "createCall": {
+    "newCall": "NEW CHAT"
+  }
+}

@@ -1,0 +1,6 @@
+<resources>
+<string name="app_name">WeeCha</string>
+<string name="facebook_app_id">900132947295198</string>
+<string name="fb_login_protocol_scheme">fb900132947295198</string>
+<string name="facebook_client_token">b383dc2fa4d97775ffb3430d806859a4</string>
+</resources>

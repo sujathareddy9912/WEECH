@@ -539,6 +539,26 @@ const Signup = props => {
               'signup.signIn',
             )}`}</MyText>
           </MyText>
+
+          <MyText style={styles.bold}>
+            {`${strings('login.aggrementDescription')} `}
+            <MyText
+              onPress={() => props.navigation.navigate('UserAgreement')}
+              style={styles.underline}>{`${strings(
+                'login.termsCondition',
+              )} `}</MyText>
+            <MyText>{`${strings('login.and')} `}</MyText>
+            <MyText
+              onPress={() => props.navigation.navigate('PrivacyPolicy')}
+              style={styles.underline}>
+              {strings('login.privacyPolicy')}
+            </MyText>
+          </MyText>
+          <MyText style={styles.bold}>
+            {`${strings('login.poweredBy')} `}
+            <MyText style={styles.regular}>{strings('login.weecha')}</MyText>
+          </MyText>
+
         </View>
 
         <CountryCodePicker

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {COLORS} from '../Utils/colors';
 import {countryCode, defaultCountry} from '../Utils/countryCode';
@@ -17,6 +17,7 @@ import Icons from './icons';
 import {strings} from '../localization/config';
 import Input from './Input';
 import {FONT_SIZE} from '../Utils/fontFamily';
+import Icon from './Icons/Icon';
 
 const CountryCodePicker = props => {
   const {
@@ -89,11 +90,10 @@ const CountryCodePicker = props => {
         },
         styles['mainContainer'],
       ]}>
-      <TouchableIcon
-        source={Icons.CrossIcon}
-        style={styles.crossIcon}
-        onPress={_closeCountryModal}
-      />
+      <TouchableOpacity style={styles.closeBtn} onPress={_closeCountryModal}>
+        <Icon origin="AntDesign" name="close" color="#000" size={24} />
+      </TouchableOpacity>
+
       <Input
         mainContainer={styles.searchInputContainer}
         textInputStyle={styles.searchInput}
@@ -158,6 +158,15 @@ const styles = StyleSheet.create({
   searchInput: {
     fontSize: FONT_SIZE.MEDIUM,
     paddingVertical: SCREEN_HEIGHT * 0.01,
+  },
+  closeBtn: {
+    padding: 4,
+    alignSelf: 'flex-end',
+    height: 32,
+    width: 32,
+    marginRight: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

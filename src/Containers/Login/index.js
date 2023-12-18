@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Image, NativeModules, Platform, View} from 'react-native';
+import {Image, NativeModules, Platform, View,Text} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import styles from './Styles';
 import CommonActions from '../../Store/Common/Actions';
@@ -13,6 +13,7 @@ import {
   TouchableIcon,
 } from '../../Component/commomComponent';
 import {strings} from '../../localization/config';
+import Icon from '../../Component/Icons/Icon';
 import Icons, {SvgIcon} from '../../Component/icons';
 import CountryCodePicker from '../../Component/countryCodePicker';
 import Input from '../../Component/Input';
@@ -33,6 +34,8 @@ import {
 } from '../../Services/Api/socialLoginServices';
 import {COLORS} from '../../Utils/colors';
 import {isIOS} from '../../Utils/helper';
+import TextInput from '../../Component/TextInput/TextInput';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const {RNTwitterSignIn} = NativeModules;
 const Constants = {
@@ -266,6 +269,18 @@ const Login = props => {
       <KeyboardAwareScroll>
         <View style={styles.mainContainer}>
           <Image source={Icons.WeechaLogoIcon} />
+
+          {/* <TextInput 
+             containerStyle = {{width:'90%',borderRadius:32}}
+             isShowLeftIcon={true} 
+             leftIcon={
+              <TouchableOpacity style={{flexDirection:'row',width:'100%',alignItems:'center',borderRightWidth:2,paddingHorizontal:8}} onPress={_openCountryModal}>
+                 <Icon origin='Ionicons' name ='call' size={18} color={COLORS.BLACK}/>
+                 <Text style={{marginHorizontal:8,fontSize:16}}>{dialCode}</Text>
+                 <Icon origin='AntDesign' name ='caretdown' size={12} color={COLORS.LIGHT_GREY}/>
+              </TouchableOpacity>
+             }
+           /> */}
 
           <Input
             onPhonePress={_openCountryModal}

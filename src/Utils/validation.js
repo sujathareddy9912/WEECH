@@ -60,9 +60,9 @@ export const validateName = name => {
 
 export const isEmpty = (value, errMsg) => {
   if (value) {
-    return null;
+    return {status: true, error: null};
   } else {
-    return errMsg;
+    return {status: false, error: errMsg};
   }
 };
 
@@ -70,7 +70,7 @@ export const validateUserName = (value, errMsg1, errMsg2) => {
   const regex = /^[^\d]+$/;
   name = value ? value.trim() : null;
   if (name && regex.test(name)) {
-    return {status: true, error: ''};
+    return {status: true, error: null};
   }
   return value
     ? {status: false, error: errMsg1}

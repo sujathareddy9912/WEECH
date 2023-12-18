@@ -414,7 +414,6 @@ const ProfileSetup = ({route, navigation}) => {
       // }
     }
 
-    console.log('********',isValid)
 
    if (isValid) _saveProfile();
   };

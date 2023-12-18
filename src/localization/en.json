@@ -37,6 +37,13 @@
     "alreadyMember": "Already a Member",
     "signIn": "Sign In"
   },
+  "placeholder":{
+    "name":"Please enter your name",
+    "gender": "Please select your gender",
+    "dob":"Please select your birth date",
+    "country":"Please select your country",
+    "about":"Please give somthing about yourself"
+  },
   "validation": {
     "requirePhone": "Please enter phone number.",
     "validPhone": "Please enter valid phone number.",

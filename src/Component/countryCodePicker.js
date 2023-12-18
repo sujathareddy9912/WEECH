@@ -31,13 +31,13 @@ const CountryCodePicker = props => {
   const [searchText, setSearch] = useState('');
   const [countryList, setCountryList] = useState(countryCode);
 
-  useEffect(() => {
-    const foundCountry = countryCode.find(item => {
-      if (item['dialCode'] == props?.['countryCode']) return item;
-    });
-    if (foundCountry?.['dialCode']) getCountry(foundCountry);
-    else if (setDefaultValue) getCountry(defaultCountry);
-  }, []);
+  // useEffect(() => {
+  //   const foundCountry = countryCode.find(item => {
+  //     if (item['dialCode'] == props?.['countryCode']) return item;
+  //   });
+  //   if (foundCountry?.['dialCode']) getCountry(foundCountry);
+  //   else if (setDefaultValue) getCountry(defaultCountry);
+  // }, []);
 
   const _renderItem = ({item, index}) => {
     return (

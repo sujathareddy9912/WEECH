@@ -12,6 +12,7 @@ import {enableKeepAwake, getData} from './Utils/helper';
 import {checkPermission} from './Notification/NotificationService';
 
 const App = () => {
+
   useEffect(() => {
     console.error = () => {};
     enableKeepAwake();

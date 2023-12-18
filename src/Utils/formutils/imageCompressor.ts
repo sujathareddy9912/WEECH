@@ -27,7 +27,7 @@ export const compressImage = async (image: ImageData) => {
     });
     value = {
       uri: result,
-      base64: 'data:image/*;base64,' + image.data,
+      base64: `data:image/png;base64,${image.data}`,
       name: image.path.split('/')[image.path.split('/').length - 1],
       type: image.mime,
     };

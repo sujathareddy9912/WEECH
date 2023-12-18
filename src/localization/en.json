@@ -42,7 +42,7 @@
     "gender": "Please select your gender",
     "dob":"Please select your birth date",
     "country":"Please select your country",
-    "about":"Please give somthing about yourself"
+    "about":"Please give brief about yourself"
   },
   "validation": {
     "requirePhone": "Please enter phone number.",

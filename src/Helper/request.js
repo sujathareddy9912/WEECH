@@ -2,11 +2,12 @@ import axios from 'axios';
 // import Config from 'react-native-config';
 // import KeychainServices from '../storage/keychain';
 // import storageKey from '../../constants/storage';
-
+import {LOCAL_KEY} from '../Utils/localStorage';
+import {getData} from '../Utils/helper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const client = axios.create({
-  baseURL: 'https://dummyjson.com/',
+  baseURL: 'https://api.weecha.uk/v1/',
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -16,10 +17,10 @@ const client = axios.create({
 
 client.interceptors.request.use(
   async config => {
-    const token = await AsyncStorage.getItem('accesstoken')
+    const token = await getData(LOCAL_KEY.TOKEN);
     console.log('token to send', token);
     if (token) {
-      config.headers.Authorization = 'Bearer ' + token;
+      config.headers.Authorization = token;
     }
     return config;
   },
@@ -50,12 +51,12 @@ client.interceptors.response.use(
   },
 );
 
-const request = async (options)=> {
-  const onSuccess = (response) => {
+const request = async options => {
+  const onSuccess = response => {
     return response;
   };
 
-  const onError = (error) => {
+  const onError = error => {
     return Promise.reject(error.response || error.message);
   };
 

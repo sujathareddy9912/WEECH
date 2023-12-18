@@ -170,7 +170,7 @@ function AppStack() {
         />
         <Stack.Screen
           name="ProfileSetup"
-          component={ProfileSetup}
+          component={Profile}
           options={{headerShown: false, gestureEnabled: false}}
         />
         <Stack.Screen

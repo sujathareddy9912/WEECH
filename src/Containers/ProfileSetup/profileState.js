@@ -5,6 +5,8 @@ const initialState = {
   country: null,
   about: null,
 
+  loading: false,
+
   //error state
   nameError: null,
   genderError: null,
@@ -19,6 +21,7 @@ const Actions = {
   DOB: 'dob',
   COUNTRY: 'country',
   ABOUT: 'about',
+  LOADING: 'loading',
 
   //Error Actions
   NAMEERROR: 'nameError',
@@ -54,6 +57,11 @@ function Reducer(state, action) {
       return {
         ...state,
         about: action.payload,
+      };
+    case 'loading':
+      return {
+        ...state,
+        loading: action.payload,
       };
     case 'nameError':
       return {

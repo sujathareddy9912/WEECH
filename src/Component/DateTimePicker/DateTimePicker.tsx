@@ -1,4 +1,4 @@
-import React, {FC, useState,forwardRef} from 'react';
+import React, {FC, useState, forwardRef} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,7 +7,7 @@ import {
   ViewStyle,
   TouchableOpacity,
   Text,
-  ColorValue
+  ColorValue,
 } from 'react-native';
 import DatePicker, {DatePickerProps} from 'react-native-date-picker';
 import {COLORS} from '../../Utils/colors';
@@ -35,36 +35,40 @@ type CustomProps = {
 
 type DateTimePickerProps = CustomProps & DatePickerProps;
 
-const DateTimePicker: FC<DateTimePickerProps> = ({
-  type,
-  date,
-  maximumDate,
-  label,
-  labelTextColor,
-  isRequired=false,
-  labelStyle,
-  minuteInterval,
-  btnStyle,
-  disabled,
-  placeholder,
-  placeHolderStyle,
-  inputStyle,
-  rightIcon,
-  onChange,
-  ...rest
-},ref) => {
-    let labelColor = labelTextColor || COLORS.BLACK;
+const DateTimePicker: FC<DateTimePickerProps> = (
+  {
+    type,
+    date,
+    maximumDate,
+    label,
+    labelTextColor,
+    isRequired = false,
+    labelStyle,
+    minuteInterval,
+    btnStyle,
+    disabled,
+    placeholder,
+    placeHolderStyle,
+    inputStyle,
+    rightIcon,
+    onChange,
+    ...rest
+  },
+  ref,
+) => {
+  let labelColor = labelTextColor || COLORS.BLACK;
   const [open, setOpen] = useState<boolean>(false);
-   
+
   return (
     <View style={styles.container} ref={ref}>
-     {label && (
+      {label && (
         <Text style={[styles.label, labelStyle, {color: labelColor}]}>
           {label}
           {isRequired && <Text style={styles.asterick}>*</Text>}
         </Text>
       )}
       <TouchableOpacity
+        disabled={disabled}
         style={[btnStyle]}
         onPress={() => {
           setOpen(true);
@@ -124,16 +128,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  container: { 
-    backgroundColor:COLORS.WHITE,
+  container: {
+    backgroundColor: COLORS.WHITE,
     maxHeight: 60,
-    borderRadius:8,
-    paddingHorizontal:4,
+    borderRadius: 8,
+    paddingHorizontal: 4,
     paddingVertical: 8,
   },
   placeholder: {
     fontSize: 14,
-    lineHeight:20
+    lineHeight: 20,
   },
   asterick: {
     color: COLORS.DARK_RED,

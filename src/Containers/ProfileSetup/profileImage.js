@@ -1,4 +1,4 @@
-import React, {useRef,forwardRef} from 'react';
+import React, {useRef, forwardRef} from 'react';
 import {
   View,
   Text,
@@ -15,7 +15,7 @@ import SelectImageDialog from '../../Component/SelectImageDialog';
 
 const {height, width} = Dimensions.get('window');
 
-function ProfileImage({profilePic, setProfilePic,profileImageError},ref) {
+function ProfileImage({profilePic, setProfilePic, profileImageError}, ref) {
   const profileImageRef = useRef();
   const _closeImagePicker = () => {
     profileImageRef.current.close();
@@ -43,19 +43,18 @@ function ProfileImage({profilePic, setProfilePic,profileImageError},ref) {
 
   return (
     <View
-     ref={ref}
+      ref={ref}
       style={[
         styles.profileImageContainer,
         {
           height: height * 0.4 - useSafeAreaInsets().top,
         },
       ]}>
-      <Text style={styles.header}>PROFILE SETUP</Text>
       <ImageBackground
         source={
           profilePic && profilePic.uri
             ? {uri: profilePic.uri}
-            : require('../../Assets/Images/broadcastCamera.png')
+            : require('../../Assets/Images/avatar.png')
         }
         resizeMode="cover"
         style={styles.profileBgImage}
@@ -88,13 +87,6 @@ function ProfileImage({profilePic, setProfilePic,profileImageError},ref) {
 export default forwardRef(ProfileImage);
 
 const styles = StyleSheet.create({
-  header: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.WHITE,
-    alignSelf: 'center',
-    marginTop: 24,
-  },
   profileImageContainer: {
     width: width,
   },
@@ -126,7 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.DARK_RED,
-    marginTop:16,
-    alignSelf:'center'
+    marginTop: 16,
+    alignSelf: 'center',
   },
 });

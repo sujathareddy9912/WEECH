@@ -1,4 +1,10 @@
-import React, {useState, useReducer, useEffect, useRef} from 'react';
+import React, {
+  useState,
+  useReducer,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react';
 import TextInput from '../../Component/TextInput/TextInput';
 import GradientBackground from '../../Component/GardientBackground/GardientBackGround';
 import {
@@ -10,7 +16,8 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import {useDispatch,useSelector} from 'react-redux';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 import Icon from '../../Component/Icons/Icon';
 import Dropdown from '../../Component/DropDown/DropDown';
 import DateTimePicker from '../../Component/DateTimePicker/DateTimePicker';
@@ -24,7 +31,16 @@ import FavouriteImages from './favouriteImages';
 import FavouriteVideos from './favouriteVideos';
 import {initialState, Actions, Reducer} from './profileState';
 import {isEmpty, validateUserName} from '../../Utils/validation';
-import {GET_PROFILE_REQUEST} from '../../ActionConstant/profile.constant';
+import {
+  GET_PROFILE_REQUEST,
+  UPDATE_PROFILE_REQUEST,
+  UPDATE_PROFILE_RESET,
+} from '../../ActionConstant/profile.constant';
+import {reset} from '../../Navigator/navigationHelper';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import LodingIndicator from '../../Component/LoadingIndicator/LoadingIndicator';
+import {storeData} from '../../Utils/helper';
+import {LOCAL_KEY} from '../../Utils/localStorage';
 
 const {height, width} = Dimensions.get('window');
 
@@ -35,10 +51,22 @@ const genderData = [
 
 function Profile() {
   const appdispatch = useDispatch();
+  const navigation = useNavigation();
+  const route = useRoute();
 
-  const reducer = useSelector((state)=>state.profile);
+  const {isEdit} = route.params;
 
-  console.log(reducer);
+  const reducer = useSelector(state => state.profile);
+
+  const {
+    updateProfileError,
+    updateProfileLoading,
+    updateProfileSuccess,
+    getProfileError,
+    getProfileLoading,
+    getProfileSuccess,
+  } = reducer;
+
 
   const [state, dispatch] = useReducer(Reducer, initialState);
   const scrollRef = useRef();
@@ -61,6 +89,54 @@ function Profile() {
 
   const _openCountryPicker = () => setCountryPicker(true);
   const _closeCountryPicker = () => setCountryPicker(false);
+
+  useEffect(() => {
+    if (isEdit) {
+      appdispatch({type: GET_PROFILE_REQUEST});
+    }
+  }, [isEdit]);
+
+  useEffect(() => {
+    dispatch({
+      type: Actions.LOADING,
+      payload: getProfileLoading || updateProfileLoading,
+    });
+  }, [getProfileLoading, updateProfileLoading]);
+
+  useEffect(() => {
+    if (updateProfileSuccess) {
+      storeData(LOCAL_KEY.PROFILE_SETUP_STATUS, 'false');
+      isEdit? onPressBack():reset('MainTabNavigation');
+    }
+
+    return () => {
+      appdispatch({type: UPDATE_PROFILE_RESET});
+    };
+  }, [updateProfileSuccess]);
+
+  useEffect(() => {
+    if (getProfileSuccess) {
+      dispatch({type: Actions.NAME, payload: getProfileSuccess.user.name});
+      dispatch({type: Actions.GENDER, payload: getProfileSuccess.user.gender});
+      dispatch({
+        type: Actions.DOB,
+        payload: new Date(getProfileSuccess.user.DateOfBirth),
+      });
+      dispatch({
+        type: Actions.COUNTRY,
+        payload: getProfileSuccess.user.country,
+      });
+      dispatch({type: Actions.ABOUT, payload: getProfileSuccess.user.bio});
+    }
+  }, [getProfileSuccess]);
+
+  useEffect(() => {
+    if (profilePicError) {
+      setProfilePicError(
+        isEmpty(profilePic, strings('validation.uploadProfilePic')).error,
+      );
+    }
+  }, [profilePic]);
 
   useEffect(() => {
     if (state.gender === 'female') {
@@ -93,19 +169,27 @@ function Profile() {
   }, [state.gender]);
 
   const imageValidation = imagesArray => {
-    setUserImagesError(
-      favouriteInfoError(
-        3,
-        imagesArray,
-        strings('validation.imapeUploadError'),
-      ),
-    );
+    if (state.gender === 'female') {
+      setUserImagesError(
+        favouriteInfoError(
+          3,
+          imagesArray,
+          strings('validation.imapeUploadError'),
+        ),
+      );
+    }
   };
 
   const videoValidation = videoArray => {
-    setUserVideosError(
-      favouriteInfoError(3, videoArray, strings('validation.videoUploadError')),
-    );
+    if (state.gender === 'female') {
+      setUserVideosError(
+        favouriteInfoError(
+          3,
+          videoArray,
+          strings('validation.videoUploadError'),
+        ),
+      );
+    }
   };
 
   const handleOnChange = (field, value) => {
@@ -163,11 +247,22 @@ function Profile() {
       : errorMessage;
   };
 
+  const favouriteMedia = media => {
+    let item = [];
+    for (let mediaItem of media) {
+      if (mediaItem.base64) {
+        item.push(mediaItem.base64);
+      }
+    }
+
+    return item;
+  };
+
+  const onPressBack = () => {
+    navigation.goBack();
+  };
+
   const onClickSave = () => {
-
-
-    appdispatch({type:GET_PROFILE_REQUEST});
-
     let aError, piError, pvError;
     const pError = isEmpty(profilePic, strings('validation.uploadProfilePic'));
     const nError = validateUserName(
@@ -225,11 +320,25 @@ function Profile() {
       handleScrollToInput(scrollInPutRef);
       return;
     }
+
+    let userfavoriteImages = favouriteMedia(userImages);
+
+    const requestData = {
+      name: state.name,
+      gender: state.gender,
+      DateOfBirth: state.dob,
+      country: state.country,
+      file: profilePic.base64,
+      multifile: userfavoriteImages,
+      bio: state.about,
+    };
+
+    appdispatch({type: UPDATE_PROFILE_REQUEST, payload: requestData});
   };
 
   const handleScrollToInput = inputRef => {
     if (scrollRef.current && inputRef) {
-      inputRef.current.measure((x, y, width, height, pageX, pageY) => {
+      inputRef.current.measure((y, pageY) => {
         scrollRef.current.scrollTo({y: y + pageY, animated: true});
       });
     }
@@ -237,9 +346,24 @@ function Profile() {
 
   return (
     <GradientBackground>
+      <LodingIndicator visible={state.loading} />
+      {isEdit && (
+        <TouchableOpacity
+          style={[styles.backBtn, {top: useSafeAreaInsets().top}]}
+          onPress={onPressBack}>
+          <Icon
+            origin="AntDesign"
+            name="arrowleft"
+            size={24}
+            color={COLORS.BLACK}
+          />
+        </TouchableOpacity>
+      )}
+
+      {isEdit && <Text style={styles.header}>PROFILE SETUP</Text>}
       <ScrollView ref={scrollRef}>
         <StatusBar barStyle="light-content" />
-        {profilePic && profilePic.uri && (
+        {profilePic && profilePic.uri && isEdit && (
           <ImageBackground
             source={{uri: profilePic.uri}}
             style={styles.blurImage}
@@ -258,6 +382,7 @@ function Profile() {
             <TextInput
               ref={nameRef}
               label={strings(`common.name`)}
+              editable={!isEdit}
               isRequired={true}
               value={state.name}
               placeholder={strings(`placeholder.name`)}
@@ -278,6 +403,7 @@ function Profile() {
             ]}>
             <Dropdown
               ref={genderRef}
+              disabled={isEdit}
               label={strings(`editProfile.gender`)}
               isRequired={true}
               value={state.gender}
@@ -293,6 +419,7 @@ function Profile() {
           <View style={[styles.datePickerContainerStyle, styles.seperator]}>
             <DateTimePicker
               ref={dobRef}
+              disabled={isEdit}
               labelStyle={styles.label}
               isRequired={true}
               placeHolderStyle={styles.placeholder}
@@ -394,6 +521,23 @@ function Profile() {
 export default Profile;
 
 const styles = StyleSheet.create({
+  header: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: COLORS.WHITE,
+    alignSelf: 'center',
+  },
+  backBtn: {
+    position: 'absolute',
+    left: width * 0.03,
+    height: 30,
+    width: 30,
+    borderRadius: 15,
+    backgroundColor: COLORS.WHITE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
+  },
   blurImage: {
     height: height * 0.4,
     width: width,

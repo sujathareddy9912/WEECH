@@ -10,6 +10,7 @@ import {LOGOUT_SUCCESS_ACTION} from '../Redux/Action/type';
 import {reducer as CommonReducer} from './Common/Reducers';
 import loaderReducer from '../Redux/Reducer/loader.Reducer';
 import streamingReducer from '../Redux/Reducer/streaming.Reducer';
+import ProfileReducer from '../Reducer/Profile/profile.reducer';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -27,6 +28,7 @@ const appReducer = combineReducers({
   loaderReducer,
   streamingReducer,
   common: CommonReducer,
+  profile:ProfileReducer
 });
 
 export const rootReducer = (state, action) => {

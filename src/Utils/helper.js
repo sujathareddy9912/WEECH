@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import KeepAwake from 'react-native-keep-awake';
 import {countryCode} from './countryCode';
+import {compressImage} from './formutils/imageCompressor';
 
 const Screen = Dimensions.get('screen');
 
@@ -25,23 +26,32 @@ export const imagePicker = async (mediaType = 'photo', isBase64) => {
       cropping: mediaType == 'video' ? false : true,
       freeStyleCropEnabled: true,
     })
-      .then(image => {
+      .then(async image => {
         const date = new Date();
         const timeStamp = Math.floor(date.getTime() + date.getSeconds() / 2);
         const fileExtension = image.mime.split('/')?.[1];
-        // const fileExtension = image.path.substr(
-        //   image.path.lastIndexOf('.') + 1,
-        // );
+        // resolve({
+        //   uri: image.path,
+        //   type: image.mime,
+        //   width: image.width,
+        //   height: image.height,
+        //   name: `${timeStamp}.${fileExtension}`,
+        //   base64:
+        //     isBase64 && mediaType == 'photo'
+        //       ? `data:image/png;base64,${image.data}`
+        //       : '',
+        // });
+        if (mediaType === 'photo') {
+          response = await compressImage(image);
+        }
+        console.log();
         resolve({
-          uri: image.path,
-          type: image.mime,
+          uri: mediaType === 'photo' ? response.uri : image.path,
+          type: mediaType === 'photo' ? response.type : image.mime,
+          name: `${timeStamp}.${fileExtension}`,
           width: image.width,
           height: image.height,
-          name: `${timeStamp}.${fileExtension}`,
-          base64:
-            isBase64 && mediaType == 'photo'
-              ? `data:image/png;base64,${image.data}`
-              : '',
+          base64: isBase64 && mediaType == 'photo' ? response.base64 : '',
         });
       })
       .catch(err => {
@@ -51,28 +61,30 @@ export const imagePicker = async (mediaType = 'photo', isBase64) => {
 };
 
 export const openCamera = async (mediaType = 'photo', isBase64) => {
+  
   return new Promise((resolve, reject) =>
     ImagePicker.openCamera({
       mediaType: mediaType,
       includeBase64: true,
-      resizeMode: 1000,
-      cropping: true,
+      freeStyleCropEnabled: true,
+      cropping: mediaType == 'video' ? false : true,
     })
-      .then(image => {
+      .then(async image => {
         const date = new Date();
+        let response = null;
         const timeStamp = Math.floor(date.getTime() + date.getSeconds() / 2);
         const fileExtension = image.mime.split('/')?.[1];
-        // const fileExtension = image.path.substr(
-        //   image.path.lastIndexOf('.') + 1,
-        // );
+        if (mediaType === 'photo') {
+          response = await compressImage(image);
+        }
+
         resolve({
-          uri: image.path,
-          type: image.mime,
+          uri: mediaType === 'photo' ? response.uri : image.path,
+          type: mediaType === 'photo' ? response.type : image.mime,
+          width: image.width,
+          height: image.height,
           name: `${timeStamp}.${fileExtension}`,
-          base64:
-            isBase64 && mediaType == 'photo'
-              ? `data:image/png;base64,${image.data}`
-              : '',
+          base64: isBase64 && mediaType == 'photo' ? response.base64 : '',
         });
       })
       .catch(err => {

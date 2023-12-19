@@ -80,6 +80,7 @@ import PaymentMethodDetail from '../Containers/MyProfile/LiveStreamCenter/Paymen
 import StartFaceVerification from '../Containers/MyProfile/LiveStreamCenter/StartFaceVerification';
 import VerificationStatus from '../Containers/MyProfile/LiveStreamCenter/VerificationStatus';
 import BankDetails from '../Containers/MyProfile/BankDetails/BankDetails';
+import Profile from '../Containers/ProfileSetup/profile';
 
 // const rtmAdaptor = new RtmAdapter();
 export const Stack = createStackNavigator();
@@ -169,7 +170,7 @@ function AppStack() {
         />
         <Stack.Screen
           name="ProfileSetup"
-          component={ProfileSetup}
+          component={Profile}
           options={{headerShown: false, gestureEnabled: false}}
         />
         <Stack.Screen

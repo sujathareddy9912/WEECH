@@ -37,6 +37,13 @@
     "alreadyMember": "Already a Member",
     "signIn": "Sign In"
   },
+  "placeholder":{
+    "name":"Please enter your name",
+    "gender": "Please select your gender",
+    "dob":"Please select your birth date",
+    "country":"Please select your country",
+    "about":"Please give brief about yourself"
+  },
   "validation": {
     "requirePhone": "Please enter phone number.",
     "validPhone": "Please enter valid phone number.",
@@ -44,7 +51,8 @@
     "validPassword": "Password must contain a minimum of 8 characters, which should include at least 1 uppercase letter, 1 lowercase letter, 1 special character and  1 number to make your password strong.",
     "requireConfPassword": "Please enter confirm Passoword.",
     "validConfPassword": "Password and Confirm password must be same.",
-    "requireName": "Please enter name.",
+    "requiredGender":"Please select gender.",
+    "requiredName": "Please enter name.",
     "validName": "Please enter valid name.",
     "dobError": "Please select your date of birth.",
     "countryError": "Please select country",

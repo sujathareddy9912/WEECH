@@ -62,6 +62,7 @@
     "react-native-element-dropdown": "^2.1.0",
     "react-native-fast-image": "^8.6.3",
     "react-native-fbsdk-next": "^7.3.3",
+    "react-native-flash-message": "^0.3.1",
     "react-native-flexi-radio-button": "^0.2.2",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-gesture-handler": "^1.10.3",

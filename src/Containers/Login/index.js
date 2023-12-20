@@ -1,10 +1,10 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Image, NativeModules, Platform, View,Text} from 'react-native';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import React, { useEffect, useRef, useState } from 'react';
+import { Image, NativeModules, Platform, View, Text } from 'react-native';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import styles from './Styles';
 import CommonActions from '../../Store/Common/Actions';
-import {HelperService} from '../../Services/Utils/HelperService';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import { HelperService } from '../../Services/Utils/HelperService';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import {
   Button,
   GradientBackground,
@@ -12,9 +12,9 @@ import {
   MyText,
   TouchableIcon,
 } from '../../Component/commomComponent';
-import {strings} from '../../localization/config';
+import { strings } from '../../localization/config';
 import Icon from '../../Component/Icons/Icon';
-import Icons, {SvgIcon} from '../../Component/icons';
+import Icons, { SvgIcon } from '../../Component/icons';
 import CountryCodePicker from '../../Component/countryCodePicker';
 import Input from '../../Component/Input';
 import commonStyle from '../../Component/commonStyles';
@@ -23,28 +23,28 @@ import {
   validateMobileNo,
   validateStatus,
 } from '../../Utils/validation';
-import {defaultCountry} from '../../Utils/countryCode';
-import {loginAction, socialLoginAction} from '../../Redux/Action';
-import {reset} from '../../Navigator/navigationHelper';
+import { defaultCountry } from '../../Utils/countryCode';
+import { loginAction, socialLoginAction } from '../../Redux/Action';
+import { reset } from '../../Navigator/navigationHelper';
 import {
   isAppleLoginSupported,
   loginWithApple,
   loginWithFacebook,
   loginWithGoogle,
 } from '../../Services/Api/socialLoginServices';
-import {COLORS} from '../../Utils/colors';
-import {isIOS} from '../../Utils/helper';
+import { COLORS } from '../../Utils/colors';
+import { isIOS } from '../../Utils/helper';
 import TextInput from '../../Component/TextInput/TextInput';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const {RNTwitterSignIn} = NativeModules;
+const { RNTwitterSignIn } = NativeModules;
 const Constants = {
   //Dev Parse keys
   TWITTER_COMSUMER_KEY: 'eImqV8WOm8ojLHFFoa2AD0TeJ',
   TWITTER_CONSUMER_SECRET: 'lCMVKi6kvpUv8WKDEK7EURYGvgfKWGzRt7rK7hVeMdbm7tTcV1',
 };
 
-const INPUT_TYPES = {PHONE: 'phone', PASSWORD: 'password'};
+const INPUT_TYPES = { PHONE: 'phone', PASSWORD: 'password' };
 
 const Login = props => {
   const dispatch = useDispatch();
@@ -52,7 +52,7 @@ const Login = props => {
     return state;
   });
 
-  const {userLoginList} = state.authReducer;
+  const { userLoginList } = state.authReducer;
 
   const initialState = {
     phone: '',
@@ -66,8 +66,8 @@ const Login = props => {
   };
 
   const [isShowCountryModal, setCountryModal] = useState(false);
-  const [{phone, password, dialCode}, setState] = useState(initialState);
-  const [{phoneError, passwordError}, setError] = useState(initialError);
+  const [{ phone, password, dialCode }, setState] = useState(initialState);
+  const [{ phoneError, passwordError }, setError] = useState(initialError);
   const [fetching, setFetching] = useState(false);
   const [fbFetching, setFbFetching] = useState(false);
   const [googleFetching, setGoogleFetching] = useState(false);
@@ -87,11 +87,11 @@ const Login = props => {
   const socialLogin = async () => {
     try {
       if (userLoginList.user.first_time) {
-        reset('ProfileSetup', {isEdit: false});
+        reset('ProfileSetup', { isEdit: false });
       } else {
         reset('MainTabNavigation');
       }
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const _checkSocialLogin = async () => {
@@ -102,7 +102,7 @@ const Login = props => {
   };
 
   const _getCountry = data => {
-    setState(prevState => ({...prevState, dialCode: data.dialCode}));
+    setState(prevState => ({ ...prevState, dialCode: data.dialCode }));
     _closeCountryModal();
   };
 
@@ -117,11 +117,11 @@ const Login = props => {
 
   const _onChangeText = type => text => {
     if (type == INPUT_TYPES.PHONE) {
-      setState(prevState => ({...prevState, phone: text}));
-      setError(preverror => ({...preverror, phoneError: ''}));
+      setState(prevState => ({ ...prevState, phone: text }));
+      setError(preverror => ({ ...preverror, phoneError: '' }));
     } else if (type == INPUT_TYPES.PASSWORD) {
-      setState(prevState => ({...prevState, password: text}));
-      setError(preverror => ({...preverror, passwordError: ''}));
+      setState(prevState => ({ ...prevState, password: text }));
+      setError(preverror => ({ ...preverror, passwordError: '' }));
     }
   };
 
@@ -142,7 +142,7 @@ const Login = props => {
           phoneError: strings('validation.validPhone'),
         }));
     } else {
-      setError(preverror => ({...preverror, phoneError: ''}));
+      setError(preverror => ({ ...preverror, phoneError: '' }));
     }
     if (!requirePassword(password).status) {
       isValid = false;
@@ -150,7 +150,7 @@ const Login = props => {
         ...preverror,
         passwordError: strings('validation.requirePassword'),
       }));
-    } else setError(preverror => ({...preverror, passwordError: ''}));
+    } else setError(preverror => ({ ...preverror, passwordError: '' }));
 
     if (isValid) _login();
   };
@@ -171,7 +171,7 @@ const Login = props => {
   const facebookLogin = async () => {
     try {
       const resp = await loginWithFacebook();
-      const param = {type: 'facebook', id: resp.socialId};
+      const param = { type: 'facebook', id: resp.socialId };
       dispatch(
         socialLoginAction(param, () => {
           setFbFetching(false);
@@ -249,8 +249,8 @@ const Login = props => {
       setAppleFetching(true);
       const resp = await loginWithApple();
       if (resp?.['user']) {
-        const {user} = resp;
-        const param = {type: 'apple', id: user};
+        const { user } = resp;
+        const param = { type: 'apple', id: user };
         dispatch(
           socialLoginAction(param, () => {
             setAppleFetching(false);
@@ -313,8 +313,8 @@ const Login = props => {
           <MyText
             onPress={_navToForgorPassword}
             style={styles.forgotText}>{`${strings(
-            'login.ForgotPassword',
-          )}?`}</MyText>
+              'login.ForgotPassword',
+            )}?`}</MyText>
 
           <Button
             indicator={fetching}
@@ -352,12 +352,14 @@ const Login = props => {
               onPress={googleLogin}
               color={COLORS.VIOLET}
             />
-            <TouchableIcon
-              indicator={appleFetching}
-              customIcon={SvgIcon.appleIcon()}
-              onPress={appleLogin}
-              color={COLORS.VIOLET}
-            />
+            {isIOS && isAppleLoginSupported ? (
+              <TouchableIcon
+                indicator={appleFetching}
+                customIcon={SvgIcon.appleIcon()}
+                onPress={appleLogin}
+                color={COLORS.VIOLET}
+              />
+            ) : null}
           </View>
 
           <MyText style={[commonStyle.mediumWhite, styles.newMewmber]}>
@@ -371,8 +373,8 @@ const Login = props => {
             <MyText
               onPress={() => props.navigation.navigate('UserAgreement')}
               style={styles.underline}>{`${strings(
-              'login.termsCondition',
-            )} `}</MyText>
+                'login.termsCondition',
+              )} `}</MyText>
             <MyText>{`${strings('login.and')} `}</MyText>
             <MyText
               onPress={() => props.navigation.navigate('PrivacyPolicy')}

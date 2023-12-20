@@ -1,17 +1,19 @@
 import {Provider} from 'react-redux';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Settings} from 'react-native-fbsdk-next';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-
+import {StyleSheet} from 'react-native';
 import {store} from './Store';
 import AppStack from './Navigator';
 import {NativeBaseProvider} from 'native-base';
 import {LOCAL_KEY} from './Utils/localStorage';
 import {enableKeepAwake, getData} from './Utils/helper';
 import {checkPermission} from './Notification/NotificationService';
+import FlashMessage from 'react-native-flash-message';
 
 const App = () => {
+  const refFlashMessage = useRef(null);
 
   useEffect(() => {
     console.error = () => {};
@@ -45,9 +47,22 @@ const App = () => {
             <AppStack />
           </NativeBaseProvider>
         </SafeAreaProvider>
+        <FlashMessage
+          textStyle={[styles.fontNormal, styles.flexWrap]}
+          titleStyle={styles.fontNormal}
+          ref={refFlashMessage}
+          floating={Platform.OS === 'ios'}
+        />
       </Provider>
     </>
   );
 };
 
 export default App;
+
+const styles = StyleSheet.create({
+  flexWrap: {flexWrap: 'wrap'},
+  fontNormal: {
+    fontWeight: '500',
+  },
+});

@@ -6,6 +6,8 @@ import {LOCAL_KEY} from '../Utils/localStorage';
 import {reset} from '../Navigator/navigationHelper';
 import CommonActions from '../Store/Common/Actions';
 import {CommonService} from '../Services/Api/Common';
+import {handleError} from '../Utils/handlErrors';
+import {showMessage} from 'react-native-flash-message';
 import {HelperService, serviceConst} from '../Services/Utils/HelperService';
 import {
   getLanguageSuccessAction,
@@ -33,13 +35,31 @@ export function* sentOtp(param) {
     const resp = yield call(CommonService.sentOtp, param.payload);
     if (resp.code == 200 || resp.code == 201) {
       param.callBack(resp);
-      HelperService.showToast(resp.message);
+      //HelperService.showToast(resp.message);
+      showMessage({
+        description: resp.message,
+        message: 'Send OTP',
+        type: 'success',
+        icon: 'success',
+      });
     } else {
-      HelperService.showToast(resp?.message);
+     // HelperService.showToast(resp?.message);
+     showMessage({
+      description: resp?.message,
+      message: 'Unable to Send OTP',
+      type: 'danger',
+      icon: 'info',
+    });
       param.callBack(false);
     }
   } catch (error) {
-    HelperService.showToast('Something went wrong');
+    showMessage({
+      description: 'Something went wrong',
+      message: 'Unable to Send OTP',
+      type: 'danger',
+      icon: 'info',
+    });
+    //HelperService.showToast('Something went wrong');
     param.callBack(false);
   }
 }
@@ -63,11 +83,12 @@ export function* userLogin({payload, callBack}) {
         reset('MainTabNavigation');
       }
     } else {
-      HelperService.showToast(resp?.message);
+      //HelperService.showToast(resp?.message);
+      handleError(resp?.message);
       callBack();
     }
   } catch (error) {
-    HelperService.showToast('Something went wrong');
+    handleError('Something went wrong');
     callBack();
   }
 }
@@ -95,11 +116,23 @@ export function* userRegistration(param) {
       yield put(loginSuccessAction(data));
       param.callBack(true);
     } else {
-      HelperService.showToast(resp?.message);
+     // HelperService.showToast(resp?.message);
+     showMessage({
+      description: resp?.message,
+      message: 'Signup Error',
+      type: 'danger',
+      icon: 'info',
+    });
       param.callBack(false);
     }
   } catch (error) {
-    HelperService.showToast(error?.message);
+   // HelperService.showToast(error?.message);
+   showMessage({
+    description: error?.message,
+    message: 'Signup Error',
+    type: 'danger',
+    icon: 'info',
+  });
     param.callBack(false);
   }
 }

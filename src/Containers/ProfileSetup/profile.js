@@ -151,13 +151,13 @@ function Profile() {
           strings('validation.imapeUploadError'),
         ),
       );
-      setUserVideosError(
-        favouriteInfoError(
-          3,
-          userVideos,
-          strings('validation.videoUploadError'),
-        ),
-      );
+      // setUserVideosError(
+      //   favouriteInfoError(
+      //     3,
+      //     userVideos,
+      //     strings('validation.videoUploadError'),
+      //   ),
+      // );
     } else {
       dispatch({
         type: Actions.ABOUTERROR,
@@ -169,7 +169,7 @@ function Profile() {
   }, [state.gender]);
 
   const imageValidation = imagesArray => {
-    if (state.gender === 'female') {
+    if (state.gender === 'female' ) {
       setUserImagesError(
         favouriteInfoError(
           3,
@@ -279,11 +279,11 @@ function Profile() {
         userImages,
         strings('validation.imapeUploadError'),
       );
-      pvError = favouriteInfoError(
-        3,
-        userVideos,
-        strings('validation.videoUploadError'),
-      );
+      // pvError = favouriteInfoError(
+      //   3,
+      //   userVideos,
+      //   strings('validation.videoUploadError'),
+      // );
     }
 
     if (
@@ -292,8 +292,9 @@ function Profile() {
       !gError.status ||
       !dError?.status ||
       (aError && !aError?.status) ||
-      piError ||
-      pvError
+      piError 
+      // ||
+      // pvError
     ) {
       setProfilePicError(pError.error);
       dispatch({type: Actions.NAMEERROR, payload: nError});
@@ -301,7 +302,7 @@ function Profile() {
       dispatch({type: Actions.DOBERROR, payload: dError});
       dispatch({type: Actions.ABOUTERROR, payload: aError});
       setUserImagesError(piError);
-      setUserVideosError(pvError);
+     // setUserVideosError(pvError);
 
       const scrollInPutRef = !pError.status
         ? profilePicRef
@@ -382,7 +383,7 @@ function Profile() {
             <TextInput
               ref={nameRef}
               label={strings(`common.name`)}
-              editable={!isEdit}
+             // editable={!isEdit}
               isRequired={true}
               value={state.name}
               placeholder={strings(`placeholder.name`)}
@@ -501,7 +502,7 @@ function Profile() {
             userVideos={userVideos}
             setUserVideos={setUserVideos}
             favouriteVidoesError={userVidoesError}
-            isRequired={state.gender === 'female'}
+            //isRequired={state.gender === 'female'}
             validation={videoValidation}
           />
         </View>

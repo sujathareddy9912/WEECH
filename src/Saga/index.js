@@ -1,6 +1,7 @@
 import * as TYPES from '../Redux/Action/type';
 import {CommonTypes} from '../Store/Common/Actions';
 import {all, takeLatest} from 'redux-saga/effects';
+import ProfileSaga from './ProfileSaga/ProfileSaga';
 
 import {
   followerListSaga,
@@ -212,5 +213,8 @@ export default function* root() {
     takeLatest(TYPES.GET_RECHARGE_AGENCY, getRechargeAgencySaga),
     takeLatest(TYPES.GET_CUSTOMER_SUPPORT_MSG_ACTION, getCustomerMsgsSaga),
     takeLatest(TYPES.GET_CUSTOMER_MSG_SEND_ACTION, getCustomerSendMsgSaga),
+
+    //new
+    ProfileSaga(),
   ]);
 }

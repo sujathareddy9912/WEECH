@@ -56,6 +56,7 @@ import DateTimePicker from '../../Component/datePicker';
 import CountryCodePicker from '../../Component/countryCodePicker';
 import SelectImageDialog from '../../Component/SelectImageDialog';
 import {FONT_FAMILY} from '../../Utils/fontFamily';
+import {validateUserName} from '../../Utils/validation';
 
 const INPUT_TYPES = {NAME: 'name', ABOUT: 'about'};
 const MEDIA_TYPE = {IMAGE: 'photo', VIDEO: 'video'};
@@ -82,7 +83,7 @@ const ProfileSetup = ({route, navigation}) => {
     name: '',
     gender: '',
     genderId: genderData[0].id,
-    dob: '',
+    dob: null,
     country: defaultCountry.name,
     about: '',
     photos: [{}],
@@ -353,23 +354,24 @@ const ProfileSetup = ({route, navigation}) => {
       }));
       return scrollRef.current.scrollToPosition(0, 0);
     } else setError(preverror => ({...preverror, profilePicError: ''}));
-
-    // if (!validateName(name).status) {
-    //   isValid = false;
-    //   if (validateName(name).error == validateStatus.required)
-    //     setError(preverror => ({
-    //       ...preverror,
-    //       nameError: strings('validation.requireName'),
-    //     }));
-    //   else if (validateName(name).error == validateStatus.validateRegEx)
-    //     setError(preverror => ({
-    //       ...preverror,
-    //       nameError: strings('validation.validName'),
-    //     }));
-    //   return scrollRef.current.scrollToPosition(0, 0);
-    // } else setError(preverror => ({...preverror, nameError: ''}));
-
+    if (
+      !validateUserName(
+        name,
+        strings('validation.validName') ,strings('validation.requiredName'),
+      ).status
+    ) {
+      isValid = false;
+      setError(preverror => ({
+        ...preverror,
+        nameError: validateUserName(
+          name,
+          strings('validation.validName') ,strings('validation.requiredName'),
+        ).error,
+      }));
+      return;
+    }
     if (!dob) {
+      alert('rrrrrr');
       isValid = false;
       setError(preverror => ({
         ...preverror,
@@ -402,16 +404,18 @@ const ProfileSetup = ({route, navigation}) => {
           photosError: strings('validation.imapeUploadError'),
         }));
         return scrollRef.current.scrollToEnd();
-      } else if (videos?.length < 3) {
-        isValid = false;
-        setError(preverror => ({
-          ...preverror,
-          photosError: strings('validation.videoUploadError'),
-        }));
       }
+      // else if (videos?.length < 3) {
+      //   isValid = false;
+      //   setError(preverror => ({
+      //     ...preverror,
+      //     photosError: strings('validation.videoUploadError'),
+      //   }));
+      // }
     }
 
-    if (isValid) _saveProfile();
+
+   if (isValid) _saveProfile();
   };
 
   const _saveProfile = () => {
@@ -878,7 +882,7 @@ const ProfileSetup = ({route, navigation}) => {
               ) : null}
               <FilePick
                 onPress={_openImagePicker(MEDIA_TYPE.VIDEO)}
-                isRequired={genderId == 2}
+                //isRequired={genderId == 2}
                 style={styles.fileContainer}
                 title={strings('editProfile.videos')}
                 subtitle={strings('editProfile.upload_video_description')}

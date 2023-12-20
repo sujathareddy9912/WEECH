@@ -59,6 +59,15 @@ const styles = StyleSheet.create({
   underline: {
     textDecorationLine: 'underline',
   },
+  bold: {
+    marginVertical: SCREEN_HEIGHT * 0.01,
+    lineHeight: FONT_SIZE.REGULAR * 2,
+    textAlign: 'center',
+    width: '100%',
+    fontSize: FONT_SIZE.REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_BOLD,
+    color: COLORS.WHITE,
+  },
 });
 
 export default styles;

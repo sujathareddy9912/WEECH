@@ -1,6 +1,6 @@
-import React, {useRef, useState} from 'react';
-import {View, Image, Keyboard} from 'react-native';
-import {useDispatch} from 'react-redux';
+import React, { useRef, useState } from 'react';
+import { View, Image, Keyboard } from 'react-native';
+import { useDispatch } from 'react-redux';
 import {
   Button,
   GradientBackground,
@@ -9,16 +9,16 @@ import {
   Touchable,
 } from '../../Component/commomComponent';
 import CountryCodePicker from '../../Component/countryCodePicker';
-import Icons, {SvgIcon} from '../../Component/icons';
+import Icons, { SvgIcon } from '../../Component/icons';
 import Input from '../../Component/Input';
 import Timer from '../../Component/timer';
-import {strings} from '../../localization/config';
+import { strings } from '../../localization/config';
 import {
   forgotPasswordAction,
   forgotPasswordSendOtpAction,
 } from '../../Redux/Action';
-import {COLORS} from '../../Utils/colors';
-import {defaultCountry} from '../../Utils/countryCode';
+import { COLORS } from '../../Utils/colors';
+import { defaultCountry } from '../../Utils/countryCode';
 import {
   validateConfpassword,
   validateMobileNo,
@@ -69,14 +69,14 @@ const ForgotPassword = props => {
     setState,
   ] = useState(initialState);
   const [
-    {phoneError, otpError, passwordError, confirmPasswordError},
+    { phoneError, otpError, passwordError, confirmPasswordError },
     setError,
   ] = useState(initialError);
   const [isShowCountryModal, setCountryModal] = useState(false);
   const [fetchingOtp, setFetcingOtp] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [passwordShow, setPasswordShow] = useState(false);
-  const [confPasswordShow, setConfirmShow] = useState(false);
+  const [passwordShow, setPasswordShow] = useState(true);
+  const [confPasswordShow, setConfirmShow] = useState(true);
   const [showResendButton, setShowResendButton] = useState(true);
 
   const otpRef = useRef('otpRef');
@@ -88,14 +88,14 @@ const ForgotPassword = props => {
   const _closeCountryModal = () => setCountryModal(false);
 
   const _getCountry = data => {
-    setState(prevState => ({...prevState, dialCode: data.dialCode}));
+    setState(prevState => ({ ...prevState, dialCode: data.dialCode }));
     _closeCountryModal();
   };
 
   const _onChangeText = type => text => {
     if (type == INPUT_TYPES.PHONE) {
-      setState(prevState => ({...prevState, phone: text}));
-      setError(preverror => ({...preverror, phoneError: ''}));
+      setState(prevState => ({ ...prevState, phone: text }));
+      setError(preverror => ({ ...preverror, phoneError: '' }));
     } else if (type == INPUT_TYPES.OTP) {
       if (otpFromBackend) {
         setState(prevState => ({
@@ -104,15 +104,15 @@ const ForgotPassword = props => {
           isVerified: otpFromBackend == text,
         }));
       } else {
-        setState(prevState => ({...prevState, otp: text, isVerified: false}));
+        setState(prevState => ({ ...prevState, otp: text, isVerified: false }));
       }
-      setError(preverror => ({...preverror, otpError: ''}));
+      setError(preverror => ({ ...preverror, otpError: '' }));
     } else if (type == INPUT_TYPES.PASSWORD) {
-      setState(prevState => ({...prevState, password: text}));
-      setError(preverror => ({...preverror, passwordError: ''}));
+      setState(prevState => ({ ...prevState, password: text }));
+      setError(preverror => ({ ...preverror, passwordError: '' }));
     } else if (type == INPUT_TYPES.CONF_PASSWORD) {
-      setState(prevState => ({...prevState, confirmPassword: text}));
-      setError(preverror => ({...preverror, confirmPasswordError: ''}));
+      setState(prevState => ({ ...prevState, confirmPassword: text }));
+      setError(preverror => ({ ...preverror, confirmPasswordError: '' }));
     }
   };
 
@@ -137,7 +137,7 @@ const ForgotPassword = props => {
           ...preverror,
           phoneError: strings('validation.validPhone'),
         }));
-    } else setError(preverror => ({...preverror, phoneError: ''}));
+    } else setError(preverror => ({ ...preverror, phoneError: '' }));
 
     if (isValid) _sendOtp();
   };
@@ -176,7 +176,7 @@ const ForgotPassword = props => {
           ...preverror,
           passwordError: strings('validation.validPassword'),
         }));
-    } else setError(preverror => ({...preverror, passwordError: ''}));
+    } else setError(preverror => ({ ...preverror, passwordError: '' }));
     if (!validateConfpassword(password, confirmPassword).status) {
       isValid = false;
       if (validatePassword(password).error == validateStatus.required)
@@ -192,7 +192,7 @@ const ForgotPassword = props => {
           ...preverror,
           confirmPasswordError: strings('validation.validConfPassword'),
         }));
-    } else setError(preverror => ({...preverror, confirmPasswordError: ''}));
+    } else setError(preverror => ({ ...preverror, confirmPasswordError: '' }));
 
     if (isValid) _forgotPassword();
   };
@@ -276,7 +276,7 @@ const ForgotPassword = props => {
                 {strings('common.resendCode')}
               </MyText>
             ) : (
-              <Timer over={timeOver} style={{color: COLORS.VIOLET}} />
+              <Timer over={timeOver} style={{ color: COLORS.VIOLET }} />
             )}
           </View>
 

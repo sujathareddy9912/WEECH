@@ -24,7 +24,7 @@ const App = () => {
 
     GoogleSignin.configure({
       webClientId:
-        '708041282700-0epu75r4oocln0k806gdg94uupril4ru.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+        '919639847531-u1jkbqg98hqncq8p8rr2fv76tmd51dap.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
       offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
     });
 

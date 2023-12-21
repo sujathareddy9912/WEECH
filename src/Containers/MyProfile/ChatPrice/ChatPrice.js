@@ -17,7 +17,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Actionsheet, Box } from 'native-base';
 import { FONT_FAMILY } from '../../../Utils/fontFamily';
 import { useDispatch, useSelector } from 'react-redux';
-import { profleSetupAction} from '../../../Redux/Action';
+import { profleSetupAction } from '../../../Redux/Action';
 
 const ChatPrice = (props) => {
     const { navigation } = props
@@ -45,16 +45,21 @@ const ChatPrice = (props) => {
                 case '2':
                     param["videoCharge"] = optionSelected
                     break;
+                case '3':
+                    param["privateMultiRoomCharge"] = optionSelected
+                    break;
                 default:
                     break;
             }
-            {isSelected < 3 && dispatch(
-                profleSetupAction(param, (res) => {
-                    setUserData(res?.user)
-                    setIsopen(false)
-                    setOptionSelected('')
-                }),
-            );}
+            {
+                isSelected < 3 && dispatch(
+                    profleSetupAction(param, (res) => {
+                        setUserData(res?.user)
+                        setIsopen(false)
+                        setOptionSelected('')
+                    }),
+                );
+            }
         }
     }
 

@@ -1368,7 +1368,7 @@ const LiveStreaming = ({navigation, route}) => {
 
   return (
     <>
-      <StatusBar backgroundColor={COLORS.STREAM_BACKGROUND} />
+      <StatusBar hidden />
       <SafeArea
         style={[
           styles.container,

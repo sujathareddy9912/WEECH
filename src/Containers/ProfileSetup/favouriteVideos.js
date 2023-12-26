@@ -13,7 +13,7 @@ import {COLORS} from '../../Utils/colors';
 import {imagePicker, openCamera} from '../../Utils/helper';
 import SelectImageDialog from '../../Component/SelectImageDialog';
 import {SvgIcon} from '../../Component/icons';
-import CreateThumbnail from 'react-native-create-thumbnail';
+import { createThumbnail } from 'react-native-create-thumbnail';
 import {strings} from '../../localization/config';
 
 const {height, width} = Dimensions.get('window');
@@ -21,14 +21,15 @@ const {height, width} = Dimensions.get('window');
 function FavouriteVideos({userVideos, setUserVideos, favouriteVidoesError,isRequired,validation},ref) {
   const favouriteVideoRef = useRef();
 
-  async function createThumbnail(file) {
+  async function CreateThumbnail(file) {
     if (file && file.uri) {
       try {
         const response = await createThumbnail({
           url: file.uri,
           timeStamp: 100,
+          format: 'png'
         });
-        console.log('rrrrr', response);
+        return response;
       } catch (error) {
         console.log(error); 
       }
@@ -62,8 +63,8 @@ function FavouriteVideos({userVideos, setUserVideos, favouriteVidoesError,isRequ
   const _takePhoto = async () => {
     try {
       const file = await openCamera('video', true, true);
-      await createThumbnail(file);
-      addImages(file);
+      const thumbnail = await CreateThumbnail(file);
+      addImages({...file,thumbnail:thumbnail.path});
     } catch (error) {
       _closeImagePicker();
     }
@@ -72,8 +73,8 @@ function FavouriteVideos({userVideos, setUserVideos, favouriteVidoesError,isRequ
   const _chooseFromLib = async () => {
     try {
       const file = await imagePicker('video', true, true);
-      createThumbnail(file);
-      addImages(file);
+      const thumbnail = await CreateThumbnail(file);
+      addImages({...file,thumbnail:thumbnail.path});
     } catch (error) {
       _closeImagePicker();
     }
@@ -82,7 +83,7 @@ function FavouriteVideos({userVideos, setUserVideos, favouriteVidoesError,isRequ
     if (item && item?.uri) {
       return (
         <ImageBackground
-          source={require('../../Assets/Images/broadcastCamera.png')}
+          source={{uri: item.thumbnail}}
           style={styles.profilePhotos(index)}
           imageStyle={styles.profilePhotosStyle}>
           <TouchableOpacity

@@ -1812,7 +1812,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
-  agora-react-native-rtm: 8add93d44dc9b24fdf31d48fa7c27c520bdf6da0
+  agora-react-native-rtm: 20cd594088d33caa46c75f2d079efbac62848cec
   AgoraRtcEngine_iOS: 549bb3853d5afb18fabca4197786f39f31141da8
   AgoraRtm_iOS: 595a9fa33a409831e6183396ea8f8bc563918403
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
@@ -1873,8 +1873,8 @@ SPEC CHECKSUMS:
   MLKitVision: 8baa5f46ee3352614169b85250574fde38c36f49
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
-  Permission-LocationAlways: 92bf7638da5852ddba7c29fda18ecd0ac246c813
-  Permission-LocationWhenInUse: 1c1f3c5dc7e33029c0a4a0846b97b4bf89d3244b
+  Permission-LocationAlways: 0704c3bcce11f98f8d6ddf34c49c65893ec64b09
+  Permission-LocationWhenInUse: e1168a583654f1d2d34d3a18c4c6518ce409ad2a
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   razorpay-pod: df3aa440969489d242c40ec606db9a0c7095743f
   RCT-Folly: 0dd9e1eb86348ecab5ba76f910b56f4b5fef3c46
@@ -1888,24 +1888,24 @@ SPEC CHECKSUMS:
   React-jsi: 12913c841713a15f64eabf5c9ad98592c0ec5940
   React-jsiexecutor: 43f2542aed3c26e42175b339f8d37fe3dd683765
   React-jsinspector: 41e58e5b8e3e0bf061fdf725b03f2144014a8fb0
-  react-native-agora: 7147c431a5af7f08dd420478d85c662b5e36efed
+  react-native-agora: c328ef8c381d7b22cc11d1eb298d8ff8a8e7a70d
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
-  react-native-camera: 210a872c84d3aa0982a9223047ef9e743ed694fa
-  react-native-compressor: 2742141c0bd7a5cfc475e4df340a0724b4e90ab4
+  react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
+  react-native-compressor: 232b841da9ad8f047038cc4898a01b97da122054
   react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8
   react-native-create-thumbnail: e022bcdcba8a0b4529a50d3fa1a832ec921be39d
   react-native-date-picker: 55193347d8d0f40948f441ffd4e5db6f0a8fbe13
   react-native-fbsdk-next: 6d497a06fc5c33360f5794b4428a0236789a60e6
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
-  react-native-image-picker: 37d5f6b12d80cd1a43fc10989e8e947214802782
-  react-native-keep-awake: eba3137546b10003361b37c761f6c429b59814ae
-  react-native-netinfo: 52cf0ee8342548a485e28f4b09e56b477567244d
-  react-native-pager-view: fc311e95f8ba2b710deae6cb0a21f2102fb49d99
-  react-native-razorpay: ca1aa3960facc92824227fac18a7aad2c40fb546
-  react-native-safe-area-context: 5b8a418400eb3d8364aa87300e865c0262cc17b9
-  react-native-simple-toast: 4f6a5b31f7a03bace3388fe9477b4db3de221bdd
+  react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
+  react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
+  react-native-netinfo: 30fb89fa913c342be82a887b56e96be6d71201dd
+  react-native-pager-view: da490aa1f902c9a5aeecf0909cc975ad0e92e53e
+  react-native-razorpay: 0272dd684bc9148828c54a72e05059e3e2e8b813
+  react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
+  react-native-simple-toast: 8ee5d23f0b92b935ab7434cdb65159ce12dfb4b7
   react-native-twitter-signin: a51cb87149edc50205af7deb236ba0017567b8f1
-  react-native-video: 79a186e378d327b6c08bc3982c17ef455c6bd75c
+  react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
   React-perflogger: fd28ee1f2b5b150b00043f0301d96bd417fdc339
   React-RCTActionSheet: 7f3fa0855c346aa5d7c60f9ced16e067db6d29fa
   React-RCTAnimation: 2119a18ee26159004b001bc56404ca5dbaae6077
@@ -1920,12 +1920,12 @@ SPEC CHECKSUMS:
   ReactCommon: eafed38eec7b591c31751bfa7494801618460459
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAppleAuthentication: e99eaf3c4c01ad8ecb6125dd6f0cfd98871685b5
-  RNCAsyncStorage: 85e2462877b7f753d5350002967c5017afb2f64c
-  RNCCheckbox: 6d53cdd9e002f01b567f5c9d59662e3517651326
-  RNCClipboard: 015fc6d93f9be18fae5754459c5cf008c9c3dc31
-  RNCMaskedView: 627993e2ddd1ed09c1d540a61c4311cfc507bbe7
-  RNDateTimePicker: cad741dac386f8178bf76e86f0a3c4b22173e0e4
-  RNDeviceInfo: e91e6da9d0fe11b31308bdafee604dd7ff98c49d
+  RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
+  RNCCheckbox: 75255b03e604bbcc26411eb31c4cbe3e3865f538
+  RNCClipboard: 204b94473a99932e314b730a81363e0bf795a60d
+  RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
+  RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
+  RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBAnalytics: 36f7df880647409ecd52e80f89cd3650c4f771e5
   RNFBApp: aecfcdc0964d9bc0c5f7ba05efb50be724d8e8b3
@@ -1937,7 +1937,7 @@ SPEC CHECKSUMS:
   RNGoogleSignin: e64616a4080cf7d83f4b292fad82d174587444e2
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
   RNImageCropPicker: 14fe1c29298fb4018f3186f455c475ab107da332
-  RNPermissions: 3e5bb8afd93c787681bbacbf54d586a6272ecc92
+  RNPermissions: 7043bacbf928eae25808275cfe73799b8f618911
   RNReanimated: 4c2ecfbeaf98cd03abd4f77b2dfe0fa8f418d4fd
   RNScreens: fa9b582d85ae5d62c91c66003b5278458fed7aaa
   RNShare: d82e10f6b7677f4b0048c23709bd04098d5aee6c
@@ -1947,7 +1947,7 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SRSRadialGradient: 8363f6c3ce63636f5ffee74a7016f5c84a6df0a1
   Stripe: e046335ab6e3f25d39f1a55bd98620a85269cffa
-  stripe-react-native: 161f8a7256731f7bac47e6fa8ba6b0b244426a0f
+  stripe-react-native: 2e2dad1734c1c2b71564b66bae4395bfd8419af4
   StripeApplePay: 1aa77f8ec7a6d9463fa8f49ae0672fe59dbf4c73
   StripeCore: fe10c34fb3c9ae18b986913f7e4460e7c653ce93
   StripeFinancialConnections: 6022426894046f26fe21d348da02d83d8a637fb0

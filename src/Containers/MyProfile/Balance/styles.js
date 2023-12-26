@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.WHITE,
     justifyContent: 'space-between',
-    paddingBottom: wp(10),
+    // paddingBottom: wp(10),
   },
   leftComponent: {
     width: wp(8),

@@ -10,6 +10,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {
   Alert,
   FlatList,
+  ScrollView,
   StatusBar,
   Text,
   TouchableOpacity,
@@ -252,7 +253,7 @@ const Balance = ({
             containerStyle={styles.header}
             titleStyle={styles.title}
           />
-          <View style={{justifyContent: 'space-between', flex: 1}}>
+          <ScrollView contentContainerStyle={{ justifyContent: 'space-between', paddingBottom: wp(10) }}>
             <View>
               <View style={styles.inventoryInfo}>
                 <DiamondGold height={26} width={26} />
@@ -310,7 +311,7 @@ const Balance = ({
                 </MyText>
               </MyText>
             </View>
-          </View>
+          </ScrollView>
         </LinearGradient>
       </StripeProvider>
     </>

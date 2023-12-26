@@ -51,8 +51,8 @@ const ChatPrice = (props) => {
                 default:
                     break;
             }
-            {
-                isSelected < 3 && dispatch(
+            {   
+                isSelected < 4 && dispatch(
                     profleSetupAction(param, (res) => {
                         setUserData(res?.user)
                         setIsopen(false)
@@ -151,7 +151,7 @@ const ChatPrice = (props) => {
                 <PriceCard title={'Video Call Price'} subText={'Per Minute'}
                     price={userData?.videoCharge} onEdit={() => onEdit('2')} />
                 <PriceCard title={'Private multiroom entry Price'} subText={'Per Minute'}
-                    price={0} onEdit={() => onEdit('3')} />
+                    price={userData?.privateMultiRoomCharge} onEdit={() => onEdit('3')} />
             </ScrollView>
             <Actionsheet isOpen={isOpen} onClose={closeModal}>
                 <Actionsheet.Content

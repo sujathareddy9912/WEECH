@@ -67,7 +67,6 @@ function Profile() {
     getProfileSuccess,
   } = reducer;
 
-
   const [state, dispatch] = useReducer(Reducer, initialState);
   const scrollRef = useRef();
   const profilePicRef = useRef();
@@ -106,7 +105,7 @@ function Profile() {
   useEffect(() => {
     if (updateProfileSuccess) {
       storeData(LOCAL_KEY.PROFILE_SETUP_STATUS, 'false');
-      isEdit? onPressBack():reset('MainTabNavigation');
+      isEdit ? onPressBack() : reset('MainTabNavigation');
     }
 
     return () => {
@@ -116,6 +115,9 @@ function Profile() {
 
   useEffect(() => {
     if (getProfileSuccess) {
+      setProfilePic({
+        uri: `https://api.weecha.uk/v1/uploads/${getProfileSuccess.user.profile}`,
+      });
       dispatch({type: Actions.NAME, payload: getProfileSuccess.user.name});
       dispatch({type: Actions.GENDER, payload: getProfileSuccess.user.gender});
       dispatch({
@@ -169,7 +171,7 @@ function Profile() {
   }, [state.gender]);
 
   const imageValidation = imagesArray => {
-    if (state.gender === 'female' ) {
+    if (state.gender === 'female') {
       setUserImagesError(
         favouriteInfoError(
           3,
@@ -292,7 +294,7 @@ function Profile() {
       !gError.status ||
       !dError?.status ||
       (aError && !aError?.status) ||
-      piError 
+      piError
       // ||
       // pvError
     ) {
@@ -302,7 +304,7 @@ function Profile() {
       dispatch({type: Actions.DOBERROR, payload: dError});
       dispatch({type: Actions.ABOUTERROR, payload: aError});
       setUserImagesError(piError);
-     // setUserVideosError(pvError);
+      // setUserVideosError(pvError);
 
       const scrollInPutRef = !pError.status
         ? profilePicRef
@@ -383,7 +385,7 @@ function Profile() {
             <TextInput
               ref={nameRef}
               label={strings(`common.name`)}
-             // editable={!isEdit}
+              // editable={!isEdit}
               isRequired={true}
               value={state.name}
               placeholder={strings(`placeholder.name`)}

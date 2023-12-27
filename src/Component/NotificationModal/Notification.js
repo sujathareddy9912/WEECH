@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, FlatList, Image, RefreshControl, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
+import Entypo from 'react-native-vector-icons/Entypo';
 import {SvgIcon} from '../icons';
 import {getAge, SCREEN_HEIGHT} from '../../Utils/helper';
 import {dynamicSize} from '../../Utils/responsive';
@@ -224,7 +224,7 @@ export function NotificationModal(props) {
           <TouchableOpacity
             style={styles.notificationContainer}
             onPress={notificationPress}>
-            <SvgIcon.NotificationRedIcon />
+              <Entypo name={'cross'} color={COLORS.DARK_RED} size={dynamicSize(18)} />
           </TouchableOpacity>
         </TouchableOpacity>
 

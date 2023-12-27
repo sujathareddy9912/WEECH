@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Text,
   Keyboard,
+  ScrollView,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {COLORS} from '../Utils/colors';
@@ -104,6 +105,7 @@ const ReportModal = props => {
         style={{flex: 0.5, width: SCREEN_WIDTH}}
       />
       <View style={styles.container}>
+        <ScrollView>
         <View>
           <MyText style={styles.header}>{'Do you want to complain?'}</MyText>
           <MyText style={styles.subHeader}>{'Type of Complain'}</MyText>
@@ -197,6 +199,7 @@ const ReportModal = props => {
           label={'Report'}
           labelStyle={styles.btntext}
         />
+        </ScrollView>
       </View>
     </View>
   );
@@ -255,7 +258,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.BABY_PINK,
     alignSelf: 'center',
     height: dynamicSize(50),
-    marginTop: dynamicSize(1),
+    marginTop: dynamicSize(30),
     width: dynamicSize(300),
   },
   btntext: {

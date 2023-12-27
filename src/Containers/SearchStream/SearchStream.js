@@ -3,7 +3,7 @@ import React, {useRef, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import {StatusBar, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {StatusBar, Text,View, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 
 import {
   heightPercentageToDP as hp,
@@ -187,7 +187,7 @@ const SearchStream = ({navigation}) => {
                   contentContainerStyle={styles.listCon}
                 />
                 :
-                <Text style={{ color: COLORS.BLACK, textAlign: 'center', marginTop: hp(5) }}>NO DATA FOUND</Text>
+                <Text style={{ color: COLORS.BLACK, textAlign: 'center', marginTop: hp(5) }}>No Data Available</Text>
               }
             </>
         }

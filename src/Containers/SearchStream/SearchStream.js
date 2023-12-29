@@ -3,7 +3,7 @@ import React, {useRef, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import {StatusBar, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {StatusBar, Text,View, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 
 import {
   heightPercentageToDP as hp,
@@ -36,6 +36,7 @@ const SearchStream = ({navigation}) => {
   const [country, setCountry] = useState(null);
   const [fetching, setFetching] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
+  const [isLoading, setLoading] = useState(false);
   const [totalDataCount, UpdateTotalDataCount] = useState(0);
   const [footerIndicator, setFooterIndicator] = useState(false);
   const [pullToRefreshIndicator, setPullToRefreshIndicator] = useState(false);
@@ -45,6 +46,7 @@ const SearchStream = ({navigation}) => {
   const paginationOffset = useRef(0);
 
   const _getLiveUserList = () => {
+    setLoading(true);
     const params = {
       pageNumber: paginationOffset.current,
       searchKey: searchText,
@@ -52,6 +54,7 @@ const SearchStream = ({navigation}) => {
     dispatch(
       getSearchUserAction(params, async data => {
         setSearchResult(data?.data);
+        setLoading(false);
       }),
     );
   };
@@ -172,11 +175,22 @@ const SearchStream = ({navigation}) => {
             <SvgIcon.streamSearch />
           </Touchable>
         </View>
-        <MyList
-          data={searchResult}
-          renderItem={renderItem}
-          contentContainerStyle={styles.listCon}
-        />
+        {
+        isLoading ?
+          <ActivityIndicator color={COLORS.DARK_RED} style={{ marginTop: hp(5) }} />
+          :
+            <>
+              {searchResult?.length ?
+                <MyList
+                  data={searchResult}
+                  renderItem={renderItem}
+                  contentContainerStyle={styles.listCon}
+                />
+                :
+                <Text style={{ color: COLORS.BLACK, textAlign: 'center', marginTop: hp(5) }}>No Data Available</Text>
+              }
+            </>
+        }
       </View>
     </>
   );

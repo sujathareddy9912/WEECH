@@ -16,7 +16,7 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from '../../Component/Icons/Icon';
 import Dropdown from '../../Component/DropDown/DropDown';
@@ -39,8 +39,14 @@ import {
 import {reset} from '../../Navigator/navigationHelper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import LodingIndicator from '../../Component/LoadingIndicator/LoadingIndicator';
-import {storeData} from '../../Utils/helper';
+import {getData, storeData} from '../../Utils/helper';
+import {showMessage} from 'react-native-flash-message';
 import {LOCAL_KEY} from '../../Utils/localStorage';
+import {
+  isDone,
+  setGender,
+  isEdit as actionEdit,
+} from '../../Actions/Profile/profile.actions';
 
 const {height, width} = Dimensions.get('window');
 
@@ -49,12 +55,9 @@ const genderData = [
   {label: 'Female', value: 'female'},
 ];
 
-function Profile() {
+function Profile(props) {
   const appdispatch = useDispatch();
   const navigation = useNavigation();
-  const route = useRoute();
-
-  const {isEdit} = route.params;
 
   const reducer = useSelector(state => state.profile);
 
@@ -65,6 +68,8 @@ function Profile() {
     getProfileError,
     getProfileLoading,
     getProfileSuccess,
+    appgender,
+    isEdit,
   } = reducer;
 
   const [state, dispatch] = useReducer(Reducer, initialState);
@@ -74,20 +79,21 @@ function Profile() {
   const genderRef = useRef();
   const dobRef = useRef();
   const aboutRef = useRef();
-  const userImagesRef = useRef();
-  const userVideosRef = useRef();
+  // const userImagesRef = useRef();
+  // const userVideosRef = useRef();
 
   const [profilePic, setProfilePic] = useState(null);
   const [countryPicker, setCountryPicker] = useState(false);
-  const [userImages, setUserImages] = useState([{}]);
-  const [userVideos, setUserVideos] = useState([{}]);
-
+  const [isSkip, setSkip] = useState(false);
   const [profilePicError, setProfilePicError] = useState(null);
-  const [userImagesError, setUserImagesError] = useState(null);
-  const [userVidoesError, setUserVideosError] = useState(null);
 
   const _openCountryPicker = () => setCountryPicker(true);
   const _closeCountryPicker = () => setCountryPicker(false);
+
+  const jumpToNext = () => {
+    appdispatch(isDone('profile'));
+    props.jumpTo('favouriteImages');
+  };
 
   useEffect(() => {
     if (isEdit) {
@@ -103,10 +109,32 @@ function Profile() {
   }, [getProfileLoading, updateProfileLoading]);
 
   useEffect(() => {
-    if (updateProfileSuccess) {
-      storeData(LOCAL_KEY.PROFILE_SETUP_STATUS, 'false');
-      isEdit ? onPressBack() : reset('MainTabNavigation');
-    }
+    (async () => {
+      if (updateProfileSuccess) {
+        let profileStatus = await getData(LOCAL_KEY.PROFILE_SETUP_STATUS);
+        // profileStatus && isSkip
+        //   ? onPressBack()
+        //   : profileStatus && !isSkip
+        //   ? reset('MainTabNavigation')
+        //   : jumpToNext()
+        // isEdit
+        //   ? isSkip
+        //     ? onPressBack()
+        //     : jumpToNext()
+        //   : reset('MainTabNavigation');
+        if (!isEdit) {
+          isSkip ? reset('MainTabNavigation') : jumpToNext();
+        } else {
+          showMessage({
+            description: updateProfileSuccess?.message,
+            message: 'Profile',
+            type: 'success',
+            icon: 'success',
+          });
+        }
+        storeData(LOCAL_KEY.PROFILE_SETUP_STATUS, 'false');
+      }
+    })();
 
     return () => {
       appdispatch({type: UPDATE_PROFILE_RESET});
@@ -120,6 +148,7 @@ function Profile() {
       });
       dispatch({type: Actions.NAME, payload: getProfileSuccess.user.name});
       dispatch({type: Actions.GENDER, payload: getProfileSuccess.user.gender});
+      appdispatch(setGender(getProfileSuccess.user.gender));
       dispatch({
         type: Actions.DOB,
         payload: new Date(getProfileSuccess.user.DateOfBirth),
@@ -146,13 +175,13 @@ function Profile() {
         type: Actions.ABOUTERROR,
         payload: isEmpty(state.about, strings('validation.aboutError')),
       });
-      setUserImagesError(
-        favouriteInfoError(
-          3,
-          userImages,
-          strings('validation.imapeUploadError'),
-        ),
-      );
+      // setUserImagesError(
+      //   favouriteInfoError(
+      //     3,
+      //     userImages,
+      //     strings('validation.imageUploadError'),
+      //   ),
+      // );
       // setUserVideosError(
       //   favouriteInfoError(
       //     3,
@@ -165,34 +194,34 @@ function Profile() {
         type: Actions.ABOUTERROR,
         payload: null,
       });
-      setUserImagesError(null);
-      setUserVideosError(null);
+      // setUserImagesError(null);
+      // setUserVideosError(null);
     }
   }, [state.gender]);
 
-  const imageValidation = imagesArray => {
-    if (state.gender === 'female') {
-      setUserImagesError(
-        favouriteInfoError(
-          3,
-          imagesArray,
-          strings('validation.imapeUploadError'),
-        ),
-      );
-    }
-  };
+  // const imageValidation = imagesArray => {
+  //   if (state.gender === 'female') {
+  //     setUserImagesError(
+  //       favouriteInfoError(
+  //         3,
+  //         imagesArray,
+  //         strings('validation.imageUploadError'),
+  //       ),
+  //     );
+  //   }
+  // };
 
-  const videoValidation = videoArray => {
-    if (state.gender === 'female') {
-      setUserVideosError(
-        favouriteInfoError(
-          3,
-          videoArray,
-          strings('validation.videoUploadError'),
-        ),
-      );
-    }
-  };
+  // const videoValidation = videoArray => {
+  //   if (state.gender === 'female') {
+  //     setUserVideosError(
+  //       favouriteInfoError(
+  //         3,
+  //         videoArray,
+  //         strings('validation.videoUploadError'),
+  //       ),
+  //     );
+  //   }
+  // };
 
   const handleOnChange = (field, value) => {
     switch (field) {
@@ -210,6 +239,7 @@ function Profile() {
 
       case 'gender':
         dispatch({type: Actions.GENDER, payload: value});
+        appdispatch(setGender(value));
         dispatch({
           type: Actions.GENDERERROR,
           payload: isEmpty(value, strings('validation.requiredGender')),
@@ -228,10 +258,12 @@ function Profile() {
 
       case 'about':
         dispatch({type: Actions.ABOUT, payload: value});
-        dispatch({
-          type: Actions.ABOUTERROR,
-          payload: isEmpty(value, strings('validation.aboutError')),
-        });
+        if (state.gender === 'female') {
+          dispatch({
+            type: Actions.ABOUTERROR,
+            payload: isEmpty(value, strings('validation.aboutError')),
+          });
+        }
         break;
       default:
         break;
@@ -243,29 +275,30 @@ function Profile() {
     _closeCountryPicker();
   };
 
-  const favouriteInfoError = (requiredLength, favouriteItem, errorMessage) => {
-    return favouriteItem && favouriteItem.length > requiredLength
-      ? null
-      : errorMessage;
-  };
+  // const favouriteInfoError = (requiredLength, favouriteItem, errorMessage) => {
+  //   return favouriteItem && favouriteItem.length > requiredLength
+  //     ? null
+  //     : errorMessage;
+  // };
 
-  const favouriteMedia = media => {
-    let item = [];
-    for (let mediaItem of media) {
-      if (mediaItem.base64) {
-        item.push(mediaItem.base64);
-      }
-    }
+  // const favouriteMedia = media => {
+  //   let item = [];
+  //   for (let mediaItem of media) {
+  //     if (mediaItem.base64) {
+  //       item.push(mediaItem.base64);
+  //     }
+  //   }
 
-    return item;
-  };
+  //   return item;
+  // };
 
-  const onPressBack = () => {
-    navigation.goBack();
-  };
+  // const onPressBack = () => {
+  //   appdispatch(actionEdit(false));
+  //   navigation.goBack();
+  // };
 
   const onClickSave = () => {
-    let aError, piError, pvError;
+    let aError;
     const pError = isEmpty(profilePic, strings('validation.uploadProfilePic'));
     const nError = validateUserName(
       state.name,
@@ -276,11 +309,11 @@ function Profile() {
     const gError = isEmpty(state.gender, strings('validation.requiredGender'));
     if (state.gender === 'female') {
       aError = isEmpty(state.about, strings('validation.aboutError'));
-      piError = favouriteInfoError(
-        3,
-        userImages,
-        strings('validation.imapeUploadError'),
-      );
+      // piError = favouriteInfoError(
+      //   3,
+      //   userImages,
+      //   strings('validation.imageUploadError'),
+      // );
       // pvError = favouriteInfoError(
       //   3,
       //   userVideos,
@@ -293,8 +326,9 @@ function Profile() {
       !nError?.status ||
       !gError.status ||
       !dError?.status ||
-      (aError && !aError?.status) ||
-      piError
+      (aError && !aError?.status)
+      // ||
+      // piError
       // ||
       // pvError
     ) {
@@ -303,7 +337,7 @@ function Profile() {
       dispatch({type: Actions.GENDERERROR, payload: gError});
       dispatch({type: Actions.DOBERROR, payload: dError});
       dispatch({type: Actions.ABOUTERROR, payload: aError});
-      setUserImagesError(piError);
+      //setUserImagesError(piError);
       // setUserVideosError(pvError);
 
       const scrollInPutRef = !pError.status
@@ -314,17 +348,13 @@ function Profile() {
         ? genderRef
         : !dError.status
         ? dobRef
-        : !aError.status
-        ? aboutRef
-        : piError
-        ? userImagesRef
-        : userVideosRef;
+        : aboutRef;
 
       handleScrollToInput(scrollInPutRef);
       return;
     }
 
-    let userfavoriteImages = favouriteMedia(userImages);
+    //let userfavoriteImages = favouriteMedia(userImages);
 
     const requestData = {
       name: state.name,
@@ -332,7 +362,7 @@ function Profile() {
       DateOfBirth: state.dob,
       country: state.country,
       file: profilePic.base64,
-      multifile: userfavoriteImages,
+      //multifile: userfavoriteImages,
       bio: state.about,
     };
 
@@ -348,9 +378,10 @@ function Profile() {
   };
 
   return (
-    <GradientBackground>
+    // <GradientBackground>
+    <>
       <LodingIndicator visible={state.loading} />
-      {isEdit && (
+      {/* {isEdit && (
         <TouchableOpacity
           style={[styles.backBtn, {top: useSafeAreaInsets().top}]}
           onPress={onPressBack}>
@@ -363,7 +394,7 @@ function Profile() {
         </TouchableOpacity>
       )}
 
-      {isEdit && <Text style={styles.header}>PROFILE SETUP</Text>}
+      {isEdit && <Text style={styles.header}>PROFILE SETUP</Text>} */}
       <ScrollView ref={scrollRef}>
         <StatusBar barStyle="light-content" />
         {profilePic && profilePic.uri && isEdit && (
@@ -491,7 +522,7 @@ function Profile() {
             )}
           </View>
 
-          <FavouriteImages
+          {/* <FavouriteImages
             ref={userImagesRef}
             userImages={userImages}
             setUserImages={setUserImages}
@@ -506,18 +537,36 @@ function Profile() {
             favouriteVidoesError={userVidoesError}
             //isRequired={state.gender === 'female'}
             validation={videoValidation}
-          />
+          /> */}
         </View>
         <Button
           // indicator={updoadingDetails}
-          onPress={onClickSave}
+          onPress={() => {
+            setSkip(false);
+            onClickSave();
+          }}
           buttonStyle={styles.buttonStyle}
           isDark
-          label={strings('editProfile.save')}
+          label={isEdit ? 'Save' : 'Continue'}
           width={'75%'}
         />
+
+        {appgender !== 'female' && !isEdit && (
+          <Button
+            onPress={() => {
+              setSkip(true);
+              onClickSave();
+            }}
+            buttonStyle={styles.buttonStyle}
+            isDark
+            label={'Save and Skip'}
+            width={'75%'}
+          />
+        )}
       </ScrollView>
-    </GradientBackground>
+
+      {/* </GradientBackground> */}
+    </>
   );
 }
 
@@ -525,10 +574,11 @@ export default Profile;
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '700',
     color: COLORS.WHITE,
     alignSelf: 'center',
+    marginBottom: 16,
   },
   backBtn: {
     position: 'absolute',
@@ -585,7 +635,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     alignSelf: 'center',
-    marginVertical: height * 0.05,
+    marginTop: height * 0.05,
   },
   error: {
     fontSize: 14,

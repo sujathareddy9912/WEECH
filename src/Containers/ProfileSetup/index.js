@@ -401,7 +401,7 @@ const ProfileSetup = ({route, navigation}) => {
         isValid = false;
         setError(preverror => ({
           ...preverror,
-          photosError: strings('validation.imapeUploadError'),
+          photosError: strings('validation.imageUploadError'),
         }));
         return scrollRef.current.scrollToEnd();
       }

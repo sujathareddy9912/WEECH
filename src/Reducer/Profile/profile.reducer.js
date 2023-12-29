@@ -6,6 +6,20 @@ import {
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_ERROR,
   UPDATE_PROFILE_RESET,
+  GET_PROFILE_IMAGE_LOADING,
+  GET_PROFILE_IMAGE_SUCCESS,
+  GET_PROFILE_IMAGE_ERROR,
+  UPDATE_PROFILE_IMAGE_LOADING,
+  UPDATE_PROFILE_IMAGE_SUCCESS,
+  UPDATE_PROFILE_IMAGE_ERROR,
+  UPDATE_PROFILE_IMAGE_RESET,
+  UPDATE_PROFILE_VIDEO_LOADING,
+  UPDATE_PROFILE_VIDEO_SUCCESS,
+  UPDATE_PROFILE_VIDEO_ERROR,
+  UPDATE_PROFILE_VIDEO_RESET,
+  SET_GENDER,
+  IS_EDIT,
+  IS_DONE,
 } from '../../ActionConstant/profile.constant';
 
 const initalState = {
@@ -16,6 +30,22 @@ const initalState = {
   updateProfileLoading: false,
   updateProfileSuccess: null,
   updateProfileError: null,
+
+  getProfileImageLoading: false,
+  getProfileImageSuccess: null,
+  getProfileImageError: null,
+
+  updateProfileImageLoading: false,
+  updateProfileImageSuccess: null,
+  updateProfileImageError: null,
+
+  updateProfileVideoLoading: false,
+  updateProfileVideoSuccess: null,
+  updateProfileVideoError: null,
+
+  appgender: null,
+  isEdit: false,
+  isDone: [],
 };
 
 export default function ProfileReducer(state = initalState, {type, payload}) {
@@ -32,6 +62,34 @@ export default function ProfileReducer(state = initalState, {type, payload}) {
       return updateProfileSuccess(state, payload);
     case UPDATE_PROFILE_ERROR:
       return updateProfileError(state, payload);
+    case GET_PROFILE_IMAGE_LOADING:
+      return getProfileImageLoading(state);
+    case GET_PROFILE_IMAGE_SUCCESS:
+      return getProfileImageSuccess(state, payload);
+    case GET_PROFILE_IMAGE_ERROR:
+      return getProfileImageError(state, payload);
+    case UPDATE_PROFILE_IMAGE_LOADING:
+      return updateProfileImageLoading(state);
+    case UPDATE_PROFILE_IMAGE_SUCCESS:
+      return updateProfileImageSuccess(state, payload);
+    case UPDATE_PROFILE_IMAGE_ERROR:
+      return updateProfileImageError(state, payload);
+    case UPDATE_PROFILE_VIDEO_LOADING:
+      return updateProfileVideoLoading(state);
+    case UPDATE_PROFILE_VIDEO_SUCCESS:
+      return updateProfileVideoSuccess(state, payload);
+    case UPDATE_PROFILE_VIDEO_ERROR:
+      return updateProfileVideoError(state, payload);
+    case UPDATE_PROFILE_IMAGE_RESET:
+      return updateProfileImageReset(state);
+    case UPDATE_PROFILE_VIDEO_RESET:
+      return updateProfileVideoReset(state);
+    case SET_GENDER:
+      return setProfileGender(state, payload);
+    case IS_DONE:
+      return setIsDone(state, payload);
+    case IS_EDIT:
+      return setIsEdit(state, payload);
     case UPDATE_PROFILE_RESET:
       return updateProfileReset(state);
     default:
@@ -80,6 +138,104 @@ const updateProfileError = (state, payload) => ({
   updateProfileSuccess: null,
   updateProfileError: payload,
 });
+
+const getProfileImageLoading = state => ({
+  ...state,
+  getProfileImageLoading: true,
+  getProfileImageSuccess: null,
+  getProfileImageError: null,
+});
+
+const getProfileImageSuccess = (state, payload) => ({
+  ...state,
+  getProfileImageLoading: false,
+  getProfileImageSuccess: payload,
+  getProfileImageError: null,
+});
+
+const getProfileImageError = (state, payload) => ({
+  ...state,
+  getProfileImageLoading: false,
+  getProfileImageSuccess: null,
+  getProfileImageError: payload,
+});
+
+const updateProfileImageLoading = state => ({
+  ...state,
+  updateProfileImageLoading: true,
+  updateProfileImageSuccess: null,
+  updateProfileImageError: null,
+});
+
+const updateProfileImageSuccess = (state, payload) => ({
+  ...state,
+  updateProfileImageLoading: false,
+  updateProfileImageSuccess: payload,
+  updateProfileImageError: null,
+});
+
+const updateProfileImageError = (state, payload) => ({
+  ...state,
+  updateProfileImageLoading: false,
+  updateProfileImageSuccess: null,
+  updateProfileImageError: payload,
+});
+
+const updateProfileVideoLoading = state => ({
+  ...state,
+  updateProfileVideoLoading: true,
+  updateProfileVideoSuccess: null,
+  updateProfileVideoError: null,
+});
+
+const updateProfileVideoSuccess = (state, payload) => ({
+  ...state,
+  updateProfileVideoLoading: false,
+  updateProfileVideoSuccess: payload,
+  updateProfileVideoError: null,
+});
+
+const updateProfileVideoError = (state, payload) => ({
+  ...state,
+  updateProfileVideoLoading: false,
+  updateProfileVideoSuccess: null,
+  updateProfileVideoError: payload,
+});
+
+const updateProfileImageReset = state => ({
+  ...state,
+  updateProfileImageLoading: false,
+  updateProfileImageSuccess: null,
+  updateProfileImageError: null,
+});
+
+const updateProfileVideoReset = state => ({
+  ...state,
+  updateProfileVideoLoading: false,
+  updateProfileVideoSuccess: null,
+  updateProfileVideoError: null,
+});
+
+const setProfileGender = (state, payload) => ({
+  ...state,
+  appgender: payload,
+});
+
+const setIsEdit = (state, payload) => ({
+  ...state,
+  isEdit: payload,
+});
+
+const setIsDone = (state, payload) => {
+  let done = [...state.isDone];
+  if (!done.includes(payload)) {
+    done.push(payload);
+  }
+  return {
+    ...state,
+    isDone: [...done],
+  };
+};
 
 const updateProfileReset = state => ({
   ...state,

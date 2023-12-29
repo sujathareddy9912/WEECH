@@ -1,4 +1,4 @@
-import React, {useRef, forwardRef} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,21 +7,128 @@ import {
   StyleSheet,
   Dimensions,
   FlatList,
+  ScrollView,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import LodingIndicator from '../../Component/LoadingIndicator/LoadingIndicator';
 import Icon from '../../Component/Icons/Icon';
 import {COLORS} from '../../Utils/colors';
 import {imagePicker, openCamera} from '../../Utils/helper';
 import SelectImageDialog from '../../Component/SelectImageDialog';
 import {SvgIcon} from '../../Component/icons';
 import {strings} from '../../localization/config';
+import {Button} from '../../Component/commomComponent';
+import {reset} from '../../Navigator/navigationHelper';
+import {showMessage} from 'react-native-flash-message';
+import {
+  UPDATE_PROFILE_IMAGE_REQUEST,
+  GET_PROFILE_IMAGE_REQUEST,
+  UPDATE_PROFILE_IMAGE_RESET,
+} from '../../ActionConstant/profile.constant';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  isEdit as actionEdit,
+  isDone as actionDone,
+} from '../../Actions/Profile/profile.actions';
+import {handleError} from '../../Utils/handlErrors';
 
 const {height, width} = Dimensions.get('window');
 
-function FavouriteImages(
-  {userImages, setUserImages, favouriteImagesError, isRequired, validation},
-  ref,
-) {
+function FavouriteImages(props) {
   const favouriteImageRef = useRef();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const reducer = useSelector(state => state.profile);
+
+  const {
+    appgender,
+    updateProfileImageLoading,
+    updateProfileImageSuccess,
+    updateProfileImageError,
+    getProfileImageLoading,
+    getProfileImageSuccess,
+    getProfileImageError,
+    getProfileSuccess,
+    isEdit,
+    isDone,
+  } = reducer;
+
+  const [userImages, setUserImages] = useState([{}]);
+  const [userImagesError, setUserImagesError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [isSkip, setSkip] = useState(false);
+
+  useEffect(() => {
+    if (getProfileSuccess) {
+      dispatch({
+        type: GET_PROFILE_IMAGE_REQUEST,
+        payload: getProfileSuccess.user._id,
+      });
+    }
+  }, [getProfileSuccess]);
+
+  useEffect(() => {
+    setLoading(updateProfileImageLoading || getProfileImageLoading);
+  }, [updateProfileImageLoading]);
+
+  useEffect(() => {
+    if (getProfileImageSuccess) {
+      let images = getProfileImageSuccess.user.map(item => ({
+        uri: `https://api.weecha.uk/v1/uploads/${item.file}`,
+      }));
+      images = [...images, userImages];
+      setUserImages(images);
+    }
+  }, [getProfileImageSuccess]);
+
+  useEffect(() => {
+    if (updateProfileImageSuccess) {
+      if (isEdit) {
+        showMessage({
+          description: updateProfileImageSuccess.message,
+          message: 'Upload Image',
+          type: 'success',
+          icon: 'success',
+        });
+        dispatch({
+          type: GET_PROFILE_IMAGE_REQUEST,
+          payload: getProfileSuccess?.user._id,
+        });
+      } else {
+        isSkip ? saveAndSkip() : jumpToNext();
+      }
+    }
+
+    return () => {
+      dispatch({type: UPDATE_PROFILE_IMAGE_RESET});
+    };
+  }, [updateProfileImageSuccess]);
+
+  useEffect(() => {
+    if (updateProfileImageError) {
+      handleError(updateProfileImageError.error.message);
+    }
+  }, [updateProfileImageError]);
+
+  const saveAndSkip = () => {
+    if (isDone?.includes('profile')) {
+      reset('MainTabNavigation');
+    } else {
+      showMessage({
+        duration: 6000,
+        description: 'Complete Profile',
+        message: 'Please fill the "Profile Details"',
+        type: 'info',
+        icon: 'info',
+      });
+    }
+  };
+
+  const jumpToNext = () => {
+    dispatch(actionDone('favouriteImages'));
+    props.jumpTo('favouriteVideos');
+  };
 
   function _openImagePicker() {
     favouriteImageRef.current.open();
@@ -31,10 +138,42 @@ function FavouriteImages(
     favouriteImageRef.current.close();
   };
 
+  const favouriteInfoError = (requiredLength, favouriteItem, errorMessage) => {
+    return favouriteItem && favouriteItem.length > requiredLength
+      ? null
+      : errorMessage;
+  };
+
+  const favouriteMedia = media => {
+    let item = [];
+    for (let mediaItem of media) {
+      if (mediaItem.base64) {
+        item.push(mediaItem.base64);
+      }
+    }
+
+    return item;
+  };
+
+  const imageValidation = imagesArray => {
+    const count = appgender === 'female' ? 3 : 1;
+    setUserImagesError(
+      favouriteInfoError(
+        count,
+        imagesArray,
+        strings(
+          appgender === 'female'
+            ? 'validation.imageUploadError '
+            : 'validation.imageMaleUploadError',
+        ),
+      ),
+    );
+  };
+
   const addImages = file => {
     let images = [...userImages];
     images.unshift(file);
-    validation(images);
+    imageValidation(images);
     setUserImages(images);
     _closeImagePicker();
   };
@@ -42,7 +181,7 @@ function FavouriteImages(
   function removeImages(index) {
     let images = [...userImages];
     images.splice(index, 1);
-    validation(images);
+    imageValidation(images);
     setUserImages(images);
     _closeImagePicker();
   }
@@ -64,6 +203,43 @@ function FavouriteImages(
       _closeImagePicker();
     }
   };
+
+  const onPressBack = () => {
+    dispatch(actionEdit(false));
+    navigation.goBack();
+  };
+
+  const onClickSave = () => {
+    const count = appgender === 'female' ? 3 : 1;
+    const piError = favouriteInfoError(
+      count,
+      userImages,
+      strings(
+        appgender === 'female'
+          ? 'validation.imageUploadError'
+          : 'validation.imageMaleUploadError',
+      ),
+    );
+
+    if (piError) {
+      setUserImagesError(piError);
+      return;
+    }
+
+    setUserImagesError(null);
+
+    let userfavoriteImages = favouriteMedia(userImages);
+
+    const uploadImagesRequest = {
+      files: userfavoriteImages,
+    };
+
+    dispatch({
+      type: UPDATE_PROFILE_IMAGE_REQUEST,
+      payload: uploadImagesRequest,
+    });
+  };
+
   const _renderImages = ({item, index}) => {
     if (item && item?.uri) {
       return (
@@ -96,43 +272,106 @@ function FavouriteImages(
     }
   };
   return (
-    <View style={styles.seperator} ref={ref}>
-      <Text style={styles.title}>
-        {strings('editProfile.photos')}
-        {isRequired && <Text style={styles.asterick}>*</Text>}
-      </Text>
-      <Text style={styles.subtitle}>
-        {strings('editProfile.upload_pic_description')}
-      </Text>
+    <>
+      {/* <GradientBackground>
+       
+        <TouchableOpacity
+          style={[styles.backBtn, {top: useSafeAreaInsets().top}]}
+          onPress={onPressBack}>
+          <Icon
+            origin="AntDesign"
+            name="arrowleft"
+            size={24}
+            color={COLORS.BLACK}
+          />
+        </TouchableOpacity>
+        <Text style={styles.header}>Favourite Images</Text> */}
+      <LodingIndicator visible={loading} />
+      <ScrollView>
+        <View style={styles.seperator}>
+          {/* <Text style={styles.title}>
+            {strings('editProfile.photos')}
+            {gender === 'female' && <Text style={styles.asterick}>*</Text>}
+          </Text> */}
+          <Text style={styles.subtitle}>
+            {strings('editProfile.upload_pic_description')}
+          </Text>
 
-      {favouriteImagesError && (
-        <Text style={styles.error}>{favouriteImagesError}</Text>
-      )}
-      {userImages && userImages.length > 0 && (
-        <FlatList
-          data={userImages}
-          keyExtractor={(item, index) => `${item}_${index}`}
-          renderItem={_renderImages}
-          numColumns={3}
+          {userImagesError && (
+            <Text style={styles.error}>{userImagesError}</Text>
+          )}
+          {userImages && userImages.length > 0 && (
+            <FlatList
+              data={userImages}
+              keyExtractor={(item, index) => `${item}_${index}`}
+              renderItem={_renderImages}
+              numColumns={3}
+              scrollEnabled={false}
+            />
+          )}
+          <SelectImageDialog
+            key="imageRef"
+            isVideo={false}
+            ref={favouriteImageRef}
+            onPressTakePhoto={_takePhoto}
+            onPressChooseFromLibrary={_chooseFromLib}
+            onPressCancel={_closeImagePicker}
+          />
+        </View>
+        <Button
+          // indicator={updoadingDetails}
+          onPress={() => {
+            setSkip(false);
+            onClickSave();
+          }}
+          buttonStyle={styles.buttonStyle}
+          isDark
+          label={isEdit ? 'Save' : 'Continue'}
+          width={'75%'}
         />
-      )}
-      <SelectImageDialog
-        key="imageRef"
-        isVideo={false}
-        ref={favouriteImageRef}
-        onPressTakePhoto={_takePhoto}
-        onPressChooseFromLibrary={_chooseFromLib}
-        onPressCancel={_closeImagePicker}
-      />
-    </View>
+
+        {appgender !== 'female' && !isEdit && (
+          <Button
+            onPress={() => {
+              setSkip(true);
+              onClickSave();
+            }}
+            buttonStyle={styles.buttonStyle}
+            isDark
+            label={'Save and Skip'}
+            width={'75%'}
+          />
+        )}
+      </ScrollView>
+      {/* </GradientBackground> */}
+    </>
   );
 }
 
-export default forwardRef(FavouriteImages);
+export default FavouriteImages;
 
 const styles = StyleSheet.create({
+  header: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.WHITE,
+    alignSelf: 'center',
+    marginBottom: 16,
+  },
+  backBtn: {
+    position: 'absolute',
+    left: width * 0.03,
+    height: 30,
+    width: 30,
+    borderRadius: 15,
+    backgroundColor: COLORS.WHITE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
+  },
   seperator: {
     marginTop: height * 0.03,
+    paddingHorizontal: width * 0.03,
   },
   profilePhotos: index => ({
     height: width * 0.3,
@@ -181,5 +420,9 @@ const styles = StyleSheet.create({
     color: COLORS.DARK_RED,
     fontSize: 14,
     fontWeight: '600',
+  },
+  buttonStyle: {
+    alignSelf: 'center',
+    marginTop: height * 0.05,
   },
 });

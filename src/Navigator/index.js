@@ -80,7 +80,10 @@ import PaymentMethodDetail from '../Containers/MyProfile/LiveStreamCenter/Paymen
 import StartFaceVerification from '../Containers/MyProfile/LiveStreamCenter/StartFaceVerification';
 import VerificationStatus from '../Containers/MyProfile/LiveStreamCenter/VerificationStatus';
 import BankDetails from '../Containers/MyProfile/BankDetails/BankDetails';
+import TabViewExample from '../Containers/ProfileSetup/ProfileTab';
 import Profile from '../Containers/ProfileSetup/profile';
+import FavouriteImages from '../Containers/ProfileSetup/favouriteImages';
+import FavouriteVideos from '../Containers/ProfileSetup/favouriteVideos';
 
 // const rtmAdaptor = new RtmAdapter();
 export const Stack = createStackNavigator();
@@ -170,7 +173,7 @@ function AppStack() {
         />
         <Stack.Screen
           name="ProfileSetup"
-          component={Profile}
+          component={TabViewExample}
           options={{headerShown: false, gestureEnabled: false}}
         />
         <Stack.Screen
@@ -436,6 +439,16 @@ function AppStack() {
         <Stack.Screen
           name="BankDetails"
           component={BankDetails}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="FavouriteImages"
+          component={FavouriteImages}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="FavouriteVideos"
+          component={FavouriteVideos}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -57,7 +57,9 @@
     "dobError": "Please select your date of birth.",
     "countryError": "Please select country",
     "aboutError": "Please enter some brief about yourself",
-    "imapeUploadError": "Please upload atleast 3 favourite pics.",
+    "imageMaleUploadError": "Please upload atleast 1 favourite pics.",
+    "imageUploadError": "Please upload atleast 3 favourite pics.",
+    "videoMaleUploadError": "Please upload atleast 1 favourite videos.",
     "videoUploadError": "Please upload atleast 3 favourite videos.",
     "uploadProfilePic": "Please upload profile pic."
   },

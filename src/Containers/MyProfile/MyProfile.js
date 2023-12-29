@@ -50,6 +50,7 @@ import AristocracyIcon from '../../Assets/Icons/Aristocracy.svg';
 import {MyText, Touchable} from '../../Component/commomComponent';
 import SelectImageDialog from '../../Component/SelectImageDialog';
 import HostRegistrationIcon from '../../Assets/Icons/HostRegistration.svg';
+import {isEdit} from '../../Actions/Profile/profile.actions';
 
 const LINEARCOLOR = [COLORS.PINK, COLORS.BACKGROUND_COLOR_BLUE];
 const LISTITEMS = [
@@ -261,7 +262,10 @@ const MyProfile = props => {
   const rightHeaderComponent = (
     <Touchable
       style={styles.rightHeaderComponent}
-      onPress={() => navigation.navigate('ProfileSetup', {isEdit: true})}>
+      onPress={() => {
+        dispatch(isEdit(true));
+        navigation.navigate('ProfileSetup');
+      }}>
       <Entypo name={'pencil'} color={COLORS.BLACK} size={wp(5)} />
       <MyText style={styles.edit}>Edit</MyText>
     </Touchable>

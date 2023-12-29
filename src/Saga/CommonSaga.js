@@ -177,7 +177,7 @@ export function* updateUserProfile(param) {
     const resp = yield call(CommonService.updateUserProfile, payload);
 
     if (resp && resp.code == 200) {
-      storeData(LOCAL_KEY.PROFILE_SETUP_STATUS, 'false');
+     // storeData(LOCAL_KEY.PROFILE_SETUP_STATUS, 'false');
       yield put(CommonActions.updateUserProfileSuccess(resp));
       callBack(resp);
     } else {

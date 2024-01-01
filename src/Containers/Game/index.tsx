@@ -16,10 +16,15 @@ interface gameListProps {
   id: number;
 }
 
-const Game: FC = () => {
+interface gameProps {
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Game: FC<gameProps> = ({visible = false, setVisible}) => {
   const data: gameListProps[] = [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}];
   const [isPlaying, setPlaying] = useState<boolean>(false);
-  const [isVisible, setVisible] = useState<boolean>(true);
+  // const [isVisible, setVisible] = useState<boolean>(visible);
 
   const _renderGameList: ListRenderItem<gameListProps> = ({item}) => {
     return (
@@ -35,7 +40,7 @@ const Game: FC = () => {
   };
 
   return (
-    <Modal transparent visible={isVisible}>
+    <Modal transparent visible={visible}>
       <View
         style={[
           styles.container,

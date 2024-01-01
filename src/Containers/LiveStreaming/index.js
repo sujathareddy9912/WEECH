@@ -6,6 +6,7 @@ import database from '@react-native-firebase/database';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import Game from '../Game';
 
 import {
   View,
@@ -227,6 +228,8 @@ const LiveStreaming = ({navigation, route}) => {
   const [todayEarning, UpdateTodayEarning] = useState(
     route?.params?.todayEarning,
   );
+
+  const [showGames,setShowGames] = useState(false);
 
   const BROAD_OPTIONS = [
     `${isAdmin ? 'Remove Admin' : 'Make Admin'}`,
@@ -1726,7 +1729,7 @@ const LiveStreaming = ({navigation, route}) => {
                         {strings('live.pk')}
                       </MyText>
                     </Touchable>
-                    <TouchableIcon customIcon={<SvgIcon.BlueGame />} />
+                    <TouchableIcon customIcon={<SvgIcon.BlueGame />}  onPress = {()=>setShowGames(true)}/>
                   </>
                 )}
               </View>
@@ -1828,7 +1831,7 @@ const LiveStreaming = ({navigation, route}) => {
 
                   {!isBroadcaster && !isKeyboardShow ? (
                     <View style={styles.subBottomChatRowContainer}>
-                      <TouchableIcon customIcon={<SvgIcon.BlueGame />} />
+                      <TouchableIcon customIcon={<SvgIcon.BlueGame />}  onPress = {()=>setShowGames(true)}/>
                       <TouchableIcon
                         onPress={_fetchGiftList}
                         customIcon={<SvgIcon.SmallGiftIcon />}
@@ -2192,6 +2195,7 @@ const LiveStreaming = ({navigation, route}) => {
           </View>
         </Actionsheet.Content>
       </Actionsheet>
+      <Game visible={showGames} setVisible={setShowGames}/>
     </>
   );
 };

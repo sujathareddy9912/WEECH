@@ -72,7 +72,7 @@ function TabViewExample() {
                 {route.title}
               </Animated.Text>
 
-              {appgender === 'female' &&
+              {appgender === 'female' && !isEdit &&
                 index !== i &&
                 !isDone?.includes(route.key) && (
                   <View style={{position: 'absolute', right: 8, top: 16}}>

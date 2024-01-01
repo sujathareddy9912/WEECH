@@ -24,6 +24,7 @@ import {
   UPDATE_PROFILE_IMAGE_REQUEST,
   GET_PROFILE_IMAGE_REQUEST,
   UPDATE_PROFILE_IMAGE_RESET,
+  GET_PROFILE_IMAGE_RESET
 } from '../../ActionConstant/profile.constant';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -70,7 +71,7 @@ function FavouriteImages(props) {
 
   useEffect(() => {
     setLoading(updateProfileImageLoading || getProfileImageLoading);
-  }, [updateProfileImageLoading]);
+  }, [updateProfileImageLoading, getProfileImageLoading]);
 
   useEffect(() => {
     if (getProfileImageSuccess) {
@@ -81,6 +82,12 @@ function FavouriteImages(props) {
       setUserImages(images);
     }
   }, [getProfileImageSuccess]);
+
+  useEffect(() => {
+    if (getProfileImageError) {
+      handleError(getProfileImageError.error.message);
+    }
+  }, [getProfileImageError]);
 
   useEffect(() => {
     if (updateProfileImageSuccess) {
@@ -101,6 +108,8 @@ function FavouriteImages(props) {
     }
 
     return () => {
+      setUserImages([{}])
+     // dispatch({type: GET_PROFILE_IMAGE_RESET});
       dispatch({type: UPDATE_PROFILE_IMAGE_RESET});
     };
   }, [updateProfileImageSuccess]);
@@ -145,13 +154,18 @@ function FavouriteImages(props) {
   };
 
   const favouriteMedia = media => {
-    let item = [];
+    let item = new FormData();
     for (let mediaItem of media) {
       if (mediaItem.base64) {
-        item.push(mediaItem.base64);
+        const image = {
+          type: mediaItem.type,
+          name: mediaItem.name,
+          uri: mediaItem.uri,
+        };
+        item.append('image', image);
       }
     }
-
+    
     return item;
   };
 
@@ -164,7 +178,7 @@ function FavouriteImages(props) {
         strings(
           appgender === 'female'
             ? 'validation.imageUploadError '
-            : 'validation.imageMaleUploadError',
+            : 'validation.videoMaleUploadError',
         ),
       ),
     );
@@ -204,10 +218,10 @@ function FavouriteImages(props) {
     }
   };
 
-  const onPressBack = () => {
-    dispatch(actionEdit(false));
-    navigation.goBack();
-  };
+  // const onPressBack = () => {
+  //   dispatch(actionEdit(false));
+  //   navigation.goBack();
+  // };
 
   const onClickSave = () => {
     const count = appgender === 'female' ? 3 : 1;
@@ -217,7 +231,7 @@ function FavouriteImages(props) {
       strings(
         appgender === 'female'
           ? 'validation.imageUploadError'
-          : 'validation.imageMaleUploadError',
+          : 'validation.videoMaleUploadError',
       ),
     );
 
@@ -226,17 +240,29 @@ function FavouriteImages(props) {
       return;
     }
 
+   
+    // alert(userfavoriteImages)
+    // const iError = favouriteInfoError(
+    //   count,
+    //   userfavoriteImages,
+    //   strings(
+    //     appgender === 'female'
+    //       ? 'validation.imageUploadError'
+    //       : 'validation.imageMaleUploadError',
+    //   ),
+    // );
+
+    // if (iError) {
+    //   setUserImagesError(iError);
+    //   return;
+    // }
+
     setUserImagesError(null);
-
     let userfavoriteImages = favouriteMedia(userImages);
-
-    const uploadImagesRequest = {
-      files: userfavoriteImages,
-    };
 
     dispatch({
       type: UPDATE_PROFILE_IMAGE_REQUEST,
-      payload: uploadImagesRequest,
+      payload: userfavoriteImages,
     });
   };
 

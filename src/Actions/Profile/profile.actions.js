@@ -11,6 +11,9 @@ import {
   UPDATE_PROFILE_IMAGE_LOADING,
   UPDATE_PROFILE_IMAGE_SUCCESS,
   UPDATE_PROFILE_IMAGE_ERROR,
+  GET_PROFILE_VIDEO_LOADING,
+  GET_PROFILE_VIDEO_SUCCESS,
+  GET_PROFILE_VIDEO_ERROR,
   UPDATE_PROFILE_VIDEO_LOADING,
   UPDATE_PROFILE_VIDEO_SUCCESS,
   UPDATE_PROFILE_VIDEO_ERROR,
@@ -78,6 +81,22 @@ export const uploadProfileImageSuccess = payload => ({
 
 export const uploadProfileImageError = payload => ({
   type: UPDATE_PROFILE_IMAGE_ERROR,
+  payload,
+});
+
+
+export const getProfileVideoLoading = payload => ({
+  type: GET_PROFILE_VIDEO_LOADING,
+  payload,
+});
+
+export const getProfileVideoSuccess = payload => ({
+  type: GET_PROFILE_VIDEO_SUCCESS,
+  payload,
+});
+
+export const getProfileVideoError = payload => ({
+  type: GET_PROFILE_VIDEO_ERROR,
   payload,
 });
 

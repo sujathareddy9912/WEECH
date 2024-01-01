@@ -13,6 +13,9 @@ import {
   uploadProfileImageLoading,
   uploadProfileImageSuccess,
   uploadProfileImageError,
+  getProfileVideoLoading,
+  getProfileVideoSuccess,
+  getProfileVideoError,
   uploadProfileVideoLoading,
   uploadProfileVideoSuccess,
   uploadProfileVideoError,
@@ -23,6 +26,7 @@ import {
   UPDATE_PROFILE_REQUEST,
   GET_PROFILE_IMAGE_REQUEST,
   UPDATE_PROFILE_IMAGE_REQUEST,
+  GET_PROFILE_VIDEO_REQUEST,
   UPDATE_PROFILE_VIDEO_REQUEST,
 } from '../../ActionConstant/profile.constant';
 
@@ -43,7 +47,7 @@ const updateProfileApi = async data => {
   });
 };
 
-const getFavouriteImagesApi = async(data)  => {
+const getFavouriteImagesApi = async data => {
   return request({
     url: `users/user_gallery/${data}`,
     method: 'GET',
@@ -51,11 +55,20 @@ const getFavouriteImagesApi = async(data)  => {
 };
 
 const uploadFavouriteImagesApi = async data => {
-  // alert(data.length);
   return request({
-    url: `users/save_image`,
+    url: `video/save_image`,
     method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
     data,
+  });
+};
+
+const getFavouriteVideosApi = async data => {
+  return request({
+    url: `users/user_video/${data}`,
+    method: 'GET',
   });
 };
 
@@ -63,6 +76,9 @@ const uploadFavouriteVideosApi = async data => {
   return request({
     url: `video/save_video`,
     method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
     data,
   });
 };
@@ -115,7 +131,7 @@ function* updateProfile(data) {
 function* getFavouriteImages(data) {
   try {
     const {payload} = data;
-   // alert(payload)
+    // alert(payload)
     yield put(getProfileImageLoading());
     const res = yield call(getFavouriteImagesApi, payload);
     if (res && res.data.code === 200) {
@@ -157,9 +173,32 @@ function* uploadFavouriteImages(data) {
   }
 }
 
+function* getFavouriteVideo(data) {
+  try {
+    const {payload} = data;
+    yield put(getProfileVideoLoading());
+    const res = yield call(getFavouriteVideosApi, payload);
+    if (res && res.data.code === 200) {
+      yield put(getProfileVideoSuccess(res.data));
+    } else {
+      yield put(getProfileVideoError(res.data));
+    }
+  } catch (error) {
+    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
+    if (error.data) {
+      yield put(
+        getProfileVideoError({
+          error: error.data,
+        }),
+      );
+    }
+  }
+}
+
 function* uploadFavouriteVidoes(data) {
   try {
     const {payload} = data;
+    console.log(payload);
     yield put(uploadProfileVideoLoading());
     const res = yield call(uploadFavouriteVideosApi, payload);
     if (res && res.data.code === 200) {
@@ -184,5 +223,6 @@ export default function* ProfileSaga() {
   yield takeLatest(UPDATE_PROFILE_REQUEST, updateProfile);
   yield takeLatest(GET_PROFILE_IMAGE_REQUEST, getFavouriteImages);
   yield takeLatest(UPDATE_PROFILE_IMAGE_REQUEST, uploadFavouriteImages);
+  yield takeLatest(GET_PROFILE_VIDEO_REQUEST, getFavouriteVideo)
   yield takeLatest(UPDATE_PROFILE_VIDEO_REQUEST, uploadFavouriteVidoes);
 }

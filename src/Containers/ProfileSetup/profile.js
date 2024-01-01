@@ -47,6 +47,7 @@ import {
   setGender,
   isEdit as actionEdit,
 } from '../../Actions/Profile/profile.actions';
+import Game from '../Game';
 
 const {height, width} = Dimensions.get('window');
 
@@ -564,7 +565,7 @@ function Profile(props) {
           />
         )}
       </ScrollView>
-
+      {/* <Game /> */}
       {/* </GradientBackground> */}
     </>
   );

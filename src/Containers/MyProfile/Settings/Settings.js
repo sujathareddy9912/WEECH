@@ -24,11 +24,13 @@ import Header from '../../../Component/header/Header';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../../Utils/helper';
 import {MyText, Touchable} from '../../../Component/commomComponent';
 import { UserServices } from '../../../Services/Api/userServices';
+import { GET_PROFILE_IMAGE_RESET,GET_PROFILE_VIDEO_RESET } from '../../../ActionConstant/profile.constant';
 
 const Settings = ({navigation}) => {
   const [cache, setCache] = useState(null);
   const [logout, setLogout] = useState(false);
   const [deleteAccount, setDeleteLogout] = useState(false);
+
 
   const state = useSelector(state => {
     return state;
@@ -85,11 +87,15 @@ const Settings = ({navigation}) => {
   ];
 
   const onLogOut = async () => {
+    dispatch({type:GET_PROFILE_IMAGE_RESET})
+    dispatch({type:GET_PROFILE_VIDEO_RESET})
     dispatch(logOutAction());
   };
 
   const onDeleteAccountPress = async() => {
      await UserServices.deleteUserAccount(userLoginList?.user?._id)
+     dispatch({type:GET_PROFILE_IMAGE_RESET})
+     dispatch({type:GET_PROFILE_VIDEO_RESET})
      dispatch(logOutAction());
   };
 

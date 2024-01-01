@@ -51,7 +51,7 @@ export const imagePicker = async (mediaType = 'photo', isBase64) => {
           name: `${timeStamp}.${fileExtension}`,
           width: image.width,
           height: image.height,
-          base64: isBase64 && mediaType == 'photo' ? response.base64 : '',
+          base64: isBase64 && mediaType == 'photo' ? response.base64 : 'video',
         });
       })
       .catch(err => {
@@ -84,7 +84,7 @@ export const openCamera = async (mediaType = 'photo', isBase64) => {
           width: image.width,
           height: image.height,
           name: `${timeStamp}.${fileExtension}`,
-          base64: isBase64 && mediaType == 'photo' ? response.base64 : '',
+          base64: isBase64 && mediaType == 'photo' ? response.base64 : 'video',
         });
       })
       .catch(err => {

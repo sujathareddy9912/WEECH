@@ -6,7 +6,7 @@ import {serviceConst} from '../Utils/HelperService';
 
 export const URL = 'https://api.weecha.uk/v1/';
 export const SERVER_API = 'https://api.weecha.uk';
-export const SOCKET_URL = 'ws://api.weecha.uk';
+export const SOCKET_URL = 'wss://api.weecha.uk';
 export const IMAGE_URL = 'https://api.weecha.uk/v1/uploads/';
 
 const isWithin = curryN(3, (min, max, value) => {

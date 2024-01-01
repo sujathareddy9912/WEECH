@@ -7,6 +7,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React, {useState, useEffect, useMemo, useRef} from 'react';
+import {io} from 'socket.io-client';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -16,7 +17,11 @@ import initialMessages from './messages';
 import {COLORS} from '../../../../Utils/colors';
 import ChatHeader from '../../components/ChatHeader';
 import {dynamicSize} from '../../../../Utils/responsive';
-import {IMAGE_URL, SERVER_API} from '../../../../Services/Api/Common';
+import {
+  IMAGE_URL,
+  SERVER_API,
+  SOCKET_URL,
+} from '../../../../Services/Api/Common';
 import {HelperService} from '../../../../Services/Utils/HelperService';
 import {CHAT_MESSAGE_TYPE, SOCKET_EVENTS} from '../../../../Utils/chatHelper';
 import {
@@ -78,7 +83,7 @@ import {
 import {FONT_FAMILY, FONT_SIZE} from '../../../../Utils/fontFamily';
 import SelectImageDialog from '../../../../Component/SelectImageDialog';
 import ReportModal from '../../../../Component/ReportModal';
-import {socket} from '../../../../Services/Sockets/sockets';
+// import {socket} from '../../../../Services/Sockets/sockets';
 import {getUserHaveBalance} from '../../../../Services/Api/LiveStreaming';
 import GiftComponent from '../../../../Component/giftComponent';
 
@@ -100,6 +105,15 @@ const PersonalChat = props => {
   //     transports: ['websocket'],
   //   });
   // }, []);
+
+  const socket = useMemo(() => {
+    return io(SOCKET_URL, {
+      reconnection: true,
+      jsonp: false,
+      reconnectionDelay: 1000,
+      transports: ['websocket'],
+    });
+  }, [chatId]);
 
   const dispatch = useDispatch();
   const state = useSelector(state => {
@@ -162,14 +176,6 @@ const PersonalChat = props => {
     } else return '';
   }, [detail?.receiverId]);
 
-  // const socket = useMemo(() => {
-  //   return io(SERVER_API, {
-  //     reconnection: true,
-  //     reconnectionDelay: 1000,
-  //     transports: ['websocket'],
-  //   });
-  // }, [chatId]);
-
   useEffect(() => {
     paginationOffset.current = 0;
     if (chatId) {
@@ -205,10 +211,6 @@ const PersonalChat = props => {
   };
 
   const _joinChat = () => {
-    socket.connect('connection', data => {
-      console.log('connection=>', data);
-    });
-
     // if (socket.connected) {
     const param = {
       chat_id: chatId,

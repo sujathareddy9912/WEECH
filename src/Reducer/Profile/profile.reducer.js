@@ -22,6 +22,10 @@ import {
   UPDATE_PROFILE_VIDEO_SUCCESS,
   UPDATE_PROFILE_VIDEO_ERROR,
   UPDATE_PROFILE_VIDEO_RESET,
+  DELETE_PROFILE_IMAGE_VIDEO_LOADING,
+  DELETE_PROFILE_IMAGE_VIDEO_SUCCESS,
+  DELETE_PROFILE_IMAGE_VIDEO_ERROR,
+  DELETE_PROFILE_IMAGE_VIDEO_RESET,
   SET_GENDER,
   IS_EDIT,
   IS_DONE,
@@ -51,6 +55,10 @@ const initalState = {
   updateProfileVideoLoading: false,
   updateProfileVideoSuccess: null,
   updateProfileVideoError: null,
+
+  deleteProfileImageVideoLoading: false,
+  deleteProfileImageVideoSuccess: null,
+  deleteProfileImageVideoError: null,
 
   appgender: null,
   isEdit: false,
@@ -103,6 +111,14 @@ export default function ProfileReducer(state = initalState, {type, payload}) {
       return getProfileImageReset(state);
     case GET_PROFILE_VIDEO_RESET:
       return getProfileVideoReset(state);
+    case DELETE_PROFILE_IMAGE_VIDEO_LOADING:
+      return deleteProfileImageVideoLoading(state);
+    case DELETE_PROFILE_IMAGE_VIDEO_SUCCESS:
+      return deleteProfileImageVideoSuccess(state, payload);
+    case DELETE_PROFILE_IMAGE_VIDEO_ERROR:
+      return deleteProfileImageVideoError(state, payload);
+    case DELETE_PROFILE_IMAGE_VIDEO_RESET:
+      return deleteProfileImageVideoReset(state);
     case SET_GENDER:
       return setProfileGender(state, payload);
     case IS_DONE:
@@ -242,6 +258,27 @@ const updateProfileVideoError = (state, payload) => ({
   updateProfileVideoError: payload,
 });
 
+const deleteProfileImageVideoLoading = state => ({
+  ...state,
+  deleteProfileImageVideoLoading: true,
+  deleteProfileImageVideoSuccess: null,
+  deleteProfileImageVideoError: null,
+});
+
+const deleteProfileImageVideoSuccess = (state, payload) => ({
+  ...state,
+  deleteProfileImageVideoLoading: false,
+  deleteProfileImageVideoSuccess: payload,
+  deleteProfileImageVideoError: null,
+});
+
+const deleteProfileImageVideoError = (state, payload) => ({
+  ...state,
+  deleteProfileImageVideoLoading: false,
+  deleteProfileImageVideoSuccess: null,
+  deleteProfileImageVideoError: payload,
+});
+
 const updateProfileImageReset = state => ({
   ...state,
   updateProfileImageLoading: false,
@@ -268,6 +305,13 @@ const getProfileVideoReset = state => ({
   getProfileVideoLoading: false,
   getProfileVideoSuccess: null,
   getProfileVideoError: null,
+});
+
+const deleteProfileImageVideoReset = state => ({
+  ...state,
+  deleteProfileImageVideoLoading: false,
+  deleteProfileImageVideoSuccess: null,
+  deleteProfileImageVideoError: null,
 });
 
 const setProfileGender = (state, payload) => ({

@@ -17,6 +17,9 @@ import {
   UPDATE_PROFILE_VIDEO_LOADING,
   UPDATE_PROFILE_VIDEO_SUCCESS,
   UPDATE_PROFILE_VIDEO_ERROR,
+  DELETE_PROFILE_IMAGE_VIDEO_LOADING,
+  DELETE_PROFILE_IMAGE_VIDEO_SUCCESS,
+  DELETE_PROFILE_IMAGE_VIDEO_ERROR,
   SET_GENDER,
   IS_DONE,
   IS_EDIT
@@ -112,6 +115,21 @@ export const uploadProfileVideoSuccess = payload => ({
 
 export const uploadProfileVideoError = payload => ({
   type: UPDATE_PROFILE_VIDEO_ERROR,
+  payload,
+});
+
+export const deleteProfileImageVideoLoading = payload => ({
+  type: DELETE_PROFILE_IMAGE_VIDEO_LOADING,
+  payload,
+});
+
+export const deleteProfileImageVideoSuccess = payload => ({
+  type: DELETE_PROFILE_IMAGE_VIDEO_SUCCESS,
+  payload,
+});
+
+export const deleteProfileImageVideoError = payload => ({
+  type: DELETE_PROFILE_IMAGE_VIDEO_ERROR,
   payload,
 });
 

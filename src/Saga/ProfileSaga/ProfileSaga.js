@@ -19,6 +19,9 @@ import {
   uploadProfileVideoLoading,
   uploadProfileVideoSuccess,
   uploadProfileVideoError,
+  deleteProfileImageVideoLoading,
+  deleteProfileImageVideoSuccess,
+  deleteProfileImageVideoError
 } from '../../Actions/Profile/profile.actions';
 
 import {
@@ -28,6 +31,7 @@ import {
   UPDATE_PROFILE_IMAGE_REQUEST,
   GET_PROFILE_VIDEO_REQUEST,
   UPDATE_PROFILE_VIDEO_REQUEST,
+  DELETE_PROFILE_IMAGE_VIDEO_REQUEST
 } from '../../ActionConstant/profile.constant';
 
 /** * APIs */
@@ -80,6 +84,14 @@ const uploadFavouriteVideosApi = async data => {
       'Content-Type': 'multipart/form-data',
     },
     data,
+  });
+};
+
+const deleteFavouriteImageVideosApi = async data => {
+  return request({
+    url: `users/delete_files`,
+    method: 'delete',
+    data
   });
 };
 
@@ -218,6 +230,29 @@ function* uploadFavouriteVidoes(data) {
   }
 }
 
+function* deleteFavouriteImageVidoes(data) {
+  try {
+    const {payload} = data;
+    // console.log(payload);
+   yield put(deleteProfileImageVideoLoading());
+   const res = yield call(deleteFavouriteImageVideosApi, payload);
+    if (res && res.data.code === 200) {
+      yield put(deleteProfileImageVideoSuccess(res.data));
+    } else {
+      yield put(deleteProfileImageVideoError(res.data));
+    }
+  } catch (error) {
+    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
+    if (error.data) {
+      yield put(
+        deleteProfileImageVideoError({
+          error: error.data,
+        }),
+      );
+    }
+  }
+}
+
 export default function* ProfileSaga() {
   yield takeLatest(GET_PROFILE_REQUEST, getProfile);
   yield takeLatest(UPDATE_PROFILE_REQUEST, updateProfile);
@@ -225,4 +260,5 @@ export default function* ProfileSaga() {
   yield takeLatest(UPDATE_PROFILE_IMAGE_REQUEST, uploadFavouriteImages);
   yield takeLatest(GET_PROFILE_VIDEO_REQUEST, getFavouriteVideo)
   yield takeLatest(UPDATE_PROFILE_VIDEO_REQUEST, uploadFavouriteVidoes);
+  yield takeLatest(DELETE_PROFILE_IMAGE_VIDEO_REQUEST, deleteFavouriteImageVidoes);
 }

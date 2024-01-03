@@ -29,13 +29,13 @@ import {
   GET_PROFILE_VIDEO_REQUEST,
   UPDATE_PROFILE_VIDEO_RESET,
   UPDATE_PROFILE_VIDEO_REQUEST,
-  GET_PROFILE_VIDEO_RESET
+  DELETE_PROFILE_IMAGE_VIDEO_RESET
 } from '../../ActionConstant/profile.constant';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Video from 'react-native-video';
 import {dynamicSize} from '../../Utils/responsive';
 import {
-  isEdit as actionEdit,
+  //isEdit as actionEdit,
   isDone as actionDone,
 } from '../../Actions/Profile/profile.actions';
 import {handleError} from '../../Utils/handlErrors';
@@ -60,6 +60,9 @@ function FavouriteVideos() {
     getProfileVideoLoading,
     getProfileVideoSuccess,
     getProfileVideoError,
+    deleteProfileImageVideoLoading,
+    deleteProfileImageVideoSuccess,
+    deleteProfileImageVideoError,
     getProfileSuccess,
     isEdit,
     isDone,
@@ -83,13 +86,14 @@ function FavouriteVideos() {
   }, [getProfileSuccess]);
 
   useEffect(() => {
-    setLoading(updateProfileVideoLoading || getProfileVideoLoading);
-  }, [updateProfileVideoLoading, getProfileVideoLoading]);
+    setLoading(updateProfileVideoLoading || getProfileVideoLoading || deleteProfileImageVideoLoading);
+  }, [updateProfileVideoLoading, getProfileVideoLoading,deleteProfileImageVideoLoading]);
 
   useEffect(() => {
     if (getProfileVideoSuccess) {
       let videos = getProfileVideoSuccess.user.map(item => ({
         uri: `https://api.weecha.uk/v1/uploads/${item.file}`,
+        id: item._id,
       }));
       videos = [...videos, userVideos];
       setUserVideos(videos);
@@ -133,6 +137,31 @@ function FavouriteVideos() {
     }
   }, [updateProfileVideoError]);
 
+  useEffect(() => {
+    if (deleteProfileImageVideoSuccess) {
+      showMessage({
+        description: deleteProfileImageVideoSuccess.message,
+        message: 'Delete Image',
+        type: 'success',
+        icon: 'success',
+      });
+      dispatch({
+        type: GET_PROFILE_VIDEO_REQUEST,
+        payload: getProfileSuccess?.user._id,
+      });
+    }
+
+    return () => {
+      dispatch({type: DELETE_PROFILE_IMAGE_VIDEO_RESET});
+    };
+  }, [deleteProfileImageVideoSuccess]);
+
+  useEffect(() => {
+    if (deleteProfileImageVideoError) {
+      handleError(deleteProfileImageVideoError.error.message);
+    }
+  }, [deleteProfileImageVideoError]);
+
   async function CreateThumbnail(file) {
     if (file && file.uri) {
       try {
@@ -149,6 +178,7 @@ function FavouriteVideos() {
   }
 
   const jumpToNext = () => {
+    dispatch({type:DELETE_PROFILE_IMAGE_VIDEO_RESET})
     dispatch(actionDone('favouriteVideos'));
     reset('MainTabNavigation');
     
@@ -293,6 +323,18 @@ function FavouriteVideos() {
     });
   };
 
+  const deleteImages = id => {
+    if (id) {
+      const requestData = {
+        id: id,
+      };
+      dispatch({
+        type: DELETE_PROFILE_IMAGE_VIDEO_REQUEST,
+        payload: requestData,
+      });
+    }
+  };
+
   const onLoadStart = () => {
     setOpacity(1);
   };
@@ -317,6 +359,7 @@ function FavouriteVideos() {
               <TouchableOpacity
                 style={styles.closeBtn}
                 onPress={() => {
+                  deleteImages(item.id)
                   removeImages(index);
                 }}>
                 <Icon

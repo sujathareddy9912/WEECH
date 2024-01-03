@@ -19,6 +19,7 @@ import FavouriteImages from './favouriteImages';
 import FavouriteVideos from './favouriteVideos';
 import {useSelector, useDispatch} from 'react-redux';
 import {isEdit as actionEdit} from '../../Actions/Profile/profile.actions';
+import { DELETE_PROFILE_IMAGE_VIDEO_RESET } from '../../ActionConstant/profile.constant';
 
 const renderScene = SceneMap({
   profile: Profile,
@@ -35,7 +36,6 @@ function TabViewExample() {
   const reducer = useSelector(state => state.profile);
 
   const {appgender, isDone, isEdit} = reducer;
-
 
   const [index, setIndex] = React.useState(0);
 
@@ -57,7 +57,9 @@ function TabViewExample() {
         {routes.map((route, i) => {
           return (
             <TouchableOpacity
-             disabled ={isEdit === false && appgender === 'female' ? true: false}
+              disabled={
+                isEdit === false && appgender === 'female' ? true : false
+              }
               style={[
                 styles.tabItem,
                 {
@@ -66,13 +68,17 @@ function TabViewExample() {
                   borderBottomWidth: 3,
                 },
               ]}
-              onPress={() => setIndex(i)}>
+              onPress={() => {
+                setIndex(i);
+                dispatch({type:DELETE_PROFILE_IMAGE_VIDEO_RESET})
+              }}>
               <Animated.Text
                 style={index === i ? styles.activeTitle : styles.inActiveTitle}>
                 {route.title}
               </Animated.Text>
 
-              {appgender === 'female' && !isEdit &&
+              {appgender === 'female' &&
+                !isEdit &&
                 index !== i &&
                 !isDone?.includes(route.key) && (
                   <View style={{position: 'absolute', right: 8, top: 16}}>
@@ -106,7 +112,7 @@ function TabViewExample() {
         </TouchableOpacity>
       )}
 
-       <Text style={styles.header}>PROFILE SETUP</Text>
+      <Text style={styles.header}>PROFILE SETUP</Text>
       <TabView
         navigationState={{index, routes}}
         renderScene={renderScene}

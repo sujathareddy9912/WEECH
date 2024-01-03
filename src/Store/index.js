@@ -11,6 +11,7 @@ import {reducer as CommonReducer} from './Common/Reducers';
 import loaderReducer from '../Redux/Reducer/loader.Reducer';
 import streamingReducer from '../Redux/Reducer/streaming.Reducer';
 import ProfileReducer from '../Reducer/Profile/profile.reducer';
+import GameReducer from '../Reducer/Game/game.reducer';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -28,7 +29,8 @@ const appReducer = combineReducers({
   loaderReducer,
   streamingReducer,
   common: CommonReducer,
-  profile:ProfileReducer
+  profile:ProfileReducer,
+  game: GameReducer,
 });
 
 export const rootReducer = (state, action) => {

@@ -24,11 +24,12 @@ import {
   UPDATE_PROFILE_IMAGE_REQUEST,
   GET_PROFILE_IMAGE_REQUEST,
   UPDATE_PROFILE_IMAGE_RESET,
-  GET_PROFILE_IMAGE_RESET
+  DELETE_PROFILE_IMAGE_VIDEO_RESET,
+  DELETE_PROFILE_IMAGE_VIDEO_REQUEST,
 } from '../../ActionConstant/profile.constant';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  isEdit as actionEdit,
+  //isEdit as actionEdit,
   isDone as actionDone,
 } from '../../Actions/Profile/profile.actions';
 import {handleError} from '../../Utils/handlErrors';
@@ -50,6 +51,9 @@ function FavouriteImages(props) {
     getProfileImageLoading,
     getProfileImageSuccess,
     getProfileImageError,
+    deleteProfileImageVideoLoading,
+    deleteProfileImageVideoSuccess,
+    deleteProfileImageVideoError,
     getProfileSuccess,
     isEdit,
     isDone,
@@ -70,13 +74,23 @@ function FavouriteImages(props) {
   }, [getProfileSuccess]);
 
   useEffect(() => {
-    setLoading(updateProfileImageLoading || getProfileImageLoading);
-  }, [updateProfileImageLoading, getProfileImageLoading]);
+    setLoading(
+      updateProfileImageLoading ||
+        getProfileImageLoading ||
+        deleteProfileImageVideoLoading,
+    );
+  }, [
+    updateProfileImageLoading,
+    getProfileImageLoading,
+    deleteProfileImageVideoLoading,
+  ]);
 
   useEffect(() => {
     if (getProfileImageSuccess) {
+      //console.log(getProfileImageSuccess.user);
       let images = getProfileImageSuccess.user.map(item => ({
         uri: `https://api.weecha.uk/v1/uploads/${item.file}`,
+        id: item._id,
       }));
       images = [...images, userImages];
       setUserImages(images);
@@ -108,8 +122,8 @@ function FavouriteImages(props) {
     }
 
     return () => {
-      setUserImages([{}])
-     // dispatch({type: GET_PROFILE_IMAGE_RESET});
+      setUserImages([{}]);
+      // dispatch({type: GET_PROFILE_IMAGE_RESET});
       dispatch({type: UPDATE_PROFILE_IMAGE_RESET});
     };
   }, [updateProfileImageSuccess]);
@@ -119,6 +133,31 @@ function FavouriteImages(props) {
       handleError(updateProfileImageError.error.message);
     }
   }, [updateProfileImageError]);
+
+  useEffect(() => {
+    if (deleteProfileImageVideoSuccess) {
+      showMessage({
+        description: deleteProfileImageVideoSuccess.message,
+        message: 'Delete Image',
+        type: 'success',
+        icon: 'success',
+      });
+      dispatch({
+        type: GET_PROFILE_IMAGE_REQUEST,
+        payload: getProfileSuccess?.user._id,
+      });
+    }
+
+    return () => {
+      dispatch({type: DELETE_PROFILE_IMAGE_VIDEO_RESET});
+    };
+  }, [deleteProfileImageVideoSuccess]);
+
+  useEffect(() => {
+    if (deleteProfileImageVideoError) {
+      handleError(deleteProfileImageVideoError.error.message);
+    }
+  }, [deleteProfileImageVideoError]);
 
   const saveAndSkip = () => {
     if (isDone?.includes('profile')) {
@@ -135,6 +174,7 @@ function FavouriteImages(props) {
   };
 
   const jumpToNext = () => {
+    dispatch({type:DELETE_PROFILE_IMAGE_VIDEO_RESET});
     dispatch(actionDone('favouriteImages'));
     props.jumpTo('favouriteVideos');
   };
@@ -165,7 +205,7 @@ function FavouriteImages(props) {
         item.append('image', image);
       }
     }
-    
+
     return item;
   };
 
@@ -240,7 +280,6 @@ function FavouriteImages(props) {
       return;
     }
 
-   
     // alert(userfavoriteImages)
     // const iError = favouriteInfoError(
     //   count,
@@ -266,6 +305,18 @@ function FavouriteImages(props) {
     });
   };
 
+  const deleteImages = id => {
+    if (id) {
+      const requestData = {
+        id: id,
+      };
+      dispatch({
+        type: DELETE_PROFILE_IMAGE_VIDEO_REQUEST,
+        payload: requestData,
+      });
+    }
+  };
+
   const _renderImages = ({item, index}) => {
     if (item && item?.uri) {
       return (
@@ -276,6 +327,7 @@ function FavouriteImages(props) {
           <TouchableOpacity
             style={styles.closeBtn}
             onPress={() => {
+              deleteImages(item?.id);
               removeImages(index);
             }}>
             <Icon

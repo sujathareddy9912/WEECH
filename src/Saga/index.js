@@ -2,6 +2,7 @@ import * as TYPES from '../Redux/Action/type';
 import {CommonTypes} from '../Store/Common/Actions';
 import {all, takeLatest} from 'redux-saga/effects';
 import ProfileSaga from './ProfileSaga/ProfileSaga';
+import GameSaga from './Game/GameSaga';
 
 import {
   followerListSaga,
@@ -216,5 +217,6 @@ export default function* root() {
 
     //new
     ProfileSaga(),
+    GameSaga()
   ]);
 }

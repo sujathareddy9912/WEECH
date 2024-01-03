@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useState, useEffect} from 'react';
 import {
   Modal,
   View,
@@ -11,6 +11,10 @@ import {
 import {COLORS} from '../../Utils/colors';
 import Icon from '../../Component/Icons/Icon';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
+import {GAME_REQUEST, GAME_RESET} from '../../ActionConstant/game.constant';
+import {handleError} from '../../Utils/handlErrors';
+import LodingIndicator from '../../Component/LoadingIndicator/LoadingIndicator';
 
 interface gameListProps {
   id: number;
@@ -23,12 +27,44 @@ interface gameProps {
 
 const Game: FC<gameProps> = ({visible = false, setVisible}) => {
   const data: gameListProps[] = [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}];
+  const dispatch = useDispatch();
   const [isPlaying, setPlaying] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
   // const [isVisible, setVisible] = useState<boolean>(visible);
+
+  const reducer = useSelector(state => state?.game);
+
+  const {gameLoading, gameSuccess, gameError} = reducer;
+
+  useEffect(() => {
+    setLoading(gameLoading);
+  }, [gameLoading]);
+
+  useEffect(() => {
+    if (gameSuccess) {
+      console.log(gameSuccess);
+      setPlaying(true);
+    }
+  }, [gameSuccess]);
+
+  useEffect(() => {
+    if (gameError) {
+      handleError(gameError.error.message);
+    }
+  }, [gameError]);
 
   const _renderGameList: ListRenderItem<gameListProps> = ({item}) => {
     return (
-      <TouchableOpacity style={styles.games} onPress={() => setPlaying(true)}>
+      <TouchableOpacity
+        style={styles.games}
+        onPress={() => {
+          const data = {
+            phone: '1234567890',
+            email: 'game#gmail.com',
+          };
+          dispatch({type: GAME_REQUEST, payload: data});
+        }}>
         <Icon
           origin="Ionicons"
           name="game-controller"
@@ -41,6 +77,7 @@ const Game: FC<gameProps> = ({visible = false, setVisible}) => {
 
   return (
     <Modal transparent visible={visible}>
+      <LodingIndicator visible={loading} />
       <View
         style={[
           styles.container,
@@ -60,6 +97,7 @@ const Game: FC<gameProps> = ({visible = false, setVisible}) => {
                 style={styles.closeButton}
                 onPress={() => {
                   setVisible(false);
+                  dispatch({type: GAME_RESET});
                   setPlaying(false);
                 }}>
                 <Icon

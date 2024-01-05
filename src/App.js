@@ -3,7 +3,7 @@ import React, {useEffect, useRef} from 'react';
 import {Settings} from 'react-native-fbsdk-next';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {StyleSheet} from 'react-native';
+import {StyleSheet,StatusBar} from 'react-native';
 import {store} from './Store';
 import AppStack from './Navigator';
 import {NativeBaseProvider} from 'native-base';
@@ -51,6 +51,8 @@ const App = () => {
           textStyle={[styles.fontNormal, styles.flexWrap]}
           titleStyle={styles.fontNormal}
           ref={refFlashMessage}
+          hideStatusBar={false}
+          statusBarHeight={StatusBar.currentHeight}
           floating={Platform.OS === 'ios'}
         />
       </Provider>

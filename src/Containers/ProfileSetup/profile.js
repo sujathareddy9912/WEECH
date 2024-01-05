@@ -47,6 +47,7 @@ import {
   setGender,
   isEdit as actionEdit,
 } from '../../Actions/Profile/profile.actions';
+import cacheImage from '../../Utils/ImageCache';
 
 const {height, width} = Dimensions.get('window');
 
@@ -142,23 +143,31 @@ function Profile(props) {
   }, [updateProfileSuccess]);
 
   useEffect(() => {
-    if (getProfileSuccess) {
-      setProfilePic({
-        uri: `https://api.weecha.uk/v1/uploads/${getProfileSuccess.user.profile}`,
-      });
-      dispatch({type: Actions.NAME, payload: getProfileSuccess.user.name});
-      dispatch({type: Actions.GENDER, payload: getProfileSuccess.user.gender});
-      appdispatch(setGender(getProfileSuccess.user.gender));
-      dispatch({
-        type: Actions.DOB,
-        payload: new Date(getProfileSuccess.user.DateOfBirth),
-      });
-      dispatch({
-        type: Actions.COUNTRY,
-        payload: getProfileSuccess.user.country,
-      });
-      dispatch({type: Actions.ABOUT, payload: getProfileSuccess.user.bio});
-    }
+    (async () => {
+      if (getProfileSuccess) {
+        const serverImage = await cacheImage(
+          `https://api.weecha.uk/v1/uploads/${getProfileSuccess.user.profile}`,
+        );
+        setProfilePic({
+          uri: serverImage.uri,
+        });
+        dispatch({type: Actions.NAME, payload: getProfileSuccess.user.name});
+        dispatch({
+          type: Actions.GENDER,
+          payload: getProfileSuccess.user.gender,
+        });
+        appdispatch(setGender(getProfileSuccess.user.gender));
+        dispatch({
+          type: Actions.DOB,
+          payload: new Date(getProfileSuccess.user.DateOfBirth),
+        });
+        dispatch({
+          type: Actions.COUNTRY,
+          payload: getProfileSuccess.user.country,
+        });
+        dispatch({type: Actions.ABOUT, payload: getProfileSuccess.user.bio});
+      }
+    })();
   }, [getProfileSuccess]);
 
   useEffect(() => {

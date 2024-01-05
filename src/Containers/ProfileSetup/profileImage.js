@@ -17,6 +17,7 @@ const {height, width} = Dimensions.get('window');
 
 function ProfileImage({profilePic, setProfilePic, profileImageError}, ref) {
   const profileImageRef = useRef();
+ // console.log(profilePic.uri);
   const _closeImagePicker = () => {
     profileImageRef.current.close();
   };

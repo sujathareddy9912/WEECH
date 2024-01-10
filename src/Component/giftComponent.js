@@ -87,10 +87,26 @@ const GiftComponent = props => {
     if (indexFound < 0) {
       selectedGifts.push({...item, count: !item?.count ? 0 : item.count});
     } else {
-      selectedGifts[indexFound].count = item.count;
+      updateCountAndRemoveIfZero(selectedGifts, item);
     }
     setRefreshData(!refreshData);
   };
+
+  function updateCountAndRemoveIfZero(array, updatedObject) {
+    for (let i = 0; i < array.length; i++) {
+      if (array[i]._id === updatedObject._id) {
+        // Decrease count by 1
+        array[i].count--;
+
+        // Remove the object if count is 0
+        if (array[i].count === 0) {
+          array.splice(i, 1);
+        }
+
+        break; // exit loop once the object is found and updated
+      }
+    }
+  }
 
   const onIncrement = (item, index) => () => {
     if (!item?.count) {
@@ -168,7 +184,7 @@ const GiftComponent = props => {
 
   const _renderSelectedList = ({item, index}) => {
     if(!item.count) return null
-    
+
     return (
       <View style={[styles.selectedContainer]}>
         <MyText style={styles.selectedCount}>{`*${item.count || 0}`}</MyText>

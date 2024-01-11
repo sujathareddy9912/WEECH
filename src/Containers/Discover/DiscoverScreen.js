@@ -1,6 +1,12 @@
 import {useDispatch} from 'react-redux';
 import Swiper from 'react-native-deck-swiper';
-import {View, Text, StatusBar, BackHandler} from 'react-native';
+import {
+  View,
+  Text,
+  StatusBar,
+  BackHandler,
+  ActivityIndicator,
+} from 'react-native';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 
 import React, {
@@ -34,6 +40,7 @@ import {SvgIcon} from '../../Component/icons';
 import {SCREEN_HEIGHT} from '../../Utils/helper';
 import {dynamicSize} from '../../Utils/responsive';
 import {countryCode} from '../../Utils/countryCode';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export const agoraEngine = createRef();
 
@@ -93,7 +100,7 @@ const DiscoverScreen = props => {
       country: country?.name || 'India',
     };
     dispatch(
-      getLiveUserListAction(params, data => {
+      getLiveUserListAction(params, async data => {
         if (paginationOffset.current == 0) {
           setLiveUserList([...data?.data]);
         } else {
@@ -181,37 +188,51 @@ const DiscoverScreen = props => {
             ]}>
             <Text>{backgroundText}</Text>
           </View>
-          {!!liveUserList.length ? (
-            <Swiper
-              key={liveUserList.length}
-              onSwiped={_onSwiped}
-              onSwipedAll={() => setbackgroundText("You're done for today!")}
-              cardIndex={0}
-              cards={liveUserList}
-              cardVerticalMargin={0}
-              renderCard={(card, cardIndex) => (
-                <Card
-                  data={card}
-                  cardIndex={cardIndex}
-                  agoraInitialised={initialised}
-                  {...props}
-                />
-              )}
-              stackSize={1}
-              stackSeparation={0}
-              cardHorizontalMargin={0}
-              containerStyle={{height: '100%'}}
-              backgroundColor={COLORS.WHITE}
-              animateOverlayLabelsOpacity
-              animateCardOpacity
-              infinite={false}
-              showSecondCard={false}
-              goBackToPreviousCardOnSwipeBottom
-            />
-          ) : (
+
+          {fetching ? (
             <View style={[styles.swiperContainer, {zIndex: 2}]}>
-              <Text>No Data Found</Text>
+              <ActivityIndicator
+                color={COLORS.DARK_RED}
+                style={{marginTop: hp(5)}}
+              />
             </View>
+          ) : (
+            <>
+              {!!liveUserList.length ? (
+                <Swiper
+                  key={liveUserList.length}
+                  onSwiped={_onSwiped}
+                  onSwipedAll={() =>
+                    setbackgroundText("You're done for today!")
+                  }
+                  cardIndex={0}
+                  cards={liveUserList}
+                  cardVerticalMargin={0}
+                  renderCard={(card, cardIndex) => (
+                    <Card
+                      data={card}
+                      cardIndex={cardIndex}
+                      agoraInitialised={initialised}
+                      {...props}
+                    />
+                  )}
+                  stackSize={1}
+                  stackSeparation={0}
+                  cardHorizontalMargin={0}
+                  containerStyle={{height: '100%'}}
+                  backgroundColor={COLORS.WHITE}
+                  animateOverlayLabelsOpacity
+                  animateCardOpacity
+                  infinite={false}
+                  showSecondCard={false}
+                  goBackToPreviousCardOnSwipeBottom
+                />
+              ) : (
+                <View style={[styles.swiperContainer, {zIndex: 2}]}>
+                  <Text>No Data Found</Text>
+                </View>
+              )}
+            </>
           )}
         </View>
         <View

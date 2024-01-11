@@ -40,7 +40,7 @@ export function* getLiveUserList({payload, callBack}) {
   try {
     const resp = yield call(getUserLiveList, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
-      callBack(resp.user);
+      callBack(resp?.user);
     } else {
       HelperService.showToast(resp?.message);
       callBack([]);

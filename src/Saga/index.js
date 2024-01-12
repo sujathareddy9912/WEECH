@@ -1,6 +1,6 @@
 import * as TYPES from '../Redux/Action/type';
 import {CommonTypes} from '../Store/Common/Actions';
-import {all, takeLatest} from 'redux-saga/effects';
+import {all, takeEvery, takeLatest} from 'redux-saga/effects';
 import ProfileSaga from './ProfileSaga/ProfileSaga';
 import GameSaga from './Game/GameSaga';
 
@@ -133,7 +133,7 @@ export default function* root() {
     takeLatest(CommonTypes.GET_USER_VIDEO, getUserVideo),
     takeLatest(CommonTypes.GET_USER_FILTER, getUserFilter),
     takeLatest(TYPES.SOCIAL_LOGIN_TYPE, social_login),
-    takeLatest(TYPES.GET_LIVE_USER_LIST_ACTION, getLiveUserList),
+    takeEvery(TYPES.GET_LIVE_USER_LIST_ACTION, getLiveUserList),
     takeLatest(TYPES.GET_INTEREST_LIST, getInterestListSaga),
     takeLatest(TYPES.GO_LIVE_STREAMING, goLiveStreamingSaga),
     takeLatest(TYPES.END_LIVE_STREAMING, endLiveStreamingSaga),

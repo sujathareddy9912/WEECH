@@ -51,7 +51,7 @@ import useFetchListLiveStream from '../../hooks/useFetchListLiveStream';
 import {getAge, getData, SCREEN_HEIGHT, SCREEN_WIDTH} from '../../Utils/helper';
 import {NotificationModal} from '../../Component/NotificationModal/Notification';
 import {requestLocationPermission} from '../../Utils/permissionLocation';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 
 export default LiveUserListing = ({navigation}) => {
   const dispatch = useDispatch();
@@ -97,7 +97,7 @@ export default LiveUserListing = ({navigation}) => {
     }
   };
 
-  const isScreenFocused = useIsFocused()
+  const isScreenFocused = useIsFocused();
 
   useEffect(() => {
     // const backHandler = BackHandler.addEventListener(
@@ -137,7 +137,7 @@ export default LiveUserListing = ({navigation}) => {
   //   return true;
   // };
 
-  useEffect(async () => {
+  const getGeoLoaction = async () => {
     if (selectedTab === 2) {
       const hasLocationPermission = await requestLocationPermission();
       if (hasLocationPermission) {
@@ -161,6 +161,10 @@ export default LiveUserListing = ({navigation}) => {
         );
       }
     }
+  };
+
+  useEffect(() => {
+    getGeoLoaction();
   }, [selectedTab, isScreenFocused]);
 
   const _getLiveUserList = () => {

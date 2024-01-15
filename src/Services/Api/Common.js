@@ -139,7 +139,7 @@ function social_login(params) {
   let body = {
     socialMediaType: params.type,
     socialMediaId: params.id,
-    email: params.email
+    email: params.email,
   };
   return userApiClient
     .post(url, body, {

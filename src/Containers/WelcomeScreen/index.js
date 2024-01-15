@@ -21,7 +21,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {HelperService} from '../../Services/Utils/HelperService';
 import {prop} from 'ramda';
 
-const WelcomeScreen = props => {
+const welcomeScreen = props => {
   const [checked, setChecked] = useState('Male');
   const [avatar, setavatar] = useState('');
   const [name, setname] = useState('');
@@ -347,4 +347,4 @@ const WelcomeScreen = props => {
     </View>
   );
 };
-export default WelcomeScreen;
+export default welcomeScreen;

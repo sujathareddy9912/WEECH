@@ -148,23 +148,23 @@ const LoginPhone = props => {
     }
   };
 
-  // useEffect(async () => {
-  // if (userLoginList) {
-  //   try {
-  //     await AsyncStorage.setItem('token', userLoginList.tokens.access.token);
-  //     await AsyncStorage.setItem('id', userLoginList._id);
-  //     await AsyncStorage.setItem('gender', userLoginList.gender);
-  //   } catch (e) {
-  //     // saving error
-  //   }
-  //   // StorageUtils.setStringValue(
-  //   //   'token',
-  //   //  JSON.stringify(,
-  //   // );
-  //   props.navigation.navigate('MainTabNavigation', {screen: 'LiveSection'});
-  // }
-  //
-  // }, [userLoginList]);
+  useEffect(async () => {
+    // if (userLoginList) {
+    //   try {
+    //     await AsyncStorage.setItem('token', userLoginList.tokens.access.token);
+    //     await AsyncStorage.setItem('id', userLoginList._id);
+    //     await AsyncStorage.setItem('gender', userLoginList.gender);
+    //   } catch (e) {
+    //     // saving error
+    //   }
+    //   // StorageUtils.setStringValue(
+    //   //   'token',
+    //   //  JSON.stringify(,
+    //   // );
+    //   props.navigation.navigate('MainTabNavigation', {screen: 'LiveSection'});
+    // }
+    //
+  }, [userLoginList]);
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>

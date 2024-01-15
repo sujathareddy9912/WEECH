@@ -7562,7 +7562,7 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-native-base@^3.2.2:
+native-base@^3.4.28:
   version "3.4.28"
   resolved "https://registry.npmjs.org/native-base/-/native-base-3.4.28.tgz"
   integrity sha512-EDg9UFDNmfYXPInpRbxce+4oWFEIGaM7aG6ey4hVllcvMC3PkgCvkiXEB+7EemgC7Qr8CuFjgMTx7P0vvnwZeQ==

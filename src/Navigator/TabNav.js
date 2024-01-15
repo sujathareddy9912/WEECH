@@ -573,10 +573,7 @@ export default TabNav = () => {
   return (
     <Tab.Navigator
       initialRouteName="LiveSection"
-      tabBar={props => <BottomTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-      }}>
+      tabBar={props => <BottomTabBar {...props} />}>
       <Tab.Screen
         name={'LiveSection'}
         component={LiveUserStack}

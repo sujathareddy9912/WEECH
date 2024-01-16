@@ -335,11 +335,11 @@ const UserProfile = props => {
         : await requestAudioPermission();
     if (permissionGranted && detail) {
       try {
-       // const userBusyorNot = await checkNodePresentOrNot(detail._id);
-        // if (userBusyorNot) {
-        //   HelperService.showToast('User is busy on another call.');
-        //   return;
-        // }
+       const userBusyorNot = await checkNodePresentOrNot(detail._id);
+        if (userBusyorNot) {
+          HelperService.showToast('User is busy on another call.');
+          return;
+        }
         const param = {
           callerId: userLoginList?.user?._id,
           receiverId: detail._id,

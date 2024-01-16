@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import SplashScreen from '../Containers/Splash';
-import welcomeScreen from '../Containers/WelcomeScreen';
+import WelcomeScreen from '../Containers/WelcomeScreen';
 import EditProfile from '../Containers/EditProfile';
 import InterestScreen from '../Containers/Interest';
 import SearchFriend from '../Containers/SearchFriend';
@@ -207,8 +207,8 @@ function AppStack() {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="welcomeScreen"
-          component={welcomeScreen}
+          name="WelcomeScreen"
+          component={WelcomeScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen

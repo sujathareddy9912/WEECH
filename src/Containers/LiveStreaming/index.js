@@ -1810,11 +1810,11 @@ const LiveStreaming = ({navigation, route}) => {
                         : SCREEN_WIDTH / 2,
                     }}
                     textInputStyle={{fontSize: FONT_SIZE.MEDIUM, width: '100%'}}
-                    //onSubmitEditing={onCommentSend}
+                    onSubmitEditing={onCommentSend}
                     blurOnSubmit={false}
                     //multiline={true}
-                    //returnKeyType='none'
-                    // returnKeyLabel="send"
+                    returnKeyType="done"
+                    returnKeyLabel="done"
                     editable={userLiveMute}
                   />
 

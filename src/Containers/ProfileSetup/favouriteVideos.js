@@ -29,7 +29,7 @@ import {
   GET_PROFILE_VIDEO_REQUEST,
   UPDATE_PROFILE_VIDEO_RESET,
   UPDATE_PROFILE_VIDEO_REQUEST,
-  DELETE_PROFILE_IMAGE_VIDEO_RESET
+  DELETE_PROFILE_IMAGE_VIDEO_RESET,
 } from '../../ActionConstant/profile.constant';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Video from 'react-native-video';
@@ -86,11 +86,25 @@ function FavouriteVideos() {
   }, [getProfileSuccess]);
 
   useEffect(() => {
-    setLoading(updateProfileVideoLoading || getProfileVideoLoading || deleteProfileImageVideoLoading);
-  }, [updateProfileVideoLoading, getProfileVideoLoading,deleteProfileImageVideoLoading]);
+    setLoading(
+      updateProfileVideoLoading ||
+        getProfileVideoLoading ||
+        deleteProfileImageVideoLoading,
+    );
+  }, [
+    updateProfileVideoLoading,
+    getProfileVideoLoading,
+    deleteProfileImageVideoLoading,
+  ]);
 
   useEffect(() => {
     if (getProfileVideoSuccess) {
+      let videoUri = getProfileVideoSuccess.user.map(async function (item) {
+        const thumbnail = await CreateThumbnail(
+          `https://api.weecha.uk/v1/uploads/${item.file}`,
+          console.log(thumbnail),
+        );
+      });
       let videos = getProfileVideoSuccess.user.map(item => ({
         uri: `https://api.weecha.uk/v1/uploads/${item.file}`,
         id: item._id,
@@ -125,8 +139,8 @@ function FavouriteVideos() {
     }
 
     return () => {
-      setUserVideos([{}])
-     // dispatch({type: GET_PROFILE_VIDEO_RESET});
+      setUserVideos([{}]);
+      // dispatch({type: GET_PROFILE_VIDEO_RESET});
       dispatch({type: UPDATE_PROFILE_VIDEO_RESET});
     };
   }, [updateProfileVideoSuccess]);
@@ -178,10 +192,9 @@ function FavouriteVideos() {
   }
 
   const jumpToNext = () => {
-    dispatch({type:DELETE_PROFILE_IMAGE_VIDEO_RESET})
+    dispatch({type: DELETE_PROFILE_IMAGE_VIDEO_RESET});
     dispatch(actionDone('favouriteVideos'));
     reset('MainTabNavigation');
-    
   };
 
   function _openImagePicker() {
@@ -199,16 +212,12 @@ function FavouriteVideos() {
   };
 
   const videoValidation = videoArray => {
-    const count = appgender === 'female' ? 3 : 1;
+    const count = 1;
     setUserVideosError(
       favouriteInfoError(
         count,
         videoArray,
-        strings(
-          appgender === 'female'
-            ? 'validation.videoUploadError'
-            : 'validation.videoMaleUploadError',
-        ),
+        strings('validation.videoMaleUploadError'),
       ),
     );
   };
@@ -359,7 +368,7 @@ function FavouriteVideos() {
               <TouchableOpacity
                 style={styles.closeBtn}
                 onPress={() => {
-                  deleteImages(item.id)
+                  deleteImages(item.id);
                   removeImages(index);
                 }}>
                 <Icon

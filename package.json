@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@ducdh-origin/react-native-twitter-signin": "^0.0.3",
-    "@invertase/react-native-apple-authentication": "^2.2.2",
-    "@react-native-async-storage/async-storage": "^1.15.14",
-    "@react-native-clipboard/clipboard": "^1.11.1",
+    "@invertase/react-native-apple-authentication": "^2.3.0",
+    "@react-native-async-storage/async-storage": "^1.21.0",
+    "@react-native-clipboard/clipboard": "^1.13.2",
     "@react-native-community/blur": "^3.6.0",
     "@react-native-community/checkbox": "^0.5.9",
     "@react-native-community/datetimepicker": "^5.1.0",

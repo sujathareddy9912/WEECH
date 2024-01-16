@@ -101,22 +101,22 @@ export const InboxNavigator = () => {
         </Animated.View>
       ) : null}
       <MaterialTopTab.Navigator
-        tabBarOptions={{
-          activeTintColor: COLORS.WHITE,
-          inactiveTintColor: COLORS.MID_GREY,
-          indicatorStyle: {
+        screenOptions={{
+          tabBarActiveTintColor: COLORS.WHITE,
+          tabBarInactiveTintColor: COLORS.MID_GREY,
+          tabBarIndicatorStyle: {
             paddingBottom: 3,
             marginBottom: 3,
             borderRadius: 10,
             backgroundColor: COLORS.WHITE,
           },
-          labelStyle: {
+          tabBarIndicatorContainerStyle: {
+            backgroundColor: COLORS.LIGHT_BABY_PINK,
+          },
+          tabBarLabelStyle: {
             color: COLORS.WHITE,
             fontSize: SCREEN_HEIGHT * 0.017,
             fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
-          },
-          indicatorContainerStyle: {
-            backgroundColor: COLORS.LIGHT_BABY_PINK,
           },
         }}>
         <MaterialTopTab.Screen

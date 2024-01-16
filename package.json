@@ -28,7 +28,7 @@
     "@react-native-firebase/firestore": "^16.5.1",
     "@react-native-firebase/messaging": "^16.5.1",
     "@react-native-google-signin/google-signin": "^6.0.1",
-    "@react-native-masked-view/masked-view": "^0.2.8",
+    "@react-native-masked-view/masked-view": "^0.3.1",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/material-top-tabs": "^6.6.5",
     "@react-navigation/native": "^6.1.9",

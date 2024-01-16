@@ -120,7 +120,7 @@ const DateTimePicker: FC<DateTimePickerProps> = (
   );
 };
 
-export default forwardRef(DateTimePicker);
+export default forwardRef(DateTimePicker); // for forward references
 
 const styles = StyleSheet.create({
   label: {

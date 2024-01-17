@@ -224,7 +224,11 @@ export function NotificationModal(props) {
           <TouchableOpacity
             style={styles.notificationContainer}
             onPress={notificationPress}>
-              <Entypo name={'cross'} color={COLORS.DARK_RED} size={dynamicSize(18)} />
+            <Entypo
+              name={'cross'}
+              color={COLORS.DARK_RED}
+              size={dynamicSize(18)}
+            />
           </TouchableOpacity>
         </TouchableOpacity>
 

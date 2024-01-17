@@ -1519,7 +1519,8 @@ PODS:
     - RNFBApp
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (1.10.3):
+  - RNGestureHandler (2.14.1):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNGoogleSignin (6.0.1):
     - GoogleSignIn (~> 5.0.0)
@@ -2115,7 +2116,7 @@ SPEC CHECKSUMS:
   RNFBFirestore: acc94fe644f02ea746bc0e0bb9016f5ce548abdf
   RNFBMessaging: a647b2db61602e9981933b5fc90f1b058e61922c
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNGestureHandler: fe2be3be5598dc74329b211c58c9f2d231461769
   RNGoogleSignin: e64616a4080cf7d83f4b292fad82d174587444e2
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
   RNImageCropPicker: 14fe1c29298fb4018f3186f455c475ab107da332

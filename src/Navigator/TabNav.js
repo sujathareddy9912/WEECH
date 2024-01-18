@@ -428,7 +428,7 @@ function BottomTabBar(props) {
 
 const LiveUserStack = () => {
   return (
-    <Stack.Navigator headerMode="screen">
+    <Stack.Navigator>
       <Stack.Screen
         name="LiveSection"
         component={LiveUserListing}
@@ -455,7 +455,7 @@ const LiveUserStack = () => {
 
 const DummyPageStack = () => {
   return (
-    <Stack.Navigator headerMode="screen" screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Online" component={DummyPage} />
     </Stack.Navigator>
   );
@@ -463,7 +463,7 @@ const DummyPageStack = () => {
 
 const HomeStack = () => {
   return (
-    <Stack.Navigator headerMode="screen" screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="DiscoverScreen" component={DiscoverScreen} />
       <Stack.Screen name="UserProfile" component={UserProfile} />
       <Stack.Screen name="PersonalChat" component={PersonalChat} />
@@ -507,7 +507,7 @@ const InboxStack = () => {
   };
 
   return (
-    <Stack.Navigator headerMode="screen">
+    <Stack.Navigator>
       <Stack.Screen
         name="Inbox"
         component={InboxNavigator}
@@ -531,7 +531,7 @@ const InboxStack = () => {
 
 const ProfileStack = () => {
   return (
-    <Stack.Navigator headerMode="screen" screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Profile" component={MyProfile} />
     </Stack.Navigator>
   );

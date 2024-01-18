@@ -159,7 +159,6 @@ function AppStack() {
       {/* <InAppCallReceivingContext.Provider value={rtmAdaptor}> */}
       <Stack.Navigator
         // initialRouteName={initialRouteName}
-        headerMode={'screen'}
         initialRouteName="SplashScreen">
         <Stack.Screen
           name="SplashScreen"

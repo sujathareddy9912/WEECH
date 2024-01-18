@@ -9094,7 +9094,7 @@ rimraf@~2.6.2:
   dependencies:
     glob "^7.1.3"
 
-rn-emoji-keyboard@^1.1.0:
+rn-emoji-keyboard@^1.6.0:
   version "1.6.0"
   resolved "https://registry.npmjs.org/rn-emoji-keyboard/-/rn-emoji-keyboard-1.6.0.tgz"
   integrity sha512-fSZ7IYvcK9A3kUYsOJp3IaXGXmcP+NdbbCqOXK2/cuxlLHDJdvK+cnckdUl7m+oAeiHGrovj3aeZ7geDQGJH/w==

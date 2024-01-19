@@ -1335,7 +1335,8 @@ PODS:
     - React-Core
   - react-native-geolocation-service (5.3.1):
     - React
-  - react-native-image-picker (5.7.0):
+  - react-native-image-picker (7.1.0):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-keep-awake (4.0.0):
     - React
@@ -2074,7 +2075,7 @@ SPEC CHECKSUMS:
   react-native-fbsdk-next: 6d497a06fc5c33360f5794b4428a0236789a60e6
   react-native-flipper: 7e4b1c3fe1a2eecbe7304e5ff6b89231b3ec61dc
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
-  react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
+  react-native-image-picker: 5e076db26cd81660cfb6db5bcf517cfa12054d45
   react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
   react-native-netinfo: 8a7fd3f7130ef4ad2fb4276d5c9f8d3f28d2df3d
   react-native-pager-view: e26d35e382d86950c936f8917e3beb9188115ccc

@@ -79,7 +79,7 @@
     "react-native-material-dropdown": "git+https://github.com/noway/react-native-material-dropdown.git",
     "react-native-media-console": "^2.2.0",
     "react-native-modal": "^13.0.1",
-    "react-native-modal-datetime-picker": "^13.0.1",
+    "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-offline": "^6.0.2",
     "react-native-pager-view": "^6.2.3",
     "react-native-paper": "^4.11.1",

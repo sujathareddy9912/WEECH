@@ -1,4 +1,4 @@
-import { call, put } from 'redux-saga/effects';
+import {call, put} from 'redux-saga/effects';
 import {
   updateChatHistoryAction,
   getChatHistorySuccessAction,
@@ -6,12 +6,12 @@ import {
   getGroupChatHistorySuccessAction,
 } from '../Redux/Action';
 
-import { ChatServices } from '../Services/Api/chatServices';
-import { IMAGE_URL } from '../Services/Api/Common';
-import { HelperService } from '../Services/Utils/HelperService';
-import { CHAT_MESSAGE_TYPE } from '../Utils/chatHelper';
+import {ChatServices} from '../Services/Api/chatServices';
+import {IMAGE_URL} from '../Services/Api/Common';
+import {HelperService} from '../Services/Utils/HelperService';
+import {CHAT_MESSAGE_TYPE} from '../Utils/chatHelper';
 
-export function* recentChatListSaga({ payload, callBack }) {
+export function* recentChatListSaga({payload, callBack}) {
   try {
     const resp = yield call(ChatServices.recentChatApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
@@ -26,7 +26,7 @@ export function* recentChatListSaga({ payload, callBack }) {
   }
 }
 
-export function* deleteRecentChatListSaga({ payload, callBack }) {
+export function* deleteRecentChatListSaga({payload, callBack}) {
   try {
     const resp = yield call(ChatServices.deleteRecentChatApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
@@ -41,7 +41,7 @@ export function* deleteRecentChatListSaga({ payload, callBack }) {
   }
 }
 
-export function* visitorListSaga({ payload, callBack }) {
+export function* visitorListSaga({payload, callBack}) {
   try {
     const resp = yield call(ChatServices.visitorListApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
@@ -56,7 +56,7 @@ export function* visitorListSaga({ payload, callBack }) {
   }
 }
 
-export function* createChatRoomSaga({ payload, callBack }) {
+export function* createChatRoomSaga({payload, callBack}) {
   try {
     const resp = yield call(ChatServices.createChatRoomApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
@@ -70,12 +70,12 @@ export function* createChatRoomSaga({ payload, callBack }) {
     HelperService.showToast('Something went wrong');
   }
 }
-export function* getChatMessagesSaga({ payload, page, callBack }) {
+export function* getChatMessagesSaga({payload, page, callBack}) {
   try {
     const resp = yield call(ChatServices.getChatMessagesApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
       callBack(resp);
-      console.log(resp, "JIOOOO ");
+      console.log(resp, 'JIOOOO ');
       const newData =
         resp?.data?.map(item => {
           if (item.type == CHAT_MESSAGE_TYPE.DOCUMENT) {
@@ -93,9 +93,9 @@ export function* getChatMessagesSaga({ payload, page, callBack }) {
               isReply:
                 item?.replyMessageId && item?.isReply
                   ? {
-                    ...item.isReply,
-                    replyId: item.replyMessageId,
-                  }
+                      ...item.isReply,
+                      replyId: item.replyMessageId,
+                    }
                   : null,
             };
           } else if (item.type == CHAT_MESSAGE_TYPE.CONTENT)
@@ -112,11 +112,11 @@ export function* getChatMessagesSaga({ payload, page, callBack }) {
               isReply:
                 item?.replyMessageId && item?.isReply
                   ? {
-                    ...item.isReply,
-                    replyId: item.replyMessageId,
-                  }
+                      ...item.isReply,
+                      replyId: item.replyMessageId,
+                    }
                   : null,
-            }
+            };
           else if (item.type == CHAT_MESSAGE_TYPE.LIVE_LINK)
             return {
               ...item,
@@ -135,13 +135,13 @@ export function* getChatMessagesSaga({ payload, page, callBack }) {
               isReply:
                 item?.replyMessageId && item?.isReply
                   ? {
-                    ...item.isReply,
-                    replyId: item.replyMessageId,
-                  }
+                      ...item.isReply,
+                      replyId: item.replyMessageId,
+                    }
                   : null,
             };
         }) || [];
-      console.log(newData, "NEW DATAA");
+      console.log(newData, 'NEW DATAA');
       if (page == 0) {
         yield put(updateChatHistoryAction(newData));
       } else {
@@ -157,7 +157,7 @@ export function* getChatMessagesSaga({ payload, page, callBack }) {
   }
 }
 
-export function* getGroupMessagesSaga({ payload, page, callBack }) {
+export function* getGroupMessagesSaga({payload, page, callBack}) {
   try {
     const resp = yield call(ChatServices.getGroupMessagesSagaApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
@@ -179,9 +179,9 @@ export function* getGroupMessagesSaga({ payload, page, callBack }) {
               isReply:
                 item?.replyMessageId && item?.isReply
                   ? {
-                    ...item.isReply,
-                    replyId: item.replyMessageId,
-                  }
+                      ...item.isReply,
+                      replyId: item.replyMessageId,
+                    }
                   : null,
             };
           } else if (item.type == CHAT_MESSAGE_TYPE.CONTENT)
@@ -198,9 +198,9 @@ export function* getGroupMessagesSaga({ payload, page, callBack }) {
               isReply:
                 item?.replyMessageId && item?.isReply
                   ? {
-                    ...item.isReply,
-                    replyId: item.replyMessageId,
-                  }
+                      ...item.isReply,
+                      replyId: item.replyMessageId,
+                    }
                   : null,
             };
         }) || [];
@@ -219,7 +219,7 @@ export function* getGroupMessagesSaga({ payload, page, callBack }) {
   }
 }
 
-export function* getChatListSaga({ payload, page, callBack }) {
+export function* getChatListSaga({payload, page, callBack}) {
   try {
     const resp = yield call(ChatServices.getChatListApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
@@ -234,7 +234,7 @@ export function* getChatListSaga({ payload, page, callBack }) {
   }
 }
 
-export function* uploadChatMediaFileSaga({ payload, callBack }) {
+export function* uploadChatMediaFileSaga({payload, callBack}) {
   try {
     const resp = yield call(ChatServices.uploadChatMediaFileApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
@@ -249,7 +249,7 @@ export function* uploadChatMediaFileSaga({ payload, callBack }) {
   }
 }
 
-export function* uploadChatVideoFileSaga({ payload, callBack }) {
+export function* uploadChatVideoFileSaga({payload, callBack}) {
   try {
     const resp = yield call(ChatServices.uploadChatVideoFileSagaApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
@@ -264,7 +264,7 @@ export function* uploadChatVideoFileSaga({ payload, callBack }) {
   }
 }
 
-export function* grpChatCreation({ payload, callBack }) {
+export function* grpChatCreation({payload, callBack}) {
   try {
     const resp = yield call(ChatServices.grpChatCreationApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
@@ -279,7 +279,7 @@ export function* grpChatCreation({ payload, callBack }) {
   }
 }
 
-export function* grpChatUpdateSaga({ payload, callBack }) {
+export function* grpChatUpdateSaga({payload, callBack}) {
   try {
     const resp = yield call(ChatServices.grpChatUpdateApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
@@ -294,7 +294,7 @@ export function* grpChatUpdateSaga({ payload, callBack }) {
   }
 }
 
-export function* getGroupChats({ payload, callBack }) {
+export function* getGroupChats({payload, callBack}) {
   try {
     const resp = yield call(ChatServices.getGroupChatsApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {

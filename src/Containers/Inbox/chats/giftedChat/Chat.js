@@ -781,7 +781,7 @@ const PersonalChat = props => {
         messagesContainerStyle={{
           paddingBottom: isIOS
             ? safeArea.bottom + dynamicSize(50)
-            : safeArea.bottom + dynamicSize(25),
+            : safeArea.bottom + dynamicSize(90),
           backgroundColor: COLORS.WHITE,
         }}
         listViewProps={{

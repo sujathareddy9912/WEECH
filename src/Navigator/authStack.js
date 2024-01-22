@@ -7,7 +7,7 @@ import Signup from '../Containers/SignUp';
 
 const AuthStack = () => {
   return (
-    <Stack.Navigator headerMode="screen" screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Landing" component={Landing} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />

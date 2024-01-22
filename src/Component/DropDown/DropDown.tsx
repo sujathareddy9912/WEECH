@@ -6,11 +6,10 @@ import {
   Keyboard,
   TextStyle,
   StyleProp,
-  ColorValue
+  ColorValue,
 } from 'react-native';
 import {Dropdown as DropDownElement} from 'react-native-element-dropdown';
 import {COLORS} from '../../Utils/colors';
-
 
 interface DropDownProps {
   data: {label: string; value: string}[];
@@ -22,14 +21,14 @@ interface DropDownProps {
   placeholderStyle?: StyleProp<TextStyle>;
   value?: string;
   disabled?: boolean;
-  onChange?: (item:any) => void;
+  onChange?: (item: any) => void;
 }
 
 const DropDown: FC<DropDownProps> = ({
   data,
   label,
   labelTextColor,
-  isRequired=false,
+  isRequired = false,
   labelStyle,
   placeholder,
   placeholderStyle,
@@ -38,7 +37,7 @@ const DropDown: FC<DropDownProps> = ({
   onChange,
   ...rest
 }: any) => {
-  const { BLACK } = COLORS;
+  const {BLACK} = COLORS;
 
   let labelColor = labelTextColor || BLACK;
 
@@ -51,7 +50,7 @@ const DropDown: FC<DropDownProps> = ({
   };
   return (
     <View style={styles.cotainer}>
-     {label && (
+      {label && (
         <Text style={[styles.label, labelStyle, {color: labelColor}]}>
           {label}
           {isRequired && <Text style={styles.asterick}>*</Text>}
@@ -60,9 +59,9 @@ const DropDown: FC<DropDownProps> = ({
       <DropDownElement
         {...rest}
         data={data}
-        mode='auto'
+        mode="auto"
         autoScroll
-        selectedTextProps={{ numberOfLines: 1 }}
+        selectedTextProps={{numberOfLines: 1}}
         showsVerticalScrollIndicator
         placeholder={placeholder}
         placeholderStyle={[
@@ -71,7 +70,7 @@ const DropDown: FC<DropDownProps> = ({
           placeholderStyle,
         ]}
         searchPlaceholder="Search"
-        selectedTextStyle={[styles.fontNormal, { color: BLACK }]}
+        selectedTextStyle={[styles.fontNormal, {color: BLACK}]}
         labelField="label"
         valueField="value"
         value={value}
@@ -91,10 +90,10 @@ export default DropDown;
 const styles = StyleSheet.create({
   cotainer: {
     flex: 1,
-    backgroundColor:COLORS.WHITE,
+    backgroundColor: COLORS.WHITE,
     maxHeight: 60,
-    borderRadius:8,
-    paddingHorizontal:4,
+    borderRadius: 8,
+    paddingHorizontal: 4,
     paddingVertical: 8,
   },
   item: {

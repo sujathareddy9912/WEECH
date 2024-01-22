@@ -950,9 +950,9 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
-  - lottie-ios (3.4.0)
-  - lottie-react-native (5.1.6):
-    - lottie-ios (~> 3.4.0)
+  - lottie-ios (4.3.4)
+  - lottie-react-native (6.5.1):
+    - lottie-ios (~> 4.3.3)
     - React-Core
   - MLImage (1.0.0-beta4)
   - MLKitCommon (9.0.0):
@@ -1283,8 +1283,9 @@ PODS:
   - react-native-agora (3.7.1):
     - AgoraRtcEngine_iOS (= 3.7.0.3)
     - React-Core
-  - react-native-blur (0.8.0):
-    - React
+  - react-native-blur (4.4.0):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
   - react-native-camera (4.2.1):
     - React-Core
     - react-native-camera/RCT (= 4.2.1)
@@ -1327,11 +1328,12 @@ PODS:
     - React-Core
   - react-native-geolocation-service (5.3.1):
     - React
-  - react-native-image-picker (5.7.0):
+  - react-native-image-picker (7.1.0):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-keep-awake (4.0.0):
     - React
-  - react-native-netinfo (5.9.10):
+  - react-native-netinfo (11.2.1):
     - React-Core
   - react-native-pager-view (6.2.3):
     - RCT-Folly (= 2021.07.22.00)
@@ -1473,9 +1475,9 @@ PODS:
     - React-Core
   - RNCClipboard (1.13.2):
     - React-Core
-  - RNCMaskedView (0.2.9):
+  - RNCMaskedView (0.3.1):
     - React-Core
-  - RNDateTimePicker (5.1.0):
+  - RNDateTimePicker (7.6.2):
     - React-Core
   - RNDeviceInfo (10.12.0):
     - React-Core
@@ -1511,19 +1513,20 @@ PODS:
     - RNFBApp
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (1.10.3):
+  - RNGestureHandler (2.14.1):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNGoogleSignin (6.0.1):
     - GoogleSignIn (~> 5.0.0)
     - React-Core
   - RNI18n (2.0.15):
     - React
-  - RNImageCropPicker (0.39.0):
+  - RNImageCropPicker (0.40.2):
     - React-Core
     - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.39.0)
+    - RNImageCropPicker/QBImagePickerController (= 0.40.2)
     - TOCropViewController
-  - RNImageCropPicker/QBImagePickerController (0.39.0):
+  - RNImageCropPicker/QBImagePickerController (0.40.2):
     - React-Core
     - React-RCTImage
     - TOCropViewController
@@ -2017,8 +2020,8 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
-  lottie-ios: 69495122151a378fdc7d1bb4c5930347e37baf1f
-  lottie-react-native: 8f9d4be452e23f6e5ca0fdc11669dc99ab52be81
+  lottie-ios: 3d98679b41fa6fd6aff2352b3953dbd3df8a397e
+  lottie-react-native: cdeae481649c11d586084b8662f03251c4dd8249
   MLImage: 7bb7c4264164ade9bf64f679b40fb29c8f33ee9b
   MLKitCommon: c1b791c3e667091918d91bda4bba69a91011e390
   MLKitFaceDetection: 4981488f71ea8ed718cda692a29ab562637d9ae5
@@ -2043,7 +2046,7 @@ SPEC CHECKSUMS:
   React-jsinspector: fdf0a09bddecf9ce8da830bcb89a9814230c04a4
   React-logger: c2e7bb772d6e9fc3d0109d1243b81546a9c93c0f
   react-native-agora: c328ef8c381d7b22cc11d1eb298d8ff8a8e7a70d
-  react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
+  react-native-blur: 69ecfe61d81b32ee7baae10f5d17aeb4e2594b10
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-compressor: d30f0cf83afec95099fb109919a58d484e00051a
   react-native-config: 86038147314e2e6d10ea9972022aa171e6b1d4d8
@@ -2052,9 +2055,9 @@ SPEC CHECKSUMS:
   react-native-fbsdk-next: 6d497a06fc5c33360f5794b4428a0236789a60e6
   react-native-flipper: 7e4b1c3fe1a2eecbe7304e5ff6b89231b3ec61dc
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
-  react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
+  react-native-image-picker: 5e076db26cd81660cfb6db5bcf517cfa12054d45
   react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
-  react-native-netinfo: 30fb89fa913c342be82a887b56e96be6d71201dd
+  react-native-netinfo: 8a7fd3f7130ef4ad2fb4276d5c9f8d3f28d2df3d
   react-native-pager-view: e26d35e382d86950c936f8917e3beb9188115ccc
   react-native-razorpay: 0272dd684bc9148828c54a72e05059e3e2e8b813
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
@@ -2083,8 +2086,8 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
   RNCCheckbox: a3ca9978cb0846b981d28da4e9914bd437403d77
   RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
-  RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
-  RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
+  RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
+  RNDateTimePicker: fc2e4f2795877d45e84d85659bebe627eba5c931
   RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBAnalytics: 36f7df880647409ecd52e80f89cd3650c4f771e5
@@ -2094,10 +2097,10 @@ SPEC CHECKSUMS:
   RNFBFirestore: acc94fe644f02ea746bc0e0bb9016f5ce548abdf
   RNFBMessaging: a647b2db61602e9981933b5fc90f1b058e61922c
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNGestureHandler: fe2be3be5598dc74329b211c58c9f2d231461769
   RNGoogleSignin: e64616a4080cf7d83f4b292fad82d174587444e2
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
-  RNImageCropPicker: 14fe1c29298fb4018f3186f455c475ab107da332
+  RNImageCropPicker: d9616a0cb9b72e8551ff94a7a5021fbd29050aa5
   RNPermissions: c03f56ca764a8193ab68078a3c11e0d72839bbd5
   RNReanimated: fdbaa9c964bbab7fac50c90862b6cc5f041679b9
   RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3

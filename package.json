@@ -67,7 +67,7 @@
     "react-native-fs": "^2.20.0",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-gesture-handler": "^2.14.1",
-    "react-native-gifted-chat": "^1.0.2",
+    "react-native-gifted-chat": "^2.4.0",
     "react-native-grid-image-viewer": "^1.3.0",
     "react-native-i18n": "^2.0.15",
     "react-native-image-crop-picker": "^0.40.2",
@@ -79,7 +79,7 @@
     "react-native-material-dropdown": "git+https://github.com/noway/react-native-material-dropdown.git",
     "react-native-media-console": "^2.2.0",
     "react-native-modal": "^13.0.1",
-    "react-native-modal-datetime-picker": "^13.0.1",
+    "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-offline": "^6.0.2",
     "react-native-pager-view": "^6.2.3",
     "react-native-paper": "^4.11.1",
@@ -90,7 +90,7 @@
     "react-native-reanimated": "^3.6.1",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.3.0",
-    "react-native-screens": "^3.13.1",
+    "react-native-screens": "^3.29.0",
     "react-native-share": "^8.1.0",
     "react-native-simple-toast": "^1.1.3",
     "react-native-snap-carousel": "^3.9.1",
@@ -113,7 +113,7 @@
     "reduxsauce": "^1.2.1",
     "rn-emoji-keyboard": "^1.6.0",
     "rn-fetch-blob": "^0.12.0",
-    "socket.io-client": "^4.4.1"
+    "socket.io-client": "^4.7.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

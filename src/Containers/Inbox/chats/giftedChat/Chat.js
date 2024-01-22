@@ -57,6 +57,7 @@ import requestCameraAndAudioPermission, {
   uuid,
   openCamera,
   dismissKeyboard,
+  isIOS,
 } from '../../../../Utils/helper';
 
 import {
@@ -778,10 +779,9 @@ const PersonalChat = props => {
         }}
         renderMessageText={renderMessageText}
         messagesContainerStyle={{
-          marginTop: -safeArea.top,
-          paddingBottom: safeArea.bottom
-            ? safeArea.bottom + dynamicSize(10)
-            : hp(10),
+          paddingBottom: isIOS
+            ? safeArea.bottom + dynamicSize(50)
+            : safeArea.bottom + dynamicSize(90),
           backgroundColor: COLORS.WHITE,
         }}
         listViewProps={{

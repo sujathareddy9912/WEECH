@@ -293,13 +293,13 @@ function FavouriteVideos() {
   // };
 
   const onClickSave = () => {
-    const count = appgender === 'female' ? 3 : 1;
+    const count = appgender === 'female' ? 1 : 1;
     const piError = favouriteInfoError(
       count,
       userVideos,
       strings(
         appgender === 'female'
-          ? 'validation.videoUploadError'
+          ? 'validation.videoMaleUploadError'
           : 'validation.videoMaleUploadError',
       ),
     );

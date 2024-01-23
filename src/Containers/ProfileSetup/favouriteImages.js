@@ -218,7 +218,7 @@ function FavouriteImages(props) {
         strings(
           appgender === 'female'
             ? 'validation.imageUploadError '
-            : 'validation.videoMaleUploadError',
+            : 'validation.imageMaleUploadError',
         ),
       ),
     );

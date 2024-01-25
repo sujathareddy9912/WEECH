@@ -22,8 +22,9 @@ export const compressImage = async (image: ImageData) => {
   if (image.path) {
     const result = await Image.compress(image.path, {
       compressionMethod: 'auto',
-      maxWidth: 720,
-      maxHeight: 720,
+      maxWidth: 300,
+      maxHeight: 300,
+      quality:0.7
     });
     value = {
       uri: result,

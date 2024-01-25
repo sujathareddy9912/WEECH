@@ -217,7 +217,7 @@ function FavouriteImages(props) {
         imagesArray,
         strings(
           appgender === 'female'
-            ? 'validation.imageUploadError '
+            ? 'validation.imageUploadError'
             : 'validation.imageMaleUploadError',
         ),
       ),
@@ -271,7 +271,7 @@ function FavouriteImages(props) {
       strings(
         appgender === 'female'
           ? 'validation.imageUploadError'
-          : 'validation.videoMaleUploadError',
+          : 'validation.imageMaleUploadError',
       ),
     );
 

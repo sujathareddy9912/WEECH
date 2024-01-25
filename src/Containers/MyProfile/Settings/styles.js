@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
   list: {
     marginTop: wp(10),
     paddingHorizontal:wp(3),
+    paddingVertical:48
   },
   backContainer:{
     flexDirection:'row',

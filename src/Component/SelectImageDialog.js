@@ -2,7 +2,7 @@ import React from 'react';
 import {Dimensions, View, Text, Pressable} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {strings} from '../localization/config';
-import { dynamicSize } from '../Utils/responsive';
+import {dynamicSize} from '../Utils/responsive';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').width;
@@ -55,30 +55,36 @@ const SelectImageDialog = React.forwardRef((props, ref) => {
           backgroundColor: '#eaeaea',
         }}></View>
 
-      <View style={{width: '100%', paddingHorizontal: 30, justifyContent:'flex-end', height:'75%'}}>
-        {!isVideo ? (
-          <Pressable
+      <View
+        style={{
+          width: '100%',
+          paddingHorizontal: 30,
+          justifyContent: 'flex-end',
+          height: '75%',
+        }}>
+        <Pressable
+          style={{
+            height: 55,
+            backgroundColor: 'blue',
+            borderRadius: 15,
+            justifyContent: 'center',
+            marginTop: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+          onPress={onPressTakePhoto}>
+          <Text
             style={{
-              height: 55,
-              backgroundColor: 'blue',
-              borderRadius: 15,
-              justifyContent: 'center',
-              marginTop: 10,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-            onPress={onPressTakePhoto}>
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 16,
-                textAlign: 'center',
-                fontWeight: '700',
-              }}>
-              {strings('filePicker.takePhoto')}
-            </Text>
-          </Pressable>
-        ) : null}
+              color: 'white',
+              fontSize: 16,
+              textAlign: 'center',
+              fontWeight: '700',
+            }}>
+            {isVideo
+              ? strings('filePicker.takeVideo')
+              : strings('filePicker.takePhoto')}
+          </Text>
+        </Pressable>
         <Pressable
           style={{
             height: 55,

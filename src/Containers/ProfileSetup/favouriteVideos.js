@@ -21,7 +21,6 @@ import {createThumbnail} from 'react-native-create-thumbnail';
 import {strings} from '../../localization/config';
 import {showMessage} from 'react-native-flash-message';
 import {reset} from '../../Navigator/navigationHelper';
-import GradientBackground from '../../Component/GardientBackground/GardientBackGround';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '../../Component/commomComponent';
 import {useSelector, useDispatch} from 'react-redux';
@@ -411,25 +410,9 @@ function FavouriteVideos() {
 
   return (
     <>
-      {/* <GradientBackground> */}
-      {/* <TouchableOpacity
-          style={[styles.backBtn, {top: useSafeAreaInsets().top}]}
-          onPress={onPressBack}>
-          <Icon
-            origin="AntDesign"
-            name="arrowleft"
-            size={24}
-            color={COLORS.BLACK}
-          />
-        </TouchableOpacity>
-        <Text style={styles.header}>Favourite Videos</Text> */}
       <LodingIndicator visible={loading} />
       <ScrollView>
         <View style={styles.seperator}>
-          {/* <Text style={styles.title}>
-            {strings('editProfile.videos')}{' '}
-            {gender === 'female' && <Text style={styles.asterick}>*</Text>}
-          </Text> */}
           <Text style={styles.subtitle}>
             {strings(`editProfile.upload_video_description`)}
           </Text>
@@ -447,7 +430,7 @@ function FavouriteVideos() {
           )}
           <SelectImageDialog
             key="imageRef"
-            isVideo={false}
+            isVideo={true}
             ref={favouriteVideoRef}
             onPressTakePhoto={_takePhoto}
             onPressChooseFromLibrary={_chooseFromLib}
@@ -456,7 +439,6 @@ function FavouriteVideos() {
         </View>
 
         <Button
-          // indicator={updoadingDetails}
           onPress={() => {
             setSkip(false);
             onClickSave();
@@ -507,7 +489,6 @@ function FavouriteVideos() {
                 source={{uri: videoUri}}
                 style={styles.video}
                 repeat={false}
-                // paused={paused}
                 onBuffer={onBuffer}
                 onLoadStart={onLoadStart}
                 onLoad={onLoad}
@@ -528,7 +509,6 @@ function FavouriteVideos() {
           </View>
         </View>
       </RBSheet>
-      {/* </GradientBackground> */}
     </>
   );
 }

@@ -82,6 +82,7 @@
   "filePicker": {
     "selectVideo": "SELECT VIDEO",
     "selectPhoto": "SELECT PHOTO",
+    "takeVideo": "Take VIDEO",
     "takePhoto": "Take Photo",
     "chooseFromLibrary": "Choose from library",
     "cancel": "Cancel"

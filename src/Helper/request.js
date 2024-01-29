@@ -7,7 +7,7 @@ import {getData} from '../Utils/helper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const client = axios.create({
-  baseURL: Config.BASE_URL,
+  baseURL: 'https://api.weecha.uk/v1/',
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',

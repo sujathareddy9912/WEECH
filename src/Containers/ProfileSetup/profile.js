@@ -441,7 +441,6 @@ function Profile(props) {
           />
         )}
       </ScrollView>
-      {/* </GradientBackground> */}
     </>
   );
 }

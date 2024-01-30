@@ -328,18 +328,17 @@ const UserProfile = props => {
   };
 
   const callingFunctionality = async type => {
-    alert('clall');
     const permissionGranted =
       type == CALLING_TYPE.VIDEO
         ? await requestCameraAndAudioPermission()
         : await requestAudioPermission();
     if (permissionGranted && detail) {
       try {
-       const userBusyorNot = await checkNodePresentOrNot(detail._id);
-        if (userBusyorNot) {
-          HelperService.showToast('User is busy on another call.');
-          return;
-        }
+      //  const userBusyorNot = await checkNodePresentOrNot(detail._id);
+      //   if (userBusyorNot) {
+      //     HelperService.showToast('User is busy on another call.');
+      //     return;
+      //   }
         const param = {
           callerId: userLoginList?.user?._id,
           receiverId: detail._id,
@@ -365,7 +364,7 @@ const UserProfile = props => {
                 receiverPoints: detail.points,
               };
               incomingCallQuery(detail._id).set(callingParams);
-             // props.navigation.navigate('VideoCall', callingParams);
+              props.navigation.navigate('VideoCall', callingParams);
             }
           }),
         );
@@ -428,7 +427,7 @@ const UserProfile = props => {
             <TouchableIcon
               customIcon={
                 <Ionicons
-                  name={'ios-chevron-back-outline'}
+                  name={'chevron-back'}
                   size={dynamicSize(30)}
                   color={COLORS.WHITE}
                 />

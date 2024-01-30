@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import Config from 'react-native-config';
+import Config from 'react-native-config';
 // import KeychainServices from '../storage/keychain';
 // import storageKey from '../../constants/storage';
 import {LOCAL_KEY} from '../Utils/localStorage';

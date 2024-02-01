@@ -233,9 +233,10 @@ function* uploadFavouriteVidoes(data) {
 function* deleteFavouriteImageVidoes(data) {
   try {
     const {payload} = data;
-    // console.log(payload);
+    console.log('hhhhhhh',payload);
    yield put(deleteProfileImageVideoLoading());
    const res = yield call(deleteFavouriteImageVideosApi, payload);
+   console.log(res);
     if (res && res.data.code === 200) {
       yield put(deleteProfileImageVideoSuccess(res.data));
     } else {

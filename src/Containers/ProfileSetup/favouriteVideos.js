@@ -29,6 +29,7 @@ import {
   UPDATE_PROFILE_VIDEO_RESET,
   UPDATE_PROFILE_VIDEO_REQUEST,
   DELETE_PROFILE_IMAGE_VIDEO_RESET,
+  DELETE_PROFILE_IMAGE_VIDEO_REQUEST,
 } from '../../ActionConstant/profile.constant';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Video from 'react-native-video';
@@ -331,7 +332,7 @@ function FavouriteVideos() {
     });
   };
 
-  const deleteImages = id => {
+  const deleteVideos = id => {
     if (id) {
       const requestData = {
         id: id,
@@ -367,7 +368,7 @@ function FavouriteVideos() {
               <TouchableOpacity
                 style={styles.closeBtn}
                 onPress={() => {
-                  deleteImages(item.id);
+                  deleteVideos(item.id);
                   removeImages(index);
                 }}>
                 <Icon
@@ -386,6 +387,19 @@ function FavouriteVideos() {
                   setVideoUri(item.uri);
                   refRBSheet.current.open();
                 }}>
+                <TouchableOpacity
+                  style={styles.closeBtn}
+                  onPress={() => {
+                    deleteVideos(item?.id);
+                    removeImages(index);
+                  }}>
+                  <Icon
+                    origin="AntDesign"
+                    name="close"
+                    size={12}
+                    color={COLORS.WHITE}
+                  />
+                </TouchableOpacity>
                 <Icon
                   origin="AntDesign"
                   name={'play'}

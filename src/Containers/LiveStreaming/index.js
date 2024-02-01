@@ -148,6 +148,7 @@ let timeout = null,
 const LiveStreaming = ({navigation, route}) => {
   const dispatch = useDispatch();
   const state = useSelector(state => {
+    console.log("selected state: " ,state)
     return state;
   });
 
@@ -396,6 +397,7 @@ const LiveStreaming = ({navigation, route}) => {
 
   useEffect(() => {
     socket.off('live_session').on('live_session', async data => {
+      console.log('Live session data',data)
       if (data?.type === 'join_user') {
         dispatch(
           joinUserOnLiveStreamAction({
@@ -961,6 +963,7 @@ const LiveStreaming = ({navigation, route}) => {
   ).current;
 
   const _renderComment = (item, index) => {
+    console.log("render comment", item)
     if (item?.type === 'comment') {
       let follwing = viewersFollowing.filter(x => {
         if (
@@ -1061,7 +1064,16 @@ const LiveStreaming = ({navigation, route}) => {
     }, 500);
   };
 
+  socket.on("connect", () => {
+    console.log("Socket Connected");
+  });
+
+  socket.on("connect_error", (error) => {
+    console.log("Socket Error", error);
+  });
+
   const onCommentSend = () => {
+
     let isAdmin = adminList.filter(
       data => data?.joinedUsers?._id == userLoginList?.user?._id,
     );
@@ -1079,6 +1091,7 @@ const LiveStreaming = ({navigation, route}) => {
           isAdmin: isAdmin.length,
         },
       };
+      console.warn('Comment 1', data)
       socket.emit('live_session', data);
 
       dispatch(commentOnLiveStreamAction(data));
@@ -1105,6 +1118,8 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   const _emitGift = data => {
+    console.warn('emit gift', JSON.stringify(data))
+    console.warn('emit giftId: data?.param?.giftId', data?.param?.giftId)
     // do not remove this line @Front end developer , this code is commented for future use
     userLoginList.user.points =
       userLoginList.user.points - data.param.totalPrice;
@@ -1129,6 +1144,7 @@ const LiveStreaming = ({navigation, route}) => {
     const comentData = {
       type: 'comment',
       chat_id: channelToken,
+      giftId: data?.param?.giftId,
       commentData: {
         type: 'comment',
         comment: `${data?.totalCount} gift's send by ${userLoginList?.user?.name} `,
@@ -1139,6 +1155,7 @@ const LiveStreaming = ({navigation, route}) => {
         isAdmin: isAdmin.length,
       },
     };
+    console.warn("passing gift on socket", comentData);
     socket.emit('live_session', comentData);
 
     dispatch(commentOnLiveStreamAction(comentData));

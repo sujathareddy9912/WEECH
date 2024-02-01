@@ -1,29 +1,24 @@
-import {useRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {BlurView} from '@react-native-community/blur';
 import database from '@react-native-firebase/database';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
-  ImageBackground,
   View,
   TouchableWithoutFeedback,
   SafeAreaView,
   StatusBar,
+  Text,
+  PermissionsAndroid,
+  ScrollView,
 } from 'react-native';
-
-import RtcEngine, {
-  ClientRole,
-  RtcLocalView,
-  RtcRemoteView,
-  ChannelProfile,
-  VideoRenderMode,
+import {
+  ClientRoleType,
+  createAgoraRtcEngine,
+  RtcSurfaceView,
+  ChannelProfileType,
 } from 'react-native-agora';
 
 import styles from './styles';
 import {COLORS} from '../../Utils/colors';
-import India from '../../Assets/Icons/india.svg';
-import {dynamicSize} from '../../Utils/responsive';
 import {IMAGE_URL} from '../../Services/Api/Common';
 import {rtmAgoraConfig} from '../../Utils/agoraConfig';
 import {routeNameRef} from '../../Navigator/navigationHelper';
@@ -31,7 +26,6 @@ import {HelperService} from '../../Services/Utils/HelperService';
 
 import {
   incomingCallQuery,
-  checkNodePresentOrNot,
   removedbNodeIfExist,
   disableIncomingCallQuery,
 } from '../../firebase/nodeQuery';
@@ -41,7 +35,6 @@ import {
   CALLING_TYPE,
   getAge,
   getCountryDetailWithKey,
-  SCREEN_HEIGHT,
   SCREEN_WIDTH,
   secondsToHourMinute,
 } from '../../Utils/helper';
@@ -49,7 +42,6 @@ import {
 import {
   MyText,
   MyImage,
-  MyIndicator,
   MyLinearGradient,
   CallActionBottonSheet,
   CallActionBottonSheetAudio,
@@ -57,32 +49,26 @@ import {
 } from '../../Component/commomComponent';
 
 import {
-  joinHostPeerIdAction,
   updateCallPeerIdAction,
   incomingCallPopupAction,
-  joinAudiencePeerIdAction,
   leaveCallingRoomAction,
   createIncomeCallAction,
   showGiftComponentOnCallAction,
-  incomingCallDataAction,
   clearCommentOnDuringCall,
   reconnectLiveStreamAction,
 } from '../../Redux/Action';
-import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {SvgIcon} from '../../Component/icons';
 import {FONT_SIZE} from '../../Utils/fontFamily';
 
 let timeout = null;
 
 const VideoCall = ({navigation, route}) => {
-  const routeName = useRoute();
-  const agoraEngine = useRef();
+  const agoraEngineRef = useRef();
   const dispatch = useDispatch();
   const state = useSelector(state => {
     return state;
   });
   const {userLoginList} = state.authReducer;
-  const {peerId} = state.callReducer;
   const {showGiftComponentOnCall} = state.loaderReducer;
 
   const initialState = {
@@ -96,6 +82,8 @@ const VideoCall = ({navigation, route}) => {
   const [showTime, UpdateTimeStatus] = useState(false);
   const [{joinSucceed, switchCamera, peerIds}, setState] =
     useState(initialState);
+  const [remoteUid, setRemoteUid] = useState(0);
+  const [isJoined, setIsJoined] = useState(false);
 
   const detail = useMemo(() => {
     return route?.params;
@@ -184,126 +172,111 @@ const VideoCall = ({navigation, route}) => {
 
   useEffect(() => {
     if (channelToken && channelName) {
-      _initEngine();
-      return async () => {
-        // await _destroyCallRefrence();
-      };
+      setupVideoSDKEngine();
     }
   }, [channelToken, channelName]);
 
-  const _initEngine = async () => {
+  const getPermission = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      ]);
+    }
+  };
+
+  const setupVideoSDKEngine = async () => {
     try {
-      agoraEngine.current = await RtcEngine.create(rtmAgoraConfig.appId);
-      if (callData.isVideoCall) {
-        await agoraEngine.current?.enableVideo();
-        await agoraEngine.current?.startPreview();
-      } else {
-        await agoraEngine.current?.enableAudio();
+      if (Platform.OS === 'android') {
+        await getPermission();
       }
-      await agoraEngine.current?.setChannelProfile(
-        ChannelProfile.LiveBroadcasting,
-      );
-      await agoraEngine.current?.setClientRole(ClientRole.Broadcaster);
-      _addListeners();
-      _startCall();
-    } catch (error) {
-      console.log('init error==>', error.message);
+      agoraEngineRef.current = createAgoraRtcEngine();
+      const agoraEngineInit = agoraEngineRef.current;
+      agoraEngineInit.registerEventHandler({
+        onJoinChannelSuccess: () => {
+          setIsJoined(true);
+        },
+        onUserJoined: (_connection, Uid) => {
+          setRemoteUid(Uid);
+        },
+        onUserOffline: (_connection, Uid) => {
+          setRemoteUid(0);
+          onCancelPress();
+        },
+        onConnectionLost: _connection => {
+          console.log('Please check your internet connection.');
+        },
+      });
+      agoraEngineInit.initialize({
+        appId: rtmAgoraConfig.appId,
+        channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+      });
+      agoraEngineInit.enableVideo();
+      join();
+    } catch (e) {
+      console.log(e);
     }
   };
 
-  const _addListeners = () => {
-    agoraEngine.current?.addListener('Warning', warn => {
-      console.log('Warning', warn);
-    });
-
-    agoraEngine.current?.addListener('Error', err => {
-      console.log('Error', err);
-    });
-
-    agoraEngine.current?.addListener('UserJoined', (uid, elapsed) => {
-      console.log('UserJoined', uid, elapsed);
-      // If new user
-      if (peerId.indexOf(uid) === -1) {
-        dispatch(joinAudiencePeerIdAction(uid));
-      }
-    });
-
-    // for video call if user leaves the room
-    agoraEngine.current?.addListener('UserOffline', (uid, reason) => {
-      console.log('UserOffline', uid, reason);
-      // Remove peer ID from state array
-      onCancelPress();
-    });
-
-    // If Local user joins RTC channel
-    agoraEngine.current?.addListener(
-      'JoinChannelSuccess',
-      (channel, uid, elapsed) => {
-        console.log('JoinChannelSuccess', channel, uid, elapsed);
-        // Set state variable to true
-        setState(prevState => ({
-          ...prevState,
-          joinSucceed: true,
-        }));
-        dispatch(joinHostPeerIdAction(uid));
-      },
-      error => {
-        console.log('JoinChannel Failure', error);
-      },
-    );
-
-    agoraEngine.current?.addListener(
-      'RemoteVideoStateChanged',
-      (uid, state) => {
-        // if (uid === 1) setBroadcasterVideoState(state);
-      },
-    );
-  };
-
-  const _startCall = async () => {
+  const join = async () => {
     if (callData.isVideoCall) {
-      await agoraEngine.current?.leaveChannel();
+      await agoraEngineRef.current?.leaveChannel();
     }
-    const uid = 0;
 
-    await agoraEngine.current?.joinChannel(
-      channelToken,
-      channelName,
-      null,
-      uid,
-    );
-    if (!callData.isVideoCall) {
-      await agoraEngine.current?.setEnableSpeakerphone(false);
+    try {
+      agoraEngineRef.current?.setChannelProfile(
+        ChannelProfileType.ChannelProfileCommunication,
+      );
+      agoraEngineRef.current?.startPreview();
+      agoraEngineRef.current?.joinChannel(
+        channelToken,
+        channelName,
+        rtmAgoraConfig.uid,
+        {
+          clientRoleType: ClientRoleType.ClientRoleBroadcaster,
+        },
+      );
+    } catch (e) {
+      console.log(e);
     }
-    await agoraEngine.current?.stopPreview();
+  };
+
+  const leave = () => {
+    try {
+      agoraEngineRef.current?.leaveChannel();
+      setRemoteUid(0);
+      setIsJoined(false);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const onCameraPress = async () => {
-    await agoraEngine.current?.switchCamera();
+    await agoraEngineRef.current?.switchCamera();
     setState(prevState => ({...prevState, switchCamera: !switchCamera}));
   };
 
   const onVideoPress = async videoStatus => {
-    await agoraEngine.current?.enableLocalVideo(videoStatus);
+    await agoraEngineRef.current?.enableLocalVideo(videoStatus);
   };
 
   const onMicPress = async micStatus => {
-    await agoraEngine.current?.muteLocalAudioStream(micStatus);
+    await agoraEngineRef.current?.muteLocalAudioStream(micStatus);
   };
 
   const onSpeakerPress = async speakerStatus => {
     if (speakerStatus) {
-      await agoraEngine.current?.setEnableSpeakerphone(true);
+      await agoraEngineRef.current?.setEnableSpeakerphone(true);
     } else {
-      await agoraEngine.current?.setEnableSpeakerphone(false);
+      await agoraEngineRef.current?.setEnableSpeakerphone(false);
     }
   };
 
   const onSpeakerVideoPress = async speakerStatus => {
     if (speakerStatus) {
-      await agoraEngine.current?.disableAudio();
+      await agoraEngineRef.current?.disableAudio();
     } else {
-      await agoraEngine.current?.enableAudio();
+      await agoraEngineRef.current?.enableAudio();
     }
   };
 
@@ -318,20 +291,16 @@ const VideoCall = ({navigation, route}) => {
 
     referenceForLiveStatus.set({isLive: false, isBusy: false});
     dispatch(incomingCallPopupAction(false));
-    // const newData = {...detail, status: CALLING_STATUS.REJECTED};
-    // incomingCallQuery(detail?.receiverId).set(newData);
-    dispatch(incomingCallDataAction({}));
     dispatch(reconnectLiveStreamAction(true));
     incomingCallQuery(detail?.receiverId).off('value', snaphot => {});
-
-    // _destroyCallRefrence();
     _leaveRoom();
+    leave();
   };
 
   const _destroyCallRefrence = async () => {
     try {
-      await agoraEngine.current?.leaveChannel();
-      await agoraEngine?.current?.destroy();
+      await agoraEngineRef.current?.leaveChannel();
+      await agoraEngineRef?.current?.destroy();
       await removedbNodeIfExist(detail.receiverId);
       await disableIncomingCallQuery(detail.receiverId);
       dispatch(clearCommentOnDuringCall());
@@ -367,7 +336,7 @@ const VideoCall = ({navigation, route}) => {
 
     dispatch(
       createIncomeCallAction(param, result => {
-        if (!result.status) {
+        if (result && result.status !== undefined && !result.status) {
           onCancelPress();
         }
       }),
@@ -384,36 +353,10 @@ const VideoCall = ({navigation, route}) => {
 
     dispatch(
       createIncomeCallAction(param, result => {
-        if (!result.status) {
+        if (result && result.status !== undefined && !result.status) {
           onCancelPress();
         }
       }),
-    );
-  };
-
-  const renderLocal = () => {
-    return (
-      <RtcLocalView.SurfaceView
-        style={[styles.videoContainer, {borderRadius: dynamicSize(10)}]}
-        uid={peerId?.[0] || 0}
-        channelId={channelName}
-        removeClippedSubviews={false}
-        renderMode={VideoRenderMode.Hidden}
-        zOrderMediaOverlay={true}
-      />
-    );
-  };
-
-  const renderHost = () => {
-    return (
-      <RtcRemoteView.SurfaceView
-        style={styles.videoContainer}
-        uid={peerId?.[1] || 1}
-        removeClippedSubviews={false}
-        channelId={channelName}
-        renderMode={VideoRenderMode.Hidden}
-        zOrderMediaOverlay={true}
-      />
     );
   };
 
@@ -422,7 +365,11 @@ const VideoCall = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
+      <StatusBar
+        translucent={true}
+        backgroundColor={'transparent'}
+        hidden={true}
+      />
       <TouchableWithoutFeedback onPress={_hideGiftComponent}>
         <View style={styles.mainContainer}>
           <MyLinearGradient
@@ -503,38 +450,33 @@ const VideoCall = ({navigation, route}) => {
             {!callData.isVideoCall ? (
               <View style={[styles.imageBackgroundStyle]}></View>
             ) : (
-              <View>
-                {peerId?.length > 1 ? renderHost() : null}
-                {peerId?.length == 1 ? renderLocal() : null}
-                {peerId?.length > 1 ? (
-                  <MyLinearGradient
-                    colors={[
-                      COLORS.WHITE,
-                      COLORS.GRADIENT_PINK,
-                      COLORS.GRADIENT_VIOLET,
-                    ]}
-                    style={styles.firstPartyVideoContainer}>
-                    <RtcLocalView.SurfaceView
-                      style={[
-                        styles.videoContainer,
-                        {borderRadius: dynamicSize(10)},
-                      ]}
-                      uid={peerId?.[0] || 0}
-                      channelId={channelName}
-                      removeClippedSubviews={false}
-                      renderMode={VideoRenderMode.Hidden}
-                      zOrderMediaOverlay={true}
+              <ScrollView
+                style={styles.scroll}
+                contentContainerStyle={styles.scrollContainer}>
+                {isJoined && (
+                  <React.Fragment key={0}>
+                    <RtcSurfaceView
+                      canvas={{uid: 0}}
+                      style={styles.uservideo}
                     />
-                  </MyLinearGradient>
-                ) : null}
-              </View>
+                  </React.Fragment>
+                )}
+                {isJoined && remoteUid !== 0 && (
+                  <React.Fragment key={remoteUid}>
+                    <RtcSurfaceView
+                      canvas={{uid: remoteUid}}
+                      style={styles.remoteView}
+                    />
+                    <Text>Remote user uid: {remoteUid}</Text>
+                  </React.Fragment>
+                )}
+              </ScrollView>
             )}
           </MyLinearGradient>
 
           {detail?.type == CALLING_TYPE.VIDEO ? (
             <View
               style={{
-                // top: heightPercentageToDP(0),
                 position: 'absolute',
                 width: '100%',
                 height: '100%',
@@ -558,7 +500,7 @@ const VideoCall = ({navigation, route}) => {
                 position: 'absolute',
                 width: '100%',
                 backgroundColor: 'transparent',
-                zIndex: 100,
+                zIndex: 1,
               }}>
               <CallActionBottonSheetAudio
                 type={detail?.type}

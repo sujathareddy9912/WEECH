@@ -147,12 +147,13 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   tabBar: {
+    //backgroundColor:'red',
     flexDirection: 'row',
     paddingTop: StatusBar.currentHeight,
   },
   tabItem: {
     flex: 1,
-    alignItems: 'center',
+    // alignItems: '',
     padding: 16,
   },
   activeTitle: {

@@ -135,7 +135,6 @@ const Card = props => {
     });
 
     agoraEngine.current?.addListener('UserJoined', (uid, elapsed) => {
-      console.log('UserJoined', uid, elapsed);
       // If new user
       if (peerIds.indexOf(uid) === -1) {
         setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));

@@ -310,22 +310,6 @@ function FavouriteVideos() {
     }
     setUserVideosError(null);
     let userfavoriteVideos = favouriteMedia(userVideos);
-
-    // const vError = favouriteInfoError(
-    //   count,
-    //   userfavoriteVideos,
-    //   strings(
-    //     appgender === 'female'
-    //       ? 'validation.videoUploadError'
-    //       : 'validation.videoMaleUploadError',
-    //   ),
-    // );
-
-    // if (vError) {
-    //   setUserVideosError(vError);
-    //   return;
-    // }
-
     dispatch({
       type: UPDATE_PROFILE_VIDEO_REQUEST,
       payload: userfavoriteVideos,
@@ -427,9 +411,11 @@ function FavouriteVideos() {
       <LodingIndicator visible={loading} />
       <ScrollView>
         <View style={styles.seperator}>
-          <Text style={styles.subtitle}>
-            {strings(`editProfile.upload_video_description`)}
-          </Text>
+          {!isEdit && (
+            <Text style={styles.subtitle}>
+              {strings(`editProfile.upload_video_description`)}
+            </Text>
+          )}
           {userVidoesError && (
             <Text style={styles.error}>{userVidoesError}</Text>
           )}

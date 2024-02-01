@@ -174,7 +174,7 @@ function FavouriteImages(props) {
   };
 
   const jumpToNext = () => {
-    dispatch({type:DELETE_PROFILE_IMAGE_VIDEO_RESET});
+    dispatch({type: DELETE_PROFILE_IMAGE_VIDEO_RESET});
     dispatch(actionDone('favouriteImages'));
     props.jumpTo('favouriteVideos');
   };
@@ -333,9 +333,11 @@ function FavouriteImages(props) {
       <LodingIndicator visible={loading} />
       <ScrollView>
         <View style={styles.seperator}>
-          <Text style={styles.subtitle}>
-            {strings('editProfile.upload_pic_description')}
-          </Text>
+          {!isEdit && (
+            <Text style={styles.subtitle}>
+              {strings('editProfile.upload_pic_description')}
+            </Text>
+          )}
 
           {userImagesError && (
             <Text style={styles.error}>{userImagesError}</Text>

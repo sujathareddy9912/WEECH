@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import database from '@react-native-firebase/database';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Game from '../Game';
 import Icon from '../../Component/Icons/Icon';
@@ -340,7 +340,6 @@ const LiveStreaming = ({navigation, route}) => {
   const Invite = async () => {
     const url = await dynamicLinks().buildLink({
       link: `https://www.google.com?liveName=${channelName}&liveToken=${channelToken}`,
-      // domainUriPrefix is created in your Firebase console
       domainUriPrefix: 'https://weecha.page.link',
       social: {
         title: 'Weecha',
@@ -354,11 +353,6 @@ const LiveStreaming = ({navigation, route}) => {
         bundleId: 'com.weecha',
         appStoreId: '123456789',
       },
-      // optional setup which updates Firebase analytics campaign
-      // "banner". This also needs setting up before hand
-      // analytics: {
-      //   campaign: 'banner',
-      // },
     });
     const options = Platform.select({
       default: {
@@ -417,9 +411,6 @@ const LiveStreaming = ({navigation, route}) => {
       if (data?.type === 'like_event') {
         dispatch(likeLiveStreamAction(data));
         setHeartFlag(true);
-        // if (data?.userId == userLoginList?.user?._id) {
-        //   dispatch(updateLikedStatusAction());
-        // }
       }
       if (
         data?.type === 'kickout_user' &&
@@ -482,7 +473,6 @@ const LiveStreaming = ({navigation, route}) => {
             setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));
           }
         });
-
         agoraEngineRef.current.addListener(
           'onRemoteVideoStateChanged',
           (uid, state) => {
@@ -566,7 +556,6 @@ const LiveStreaming = ({navigation, route}) => {
       const agoraEngineInit = agoraEngineRef.current;
       agoraEngineInit.registerEventHandler({
         onJoinChannelSuccess: () => {
-          //  setState(prev => ({...prev, joinSucceed: true}));
           console.log('Successfully joined the channel ' + channelName);
         },
         onUserJoined: (_connection, Uid) => {
@@ -1184,7 +1173,7 @@ const LiveStreaming = ({navigation, route}) => {
     hideGift();
   };
 
-  const checkCallPossible = type => async () => {
+  const checkCallPossible =  async (type) => {
     const data = {
       senderId: userLoginList?.user?._id,
       receiverId: route?.params?._id,
@@ -1223,7 +1212,7 @@ const LiveStreaming = ({navigation, route}) => {
           getCAllingDetailAction(param, result => {
             if (result) {
               const callingParams = {
-                type: CALLING_TYPE.AUDIO,
+                type: type,
                 status: CALLING_STATUS.CALLING,
                 liveName: result.roomName || 'WeechaTest',
                 liveToken:
@@ -1241,7 +1230,6 @@ const LiveStreaming = ({navigation, route}) => {
               incomingCallQuery(route?.params?._id).set(callingParams);
               navigation.navigate('VideoCall', callingParams);
             }
-            // setStartCallIndicator(false);
           }),
         );
       } catch (error) {
@@ -1738,12 +1726,16 @@ const LiveStreaming = ({navigation, route}) => {
                     <TouchableIcon
                       style={styles.marginBottom}
                       customIcon={<SvgIcon.SmallCall />}
-                      onPress={checkCallPossible(CALLING_TYPE.AUDIO)}
+                      onPress={() => {
+                        checkCallPossible(CALLING_TYPE.AUDIO);
+                      }}
                     />
                     <TouchableIcon
                       style={styles.marginBottom}
                       customIcon={<VideoCallSmallIcon />}
-                      onPress={checkCallPossible(CALLING_TYPE.VIDEO)}
+                      onPress={() => {
+                        checkCallPossible(CALLING_TYPE.VIDEO);
+                      }}
                     />
                   </>
                 ) : (

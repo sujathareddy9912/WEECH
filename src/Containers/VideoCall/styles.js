@@ -116,6 +116,35 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.LIGHT_GREY,
     marginTop: 40,
   },
+  button: {
+    paddingHorizontal: 25,
+    paddingVertical: 4,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    backgroundColor: '#0055cc',
+    margin: 5,
+  },
+  main: {flex: 1, alignItems: 'center'},
+  scroll: {flex: 1, backgroundColor: '#ddeeff', width: '100%'},
+  uservideo: {
+    width: '100%',
+    height: SCREEN_HEIGHT,
+  },
+  remoteView: {
+    position: 'absolute',
+    bottom: 160,
+    right: 16,
+    width: SCREEN_WIDTH * 0.3,
+    height: SCREEN_WIDTH * 0.4,
+    minWidth: 72,
+    minHeight: 96,
+    borderRadius: 8,
+  },
+  scrollContainer: {alignItems: 'center'},
+  videoView: {width: '90%', height: 200},
+  btnContainer: {flexDirection: 'row', justifyContent: 'center'},
+  head: {fontSize: 20},
+  info: {backgroundColor: '#ffffe0', color: '#0000ff'},
 });
 
 export default styles;

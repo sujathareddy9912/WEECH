@@ -300,7 +300,7 @@ const VideoCall = ({navigation, route}) => {
   const _destroyCallRefrence = async () => {
     try {
       await agoraEngineRef.current?.leaveChannel();
-      await agoraEngineRef?.current?.destroy();
+      //await agoraEngineRef?.current?.destroy();
       await removedbNodeIfExist(detail.receiverId);
       await disableIncomingCallQuery(detail.receiverId);
       dispatch(clearCommentOnDuringCall());

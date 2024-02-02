@@ -229,17 +229,18 @@ const LiveStreaming = ({navigation, route}) => {
     route?.params?.todayEarning,
   );
 
-  const [showGames,setShowGames] = useState(false);
+  const [showGames, setShowGames] = useState(false);
 
   const [isVisible, setIsVisible] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
 
   useEffect(() => {
     // Get the last image from the array
-    const latestImage = commentData.length > 0 ? commentData[commentData.length - 1] : null;
+    const latestImage =
+      commentData.length > 0 ? commentData[commentData.length - 1] : null;
     // Check if the last object contains an image property
     if (latestImage && latestImage?.image) {
-      console.warn("latest image",latestImage?.image)
+      console.warn('latest image', latestImage?.image);
       setImageSrc(latestImage?.image);
       setIsVisible(true);
 
@@ -252,7 +253,7 @@ const LiveStreaming = ({navigation, route}) => {
       return () => clearTimeout(timer);
     } else {
       // If the last object does not contain an image, reset state
-      
+
       setImageSrc(null);
       setIsVisible(false);
     }
@@ -1688,23 +1689,27 @@ const LiveStreaming = ({navigation, route}) => {
           }}
           {...panResponder.panHandlers}>
           {showComments && (
-            <View style={[styles.chatMainContainer, {
-              flex: 1,
-              position: 'relative',
-              alignItems: 'center',
-            }]}>
-
-        {isVisible && imageSrc ? 
-        <MyImage
-        fast
-        source={{uri: imageSrc}}
-        style={{
-          width: SCREEN_WIDTH * 0.5,
-            height: SCREEN_WIDTH * 0.5,
-            backgroundColor: 'transparent'
-        }}
-      />
-         : null}
+            <View style={styles.chatMainContainer}>
+              <View
+                style={{
+                  position: 'absolute',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: SCREEN_WIDTH,
+                  height: SCREEN_HEIGHT,
+                }}>
+                {isVisible && imageSrc ? (
+                  <MyImage
+                    fast
+                    source={{uri: imageSrc}}
+                    style={{
+                      width: SCREEN_WIDTH * 0.5,
+                      height: SCREEN_WIDTH * 0.5,
+                      backgroundColor: 'transparent',
+                    }}
+                  />
+                ) : null}
+              </View>
 
               <Touchable
                 activeOpacity={1}
@@ -1833,7 +1838,6 @@ const LiveStreaming = ({navigation, route}) => {
                     )}
                   </View>
                 </ScrollView>
-              
                 <View
                   style={[
                     styles.bottomChatRowContainer,

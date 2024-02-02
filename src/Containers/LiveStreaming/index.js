@@ -235,24 +235,19 @@ const LiveStreaming = ({navigation, route}) => {
   const [imageSrc, setImageSrc] = useState(null);
 
   useEffect(() => {
-    // Get the last image from the array
     const latestImage =
       commentData.length > 0 ? commentData[commentData.length - 1] : null;
-    // Check if the last object contains an image property
     if (latestImage && latestImage?.image) {
-      console.warn('latest image', latestImage?.image);
       setImageSrc(latestImage?.image);
       setIsVisible(true);
 
-      // Schedule hiding the image after 2 seconds
+      // Schedule hiding the gift image after 3 seconds
       const timer = setTimeout(() => {
         setIsVisible(false);
       }, 3000);
 
-      // Cleanup timer on component unmount or when a new image is added
       return () => clearTimeout(timer);
     } else {
-      // If the last object does not contain an image, reset state
 
       setImageSrc(null);
       setIsVisible(false);

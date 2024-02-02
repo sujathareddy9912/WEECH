@@ -148,7 +148,6 @@ let timeout = null,
 const LiveStreaming = ({navigation, route}) => {
   const dispatch = useDispatch();
   const state = useSelector(state => {
-    console.log("selected state: " ,state)
     return state;
   });
 
@@ -231,6 +230,33 @@ const LiveStreaming = ({navigation, route}) => {
   );
 
   const [showGames,setShowGames] = useState(false);
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
+
+  useEffect(() => {
+    // Get the last image from the array
+    const latestImage = commentData.length > 0 ? commentData[commentData.length - 1] : null;
+    // Check if the last object contains an image property
+    if (latestImage && latestImage?.image) {
+      console.warn("latest image",latestImage?.image)
+      setImageSrc(latestImage?.image);
+      setIsVisible(true);
+
+      // Schedule hiding the image after 2 seconds
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 2000);
+
+      // Cleanup timer on component unmount or when a new image is added
+      return () => clearTimeout(timer);
+    } else {
+      // If the last object does not contain an image, reset state
+      
+      setImageSrc(null);
+      setIsVisible(false);
+    }
+  }, [commentData]);
 
   const BROAD_OPTIONS = [
     `${isAdmin ? 'Remove Admin' : 'Make Admin'}`,
@@ -397,7 +423,6 @@ const LiveStreaming = ({navigation, route}) => {
 
   useEffect(() => {
     socket.off('live_session').on('live_session', async data => {
-      console.log('Live session data',data)
       if (data?.type === 'join_user') {
         dispatch(
           joinUserOnLiveStreamAction({
@@ -963,7 +988,6 @@ const LiveStreaming = ({navigation, route}) => {
   ).current;
 
   const _renderComment = (item, index) => {
-    console.log("render comment", item)
     if (item?.type === 'comment') {
       let follwing = viewersFollowing.filter(x => {
         if (
@@ -1064,16 +1088,7 @@ const LiveStreaming = ({navigation, route}) => {
     }, 500);
   };
 
-  socket.on("connect", () => {
-    console.log("Socket Connected");
-  });
-
-  socket.on("connect_error", (error) => {
-    console.log("Socket Error", error);
-  });
-
   const onCommentSend = () => {
-
     let isAdmin = adminList.filter(
       data => data?.joinedUsers?._id == userLoginList?.user?._id,
     );
@@ -1091,7 +1106,6 @@ const LiveStreaming = ({navigation, route}) => {
           isAdmin: isAdmin.length,
         },
       };
-      console.warn('Comment 1', data)
       socket.emit('live_session', data);
 
       dispatch(commentOnLiveStreamAction(data));
@@ -1118,8 +1132,6 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   const _emitGift = data => {
-    console.warn('emit gift', JSON.stringify(data))
-    console.warn('emit giftId: data?.param?.giftId', data?.param?.giftId)
     // do not remove this line @Front end developer , this code is commented for future use
     userLoginList.user.points =
       userLoginList.user.points - data.param.totalPrice;
@@ -1155,7 +1167,6 @@ const LiveStreaming = ({navigation, route}) => {
         isAdmin: isAdmin.length,
       },
     };
-    console.warn("passing gift on socket", comentData);
     socket.emit('live_session', comentData);
 
     dispatch(commentOnLiveStreamAction(comentData));
@@ -1677,7 +1688,24 @@ const LiveStreaming = ({navigation, route}) => {
           }}
           {...panResponder.panHandlers}>
           {showComments && (
-            <View style={styles.chatMainContainer}>
+            <View style={[styles.chatMainContainer, {
+              flex: 1,
+              position: 'relative',
+              alignItems: 'center',
+            }]}>
+
+        {isVisible && imageSrc ? 
+        <MyImage
+        fast
+        source={{uri: imageSrc}}
+        style={{
+          width: SCREEN_WIDTH * 0.5,
+            height: SCREEN_WIDTH * 0.5,
+            backgroundColor: 'transparent'
+        }}
+      />
+         : null}
+
               <Touchable
                 activeOpacity={1}
                 onPress={_closeAllPopup}
@@ -1746,7 +1774,10 @@ const LiveStreaming = ({navigation, route}) => {
                         {strings('live.pk')}
                       </MyText>
                     </Touchable>
-                    <TouchableIcon customIcon={<SvgIcon.BlueGame />}  onPress = {()=>setShowGames(true)}/>
+                    <TouchableIcon
+                      customIcon={<SvgIcon.BlueGame />}
+                      onPress={() => setShowGames(true)}
+                    />
                   </>
                 )}
               </View>
@@ -1802,6 +1833,7 @@ const LiveStreaming = ({navigation, route}) => {
                     )}
                   </View>
                 </ScrollView>
+              
                 <View
                   style={[
                     styles.bottomChatRowContainer,
@@ -1849,7 +1881,10 @@ const LiveStreaming = ({navigation, route}) => {
 
                   {!isBroadcaster && !isKeyboardShow ? (
                     <View style={styles.subBottomChatRowContainer}>
-                      <TouchableIcon customIcon={<SvgIcon.BlueGame />}  onPress = {()=>setShowGames(true)}/>
+                      <TouchableIcon
+                        customIcon={<SvgIcon.BlueGame />}
+                        onPress={() => setShowGames(true)}
+                      />
                       <TouchableIcon
                         onPress={_fetchGiftList}
                         customIcon={<SvgIcon.SmallGiftIcon />}
@@ -2213,7 +2248,7 @@ const LiveStreaming = ({navigation, route}) => {
           </View>
         </Actionsheet.Content>
       </Actionsheet>
-      <Game visible={showGames} setVisible={setShowGames}/>
+      <Game visible={showGames} setVisible={setShowGames} />
     </>
   );
 };

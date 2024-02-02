@@ -246,7 +246,7 @@ const LiveStreaming = ({navigation, route}) => {
       // Schedule hiding the image after 2 seconds
       const timer = setTimeout(() => {
         setIsVisible(false);
-      }, 2000);
+      }, 3000);
 
       // Cleanup timer on component unmount or when a new image is added
       return () => clearTimeout(timer);

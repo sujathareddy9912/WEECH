@@ -40,10 +40,6 @@ export function* leaveCallRoomSaga({payload}) {
 export function* createIncomeCallSaga({payload, callBack}) {
   try {
     const resp = yield call(createCallingRoomApi, payload);
-    // if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
-    // } else {
-    //   HelperService.showToast(resp?.message);
-    // }
     callBack(resp);
   } catch (error) {
     callBack(error.response);

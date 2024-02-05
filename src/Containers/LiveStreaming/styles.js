@@ -121,16 +121,12 @@ const styles = StyleSheet.create({
 
   remote: {
     flex: 1,
-    // width: SCREEN_WIDTH,
-    // height: SCREEN_HEIGHT,
   },
 
   bottomMenuContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    // paddingVertical: dynamicSize(10),
     paddingHorizontal: dynamicSize(20),
-    // backgroundCo]]]]lor: COLORS.MEHRUN_COLOR,
     borderTopLeftRadius: dynamicSize(10),
     borderTopRightRadius: dynamicSize(10),
   },
@@ -171,10 +167,6 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    // height: SCREEN_HEIGHT / 5,
-    // justifyContent: 'flex-end',
-    // maxHeight: SCREEN_HEIGHT / 2,
-    // paddingVertical: dynamicSize(10),
     paddingHorizontal: dynamicSize(10),
   },
 
@@ -400,6 +392,15 @@ const styles = StyleSheet.create({
     borderRadius: dynamicSize(16),
     backgroundColor: COLORS.BABY_PINK,
   },
+  closeBtn:{
+    zIndex: 100,
+    backgroundColor: '#000',
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 export default styles;

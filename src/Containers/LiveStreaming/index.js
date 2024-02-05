@@ -4,9 +4,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import database from '@react-native-firebase/database';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Game from '../Game';
+import Icon from '../../Component/Icons/Icon';
 
 import {
   View,
@@ -21,15 +22,15 @@ import {
   PanResponder,
   StatusBar,
   FlatList,
+  PermissionsAndroid,
 } from 'react-native';
 
-import RtcEngine, {
-  ClientRole,
-  RtcLocalView,
-  RtcRemoteView,
-  ChannelProfile,
-  VideoRenderMode,
-  VideoRemoteState,
+import {
+  ClientRoleType,
+  ChannelProfileType,
+  RemoteVideoState,
+  createAgoraRtcEngine,
+  RtcSurfaceView,
 } from 'react-native-agora';
 import {
   heightPercentageToDP as hp,
@@ -130,13 +131,13 @@ const HEART_ANIMATION = require('../../Assets/lottiefiles/heartAnimation.json');
 
 const videoStateMessage = state => {
   switch (state) {
-    case VideoRemoteState.Stopped:
+    case RemoteVideoState.RemoteVideoStateStopped:
       return 'Video turned off by Host';
 
-    case VideoRemoteState.Frozen:
+    case RemoteVideoState.RemoteVideoStateFrozen:
       return 'Connection Issue, Please Wait';
 
-    case VideoRemoteState.Failed:
+    case RemoteVideoState.RemoteVideoStateFailed:
       return 'Network Error';
   }
 };
@@ -186,7 +187,7 @@ const LiveStreaming = ({navigation, route}) => {
     joinSucceed: false,
     peerIds: [],
   };
-  const agoraEngine = useRef();
+  const agoraEngineRef = useRef();
   const scrollRef = useRef();
   const pan = useRef(new Animated.ValueXY()).current;
   const reconnectAlertStatus = useRef(false);
@@ -215,7 +216,7 @@ const LiveStreaming = ({navigation, route}) => {
   const [joinedUserDataState, updateJoinedUserDataState] = useState([]);
   const [isKeyboardShow, updateKeyboardShow] = useState(false);
   const [broadcasterVideoState, setBroadcasterVideoState] = useState(
-    VideoRemoteState.Decoding,
+    RemoteVideoState.RemoteVideoStateDecoding,
   );
   const [diamondPoints, setDiamondPoints] = useState(
     userLoginList?.user?.myBalance,
@@ -234,8 +235,6 @@ const LiveStreaming = ({navigation, route}) => {
   const [isVisible, setIsVisible] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
 
-
-  // to show gift on live stream
   useEffect(() => {
     const latestImage =
       commentData.length > 0 ? commentData[commentData.length - 1] : null;
@@ -250,7 +249,6 @@ const LiveStreaming = ({navigation, route}) => {
 
       return () => clearTimeout(timer);
     } else {
-
       setImageSrc(null);
       setIsVisible(false);
     }
@@ -263,7 +261,6 @@ const LiveStreaming = ({navigation, route}) => {
     'Kickout',
     'Mute/UnMute',
     'Report',
-    // 'Private call',
   ];
 
   const OPTIONS = {
@@ -286,14 +283,18 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   useEffect(() => {
+    if ((channelName, channelToken)) {
+      _initEngine();
+    }
+  }, [channelName, channelToken]);
+
+  useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       backAction,
     );
-    _initEngine();
     _fetchGifts();
     UpdateFirstTimeRender(false);
-    // getUserEarning();
 
     return () => backHandler.remove();
   }, []);
@@ -361,7 +362,6 @@ const LiveStreaming = ({navigation, route}) => {
   const Invite = async () => {
     const url = await dynamicLinks().buildLink({
       link: `https://www.google.com?liveName=${channelName}&liveToken=${channelToken}`,
-      // domainUriPrefix is created in your Firebase console
       domainUriPrefix: 'https://weecha.page.link',
       social: {
         title: 'Weecha',
@@ -375,11 +375,6 @@ const LiveStreaming = ({navigation, route}) => {
         bundleId: 'com.weecha',
         appStoreId: '123456789',
       },
-      // optional setup which updates Firebase analytics campaign
-      // "banner". This also needs setting up before hand
-      // analytics: {
-      //   campaign: 'banner',
-      // },
     });
     const options = Platform.select({
       default: {
@@ -438,9 +433,6 @@ const LiveStreaming = ({navigation, route}) => {
       if (data?.type === 'like_event') {
         dispatch(likeLiveStreamAction(data));
         setHeartFlag(true);
-        // if (data?.userId == userLoginList?.user?._id) {
-        //   dispatch(updateLikedStatusAction());
-        // }
       }
       if (
         data?.type === 'kickout_user' &&
@@ -483,28 +475,28 @@ const LiveStreaming = ({navigation, route}) => {
         data?.type === 'reconnect_live_stream' &&
         data?.detail?.id !== userLoginList?.user?._id
       ) {
-        agoraEngine.current?.leaveChannel();
+        agoraEngineRef.current?.leaveChannel();
 
-        agoraEngine.current = await RtcEngine.create(rtmAgoraConfig.appId);
-        await agoraEngine.current.enableVideo();
-        await agoraEngine.current.startPreview();
-        await agoraEngine.current?.setChannelProfile(
-          ChannelProfile.LiveBroadcasting,
+        agoraEngineRef.current = createAgoraRtcEngine();
+        await agoraEngineRef.current?.setChannelProfile(
+          ChannelProfileType.ChannelProfileLiveBroadcasting,
         );
-        await agoraEngine.current?.setClientRole(
-          isBroadcaster ? ClientRole.Broadcaster : ClientRole.Audience,
+        await agoraEngineRef.current.enableVideo();
+        await agoraEngineRef.current.startPreview();
+        await agoraEngineRef.current?.setClientRole(
+          isBroadcaster
+            ? ClientRoleType.ClientRoleBroadcaster
+            : ClientRoleType.ClientRoleAudience,
         );
 
-        agoraEngine.current.addListener('UserJoined', (uid, elapsed) => {
-          console.log('UserJoined', uid, elapsed);
+        agoraEngineRef.current.addListener('onUserJoined', (uid, elapsed) => {
           // If new user
           if (peerIds.indexOf(uid) === -1) {
             setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));
           }
         });
-
-        agoraEngine.current.addListener(
-          'RemoteVideoStateChanged',
+        agoraEngineRef.current.addListener(
+          'onRemoteVideoStateChanged',
           (uid, state) => {
             if (uid === 1) setBroadcasterVideoState(state);
           },
@@ -567,45 +559,74 @@ const LiveStreaming = ({navigation, route}) => {
     );
   };
 
+  const getPermission = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      ]);
+    }
+  };
+
   const _initEngine = async () => {
-    agoraEngine.current = await RtcEngine.create(rtmAgoraConfig.appId);
-    await agoraEngine.current.enableVideo();
-    await agoraEngine.current.startPreview();
-    await agoraEngine.current?.setChannelProfile(
-      ChannelProfile.LiveBroadcasting,
-    );
-    await agoraEngine.current?.setClientRole(
-      isBroadcaster ? ClientRole.Broadcaster : ClientRole.Audience,
-    );
-    _addListeners();
-    _startCall();
+    try {
+      if (Platform.OS === 'android') {
+        await getPermission();
+      }
+
+      agoraEngineRef.current = createAgoraRtcEngine();
+      const agoraEngineInit = agoraEngineRef.current;
+      agoraEngineInit.registerEventHandler({
+        onJoinChannelSuccess: () => {
+          console.log('Successfully joined the channel ' + channelName);
+        },
+        onUserJoined: (_connection, Uid) => {
+          console.log('Remote user joined with uid ' + Uid);
+        },
+        onUserOffline: (_connection, Uid) => {
+          console.log('Remote user left the channel. uid: ' + Uid);
+        },
+      });
+      agoraEngineInit.initialize({
+        appId: rtmAgoraConfig.appId,
+        channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+      });
+      agoraEngineInit.enableVideo();
+      _addListeners();
+      _startCall();
+    } catch (e) {
+      console.log('An error occurred', e);
+    }
   };
 
   const reconnectAgro = async () => {
-    agoraEngine.current?.leaveChannel();
-    agoraEngine.current = await RtcEngine.create(rtmAgoraConfig.appId);
-    await agoraEngine.current.enableVideo();
-    await agoraEngine.current.startPreview();
-    await agoraEngine.current?.setChannelProfile(
-      ChannelProfile.LiveBroadcasting,
-    );
-    await agoraEngine.current?.setClientRole(
-      isBroadcaster ? ClientRole.Broadcaster : ClientRole.Audience,
+    agoraEngineRef.current?.leaveChannel();
+    agoraEngineRef.current.initialize({
+      appId: rtmAgoraConfig.appId,
+      channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+    });
+    await agoraEngineRef.current.enableVideo();
+    await agoraEngineRef.current.startPreview();
+    await agoraEngineRef.current?.setClientRole(
+      isBroadcaster
+        ? ClientRoleType.ClientRoleBroadcaster
+        : ClientRoleType.ClientRoleAudience,
     );
 
     updateFirebase();
 
-    agoraEngine.current.addListener('UserJoined', (uid, elapsed) => {
-      console.log('UserJoined', uid, elapsed);
-      // If new user
+    agoraEngineRef.current.addListener('onUserJoined', (uid, elapsed) => {
       if (peerIds.indexOf(uid) === -1) {
         setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));
       }
     });
 
-    agoraEngine.current.addListener('RemoteVideoStateChanged', (uid, state) => {
-      if (uid === 1) setBroadcasterVideoState(state);
-    });
+    agoraEngineRef.current.addListener(
+      'onRemoteVideoStateChanged',
+      (uid, state) => {
+        if (uid === 1) setBroadcasterVideoState(state);
+      },
+    );
 
     _startCall();
     UpdateHostScreenStatus(true);
@@ -678,23 +699,22 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   const _addListeners = () => {
-    agoraEngine.current.addListener('Warning', warn => {
+    agoraEngineRef.current.addListener('Warning', warn => {
       console.log('Warning', warn);
     });
 
-    agoraEngine.current.addListener('Error', err => {
+    agoraEngineRef.current.addListener('onError', err => {
       console.log('Error', err);
     });
 
-    agoraEngine.current.addListener('UserJoined', (uid, elapsed) => {
-      console.log('UserJoined', uid, elapsed);
+    agoraEngineRef.current.addListener('onUserJoined', (uid, elapsed) => {
       // If new user
       if (peerIds.indexOf(uid) === -1) {
         setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));
       }
     });
 
-    agoraEngine.current.addListener('UserOffline', (uid, reason) => {
+    agoraEngineRef.current.addListener('onUserOffline', (uid, reason) => {
       // Remove peer ID from state array
       setState(prevState => ({
         ...prevState,
@@ -703,8 +723,8 @@ const LiveStreaming = ({navigation, route}) => {
     });
 
     // If Local user joins RTC channel
-    agoraEngine.current.addListener(
-      'JoinChannelSuccess',
+    agoraEngineRef.current.addListener(
+      'onJoinChannelSuccess',
       (channel, uid, elapsed) => {
         // Set state variable to true
 
@@ -734,34 +754,42 @@ const LiveStreaming = ({navigation, route}) => {
       },
     );
 
-    agoraEngine.current.addListener('RemoteVideoStateChanged', (uid, state) => {
-      if (uid === 1) setBroadcasterVideoState(state);
-    });
+    agoraEngineRef.current.addListener(
+      'onRemoteVideoStateChanged',
+      (uid, state) => {
+        if (uid === 1) setBroadcasterVideoState(state);
+      },
+    );
   };
 
-  /**
-   * @name startCall
-   * @description Function to start the call
-   */
   const _startCall = async () => {
-    // Join Channel using null token and channel name
-
     const uid = isBroadcaster ? 1 : 0;
 
-    await agoraEngine.current?.joinChannel(
-      channelToken,
-      channelName,
-      null,
-      uid,
-    );
-
-    await agoraEngine.current.stopPreview();
+    if (joinSucceed) {
+      return;
+    }
+    try {
+      agoraEngineRef.current?.setChannelProfile(
+        ChannelProfileType.ChannelProfileLiveBroadcasting,
+      );
+      if (isBroadcaster) {
+        await agoraEngineRef.current.startPreview();
+        agoraEngineRef.current?.joinChannel(channelToken, channelName, uid, {
+          clientRoleType: ClientRoleType.ClientRoleBroadcaster,
+        });
+      } else {
+        agoraEngineRef.current?.joinChannel(channelToken, channelName, uid, {
+          clientRoleType: ClientRoleType.ClientRoleAudience,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const _endCallAudiance = async () => {
     try {
-      await agoraEngine.current?.leaveChannel();
-      await agoraEngine.current?.destroy();
+      await agoraEngineRef.current?.leaveChannel();
       dispatch(
         endLiveStreamingAction({
           userId: userLoginList?.user?._id,
@@ -822,14 +850,9 @@ const LiveStreaming = ({navigation, route}) => {
     }
   };
 
-  /**
-   * @name endCall
-   * @description Function to end the call
-   */
   const _endCall = async () => {
     try {
-      await agoraEngine.current?.leaveChannel();
-      await agoraEngine.current?.destroy();
+      await agoraEngineRef.current?.leaveChannel();
       dispatch(
         endLiveStreamingAction({
           userId: userLoginList?.user?._id,
@@ -891,11 +914,11 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   const onChangeCameraDirection = async () => {
-    await agoraEngine.current?.switchCamera();
+    await agoraEngineRef.current?.switchCamera();
   };
 
   const onToggleMicrophone = async () => {
-    await agoraEngine.current?.muteLocalAudioStream(!isMute);
+    await agoraEngineRef.current?.muteLocalAudioStream(!isMute);
     updateMuteState(!isMute);
   };
 
@@ -1044,24 +1067,25 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   const renderLocal = () => (
-    <RtcLocalView.SurfaceView
-      channelId={channelName}
-      removeClippedSubviews={false}
-      style={styles.localStreamingView}
-      renderMode={VideoRenderMode.Hidden}
-    />
+    <React.Fragment key={0}>
+      <RtcSurfaceView
+        canvas={{uid: 0}}
+        style={styles.localStreamingView}
+        removeClippedSubviews={false}
+      />
+    </React.Fragment>
   );
 
   const renderHost = () =>
-    broadcasterVideoState === VideoRemoteState.Decoding ? (
-      <RtcRemoteView.SurfaceView
-        uid={1}
-        channelId={channelName}
-        zOrderMediaOverlay={true}
-        removeClippedSubviews={false}
-        style={styles.localStreamingView}
-        renderMode={VideoRenderMode.Hidden}
-      />
+    broadcasterVideoState === RemoteVideoState.RemoteVideoStateDecoding ? (
+      <React.Fragment key={1}>
+        <RtcSurfaceView
+          canvas={{uid: 1}}
+          style={styles.localStreamingView}
+          removeClippedSubviews={false}
+          zOrderMediaOverlay={true}
+        />
+      </React.Fragment>
     ) : (
       <View style={styles.broadcasterVideoStateMessage}>
         <MyText style={styles.broadcasterVideoStateMessageText}>
@@ -1172,7 +1196,7 @@ const LiveStreaming = ({navigation, route}) => {
     hideGift();
   };
 
-  const checkCallPossible = type => async () => {
+  const checkCallPossible = async type => {
     const data = {
       senderId: userLoginList?.user?._id,
       receiverId: route?.params?._id,
@@ -1186,7 +1210,7 @@ const LiveStreaming = ({navigation, route}) => {
       }
     } catch (error) {
       const data = error.response.data;
-      alert(data.message);
+      Alert.alert(data.message);
     }
   };
 
@@ -1195,11 +1219,11 @@ const LiveStreaming = ({navigation, route}) => {
 
     if (permissionGranted && route?.params) {
       try {
-        const userBusyorNot = await checkNodePresentOrNot(route?.params?._id);
-        if (userBusyorNot) {
-          HelperService.showToast('User is busy on another call.');
-          return;
-        }
+        // const userBusyorNot = await checkNodePresentOrNot(route?.params?._id);
+        // if (userBusyorNot) {
+        //   HelperService.showToast('User is busy on another call.');
+        //   return;
+        // }
 
         // setStartCallIndicator(true);
         const param = {
@@ -1211,7 +1235,7 @@ const LiveStreaming = ({navigation, route}) => {
           getCAllingDetailAction(param, result => {
             if (result) {
               const callingParams = {
-                type: CALLING_TYPE.AUDIO,
+                type: type,
                 status: CALLING_STATUS.CALLING,
                 liveName: result.roomName || 'WeechaTest',
                 liveToken:
@@ -1229,7 +1253,6 @@ const LiveStreaming = ({navigation, route}) => {
               incomingCallQuery(route?.params?._id).set(callingParams);
               navigation.navigate('VideoCall', callingParams);
             }
-            // setStartCallIndicator(false);
           }),
         );
       } catch (error) {
@@ -1372,32 +1395,13 @@ const LiveStreaming = ({navigation, route}) => {
   }, []);
 
   const _joinAsAudience = item => {
-    // if (kickedOutRooms?.includes(item?.liveToken)) {
-    //   return Alert.alert('You have been kicked out from this live');
-    // }
-    // if (blockedLiveRooms?.includes(item?.liveToken)) {
-    //   return Alert.alert('You have been Blocked from this live');
-    // }
-
     liveEndSuggestionRef.current.close();
     navigation.navigate('LiveSection');
-    // dispatch(
-    //   hostDetailAction({
-    //     ...item,
-    //   }),
-    // );
-    // navigation.reset('liveStreaming', {
-    //   ...item,
-    //   type: STREAM_TYPE.AUDIENCE,
-    //   channel: item?.liveName,
-    //   token: item?.liveToken,
-    // });
-    // dispatch(getHostExtraDetailAction(item?._id));
   };
 
   return (
     <>
-      <StatusBar hidden />
+      <StatusBar hidden={true} />
       <SafeArea
         style={[
           styles.container,
@@ -1591,9 +1595,14 @@ const LiveStreaming = ({navigation, route}) => {
             <View>
               {showComments && (
                 <TouchableOpacity
-                  style={{padding: 10, zIndex: 100}}
+                  style={styles.closeBtn}
                   onPress={endCallPopup}>
-                  <SvgIcon.TranslucentClose />
+                  <Icon
+                    origin="AntDesign"
+                    name="close"
+                    size={16}
+                    color={'#fff'}
+                  />
                 </TouchableOpacity>
               )}
             </View>
@@ -1707,7 +1716,6 @@ const LiveStreaming = ({navigation, route}) => {
                   />
                 ) : null}
               </View>
-
               <Touchable
                 activeOpacity={1}
                 onPress={_closeAllPopup}
@@ -1761,12 +1769,16 @@ const LiveStreaming = ({navigation, route}) => {
                     <TouchableIcon
                       style={styles.marginBottom}
                       customIcon={<SvgIcon.SmallCall />}
-                      onPress={checkCallPossible(CALLING_TYPE.AUDIO)}
+                      onPress={() => {
+                        checkCallPossible(CALLING_TYPE.AUDIO);
+                      }}
                     />
                     <TouchableIcon
                       style={styles.marginBottom}
                       customIcon={<VideoCallSmallIcon />}
-                      onPress={checkCallPossible(CALLING_TYPE.VIDEO)}
+                      onPress={() => {
+                        checkCallPossible(CALLING_TYPE.VIDEO);
+                      }}
                     />
                   </>
                 ) : (

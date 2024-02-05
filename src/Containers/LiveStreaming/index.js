@@ -232,6 +232,28 @@ const LiveStreaming = ({navigation, route}) => {
 
   const [showGames, setShowGames] = useState(false);
 
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
+
+  useEffect(() => {
+    const latestImage =
+      commentData.length > 0 ? commentData[commentData.length - 1] : null;
+    if (latestImage && latestImage?.image) {
+      setImageSrc(latestImage?.image);
+      setIsVisible(true);
+
+      // Schedule hiding the gift image after 3 seconds
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    } else {
+      setImageSrc(null);
+      setIsVisible(false);
+    }
+  }, [commentData]);
+
   const BROAD_OPTIONS = [
     `${isAdmin ? 'Remove Admin' : 'Make Admin'}`,
     `${isFollowing ? 'UnFollow' : 'Follow'}`,
@@ -1156,6 +1178,7 @@ const LiveStreaming = ({navigation, route}) => {
     const comentData = {
       type: 'comment',
       chat_id: channelToken,
+      giftId: data?.param?.giftId,
       commentData: {
         type: 'comment',
         comment: `${data?.totalCount} gift's send by ${userLoginList?.user?.name} `,
@@ -1173,7 +1196,7 @@ const LiveStreaming = ({navigation, route}) => {
     hideGift();
   };
 
-  const checkCallPossible =  async (type) => {
+  const checkCallPossible = async type => {
     const data = {
       senderId: userLoginList?.user?._id,
       receiverId: route?.params?._id,
@@ -1673,6 +1696,26 @@ const LiveStreaming = ({navigation, route}) => {
           {...panResponder.panHandlers}>
           {showComments && (
             <View style={styles.chatMainContainer}>
+              <View
+                style={{
+                  position: 'absolute',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: SCREEN_WIDTH,
+                  height: SCREEN_HEIGHT,
+                }}>
+                {isVisible && imageSrc ? (
+                  <MyImage
+                    fast
+                    source={{uri: imageSrc}}
+                    style={{
+                      width: SCREEN_WIDTH * 0.5,
+                      height: SCREEN_WIDTH * 0.5,
+                      backgroundColor: 'transparent',
+                    }}
+                  />
+                ) : null}
+              </View>
               <Touchable
                 activeOpacity={1}
                 onPress={_closeAllPopup}

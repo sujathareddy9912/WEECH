@@ -43,7 +43,9 @@ const DATA = [
 ];
 
 const WeechaLevel = ({navigation, route}) => {
-  const [weechaLevel, setWeechaLevel] = useState({});
+  const [weechaLevel, setWeechaLevel] = useState();
+  const {_id} = route?.params?.profileData;
+  const [nextLevel, setNextLevel] = useState();
 
   const state = useSelector(state => {
     return state;
@@ -67,10 +69,12 @@ const WeechaLevel = ({navigation, route}) => {
     dispatch(
       getWeechaLevelAction(
         {
-          userId: userLoginList?.user?._id,
+          userId: _id,
         },
         result => {
           setWeechaLevel({...result});
+          let num = parseInt(result?.level)+1; 
+          setNextLevel(num);
         },
       ),
     );
@@ -99,26 +103,17 @@ const WeechaLevel = ({navigation, route}) => {
           />
           <View style={styles.levelTextView}>
             <MyText style={styles.levelText}>
-              LV.{' '}
-              {weechaLevelCalculation(weechaLevel?.totalXP)?.currWeechaLevel}
+              LV. {weechaLevel?.level ? weechaLevel?.level : 0}
             </MyText>
           </View>
         </View>
         <View style={styles.levelCon}>
           <View style={styles.levelLimitTextCon}>
             <MyText style={styles.levelLimitText}>
-              {weechaLevelCalculation(weechaLevel?.totalXP)?.currWeechaLevel !==
-                null &&
-                `LV. ${
-                  weechaLevelCalculation(weechaLevel?.totalXP)?.currWeechaLevel
-                }`}
+              LV. {weechaLevel?.level ? weechaLevel?.level : 0}
             </MyText>
             <MyText style={styles.levelLimitText}>
-              {weechaLevelCalculation(weechaLevel?.totalXP)?.nextWeechaLevel !==
-                null &&
-                `LV. ${
-                  weechaLevelCalculation(weechaLevel?.totalXP)?.nextWeechaLevel
-                }`}
+              LV. {nextLevel ? nextLevel : 1}
             </MyText>
           </View>
           <ProgressBar

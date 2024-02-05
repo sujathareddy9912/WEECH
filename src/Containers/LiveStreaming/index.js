@@ -234,6 +234,8 @@ const LiveStreaming = ({navigation, route}) => {
   const [isVisible, setIsVisible] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
 
+
+  // to show gift on live stream
   useEffect(() => {
     const latestImage =
       commentData.length > 0 ? commentData[commentData.length - 1] : null;

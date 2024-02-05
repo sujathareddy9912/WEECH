@@ -43,7 +43,7 @@ const GiftComponent = props => {
   const dispatch = useDispatch();
 
   const [refreshData, setRefreshData] = useState(false);
-  const [selectedGifts, setSelectedGifts] = useState([]);
+  const [selectedGifts, setSelectedGifts] = useState(null);
   const [sendingGift, setSendingGift] = useState(false);
   const [selectedGiftType, updateSelectedGiftType] = useState(0);
   const [diamondPoints, setDiamondPoints] = useState(diamondCount);
@@ -73,67 +73,46 @@ const GiftComponent = props => {
     else return 'center';
   };
 
-  const onDecrement = (item, index) => () => {
-    if (!item?.count) {
-      topCategoryList[selectedGiftType].gifts[index].count = 0;
-    } else if (item?.count == 0) {
-      topCategoryList[selectedGiftType].gifts[index].count = 0;
-    } else {
-      topCategoryList[selectedGiftType].gifts[index].count = item.count - 1;
-    }
-    const indexFound = selectedGifts.findIndex(find => {
-      if (item._id == find._id) return find;
-    });
-    if (indexFound < 0) {
-      selectedGifts.push({...item, count: !item?.count ? 0 : item.count});
-    } else {
-      updateCountAndRemoveIfZero(selectedGifts, item);
-    }
-    setRefreshData(!refreshData);
-  };
+  const onDecrement = () => () => {
+    if (selectedGifts) {
+      // Decrement the count
+      const updatedObject = {
+        ...selectedGifts,
+        count: (selectedGifts.count || 0) - 1,
+      };
 
-  function updateCountAndRemoveIfZero(array, updatedObject) {
-    for (let i = 0; i < array.length; i++) {
-      if (array[i]._id === updatedObject._id) {
-        // Decrease count by 1
-        array[i].count--;
-
-        // Remove the object if count is 0
-        if (array[i].count === 0) {
-          array.splice(i, 1);
-        }
-
-        break; // exit loop once the object is found and updated
+      // Remove from the state if count becomes 0
+      if (updatedObject.count <= 0) {
+        setSelectedGifts(null);
+      } else {
+        setSelectedGifts(updatedObject);
       }
     }
-  }
+  };
 
-  const onIncrement = (item, index) => () => {
-    if (!item?.count) {
-      topCategoryList[selectedGiftType].gifts[index].count = 1;
+  const onIncrement = item => () => {
+    if (selectedGifts && selectedGifts._id === item._id) {
+      // If the same object is selected, increment the count
+      setSelectedGifts({
+        ...selectedGifts,
+        count: (selectedGifts.count || 0) + 1,
+      });
     } else {
-      topCategoryList[selectedGiftType].gifts[index].count = item.count + 1;
+      // If a different object is selected, replace the existing object
+      setSelectedGifts({...item, count: 1});
     }
-    const indexFound = selectedGifts.findIndex(find => {
-      if (item._id == find._id) return find;
-    });
-    if (indexFound < 0) {
-      selectedGifts.push({...item, count: !item?.count ? 1 : item.count});
-    } else {
-      selectedGifts[indexFound].count = item.count;
-    }
-    setRefreshData(!refreshData);
   };
 
   const onSendPress = () => {
-    let totalPrice = 0;
-    let totalCount = 0;
-    const gifts = selectedGifts.map(item => {
-      totalPrice = totalPrice + item.price * item.count;
-      totalCount = item.count > 0 ? totalCount + 1 : totalCount;
-      return {giftId: item._id, quantity: item.count};
-    });
-    if (!gifts.length) {
+    let totalPrice = selectedGifts?.price * selectedGifts?.count;
+    let totalCount = selectedGifts?.count;
+
+    const gifts = {
+      giftId: selectedGifts?._id ? selectedGifts?._id : null,
+      quantity: selectedGifts?.count ? selectedGifts?.count : null,
+    };
+
+    if (!gifts?.quantity) {
       HelperService.showToast(strings('gift.pleaseSelectGift'));
       return;
     }
@@ -142,13 +121,15 @@ const GiftComponent = props => {
       const param = {
         senderId,
         totalPrice,
-        giftId: gifts,
+        giftId: [gifts],
         receiverId: [{userId: receiverId}],
         roomId: roomID,
+        giftId: selectedGifts?._id
       };
+      console.warn("gift component onSendPress",param)
 
       dispatch(
-        sendGiftAction(param, () => {
+        sendGiftAction(param, resp => {
           onSendSuccess({param, totalCount});
           setSendingGift(false);
           onSendClick();
@@ -172,7 +153,7 @@ const GiftComponent = props => {
             <MyText style={styles.diamondCount}>{item.price}</MyText>
           </View>
           <Counter
-            count={item?.count || 0}
+            count={item?._id === selectedGifts?._id ? selectedGifts?.count : 0}
             onDecrement={onDecrement(item, index)}
             onIncrement={onIncrement(item, index)}
             style={{marginTop: dynamicSize(5)}}
@@ -183,7 +164,7 @@ const GiftComponent = props => {
   };
 
   const _renderSelectedList = ({item, index}) => {
-    if(!item.count) return null
+    if (!item.count) return null;
 
     return (
       <View style={[styles.selectedContainer]}>
@@ -232,16 +213,18 @@ const GiftComponent = props => {
           contentContainerStyle={styles.giftList}
         />
       )}
-      <View>
-        <FlatList
-          key="selectedList"
-          data={selectedGifts}
-          renderItem={_renderSelectedList}
-          horizontal
-          ItemSeparatorComponent={_renderSelectedSeperator}
-          contentContainerStyle={styles.selectedlistContainerStyle}
-        />
-      </View>
+      {selectedGifts ? (
+        <View style={[styles.selectedContainer]}>
+          <MyText style={styles.selectedCount}>{`*${
+            selectedGifts?.count || 0
+          }`}</MyText>
+          <MyImage
+            fast
+            source={{uri: `${IMAGE_URL}${selectedGifts?.icon}`}}
+            style={styles.giftIcon}
+          />
+        </View>
+      ) : null}
 
       <Button
         disabled={fetchingGifts}

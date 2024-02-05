@@ -229,7 +229,30 @@ const LiveStreaming = ({navigation, route}) => {
     route?.params?.todayEarning,
   );
 
-  const [showGames,setShowGames] = useState(false);
+  const [showGames, setShowGames] = useState(false);
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
+
+  useEffect(() => {
+    const latestImage =
+      commentData.length > 0 ? commentData[commentData.length - 1] : null;
+    if (latestImage && latestImage?.image) {
+      setImageSrc(latestImage?.image);
+      setIsVisible(true);
+
+      // Schedule hiding the gift image after 3 seconds
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    } else {
+
+      setImageSrc(null);
+      setIsVisible(false);
+    }
+  }, [commentData]);
 
   const BROAD_OPTIONS = [
     `${isAdmin ? 'Remove Admin' : 'Make Admin'}`,
@@ -1129,6 +1152,7 @@ const LiveStreaming = ({navigation, route}) => {
     const comentData = {
       type: 'comment',
       chat_id: channelToken,
+      giftId: data?.param?.giftId,
       commentData: {
         type: 'comment',
         comment: `${data?.totalCount} gift's send by ${userLoginList?.user?.name} `,
@@ -1661,6 +1685,27 @@ const LiveStreaming = ({navigation, route}) => {
           {...panResponder.panHandlers}>
           {showComments && (
             <View style={styles.chatMainContainer}>
+              <View
+                style={{
+                  position: 'absolute',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: SCREEN_WIDTH,
+                  height: SCREEN_HEIGHT,
+                }}>
+                {isVisible && imageSrc ? (
+                  <MyImage
+                    fast
+                    source={{uri: imageSrc}}
+                    style={{
+                      width: SCREEN_WIDTH * 0.5,
+                      height: SCREEN_WIDTH * 0.5,
+                      backgroundColor: 'transparent',
+                    }}
+                  />
+                ) : null}
+              </View>
+
               <Touchable
                 activeOpacity={1}
                 onPress={_closeAllPopup}
@@ -1729,7 +1774,10 @@ const LiveStreaming = ({navigation, route}) => {
                         {strings('live.pk')}
                       </MyText>
                     </Touchable>
-                    <TouchableIcon customIcon={<SvgIcon.BlueGame />}  onPress = {()=>setShowGames(true)}/>
+                    <TouchableIcon
+                      customIcon={<SvgIcon.BlueGame />}
+                      onPress={() => setShowGames(true)}
+                    />
                   </>
                 )}
               </View>
@@ -1832,7 +1880,10 @@ const LiveStreaming = ({navigation, route}) => {
 
                   {!isBroadcaster && !isKeyboardShow ? (
                     <View style={styles.subBottomChatRowContainer}>
-                      <TouchableIcon customIcon={<SvgIcon.BlueGame />}  onPress = {()=>setShowGames(true)}/>
+                      <TouchableIcon
+                        customIcon={<SvgIcon.BlueGame />}
+                        onPress={() => setShowGames(true)}
+                      />
                       <TouchableIcon
                         onPress={_fetchGiftList}
                         customIcon={<SvgIcon.SmallGiftIcon />}
@@ -2196,7 +2247,7 @@ const LiveStreaming = ({navigation, route}) => {
           </View>
         </Actionsheet.Content>
       </Actionsheet>
-      <Game visible={showGames} setVisible={setShowGames}/>
+      <Game visible={showGames} setVisible={setShowGames} />
     </>
   );
 };

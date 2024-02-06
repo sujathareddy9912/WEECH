@@ -45,7 +45,12 @@ export const LiveScreenHeader = props => {
 
   return (
     <View style={styles.container}>
-      <FlatList horizontal data={headerData} renderItem={renderHeaderValue} />
+      <FlatList
+        horizontal
+        data={headerData}
+        renderItem={renderHeaderValue}
+        showsHorizontalScrollIndicator={false}
+      />
       <View style={styles.rightCon}>
         <Touchable onPress={onSearchPress} style={styles.iconContainer}>
           <SvgIcon.SearchIcon />

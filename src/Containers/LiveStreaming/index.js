@@ -1821,6 +1821,7 @@ const LiveStreaming = ({navigation, route}) => {
                 keyboardShouldPersistTaps={'handled'}
                 contentContainerStyle={{
                   flex: 1,
+                  marginTop: 150,
                 }}
                 style={{
                   height: 0,
@@ -1833,14 +1834,12 @@ const LiveStreaming = ({navigation, route}) => {
                   keyboardShouldPersistTaps={'always'}
                   contentContainerStyle={[
                     styles['scrollView'],
-                    {paddingTop: dynamicSize(60)},
                   ]}>
                   <View
                     style={{
                       width: SCREEN_WIDTH,
                       flex: 1,
                       justifyContent: 'flex-end',
-                      marginVertical: dynamicSize(10),
                     }}>
                     {commentData?.map((item, index) =>
                       _renderComment(item, index),

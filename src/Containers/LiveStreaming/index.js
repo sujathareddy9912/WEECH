@@ -1178,7 +1178,7 @@ const LiveStreaming = ({navigation, route}) => {
     const comentData = {
       type: 'comment',
       chat_id: channelToken,
-      giftId: data?.param?.giftId,
+      giftId: data?.param?.giftId[0]?.giftId,
       commentData: {
         type: 'comment',
         comment: `${data?.totalCount} gift's send by ${userLoginList?.user?.name} `,
@@ -1192,7 +1192,7 @@ const LiveStreaming = ({navigation, route}) => {
     socket.emit('live_session', comentData);
 
     dispatch(commentOnLiveStreamAction(comentData));
-    dispatch(updateHostPointAction(data.param.totalPrice));
+    dispatch(updateHostPointAction(data?.param?.totalPrice));
     hideGift();
   };
 

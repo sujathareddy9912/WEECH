@@ -1819,10 +1819,7 @@ const LiveStreaming = ({navigation, route}) => {
                 behavior={isIOS ? 'position' : null}
                 enabled
                 keyboardShouldPersistTaps={'handled'}
-                contentContainerStyle={{
-                  flex: 1,
-                  marginTop: 150,
-                }}
+                contentContainerStyle={styles.chatKeyboardScrollViewContainer}
                 style={{
                   height: 0,
                 }}>
@@ -1836,11 +1833,7 @@ const LiveStreaming = ({navigation, route}) => {
                     styles['scrollView'],
                   ]}>
                   <View
-                    style={{
-                      width: SCREEN_WIDTH,
-                      flex: 1,
-                      justifyContent: 'flex-end',
-                    }}>
+                    style={styles.chatContainer}>
                     {commentData?.map((item, index) =>
                       _renderComment(item, index),
                     )}

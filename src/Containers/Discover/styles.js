@@ -206,6 +206,11 @@ const styles = StyleSheet.create({
     color: COLORS.WHITE,
     fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
   },
+  remoteView:{
+    height: '100%',
+    width: '100%',
+    zIndex: 10,
+  }
 });
 
 export default styles;

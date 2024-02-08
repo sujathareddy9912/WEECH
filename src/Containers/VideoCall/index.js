@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from 'react-redux';
 import database from '@react-native-firebase/database';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   View,
   TouchableWithoutFeedback,
@@ -9,6 +9,7 @@ import {
   Text,
   PermissionsAndroid,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {
   ClientRoleType,
@@ -59,8 +60,11 @@ import {
 } from '../../Redux/Action';
 import {SvgIcon} from '../../Component/icons';
 import {FONT_SIZE} from '../../Utils/fontFamily';
+import {Modal} from 'react-native-paper';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 let timeout = null;
+let checkEndCall = 0;
 
 const VideoCall = ({navigation, route}) => {
   const agoraEngineRef = useRef();
@@ -84,6 +88,9 @@ const VideoCall = ({navigation, route}) => {
     useState(initialState);
   const [remoteUid, setRemoteUid] = useState(0);
   const [isJoined, setIsJoined] = useState(false);
+  const [callChargeDetails, setCallChargeDetails] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const detail = useMemo(() => {
     return route?.params;
@@ -150,13 +157,30 @@ const VideoCall = ({navigation, route}) => {
     };
   }, []);
 
+  useMemo(() => {
+    if (modalVisible) {
+      Alert.alert(
+        '',
+        'Please recharge, other wise you call will end within a minute',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              setShowPopup(true);
+              setModalVisible(false);
+            },
+          },
+        ],
+      );
+    }
+  }, [modalVisible]);
+
   useEffect(() => {
     if (showTime) {
       if (timeout) clearTimeout(timeout);
       timeout = setTimeout(() => {
         UpdateSecond(second + 1);
       }, 1000);
-
       if (
         second != 0 &&
         second % 60 === 0 &&
@@ -169,6 +193,29 @@ const VideoCall = ({navigation, route}) => {
       clearTimeout(timeout);
     };
   }, [showTime, second]);
+
+  useEffect(() => {
+    console.log(callChargeDetails);
+    if (callChargeDetails) {
+      let perSecondCharge = callChargeDetails.balance?.charge / 60;
+      checkEndCall = checkEndCall + Math.abs(perSecondCharge);
+      if (
+        !callChargeDetails.data.call &&
+        callChargeDetails.data.message.toLowerCase() ==
+          'Insufficient balance !!'.toLowerCase()
+      ) {
+        onCancelPress();
+      } else if (
+        callChargeDetails.data.call &&
+        callChargeDetails.data.balance <= callChargeDetails.data.charge &&
+        callChargeDetails.data.message.toLowerCase() ==
+          'success'.toLowerCase() &&
+        !showPopup
+      ) {
+        setModalVisible(true);
+      }
+    }
+  }, [second]);
 
   useEffect(() => {
     if (channelToken && channelName) {
@@ -207,11 +254,18 @@ const VideoCall = ({navigation, route}) => {
           console.log('Please check your internet connection.');
         },
       });
-      agoraEngineInit.initialize({
-        appId: rtmAgoraConfig.appId,
-        channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
-      });
-      agoraEngineInit.enableVideo();
+
+      if (detail?.type === CALLING_TYPE.VIDEO) {
+        agoraEngineInit.initialize({
+          appId: rtmAgoraConfig.appId,
+          channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+        });
+        agoraEngineInit.enableVideo();
+      } else {
+        agoraEngineInit.initialize({
+          appId: rtmAgoraConfig.appId,
+        });
+      }
       join();
     } catch (e) {
       console.log(e);
@@ -227,7 +281,9 @@ const VideoCall = ({navigation, route}) => {
       agoraEngineRef.current?.setChannelProfile(
         ChannelProfileType.ChannelProfileCommunication,
       );
-      agoraEngineRef.current?.startPreview();
+      if (detail?.type === CALLING_TYPE.VIDEO) {
+        agoraEngineRef.current?.startPreview();
+      }
       agoraEngineRef.current?.joinChannel(
         channelToken,
         channelName,
@@ -300,7 +356,6 @@ const VideoCall = ({navigation, route}) => {
   const _destroyCallRefrence = async () => {
     try {
       await agoraEngineRef.current?.leaveChannel();
-      //await agoraEngineRef?.current?.destroy();
       await removedbNodeIfExist(detail.receiverId);
       await disableIncomingCallQuery(detail.receiverId);
       dispatch(clearCommentOnDuringCall());
@@ -319,9 +374,8 @@ const VideoCall = ({navigation, route}) => {
     };
     dispatch(leaveCallingRoomAction(param));
   };
-
   useEffect(() => {
-    if (route?.params?.receiverId !== userLoginList?.user?._id) {
+    if (detail?.receiverId !== userLoginList?.user?._id) {
       _incomeCreate();
     }
   }, []);
@@ -336,8 +390,9 @@ const VideoCall = ({navigation, route}) => {
 
     dispatch(
       createIncomeCallAction(param, result => {
-        if (result && result.status !== undefined && !result.status) {
-          onCancelPress();
+        checkEndCall = 0;
+        if (result && result !== undefined) {
+          setCallChargeDetails(result);
         }
       }),
     );
@@ -353,8 +408,13 @@ const VideoCall = ({navigation, route}) => {
 
     dispatch(
       createIncomeCallAction(param, result => {
-        if (result && result.status !== undefined && !result.status) {
-          onCancelPress();
+        checkEndCall = 0;
+        if (
+          result &&
+          result !== undefined &&
+          result.balance.balance < result.balance.charge
+        ) {
+          setModalVisible(true);
         }
       }),
     );
@@ -467,13 +527,11 @@ const VideoCall = ({navigation, route}) => {
                       canvas={{uid: remoteUid}}
                       style={styles.remoteView}
                     />
-                    <Text>Remote user uid: {remoteUid}</Text>
                   </React.Fragment>
                 )}
               </ScrollView>
             )}
           </MyLinearGradient>
-
           {detail?.type == CALLING_TYPE.VIDEO ? (
             <View
               style={{

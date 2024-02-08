@@ -1829,11 +1829,8 @@ const LiveStreaming = ({navigation, route}) => {
                   scrollEventThrottle={16}
                   showsVerticalScrollIndicator={false}
                   keyboardShouldPersistTaps={'always'}
-                  contentContainerStyle={[
-                    styles['scrollView'],
-                  ]}>
-                  <View
-                    style={styles.chatContainer}>
+                  contentContainerStyle={[styles['scrollView']]}>
+                  <View style={styles.chatContainer}>
                     {commentData?.map((item, index) =>
                       _renderComment(item, index),
                     )}

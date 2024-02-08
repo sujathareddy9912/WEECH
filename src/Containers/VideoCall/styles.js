@@ -145,6 +145,38 @@ const styles = StyleSheet.create({
   btnContainer: {flexDirection: 'row', justifyContent: 'center'},
   head: {fontSize: 20},
   info: {backgroundColor: '#ffffe0', color: '#0000ff'},
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'red', // Transparent background
+    height: SCREEN_HEIGHT,
+    width:SCREEN_WIDTH,
+    padding:16
+  },
+  modal: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width:'100%',
+    height:160
+  },
+  message: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  okButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  okText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign:'center'
+  },
 });
 
 export default styles;

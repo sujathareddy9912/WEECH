@@ -11,7 +11,8 @@ import {
   Image,
   TouchableWithoutFeedback,
   ActivityIndicator,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -334,11 +335,11 @@ const UserProfile = props => {
         : await requestAudioPermission();
     if (permissionGranted && detail) {
       try {
-      //  const userBusyorNot = await checkNodePresentOrNot(detail._id);
-      //   if (userBusyorNot) {
-      //     HelperService.showToast('User is busy on another call.');
-      //     return;
-      //   }
+        //  const userBusyorNot = await checkNodePresentOrNot(detail._id);
+        //   if (userBusyorNot) {
+        //     HelperService.showToast('User is busy on another call.');
+        //     return;
+        //   }
         const param = {
           callerId: userLoginList?.user?._id,
           receiverId: detail._id,
@@ -400,6 +401,14 @@ const UserProfile = props => {
 
   function checkURL(url) {
     return url?.match(/\.(jpeg|jpg|gif|png)$/) != null;
+  }
+
+  function rechargePopup() {
+    Alert.alert('', 'Your account balance is low,Please Recharge.', [
+      {
+        text: 'OK',
+      },
+    ]);
   }
 
   return (
@@ -633,15 +642,36 @@ const UserProfile = props => {
               ]}>
               <TouchableIcon
                 customIcon={<SvgIcon.AudioCallBlue />}
-                onPress={() => callingFunctionality(CALLING_TYPE.AUDIO)}
+                onPress={() => {
+                  console.log(detail);
+                  if (detail?.callCharge < userLoginList?.user?.myBalance) {
+                    callingFunctionality(CALLING_TYPE.AUDIO);
+                  } else {
+                    rechargePopup();
+                  }
+                }}
               />
               <TouchableIcon
-                onPress={() => callingFunctionality(CALLING_TYPE.VIDEO)}
+                onPress={() => {
+                  if (detail?.videoCharge < userLoginList?.user?.myBalance) {
+                    callingFunctionality(CALLING_TYPE.VIDEO);
+                  } else {
+                    rechargePopup();
+                  }
+                }}
                 style={styles.videoCallIcon}
                 customIcon={<SvgIcon.VideoCallPink />}
               />
               <TouchableIcon
-                onPress={_createRoom}
+                onPress={() => {
+                  console.log(detail.messageCharge);
+                  console.log(userLoginList.user.myBalance);
+                  if (detail?.messageCharge < userLoginList?.user?.myBalance) {
+                    _createRoom();
+                  } else {
+                    rechargePopup();
+                  }
+                }}
                 customIcon={<SvgIcon.TextMsgBlue />}
               />
             </View>

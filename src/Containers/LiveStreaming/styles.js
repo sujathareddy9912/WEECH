@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
     borderRadius: dynamicSize(16),
     backgroundColor: COLORS.BABY_PINK,
   },
-  closeBtn:{
+  closeBtn: {
     zIndex: 100,
     backgroundColor: '#000',
     height: 24,
@@ -400,7 +400,18 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+
+  chatKeyboardScrollViewContainer: {
+    flex: 1,
+    marginTop: 150,
+  },
+  chatContainer: {
+    width: SCREEN_WIDTH,
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingTop: 10,
+  },
 });
 
 export default styles;

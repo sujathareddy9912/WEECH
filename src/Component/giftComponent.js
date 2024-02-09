@@ -124,9 +124,7 @@ const GiftComponent = props => {
         giftId: [gifts],
         receiverId: [{userId: receiverId}],
         roomId: roomID,
-        giftId: selectedGifts?._id
       };
-      console.warn("gift component onSendPress",param)
 
       dispatch(
         sendGiftAction(param, resp => {

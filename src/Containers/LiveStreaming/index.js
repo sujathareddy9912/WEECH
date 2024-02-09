@@ -211,7 +211,7 @@ const LiveStreaming = ({navigation, route}) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [viewersFollowing, setViewersFollowing] = useState([]);
   const [removeAdminVisible, setRemoveAdminVisible] = useState(false);
-  const [renderNewJoinne, UpdateNewJoinneState] = useState(true);
+  const [renderNewJoinne, UpdateNewJoinneState] = useState(false);
   const [{joinSucceed, peerIds}, setState] = useState(initialState);
   const [joinedUserDataState, updateJoinedUserDataState] = useState([]);
   const [isKeyboardShow, updateKeyboardShow] = useState(false);
@@ -341,13 +341,13 @@ const LiveStreaming = ({navigation, route}) => {
 
   useEffect(() => {
     if (joinedUserData?.id) {
-      if (joinedTimout) {
-        UpdateNewJoinneState(false);
+      if (joinedTimout || !renderNewJoinne) {
+        UpdateNewJoinneState(true);
       } else {
         dispatch(changeAnimationTypeAction('slideInRight'));
-        joinedTimout = setTimeout(() => {
+        setTimeout(() => {
           joinedTimout = null;
-          UpdateNewJoinneState(true);
+          UpdateNewJoinneState(false);
           dispatch(changeAnimationTypeAction('slideOutLeft'));
         }, 3000);
       }
@@ -958,7 +958,9 @@ const LiveStreaming = ({navigation, route}) => {
         <Animatable.View
           animation={animationType}
           easing="ease"
-          duration={3000}>
+          duration={5000}
+          onAnimationEnd={() => UpdateNewJoinneState(false)}
+        >
           <MyLinearGradient
             colors={[COLORS.ORANGE, COLORS.ORANGE1]}
             style={styles.joinedThLiveContainer}>
@@ -1678,7 +1680,7 @@ const LiveStreaming = ({navigation, route}) => {
           activeOpacity={1}
           onPress={_closeAllPopup}
           style={{
-            top: hp(58),
+            top: hp(56),
             position: 'absolute',
             width: SCREEN_WIDTH,
             justifyContent: 'flex-end',

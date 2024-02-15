@@ -16,6 +16,7 @@ import {
   createAgoraRtcEngine,
   RtcSurfaceView,
   ChannelProfileType,
+  VideoStreamType,
 } from 'react-native-agora';
 
 import styles from './styles';
@@ -261,6 +262,7 @@ const VideoCall = ({navigation, route}) => {
           channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
         });
         agoraEngineInit.enableVideo();
+        agoraEngineInit.setRemoteDefaultVideoStreamType(VideoStreamType.VideoStreamHigh);
       } else {
         agoraEngineInit.initialize({
           appId: rtmAgoraConfig.appId,
@@ -386,6 +388,7 @@ const VideoCall = ({navigation, route}) => {
       receiverId: detail?.receiverId,
       type: callData.isVideoCall ? 'VIDEOCALL' : 'CALL',
       chargeSettle: true,
+      seconds: second
     };
 
     dispatch(

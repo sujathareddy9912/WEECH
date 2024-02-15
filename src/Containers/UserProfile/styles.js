@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: dynamicSize(10),
-    backgroundColor: COLORS.GALLERY_PLACEHOLDER_GREY,
+    backgroundColor: COLORS.TRANSPARENT,
   },
   image: {
     width: SCREEN_WIDTH / 3 - dynamicSize(15),
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
     top: dynamicSize(7),
     right: dynamicSize(7),
     zIndex: 10,
+    backgroundColor:COLORS.TRANSPARENT
   },
   seperator: {
     height: dynamicSize(10),

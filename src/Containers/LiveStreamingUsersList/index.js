@@ -37,6 +37,7 @@ const LiveStreamingUserList = ({navigation, route}) => {
   const [footerIndicator, setFooterIndicator] = useState(false);
   const [pullToRefreshIndicator, setPullToRefreshIndicator] = useState(false);
 
+
   useEffect(() => {
     paginationOffset.current = 0;
     setFetching(true);

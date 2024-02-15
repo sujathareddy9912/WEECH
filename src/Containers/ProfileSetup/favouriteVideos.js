@@ -99,15 +99,10 @@ function FavouriteVideos() {
 
   useEffect(() => {
     if (getProfileVideoSuccess) {
-      let videoUri = getProfileVideoSuccess.user.map(async function (item) {
-        const thumbnail = await CreateThumbnail(
-          `https://api.weecha.uk/v1/uploads/${item.file}`,
-          console.log(thumbnail),
-        );
-      });
       let videos = getProfileVideoSuccess.user.map(item => ({
         uri: `https://api.weecha.uk/v1/uploads/${item.file}`,
         id: item._id,
+        thumbnail: `https://api.weecha.uk/v1/uploads/${item.thumbImage}`,
       }));
       videos = [...videos, userVideos];
       setUserVideos(videos);
@@ -344,15 +339,20 @@ function FavouriteVideos() {
     if (item && item?.uri) {
       return (
         <>
-          {item.thumbnail ? (
-            <ImageBackground
-              source={{uri: item.thumbnail}}
-              style={styles.profilePhotos(index)}
-              imageStyle={styles.profilePhotosStyle}>
+          <ImageBackground
+            source={{uri: item.thumbnail}}
+            style={styles.profilePhotos(index)}
+            imageStyle={styles.profilePhotosStyle}>
+            <TouchableOpacity
+              style={styles.playIcon}
+              onPress={() => {
+                setVideoUri(item.uri);
+                refRBSheet.current.open();
+              }}>
               <TouchableOpacity
                 style={styles.closeBtn}
                 onPress={() => {
-                  deleteVideos(item.id);
+                  deleteVideos(item?.id);
                   removeImages(index);
                 }}>
                 <Icon
@@ -362,37 +362,14 @@ function FavouriteVideos() {
                   color={COLORS.WHITE}
                 />
               </TouchableOpacity>
-            </ImageBackground>
-          ) : (
-            <View style={styles.profilePhotos(index)}>
-              <TouchableOpacity
-                style={styles.playIcon}
-                onPress={() => {
-                  setVideoUri(item.uri);
-                  refRBSheet.current.open();
-                }}>
-                <TouchableOpacity
-                  style={styles.closeBtn}
-                  onPress={() => {
-                    deleteVideos(item?.id);
-                    removeImages(index);
-                  }}>
-                  <Icon
-                    origin="AntDesign"
-                    name="close"
-                    size={12}
-                    color={COLORS.WHITE}
-                  />
-                </TouchableOpacity>
-                <Icon
-                  origin="AntDesign"
-                  name={'play'}
-                  size={30}
-                  color={COLORS.WHITE}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
+              <Icon
+                origin="AntDesign"
+                name={'play'}
+                size={30}
+                color={COLORS.WHITE}
+              />
+            </TouchableOpacity>
+          </ImageBackground>
         </>
       );
     } else {
@@ -599,7 +576,7 @@ const styles = StyleSheet.create({
   },
   playIcon: {
     flex: 1,
-    backgroundColor: COLORS.GALLERY_PLACEHOLDER_GREY,
+    backgroundColor: COLORS.TRANSPARENT,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 16,

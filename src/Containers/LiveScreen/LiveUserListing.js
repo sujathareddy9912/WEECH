@@ -347,6 +347,7 @@ export default LiveUserListing = ({navigation}) => {
   };
 
   const renderCard = (item, index) => {
+    console.log(item);
     if (index == 0) {
       return item?._id ? (
         <TouchableOpacity onPress={() => _joinAsAudience(item)}>

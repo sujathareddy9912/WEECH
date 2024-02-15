@@ -31,7 +31,7 @@ import {
   RemoteVideoState,
   createAgoraRtcEngine,
   RtcSurfaceView,
-  VideoStreamType
+  VideoStreamType,
 } from 'react-native-agora';
 import {
   heightPercentageToDP as hp,
@@ -490,7 +490,9 @@ const LiveStreaming = ({navigation, route}) => {
         await agoraEngineRef.current?.setChannelProfile(
           ChannelProfileType.ChannelProfileLiveBroadcasting,
         );
-        await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(VideoStreamType.VideoStreamHigh)
+        await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(
+          VideoStreamType.VideoStreamHigh,
+        );
         await agoraEngineRef.current.enableVideo();
         await agoraEngineRef.current.startPreview();
         await agoraEngineRef.current?.setClientRole(
@@ -607,7 +609,9 @@ const LiveStreaming = ({navigation, route}) => {
         appId: rtmAgoraConfig.appId,
         channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
       });
-      await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(VideoStreamType.VideoStreamHigh)
+      await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(
+        VideoStreamType.VideoStreamHigh,
+      );
       agoraEngineInit.enableVideo();
       _addListeners();
       _startCall();
@@ -1216,7 +1220,12 @@ const LiveStreaming = ({navigation, route}) => {
     const hostGiftIncome = {
       roomId: channelToken,
     };
-    dispatch(hostSendGiftAction(hostGiftIncome));
+    dispatch(
+      hostSendGiftAction(hostGiftIncome, resp => {
+        UpdateTodayEarning(resp?.data?.todayEarning)
+        setStar(resp?.data?.star);
+      }),
+    );
 
     hideGift();
   };

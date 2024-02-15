@@ -71,8 +71,8 @@ const MyEarning = ({navigation, route}) => {
         tempValue.push(Number(item?.total));
       });
     setMaxValue(Number(max));
-    setLabel([...tempLabel].reverse());
-    setValue([...tempValue].reverse());
+    setLabel([...tempLabel]);
+    setValue([...tempValue]);
   }, [myEarning]);
 
   const getAgencyDetails = async () => {

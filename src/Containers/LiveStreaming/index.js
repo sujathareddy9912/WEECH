@@ -31,6 +31,7 @@ import {
   RemoteVideoState,
   createAgoraRtcEngine,
   RtcSurfaceView,
+  VideoStreamType
 } from 'react-native-agora';
 import {
   heightPercentageToDP as hp,
@@ -171,6 +172,7 @@ const LiveStreaming = ({navigation, route}) => {
     hostExtraDetail,
     likeStatusStream,
   } = state.streamingReducer;
+
 
   const isBroadcaster = useMemo(() => {
     if (route?.params?.type) return route?.params?.type == STREAM_TYPE.HOST;
@@ -488,6 +490,7 @@ const LiveStreaming = ({navigation, route}) => {
         await agoraEngineRef.current?.setChannelProfile(
           ChannelProfileType.ChannelProfileLiveBroadcasting,
         );
+        await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(VideoStreamType.VideoStreamHigh)
         await agoraEngineRef.current.enableVideo();
         await agoraEngineRef.current.startPreview();
         await agoraEngineRef.current?.setClientRole(
@@ -548,6 +551,12 @@ const LiveStreaming = ({navigation, route}) => {
     }
   }, [joinUserCount]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(clearLiveStreamDataAction());
+    };
+  }, []);
+
   const getUserJoinedData = () => {
     dispatch(
       activeLiveUserListInStreamingAction(
@@ -598,6 +607,7 @@ const LiveStreaming = ({navigation, route}) => {
         appId: rtmAgoraConfig.appId,
         channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
       });
+      await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(VideoStreamType.VideoStreamHigh)
       agoraEngineInit.enableVideo();
       _addListeners();
       _startCall();
@@ -826,7 +836,7 @@ const LiveStreaming = ({navigation, route}) => {
           peerIds: [],
           joinSucceed: false,
         }));
-        dispatch(clearLiveStreamDataAction());
+        //dispatch(clearLiveStreamDataAction());
         navigation.navigate('LiveSection');
       } else {
         socket.emit('live_session', {
@@ -849,7 +859,7 @@ const LiveStreaming = ({navigation, route}) => {
           peerIds: [],
           joinSucceed: false,
         }));
-        dispatch(clearLiveStreamDataAction());
+        // dispatch(clearLiveStreamDataAction());
         navigation.navigate('LiveSection');
       }
     } catch (error) {
@@ -889,7 +899,7 @@ const LiveStreaming = ({navigation, route}) => {
           peerIds: [],
           joinSucceed: false,
         }));
-        dispatch(clearLiveStreamDataAction());
+        //dispatch(clearLiveStreamDataAction());
         navigation.navigate('LiveSection');
       } else {
         socket.emit('live_session', {
@@ -907,7 +917,7 @@ const LiveStreaming = ({navigation, route}) => {
           peerIds: [],
           joinSucceed: false,
         }));
-        dispatch(clearLiveStreamDataAction());
+        //dispatch(clearLiveStreamDataAction());
       }
     } catch (error) {
       console.log('erroe while leaving streaming==>', error.message);

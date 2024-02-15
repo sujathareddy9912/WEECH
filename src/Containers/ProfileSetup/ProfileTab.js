@@ -77,7 +77,7 @@ function TabViewExample() {
                 {route.title}
               </Animated.Text>
 
-              {appgender === 'female' &&
+              {/* {appgender === 'female' &&
                 !isEdit &&
                 index !== i &&
                 !isDone?.includes(route.key) && (
@@ -89,7 +89,7 @@ function TabViewExample() {
                       size={12}
                     />
                   </View>
-                )}
+                )} */}
             </TouchableOpacity>
           );
         })}
@@ -149,19 +149,22 @@ const styles = StyleSheet.create({
   tabBar: {
     //backgroundColor:'red',
     flexDirection: 'row',
-    paddingTop: StatusBar.currentHeight,
+   // paddingTop: StatusBar.currentHeight,
   },
   tabItem: {
     flex: 1,
     // alignItems: '',
-    padding: 16,
+    marginHorizontal:16,
+    paddingVertical: 16,
   },
   activeTitle: {
     fontSize: 18,
     color: COLORS.VERIFIED_GREEN,
+    textAlign: 'center',
   },
   inActiveTitle: {
     fontSize: 18,
     color: COLORS.MID_GREY,
+    textAlign: 'center',
   },
 });

@@ -85,6 +85,8 @@ import {
   getLiveUserListAction,
   hostDetailAction,
   getHostExtraDetailAction,
+  getHostSendGiftAction,
+  hostSendGiftAction,
 } from '../../Redux/Action';
 
 import {
@@ -234,25 +236,7 @@ const LiveStreaming = ({navigation, route}) => {
 
   const [isVisible, setIsVisible] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
-
-  useEffect(() => {
-    const latestImage =
-      commentData.length > 0 ? commentData[commentData.length - 1] : null;
-    if (latestImage && latestImage?.image) {
-      setImageSrc(latestImage?.image);
-      setIsVisible(true);
-
-      // Schedule hiding the gift image after 3 seconds
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    } else {
-      setImageSrc(null);
-      setIsVisible(false);
-    }
-  }, [commentData]);
+  const [star, setStar] = useState();
 
   const BROAD_OPTIONS = [
     `${isAdmin ? 'Remove Admin' : 'Make Admin'}`,
@@ -281,6 +265,29 @@ const LiveStreaming = ({navigation, route}) => {
       }),
     );
   };
+
+  useEffect(() => {
+    setStar(hostExtraDetail?.star ? hostExtraDetail?.star : 0);
+    const latestImage =
+      commentData.length > 0 ? commentData[commentData.length - 1] : null;
+    if (latestImage && latestImage?.image) {
+      setImageSrc(latestImage?.image);
+      setIsVisible(true);
+
+      UpdateTodayEarning(latestImage?.userIncome?.todayEarning);
+      setStar(latestImage?.userIncome?.star);
+
+      // Schedule hiding the gift image after 3 seconds
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    } else {
+      setImageSrc(null);
+      setIsVisible(false);
+    }
+  }, [commentData]);
 
   useEffect(() => {
     if ((channelName, channelToken)) {
@@ -959,8 +966,7 @@ const LiveStreaming = ({navigation, route}) => {
           animation={animationType}
           easing="ease"
           duration={5000}
-          onAnimationEnd={() => UpdateNewJoinneState(false)}
-        >
+          onAnimationEnd={() => UpdateNewJoinneState(false)}>
           <MyLinearGradient
             colors={[COLORS.ORANGE, COLORS.ORANGE1]}
             style={styles.joinedThLiveContainer}>
@@ -1191,10 +1197,17 @@ const LiveStreaming = ({navigation, route}) => {
         isAdmin: isAdmin.length,
       },
     };
+    console.log('comentData comentData', comentData);
     socket.emit('live_session', comentData);
 
     dispatch(commentOnLiveStreamAction(comentData));
     dispatch(updateHostPointAction(data?.param?.totalPrice));
+
+    const hostGiftIncome = {
+      roomId: channelToken,
+    };
+    dispatch(hostSendGiftAction(hostGiftIncome));
+
     hideGift();
   };
 
@@ -1655,7 +1668,7 @@ const LiveStreaming = ({navigation, route}) => {
                     colors={[COLORS.ORANGE, COLORS.ORANGE1]}
                     source={<SvgIcon.SmallGlowStar />}
                     tintColor={COLORS.TRANSPARENT}
-                    text={`${hostExtraDetail?.star} star`}
+                    text={`${star} star`}
                     textStyle={{marginLeft: 0}}
                     style={{
                       paddingVertical: SCREEN_HEIGHT * 0.005,

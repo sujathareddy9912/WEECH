@@ -61,6 +61,7 @@ import TopTabPKBattle from './TopTabPKBattle';
 
 export default LiveUserListing = ({navigation}) => {
   const dispatch = useDispatch();
+  const isScreenFocused = useIsFocused();
 
   const {kickedOutRooms, blockedLiveRooms} = useSelector(
     state => state.streamingReducer,
@@ -102,8 +103,6 @@ export default LiveUserListing = ({navigation}) => {
       }
     }
   };
-
-  const isScreenFocused = useIsFocused();
 
   useEffect(() => {
     // const backHandler = BackHandler.addEventListener(
@@ -773,9 +772,16 @@ function MyTabBar({
               accessibilityLabel={options.tabBarAccessibilityLabel}
               testID={options.tabBarTestID}
               onPress={onPress}
-              onLongPress={onLongPress}
-              style={{flex: 1}}>
-              <MyText style={[styles.textStyle]}>{label}</MyText>
+              onLongPress={onLongPress}>
+              <MyText
+                style={[
+                  styles.textStyle,
+                  {
+                    fontWeight: isFocused ? 'bold' : '',
+                  },
+                ]}>
+                {label}
+              </MyText>
             </Touchable>
           );
         })}
@@ -833,6 +839,5 @@ const TapTabNav = props => {
     </TopTab.Navigator>
   );
 };
-
 
 // In future we can reduce code of this file after some days of testing like as now we are integrating toptap navigations if its not give any error then we'll remove some code which is not in use as we split in multipe files

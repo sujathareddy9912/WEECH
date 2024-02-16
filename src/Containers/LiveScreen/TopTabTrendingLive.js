@@ -140,65 +140,19 @@ export default function TopTabTrendingLive({navigation}) {
     dispatch(
       getLiveUserListAction(params, async data => {
         if (data?.data?.length) {
-          let replicaData = [];
-          if (paginationOffset.current == 0) {
-            UpdateTotalDataCount(data?.totalData);
-            const result = data?.data?.map(async (item, index) => {
-              const dataNode = await useFetchListLiveStream(item);
-              if (dataNode?.status) {
-                if (replicaData.length == 0) {
-                  replicaData[0] = {...item, isLive: dataNode?.status || false};
-                } else if (replicaData.length == 1) {
-                  replicaData[1] = [
-                    {...item, isLive: dataNode?.status || false},
-                  ];
-                } else if (replicaData.length == 2) {
-                  replicaData[1].push({
-                    ...item,
-                    isLive: dataNode?.status || false,
-                  });
-                } else
-                  replicaData.push({
-                    ...item,
-                    isLive: dataNode?.status || false,
-                  });
-              } else {
-                dispatch(
-                  endLiveStreamingAction({
-                    userId: item?._id,
-                    roomId: item?.liveToken,
-                    roomName: item?.liveName,
-                  }),
-                );
-              }
-              return replicaData;
-            });
-            await Promise.all(result);
-            setLiveUserList([...replicaData]);
-            if (selectedTab === 2) {
-              setNearbyLive([...replicaData]);
-            }
-          } else {
-            const result = data?.data?.map(async item => {
-              const dataNode = await useFetchListLiveStream(item);
-              if (dataNode?.status) {
-                replicaData.push({...item, isLive: dataNode?.status || false});
-              } else {
-                dispatch(
-                  endLiveStreamingAction({
-                    userId: item?._id,
-                    roomId: item?.liveToken,
-                    roomName: item?.liveName,
-                  }),
-                );
-              }
-            });
-            await Promise.all(result);
-            setLiveUserList([...replicaData]);
-            if (selectedTab === 2) {
-              setNearbyLive([...replicaData]);
+          let getedArray = data?.data; // this array is got from API
+          let newArray = [];
+          UpdateTotalDataCount(data?.totalData);
+
+          for (let i = 0; i < getedArray.length; i++) {
+            if (i === 1) {
+              newArray.push([getedArray[i], getedArray[i + 1]]);
+              i++;
+            } else {
+              newArray.push(getedArray[i]);
             }
           }
+          setLiveUserList([...newArray]);
         } else {
           setLiveUserList([]);
           if (selectedTab === 2) {

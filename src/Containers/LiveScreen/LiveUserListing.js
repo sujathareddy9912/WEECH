@@ -17,6 +17,9 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+const TopTab = createMaterialTopTabNavigator();
+
 import {
   hostDetailAction,
   getLiveUserListAction,
@@ -52,6 +55,9 @@ import {getAge, getData, SCREEN_HEIGHT, SCREEN_WIDTH} from '../../Utils/helper';
 import {NotificationModal} from '../../Component/NotificationModal/Notification';
 import {requestLocationPermission} from '../../Utils/permissionLocation';
 import {useIsFocused} from '@react-navigation/native';
+import TopTabTrendingLive from './TopTabTrendingLive';
+import TopTabNearBy from './TopTabNearBy';
+import TopTabPKBattle from './TopTabPKBattle';
 
 export default LiveUserListing = ({navigation}) => {
   const dispatch = useDispatch();
@@ -346,6 +352,7 @@ export default LiveUserListing = ({navigation}) => {
     else return <SvgIcon.profilePlaceholder />;
   };
 
+  // moved to LiveStreamingCard
   const renderCard = (item, index) => {
     console.log(item);
     if (index == 0) {
@@ -599,14 +606,19 @@ export default LiveUserListing = ({navigation}) => {
         easing="ease"
         duration={3000}
         style={styles.container}>
-        <LiveScreenHeader
+        {/* <LiveScreenHeader
           selectedTab={selectedTab}
           onFilterPress={onFilterPress}
           onHeaderTextPress={onChangeTab}
           onSearchPress={onSearchPress}
           onNotificationPress={onActivateNotificationModal}
+        /> */}
+        <TapTabNav
+          onFilterPress={onFilterPress}
+          onSearchPress={onSearchPress}
+          onNotificationPress={onActivateNotificationModal}
         />
-        <ScrollView
+        {/* <ScrollView
           horizontal
           bounces={false}
           ref={scrollViewRef}
@@ -664,17 +676,16 @@ export default LiveUserListing = ({navigation}) => {
           <Touchable onPress={_navToLive} style={styles.absolute}>
             <SvgIcon.StartLiveIcon />
           </Touchable>
-        </ScrollView>
-
-        {notificationModal && (
-          <NotificationModal
-            isVisible={notificationModal}
-            notificationPress={onActivateNotificationModal}
-          />
-        )}
-
-        {/* <CallModal /> */}
+        </ScrollView> */}
       </Animatable.View>
+      {notificationModal && (
+        <NotificationModal
+          isVisible={notificationModal}
+          notificationPress={onActivateNotificationModal}
+        />
+      )}
+
+      {/* <CallModal /> */}
       <RBSheet ref={refRBSheet} openDuration={250} height={SCREEN_HEIGHT * 0.4}>
         <View style={styles.exitModal}>
           <MyText style={styles.exitText}>Filter your Country/Region</MyText>
@@ -707,3 +718,121 @@ export default LiveUserListing = ({navigation}) => {
     </SafeAreaView>
   );
 };
+
+function MyTabBar({
+  state,
+  descriptors,
+  navigation,
+  position,
+  onSearchPress,
+  onFilterPress,
+  onHeaderTextPress,
+  onNotificationPress,
+}) {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        paddingTop: dynamicSize(15),
+        paddingBottom: dynamicSize(15),
+        backgroundColor: COLORS.BABY_PINK,
+      }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {state.routes.map((route, index) => {
+          const {options} = descriptors[route.key];
+          const label =
+            options.tabBarLabel !== undefined
+              ? options.tabBarLabel
+              : options.title !== undefined
+              ? options.title
+              : route.name;
+
+          const isFocused = state.index === index;
+
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+            });
+
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
+
+          const onLongPress = () => {
+            navigation.emit({
+              type: 'tabLongPress',
+              target: route.key,
+            });
+          };
+          return (
+            <Touchable
+              accessibilityRole="button"
+              accessibilityState={isFocused ? {selected: true} : {}}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              testID={options.tabBarTestID}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              style={{flex: 1}}>
+              <MyText style={[styles.textStyle]}>{label}</MyText>
+            </Touchable>
+          );
+        })}
+      </ScrollView>
+      <View style={styles.rightCon}>
+        <Touchable onPress={onSearchPress} style={styles.iconContainer}>
+          <SvgIcon.SearchIcon />
+        </Touchable>
+
+        <Touchable onPress={onFilterPress} style={styles.iconContainer}>
+          <SvgIcon.FilterIcon />
+        </Touchable>
+
+        <Touchable onPress={onNotificationPress} style={styles.iconContainer}>
+          <SvgIcon.NotificationIcon />
+        </Touchable>
+      </View>
+    </View>
+  );
+}
+
+const TapTabNav = props => {
+  const {onSearchPress, onFilterPress, onNotificationPress} = props;
+  return (
+    <TopTab.Navigator
+      tabBar={props => (
+        <MyTabBar
+          {...props}
+          onSearchPress={onSearchPress}
+          onFilterPress={onFilterPress}
+          onNotificationPress={onNotificationPress}
+        />
+      )}>
+      <TopTab.Screen
+        name="TrendingLive"
+        component={TopTabTrendingLive}
+        options={{
+          title: 'Trending Live',
+        }}
+      />
+      <TopTab.Screen
+        name="PKBattle"
+        component={TopTabPKBattle}
+        options={{
+          title: 'PK Battle',
+        }}
+      />
+      <TopTab.Screen
+        name="NearBy"
+        component={TopTabNearBy}
+        options={{
+          title: 'Near By',
+        }}
+      />
+    </TopTab.Navigator>
+  );
+};
+
+
+// In future we can reduce code of this file after some days of testing like as now we are integrating toptap navigations if its not give any error then we'll remove some code which is not in use as we split in multipe files

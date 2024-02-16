@@ -211,6 +211,20 @@ const styles = StyleSheet.create({
     color: COLORS.WHITE,
     fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
   },
+  textStyle: {
+    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    color: COLORS.WHITE,
+    fontSize: FONT_SIZE.MEDIUM,
+    fontWeight: '400',
+    marginLeft: SCREEN_HEIGHT * 0.02,
+  },
+  iconContainer: {},
+  rightCon: {
+    flexDirection: 'row',
+    width: wp(25),
+    justifyContent: 'space-around',
+    marginRight: SCREEN_HEIGHT * 0.02,
+  },
 });
 
 export default styles;

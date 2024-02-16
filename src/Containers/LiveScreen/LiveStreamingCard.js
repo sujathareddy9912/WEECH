@@ -3,12 +3,13 @@ import React from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 
-import styles from './styles';
+import styles, {fileWidth} from './styles';
 import ProfileGift from '../../Assets/Icons/profileGift.svg';
 import {MyImage, MyText} from '../../Component/commomComponent';
 import {IMAGE_URL} from '../../Services/Api/Common';
 import icons, {SvgIcon} from '../../Component/icons';
 import {getAge} from '../../Utils/helper';
+import {dynamicSize} from '../../Utils/responsive';
 
 const _renderCoverImage = (item, index) => {
   if (item?.coverImage) {

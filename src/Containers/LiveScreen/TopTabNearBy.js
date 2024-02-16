@@ -2,6 +2,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {View, FlatList, RefreshControl} from 'react-native';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import Geolocation from 'react-native-geolocation-service';
+import {useIsFocused} from '@react-navigation/native';
 
 import styles from './styles';
 import {COLORS} from '../../Utils/colors';
@@ -19,6 +21,7 @@ import LiveStreamingCard from './LiveStreamingCard';
 import {SvgIcon} from '../../Component/icons';
 import {UserServices} from '../../Services/Api/userServices';
 import {LOCAL_KEY} from '../../Utils/localStorage';
+import {requestLocationPermission} from '../../Utils/permissionLocation';
 
 export default function TopTabNearBy({navigation}) {
   const dispatch = useDispatch();
@@ -39,6 +42,11 @@ export default function TopTabNearBy({navigation}) {
   const [country, setCountry] = useState(null);
   const [currentLoc, setCurrentLoc] = useState();
   const [nearbyLive, setNearbyLive] = useState();
+  const isScreenFocused = useIsFocused();
+
+  useEffect(() => {
+    getGeoLoaction();
+  }, [selectedTab, isScreenFocused]);
 
   useEffect(() => {
     // const backHandler = BackHandler.addEventListener(
@@ -71,7 +79,33 @@ export default function TopTabNearBy({navigation}) {
     // When the component is unmounted, remove the listener
     return () => unsubscribe();
     // return () => backHandler.remove();
-  }, []);
+  }, [isScreenFocused]);
+
+  const getGeoLoaction = async () => {
+    if (selectedTab === 2) {
+      const hasLocationPermission = await requestLocationPermission();
+      if (hasLocationPermission) {
+        Geolocation.getCurrentPosition(
+          position => {
+            setCurrentLoc({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+            _getLiveUserList();
+          },
+          error => {
+            // See error code charts below.
+            console.log(error.code, error.message);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 10000,
+          },
+        );
+      }
+    }
+  };
 
   const handleDynamicLink = link => {
     // Handle dynamic link inside your own application

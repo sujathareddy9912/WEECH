@@ -5,7 +5,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 import styles from './styles';
 import {COLORS} from '../../Utils/colors';
-import {MyIndicator} from '../../Component/commomComponent';
+import {MyIndicator, Touchable} from '../../Component/commomComponent';
 import {getData} from '../../Utils/helper';
 import {
   endLiveStreamingAction,
@@ -16,12 +16,16 @@ import {
 import useFetchListLiveStream from '../../hooks/useFetchListLiveStream';
 import {STREAM_TYPE} from '../../Utils/agoraConfig';
 import LiveStreamingCard from './LiveStreamingCard';
+import {SvgIcon} from '../../Component/icons';
+import {UserServices} from '../../Services/Api/userServices';
+import {LOCAL_KEY} from '../../Utils/localStorage';
 
 export default function TopTabTrendingLive({navigation}) {
   const dispatch = useDispatch();
   const {kickedOutRooms, blockedLiveRooms} = useSelector(
     state => state.streamingReducer,
   );
+  const {userLoginList} = useSelector(state => state.authReducer);
 
   const paginationOffset = useRef(0);
   const waitTillFetchingData = useRef(true);
@@ -119,6 +123,7 @@ export default function TopTabTrendingLive({navigation}) {
   };
 
   const renderLiveUserProfile = ({item, index}) => {
+    console.warn('Top Tab Trending Live', index);
     return LiveStreamingCard(item, index, _joinAsAudience);
   };
 
@@ -229,27 +234,34 @@ export default function TopTabTrendingLive({navigation}) {
     }
   };
 
+  const _navToLive = () => navigation.navigate('LetsGoLive');
+
   return (
-    <View style={styles.scrollContainer}>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        numColumns={2}
-        data={liveUserList}
-        keyExtractor={item => item.id}
-        renderItem={renderLiveUserProfile}
-        refreshControl={
-          <RefreshControl
-            refreshing={pullToRefreshIndicator}
-            onRefresh={_onPullToRefresh}
-            tintColor={COLORS.WHITE}
-          />
-        }
-        ListFooterComponent={footerRender}
-        onEndReachedThreshold={0.7}
-        onEndReached={_onEndReached}
-        columnWrapperStyle={styles.columnContainer}
-        contentContainerStyle={styles.contentStyle}
-      />
-    </View>
+    <>
+      <View style={styles.scrollContainer}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          data={liveUserList}
+          keyExtractor={item => item.id}
+          renderItem={renderLiveUserProfile}
+          refreshControl={
+            <RefreshControl
+              refreshing={pullToRefreshIndicator}
+              onRefresh={_onPullToRefresh}
+              tintColor={COLORS.WHITE}
+            />
+          }
+          ListFooterComponent={footerRender}
+          onEndReachedThreshold={0.7}
+          onEndReached={_onEndReached}
+          columnWrapperStyle={styles.columnContainer}
+          contentContainerStyle={styles.contentStyle}
+        />
+      </View>
+      <Touchable onPress={_navToLive} style={styles.absolute}>
+        <SvgIcon.StartLiveIcon />
+      </Touchable>
+    </>
   );
 }

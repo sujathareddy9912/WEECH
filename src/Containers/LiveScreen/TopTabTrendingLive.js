@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {View, FlatList, RefreshControl} from 'react-native';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {useIsFocused} from '@react-navigation/native';
 
 import styles from './styles';
 import {COLORS} from '../../Utils/colors';
@@ -37,6 +38,7 @@ export default function TopTabTrendingLive({navigation}) {
   const [footerIndicator, setFooterIndicator] = useState(false);
   const [totalDataCount, UpdateTotalDataCount] = useState(0);
   const [country, setCountry] = useState(null);
+  const isScreenFocused = useIsFocused();
 
   useEffect(() => {
     // const backHandler = BackHandler.addEventListener(
@@ -69,7 +71,7 @@ export default function TopTabTrendingLive({navigation}) {
     // When the component is unmounted, remove the listener
     return () => unsubscribe();
     // return () => backHandler.remove();
-  }, []);
+  }, [isScreenFocused]);
 
   const handleDynamicLink = link => {
     // Handle dynamic link inside your own application
@@ -123,7 +125,6 @@ export default function TopTabTrendingLive({navigation}) {
   };
 
   const renderLiveUserProfile = ({item, index}) => {
-    console.warn('Top Tab Trending Live', index);
     return LiveStreamingCard(item, index, _joinAsAudience);
   };
 

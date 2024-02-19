@@ -1771,12 +1771,7 @@ const LiveStreaming = ({navigation, route}) => {
                 {!isBroadcaster ? (
                   <>
                     {heartFlag ? (
-                      <View
-                        style={{
-                          bottom: hp(17),
-                          left: wp(-22),
-                          position: 'absolute',
-                        }}>
+                      <View style={styles.heartFlagContainer}>
                         <LottieView
                           source={HEART_ANIMATION}
                           autoPlay

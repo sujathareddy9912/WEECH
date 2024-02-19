@@ -412,6 +412,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingTop: 10,
   },
+  heartFlagContainer: {
+    bottom: hp(17),
+    left: wp(-22),
+    position: 'absolute',
+  },
 });
 
 export default styles;

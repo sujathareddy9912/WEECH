@@ -1,5 +1,5 @@
 import moment from 'moment';
-import Lottie from 'lottie-react-native';
+import LottieView from 'lottie-react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import database from '@react-native-firebase/database';
@@ -1768,23 +1768,25 @@ const LiveStreaming = ({navigation, route}) => {
                       : SCREEN_HEIGHT * 0.06 + useSafeAreaInsets().bottom,
                   },
                 ]}>
-                {heartFlag ? (
-                  <View
-                    style={{
-                      bottom: hp(12),
-                      left: wp(-4),
-                      position: 'absolute',
-                    }}>
-                    <Lottie
-                      source={HEART_ANIMATION}
-                      autoPlay
-                      loop={false}
-                      style={styles.heartFlag}
-                      onAnimationFinish={() =>
-                        isBroadcaster ? setHeartFlag(false) : null
-                      }
-                    />
-                  </View>
+                {!isBroadcaster ? (
+                  <>
+                    {heartFlag ? (
+                      <View
+                        style={{
+                          bottom: hp(17),
+                          left: wp(-22),
+                          position: 'absolute',
+                        }}>
+                        <LottieView
+                          source={HEART_ANIMATION}
+                          autoPlay
+                          loop={false}
+                          style={styles.heartFlag}
+                          onAnimationFinish={() => setHeartFlag(false)}
+                        />
+                      </View>
+                    ) : null}
+                  </>
                 ) : null}
                 {!isBroadcaster ? (
                   <>

@@ -33,6 +33,7 @@ import {
   unBlockUserApi,
   getHelpCenterApi,
   getSearchUserApi,
+  getUserDailyIncome,
 } from '../Services/Api/LiveStreaming';
 import {Alert} from 'react-native';
 
@@ -401,5 +402,21 @@ export function* getSearchUser({payload, callBack}) {
   } catch (error) {
     HelperService.showToast('Something went wrong');
     callBack([]);
+  }
+}
+
+export function* getHostGiftDataSaga({payload, callBack}) {
+  try {
+    const resp = yield call(getUserDailyIncome, payload);
+    console.log('resp resp', resp);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+    } else {
+      HelperService.showToast(resp?.message);
+      callBack();
+    }
+  } catch (error) {
+    HelperService.showToast('Something went wrong');
+    callBack();
   }
 }

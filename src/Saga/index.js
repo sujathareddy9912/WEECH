@@ -97,6 +97,7 @@ import {
   liveSessionUserBlock,
   getHelpCenter,
   getSearchUser,
+  getHostGiftDataSaga,
 } from './LiveStreaming';
 
 import {
@@ -214,6 +215,7 @@ export default function* root() {
     takeLatest(TYPES.GET_RECHARGE_AGENCY, getRechargeAgencySaga),
     takeLatest(TYPES.GET_CUSTOMER_SUPPORT_MSG_ACTION, getCustomerMsgsSaga),
     takeLatest(TYPES.GET_CUSTOMER_MSG_SEND_ACTION, getCustomerSendMsgSaga),
+    takeLatest(TYPES.HOST_GIFT_INCOME_ACTION, getHostGiftDataSaga),
 
     //new
     ProfileSaga(),

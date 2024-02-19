@@ -194,6 +194,7 @@ const GiftComponent = props => {
           data={topCategoryList}
           renderItem={_renderTopList}
           horizontal
+          showsHorizontalScrollIndicator={false}
           ItemSeparatorComponent={_renderHeaderSeperator}
           contentContainerStyle={styles.topContentContainerStyle}
         />

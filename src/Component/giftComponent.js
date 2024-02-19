@@ -146,9 +146,10 @@ const GiftComponent = props => {
             source={{uri: `${IMAGE_URL}${item.icon}`}}
             style={styles.giftIcon}
           />
+          <MyText style={styles.giftTitle}>{item?.name}</MyText>
           <View style={styles.diamondContainerSmall}>
             <SvgIcon.SmallDiamond />
-            <MyText style={styles.diamondCount}>{item.price}</MyText>
+            <MyText style={styles.diamondCount}>{item?.price}</MyText>
           </View>
           <Counter
             count={item?._id === selectedGifts?._id ? selectedGifts?.count : 0}
@@ -309,6 +310,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
+    marginTop: dynamicSize(5),
+  },
+  giftTitle: {
+    fontWeight: 'bold',
+    color: COLORS.BLACK,
+    fontSize: FONT_SIZE.SMALL,
+    textAlign: 'center',
     marginTop: dynamicSize(5),
   },
   diamondCount: {

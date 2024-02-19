@@ -139,7 +139,7 @@ const GiftComponent = props => {
 
   const _renderGiftList = ({item, index}) => {
     return (
-      <View style={[styles.giftItem, {alignItems: _alignItems(index)}]}>
+      <View style={styles.giftItemsContainer}>
         <View style={{alignItems: 'center'}}>
           <MyImage
             fast
@@ -207,10 +207,10 @@ const GiftComponent = props => {
         <FlatList
           key="horizontalList"
           data={topCategoryList?.[selectedGiftType]?.gifts || []}
-          numColumns={3}
+          numColumns={4}
           renderItem={_renderGiftList}
           ItemSeparatorComponent={_renderGiftSeperator}
-          contentContainerStyle={styles.giftList}
+          // contentContainerStyle={styles.giftList}
         />
       )}
       {selectedGifts ? (
@@ -295,11 +295,10 @@ const styles = StyleSheet.create({
   topContentContainerStyle: {
     paddingVertical: dynamicSize(10),
   },
-  giftItem: {
-    justifyContent: 'flex-end',
-    width: SCREEN_WIDTH / 3 - dynamicSize(20),
+  giftItemsContainer: {
+    width: SCREEN_WIDTH / 5,
     alignItems: 'center',
-    marginRight: dynamicSize(10),
+    marginHorizontal: dynamicSize(5),
   },
   giftList: {
     // paddingHorizontal: dynamicSize(10),
@@ -311,7 +310,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: dynamicSize(5),
   },
   giftTitle: {
     fontWeight: 'bold',

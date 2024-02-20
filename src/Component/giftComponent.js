@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {FlatList, StyleSheet, View} from 'react-native';
 
-import Input from './Input';
 import {SvgIcon} from './icons';
 import {COLORS} from '../Utils/colors';
 import {strings} from '../localization/config';
@@ -13,26 +12,14 @@ import {FONT_FAMILY, FONT_SIZE} from '../Utils/fontFamily';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../Utils/helper';
 import {HelperService} from '../Services/Utils/HelperService';
 
-import {
-  MyText,
-  Touchable,
-  Counter,
-  Button,
-  MyImage,
-  MyIndicator,
-  KeyboardAwareScroll,
-} from './commomComponent';
+import {MyText, Touchable, MyImage, MyIndicator} from './commomComponent';
 
 const GiftComponent = props => {
   const {
     roomID,
-    onBlur,
-    onFocus,
-    onSearch,
     senderId,
     receiverId,
     onSendClick,
-    placeholder,
     topTitleList,
     mainContainer,
     diamondCount,
@@ -42,9 +29,6 @@ const GiftComponent = props => {
 
   const dispatch = useDispatch();
 
-  const [refreshData, setRefreshData] = useState(false);
-  const [selectedGifts, setSelectedGifts] = useState(null);
-  const [sendingGift, setSendingGift] = useState(false);
   const [selectedGiftType, updateSelectedGiftType] = useState(0);
   const [diamondPoints, setDiamondPoints] = useState(diamondCount);
   const [topCategoryList, setTopCategoryList] = useState(topTitleList || []);
@@ -91,76 +75,6 @@ const GiftComponent = props => {
 
   const _renderGiftSeperator = () => <View style={styles.giftSeperator} />;
 
-  const _alignItems = index => {
-    if (index % 3 == 0) return 'flex-start';
-    else if (index % 3 == 2) return 'flex-end';
-    else return 'center';
-  };
-
-  const onDecrement = () => () => {
-    if (selectedGifts) {
-      // Decrement the count
-      const updatedObject = {
-        ...selectedGifts,
-        count: (selectedGifts.count || 0) - 1,
-      };
-
-      // Remove from the state if count becomes 0
-      if (updatedObject.count <= 0) {
-        setSelectedGifts(null);
-      } else {
-        setSelectedGifts(updatedObject);
-      }
-    }
-  };
-
-  const onIncrement = item => () => {
-    if (selectedGifts && selectedGifts._id === item._id) {
-      // If the same object is selected, increment the count
-      setSelectedGifts({
-        ...selectedGifts,
-        count: (selectedGifts.count || 0) + 1,
-      });
-    } else {
-      // If a different object is selected, replace the existing object
-      setSelectedGifts({...item, count: 1});
-    }
-  };
-
-  const onSendPress = () => {
-    let totalPrice = selectedGifts?.price * selectedGifts?.count;
-    let totalCount = selectedGifts?.count;
-
-    const gifts = {
-      giftId: selectedGifts?._id ? selectedGifts?._id : null,
-      quantity: selectedGifts?.count ? selectedGifts?.count : null,
-    };
-
-    if (!gifts?.quantity) {
-      HelperService.showToast(strings('gift.pleaseSelectGift'));
-      return;
-    }
-    if (totalPrice <= diamondPoints) {
-      setSendingGift(true);
-      const param = {
-        senderId,
-        totalPrice,
-        giftId: [gifts],
-        receiverId: [{userId: receiverId}],
-        roomId: roomID,
-      };
-
-      dispatch(
-        sendGiftAction(param, resp => {
-          onSendSuccess({param, totalCount});
-          setSendingGift(false);
-          onSendClick();
-        }),
-      );
-      setDiamondPoints(diamondPoints - totalPrice);
-    } else HelperService.showToast(strings('gift.giftSendError'));
-  };
-
   const newSendGiftAction = async () => {
     console.log('newSelectedGift on send', newSelectedGift);
     let totalPrice = newSelectedGift?.price * newSelectedGift?.count;
@@ -176,7 +90,6 @@ const GiftComponent = props => {
       return;
     }
     if (totalPrice <= diamondPoints) {
-      setSendingGift(true);
       const param = {
         senderId,
         totalPrice,
@@ -188,7 +101,6 @@ const GiftComponent = props => {
       dispatch(
         sendGiftAction(param, resp => {
           onSendSuccess({param, totalCount});
-          setSendingGift(false);
           onSendClick();
         }),
       );
@@ -224,36 +136,10 @@ const GiftComponent = props => {
               {selectedGiftQuantity > 1 ? '*' + selectedGiftQuantity : null}
             </MyText>
           </View>
-          {/* <Counter
-            count={item?._id === selectedGifts?._id ? selectedGifts?.count : 0}
-            onDecrement={onDecrement(item, index)}
-            onIncrement={onIncrement(item, index)}
-            style={{marginTop: dynamicSize(5)}}
-          /> */}
         </View>
       </Touchable>
     );
   };
-
-  const _renderSelectedList = ({item, index}) => {
-    if (!item.count) return null;
-
-    return (
-      <View style={[styles.selectedContainer]}>
-        <MyText style={styles.selectedCount}>{`*${item.count || 0}`}</MyText>
-        <MyImage
-          fast
-          key={index.toString()}
-          source={{uri: `${IMAGE_URL}${item.icon}`}}
-          style={styles.giftIcon}
-        />
-      </View>
-    );
-  };
-
-  const _renderSelectedSeperator = () => (
-    <View style={styles.selectedSeperator} />
-  );
 
   const selectGiftQuantity = e => {
     setSelectedGiftQuantity(e);
@@ -286,18 +172,6 @@ const GiftComponent = props => {
           ItemSeparatorComponent={_renderGiftSeperator}
         />
       )}
-      {selectedGifts ? (
-        <View style={[styles.selectedContainer]}>
-          <MyText style={styles.selectedCount}>{`*${
-            selectedGifts?.count || 0
-          }`}</MyText>
-          <MyImage
-            fast
-            source={{uri: `${IMAGE_URL}${selectedGifts?.icon}`}}
-            style={styles.giftIcon}
-          />
-        </View>
-      ) : null}
 
       <View
         style={{
@@ -490,6 +364,6 @@ const styles = StyleSheet.create({
     color: COLORS.BABY_PINK,
   },
   selectedGiftQuantityNumber: {
-    color: COLORS.BABY_PINK
-  }
+    color: COLORS.BABY_PINK,
+  },
 });

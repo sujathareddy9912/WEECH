@@ -457,6 +457,131 @@ const VideoCall = ({navigation, route}) => {
   const _hideGiftComponent = () =>
     dispatch(showGiftComponentOnCallAction(false));
 
+  const _fetchGiftList = () => {
+    _fetchGifts();
+    dispatch(showGiftComponentOnCallAction(true));
+  };
+
+  const _fetchGifts = () => {
+    setFetchingGifts(true);
+    dispatch(
+      getGiftDataAction('', data => {
+        setFetchingGifts(false);
+        if (data.status) {
+          updateGiftData(data.giftTypes);
+        }
+      }),
+    );
+  };
+
+  const _onSearch = text => {
+    if (giftTimeout) clearTimeout(giftTimeout);
+    giftTimeout = setTimeout(() => {
+      giftTimeout = null;
+      setFetchingGifts(true);
+      dispatch(
+        getGiftDataAction(text, data => {
+          setFetchingGifts(false);
+          if (data.status) {
+            updateGiftData(data.giftTypes);
+          }
+        }),
+      );
+    }, 500);
+  };
+
+  const onCommentSend = () => {
+    if (commentText !== '') {
+      const data = {
+        token: detail?.liveToken,
+        commentData: {
+          type: 'comment',
+          comment: commentText,
+          name: userLoginList?.user?.name,
+          profilePic: userLoginList?.user?.profile,
+          joinedUsers: userLoginList?.user,
+          senderId: detail?.callerId,
+        },
+      };
+      socket.emit('comment', data);
+      dispatch(commentOnDuringCall(data));
+      _scrollToEnd();
+      UpdateCommentText('');
+    }
+  };
+
+  useEffect(() => {
+    socket.off('comment').on('comment', response => {
+      if (!!response.commentData.comment) {
+        dispatch(commentOnDuringCall(response));
+        _scrollToEnd();
+      }
+    });
+  }, []);
+
+  const _scrollToEnd = () => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      timeout = null;
+      scrollRef?.current?.scrollToEnd();
+    }, 400);
+  };
+
+  const silentCommentForConnection = () => {
+    const data = {
+      token: detail?.liveToken,
+      commentData: {
+        type: 'comment',
+        name: userLoginList?.user?.name,
+        profilePic: userLoginList?.user?.profile,
+        joinedUsers: userLoginList?.user,
+      },
+    };
+    socket.emit('comment', data);
+    const comment = {
+      commentData: {
+        type: 'welcomeText',
+        comment: strings('live.welcomeMessage'),
+      },
+    };
+    dispatch(commentOnDuringCall(comment));
+  };
+
+  useEffect(() => {
+    silentCommentForConnection();
+  }, []);
+
+  const _renderComment = (item, index) => {
+    if (item?.type === 'comment') {
+      return (
+        <TouchableOpacity style={[commonStyle.chatView]}>
+          {item?.profilePic ? (
+            <SmallProfilePic
+              imageStyle={commonStyle.chatPic}
+              url={`${IMAGE_URL}${item?.profilePic}`}
+            />
+          ) : (
+            <View style={commonStyle.picContainer}>
+              <SvgIcon.SmallProfilePlaceholder />
+            </View>
+          )}
+          <View style={commonStyle.chatRightConrtainer}>
+            <MyText style={commonStyle.username}>{item.name}</MyText>
+            <View style={commonStyle.msgBox}>
+              <MyText style={commonStyle.msg}>{item.comment}</MyText>
+            </View>
+          </View>
+        </TouchableOpacity>
+      );
+    } else if (item?.type == 'welcomeText') {
+      return (
+        <View style={[commonStyle.welcomeContainer]}>
+          <MyText style={commonStyle.welcometxt}>{item.comment}</MyText>
+        </View>
+      );
+    }
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <StatusBar
@@ -596,24 +721,117 @@ const VideoCall = ({navigation, route}) => {
             )}
           </MyLinearGradient>
           {detail?.type == CALLING_TYPE.VIDEO ? (
-            <View
-              style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                backgroundColor: 'transparent',
-              }}>
-              <CallActionBottonSheet
-                type={detail?.type}
-                points={callData.points}
-                onCameraPress={onCameraPress}
-                onVideoPress={onVideoPress}
-                onMicPress={onMicPress}
-                onSpeakerPress={onSpeakerVideoPress}
-                onCancelPress={onCancelPress}
-                detail={detail}
-              />
-            </View>
+            <>
+              {!showGiftComponentOnCall && (
+                <View>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: buttonPosition, backgroundColor: COLORS.DARK_RED},
+                    ]}
+                    onPress={onCancelPress}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={'phone-hangup'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 2 * buttonPosition},
+                    ]}
+                    onPress={() => {
+                      onVideoPress(!isVideoPause);
+                    }}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isVideoPause ? 'video' : 'video-off'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 3 * buttonPosition},
+                    ]}
+                    onPress={onCameraPress}>
+                    <Icon
+                      origin="MaterialIcons"
+                      name={'cameraswitch'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 4 * buttonPosition},
+                    ]}
+                    onPress={() => onSpeakerVideoPress(!isSpeakerOn)}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isSpeakerOn ? 'volume-high' : 'volume-low'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 5 * buttonPosition},
+                    ]}
+                    onPress={() => onMicPress(!isMuted)}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isSpeakerOn ? 'microphone' : 'microphone-off'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              <View style={styles.bottomContainer}>
+                <Input
+                  value={commentText}
+                  onChangeText={UpdateCommentText}
+                  placeholder={
+                    true ? strings('live.saySomething') : "You're muted"
+                  }
+                  svgSource={<SvgIcon.CommentIcon />}
+                  style={{marginRight: 16, flex: 1}}
+                  textInputStyle={{fontSize: FONT_SIZE.MEDIUM}}
+                  onSubmitEditing={onCommentSend}
+                  blurOnSubmit={false}
+                  returnKeyType={'send'}
+                  returnKeyLabel="send"
+                />
+                <TouchableOpacity
+                  style={styles.giftIconBtn}
+                  onPress={_fetchGiftList}>
+                  <SvgIcon.SmallGiftIcon />
+                </TouchableOpacity>
+              </View>
+              {showGiftComponentOnCall && (
+                <View style={styles.giftContainer}>
+                  <GiftComponent
+                    fetchingGifts={fetchingGifts}
+                    onSearch={_onSearch}
+                    diamondCount={userLoginList?.user?.points || 0}
+                    topTitleList={giftData}
+                    senderId={userLoginList?.user?._id}
+                    receiverId={detail?.receiverId}
+                    onSendClick={() =>
+                      dispatch(showGiftComponentOnCallAction(false))
+                    }
+                    onSendSuccess={() => {}}
+                  />
+                </View>
+              )}
+            </>
           ) : (
             <View
               style={{

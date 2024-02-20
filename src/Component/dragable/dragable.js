@@ -3,10 +3,12 @@ import {StyleSheet, View, Text} from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
+  withDecay,
 } from 'react-native-reanimated';
 import {
   Gesture,
   GestureDetector,
+  GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 
 const SIZE = 120;
@@ -23,6 +25,7 @@ function Dragable({children}) {
 
   const pan = Gesture.Pan()
     .onChange(event => {
+      // highlight-next-line
       offsetX.value += event.changeX;
       offsetY.value += event.changeY;
     })

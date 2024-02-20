@@ -724,24 +724,117 @@ const VideoCall = ({navigation, route}) => {
             )}
           </MyLinearGradient>
           {detail?.type == CALLING_TYPE.VIDEO ? (
-            <View
-              style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                backgroundColor: 'transparent',
-              }}>
-              <CallActionBottonSheet
-                type={detail?.type}
-                points={callData.points}
-                onCameraPress={onCameraPress}
-                onVideoPress={onVideoPress}
-                onMicPress={onMicPress}
-                onSpeakerPress={onSpeakerVideoPress}
-                onCancelPress={onCancelPress}
-                detail={detail}
-              />
-            </View>
+            <>
+              {!showGiftComponentOnCall && (
+                <View>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: buttonPosition, backgroundColor: COLORS.DARK_RED},
+                    ]}
+                    onPress={onCancelPress}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={'phone-hangup'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 2 * buttonPosition},
+                    ]}
+                    onPress={() => {
+                      onVideoPress(!isVideoPause);
+                    }}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isVideoPause ? 'video' : 'video-off'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 3 * buttonPosition},
+                    ]}
+                    onPress={onCameraPress}>
+                    <Icon
+                      origin="MaterialIcons"
+                      name={'cameraswitch'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 4 * buttonPosition},
+                    ]}
+                    onPress={() => onSpeakerVideoPress(!isSpeakerOn)}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isSpeakerOn ? 'volume-high' : 'volume-low'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 5 * buttonPosition},
+                    ]}
+                    onPress={() => onMicPress(!isMuted)}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isSpeakerOn ? 'microphone' : 'microphone-off'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              <View style={styles.bottomContainer}>
+                <Input
+                  value={commentText}
+                  onChangeText={UpdateCommentText}
+                  placeholder={
+                    true ? strings('live.saySomething') : "You're muted"
+                  }
+                  svgSource={<SvgIcon.CommentIcon />}
+                  style={{marginRight: 16, flex: 1}}
+                  textInputStyle={{fontSize: FONT_SIZE.MEDIUM}}
+                  onSubmitEditing={onCommentSend}
+                  blurOnSubmit={false}
+                  returnKeyType={'send'}
+                  returnKeyLabel="send"
+                />
+                <TouchableOpacity
+                  style={styles.giftIconBtn}
+                  onPress={_fetchGiftList}>
+                  <SvgIcon.SmallGiftIcon />
+                </TouchableOpacity>
+              </View>
+              {showGiftComponentOnCall && (
+                <View style={styles.giftContainer}>
+                  <GiftComponent
+                    fetchingGifts={fetchingGifts}
+                    onSearch={_onSearch}
+                    diamondCount={userLoginList?.user?.points || 0}
+                    topTitleList={giftData}
+                    senderId={userLoginList?.user?._id}
+                    receiverId={detail?.receiverId}
+                    onSendClick={() =>
+                      dispatch(showGiftComponentOnCallAction(false))
+                    }
+                    onSendSuccess={() => {}}
+                  />
+                </View>
+              )}
+            </>
           ) : (
             <View
               style={{

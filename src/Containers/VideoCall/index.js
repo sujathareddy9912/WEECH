@@ -223,7 +223,6 @@ const VideoCall = ({navigation, route}) => {
   }, [showTime, second]);
 
   useEffect(() => {
-    console.log(callChargeDetails);
     if (callChargeDetails) {
       let perSecondCharge = callChargeDetails.balance?.charge / 60;
       checkEndCall = checkEndCall + Math.abs(perSecondCharge);
@@ -552,6 +551,9 @@ const VideoCall = ({navigation, route}) => {
     silentCommentForConnection();
   }, []);
 
+  console.log('tttttttttttt',userLoginList?.user?.points);
+  console.log('tttttttttttt',userLoginList?.user);
+
   const _renderComment = (item, index) => {
     if (item?.type === 'comment') {
       return (
@@ -816,12 +818,13 @@ const VideoCall = ({navigation, route}) => {
                   <SvgIcon.SmallGiftIcon />
                 </TouchableOpacity>
               </View>
+
               {showGiftComponentOnCall && (
                 <View style={styles.giftContainer}>
                   <GiftComponent
                     fetchingGifts={fetchingGifts}
                     onSearch={_onSearch}
-                    diamondCount={userLoginList?.user?.points || 0}
+                    diamondCount={userLoginList?.user?.myBalance || 0}
                     topTitleList={giftData}
                     senderId={userLoginList?.user?._id}
                     receiverId={detail?.receiverId}

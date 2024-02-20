@@ -221,7 +221,7 @@ const GiftComponent = props => {
         </View>
       ) : null}
 
-      <Button
+      {/* <Button
         disabled={fetchingGifts}
         indicator={sendingGift}
         width={SCREEN_WIDTH - dynamicSize(40)}
@@ -229,7 +229,52 @@ const GiftComponent = props => {
         labelStyle={styles.buttonText}
         label={strings('gift.send')}
         onPress={onSendPress}
-      />
+      /> */}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginVertical: dynamicSize(10),
+          justifyContent: 'space-between',
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <SvgIcon.SmallDiamond />
+          <MyText style={styles.diamondText}>{diamondPoints}</MyText>
+        </View>
+        <View
+          style={{
+            backgroundColor: COLORS.LIGHT_GREY_OFFSET,
+            flexDirection: 'row',
+            borderRadius: 20,
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              padding: dynamicSize(5),
+              alignItems: 'center',
+            }}>
+            <Touchable onPress={() => alert('1')}>
+              <MyText style={styles.giftNumberText}>1</MyText>
+            </Touchable>
+            <Touchable onPress={() => alert('15')}>
+              <MyText style={styles.giftNumberText}>15</MyText>
+            </Touchable>
+            <Touchable onPress={() => alert('30')}>
+              <MyText style={styles.giftNumberText}>30</MyText>
+            </Touchable>
+            <Touchable onPress={() => alert('60')}>
+              <MyText style={styles.giftNumberText}>60</MyText>
+            </Touchable>
+          </View>
+          <Touchable onPress={() => alert('Clicked')}>
+            <SvgIcon.GiftIcon />
+          </Touchable>
+        </View>
+      </View>
     </View>
   );
 };

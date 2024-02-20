@@ -268,6 +268,7 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     setStar(hostExtraDetail?.star ? hostExtraDetail?.star : 0);
     const latestImage =
       commentData.length > 0 ? commentData[commentData.length - 1] : null;
@@ -292,6 +293,9 @@ const LiveStreaming = ({navigation, route}) => {
 
   useEffect(() => {
     if ((channelName, channelToken)) {
+=======
+    if (channelName && channelToken) {
+>>>>>>> 313eea5 (done flexible video view)
       _initEngine();
     }
   }, [channelName, channelToken]);

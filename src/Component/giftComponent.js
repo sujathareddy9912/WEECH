@@ -151,12 +151,12 @@ const GiftComponent = props => {
             <SvgIcon.SmallDiamond />
             <MyText style={styles.diamondCount}>{item?.price}</MyText>
           </View>
-          <Counter
+          {/* <Counter
             count={item?._id === selectedGifts?._id ? selectedGifts?.count : 0}
             onDecrement={onDecrement(item, index)}
             onIncrement={onIncrement(item, index)}
             style={{marginTop: dynamicSize(5)}}
-          />
+          /> */}
         </View>
       </View>
     );
@@ -184,10 +184,6 @@ const GiftComponent = props => {
 
   return (
     <View style={[styles.giftContainer, mainContainer]}>
-      <View style={styles.diamondContainer}>
-        <SvgIcon.SmallDiamond />
-        <MyText style={styles.diamondText}>{diamondPoints}</MyText>
-      </View>
       <View>
         <FlatList
           key="horizontalList"
@@ -210,7 +206,6 @@ const GiftComponent = props => {
           numColumns={4}
           renderItem={_renderGiftList}
           ItemSeparatorComponent={_renderGiftSeperator}
-          // contentContainerStyle={styles.giftList}
         />
       )}
       {selectedGifts ? (
@@ -274,6 +269,8 @@ const styles = StyleSheet.create({
   },
   diamondText: {
     marginLeft: dynamicSize(10),
+    color: COLORS.BABY_PINK,
+    fontWeight: 'bold',
   },
   topItem: {
     backgroundColor: COLORS.LIGHT_BABY_PINK,

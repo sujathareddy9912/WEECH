@@ -48,6 +48,9 @@ const GiftComponent = props => {
   const [selectedGiftType, updateSelectedGiftType] = useState(0);
   const [diamondPoints, setDiamondPoints] = useState(diamondCount);
   const [topCategoryList, setTopCategoryList] = useState(topTitleList || []);
+
+  const [newSelectedGift, setNewSelectedGift] = useState();
+  const [selectedGiftQuantity, setSelectedGiftQuantity] = useState(1);
   const giftQuantity = [
     {
       quantity: 1,
@@ -66,6 +69,13 @@ const GiftComponent = props => {
   useEffect(() => {
     if (topTitleList) setTopCategoryList(topTitleList);
   }, [topTitleList]);
+
+  useEffect(() => {
+    setNewSelectedGift({
+      ...topCategoryList?.[selectedGiftType]?.gifts[0],
+      count: selectedGiftQuantity,
+    });
+  }, []);
 
   const _renderTopList = ({item, index}) => {
     return (
@@ -151,19 +161,68 @@ const GiftComponent = props => {
     } else HelperService.showToast(strings('gift.giftSendError'));
   };
 
+  const newSendGiftAction = async () => {
+    console.log('newSelectedGift on send', newSelectedGift);
+    let totalPrice = newSelectedGift?.price * newSelectedGift?.count;
+    let totalCount = newSelectedGift?.count;
+
+    const gifts = {
+      giftId: newSelectedGift?._id ? newSelectedGift?._id : null,
+      quantity: newSelectedGift?.count ? newSelectedGift?.count : null,
+    };
+
+    if (!gifts?.quantity) {
+      HelperService.showToast(strings('gift.pleaseSelectGift'));
+      return;
+    }
+    if (totalPrice <= diamondPoints) {
+      setSendingGift(true);
+      const param = {
+        senderId,
+        totalPrice,
+        giftId: [gifts],
+        receiverId: [{userId: receiverId}],
+        roomId: roomID,
+      };
+
+      dispatch(
+        sendGiftAction(param, resp => {
+          onSendSuccess({param, totalCount});
+          setSendingGift(false);
+          onSendClick();
+        }),
+      );
+      setDiamondPoints(diamondPoints - totalPrice);
+    } else HelperService.showToast(strings('gift.giftSendError'));
+  };
+
+  const newSelectedGiftFunction = item => {
+    setNewSelectedGift({...item, count: selectedGiftQuantity});
+  };
+
   const _renderGiftList = ({item, index}) => {
     return (
-      <View style={styles.giftItemsContainer}>
+      <Touchable
+        style={[
+          styles.giftItemsContainer,
+          newSelectedGift?._id === item?._id ? styles.selectedGiftView : null,
+        ]}
+        onPress={() => newSelectedGiftFunction(item)}>
         <View style={{alignItems: 'center'}}>
           <MyImage
             fast
             source={{uri: `${IMAGE_URL}${item.icon}`}}
             style={styles.giftIcon}
           />
-          <MyText style={styles.giftTitle}>{item?.name}</MyText>
+          <MyText style={styles.giftTitle}>
+            {item?.name} {}
+          </MyText>
           <View style={styles.diamondContainerSmall}>
             <SvgIcon.SmallDiamond />
-            <MyText style={styles.diamondCount}>{item?.price}</MyText>
+            <MyText style={styles.diamondCount}>
+              {item?.price}{' '}
+              {selectedGiftQuantity > 1 ? '*' + selectedGiftQuantity : null}
+            </MyText>
           </View>
           {/* <Counter
             count={item?._id === selectedGifts?._id ? selectedGifts?.count : 0}
@@ -172,7 +231,7 @@ const GiftComponent = props => {
             style={{marginTop: dynamicSize(5)}}
           /> */}
         </View>
-      </View>
+      </Touchable>
     );
   };
 
@@ -195,6 +254,11 @@ const GiftComponent = props => {
   const _renderSelectedSeperator = () => (
     <View style={styles.selectedSeperator} />
   );
+
+  const selectGiftQuantity = e => {
+    setSelectedGiftQuantity(e);
+    setNewSelectedGift({...newSelectedGift, count: e});
+  };
 
   return (
     <View style={[styles.giftContainer, mainContainer]}>
@@ -235,15 +299,6 @@ const GiftComponent = props => {
         </View>
       ) : null}
 
-      {/* <Button
-        disabled={fetchingGifts}
-        indicator={sendingGift}
-        width={SCREEN_WIDTH - dynamicSize(40)}
-        buttonStyle={styles.buttonStyle}
-        labelStyle={styles.buttonText}
-        label={strings('gift.send')}
-        onPress={onSendPress}
-      /> */}
       <View
         style={{
           flexDirection: 'row',
@@ -272,12 +327,27 @@ const GiftComponent = props => {
               alignItems: 'center',
             }}>
             {giftQuantity.map((e, key) => (
-              <Touchable onPress={() => alert(e?.quantity)} key={key}>
-                <MyText style={styles.giftNumberText}>{e?.quantity}</MyText>
+              <Touchable
+                onPress={() => selectGiftQuantity(e?.quantity)}
+                key={key}
+                style={[
+                  e?.quantity === selectedGiftQuantity
+                    ? styles.selectedQuantityView
+                    : null,
+                ]}>
+                <MyText
+                  style={[
+                    styles.giftNumberText,
+                    e?.quantity === selectedGiftQuantity
+                      ? styles.selectedGiftQuantityNumber
+                      : null,
+                  ]}>
+                  {e?.quantity}
+                </MyText>
               </Touchable>
             ))}
           </View>
-          <Touchable onPress={() => alert('Clicked')}>
+          <Touchable onPress={() => newSendGiftAction()}>
             <SvgIcon.GiftIcon />
           </Touchable>
         </View>
@@ -291,7 +361,7 @@ export default GiftComponent;
 const styles = StyleSheet.create({
   giftContainer: {
     alignSelf: 'center',
-    backgroundColor: COLORS.WHITE,
+    backgroundColor: COLORS.BLACK,
     width: SCREEN_WIDTH - dynamicSize(20),
     borderRadius: dynamicSize(5),
     padding: dynamicSize(10),
@@ -348,6 +418,7 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH / 5,
     alignItems: 'center',
     marginHorizontal: dynamicSize(5),
+    padding: 5,
   },
   giftList: {
     // paddingHorizontal: dynamicSize(10),
@@ -362,7 +433,7 @@ const styles = StyleSheet.create({
   },
   giftTitle: {
     fontWeight: 'bold',
-    color: COLORS.BLACK,
+    color: COLORS.WHITE,
     fontSize: FONT_SIZE.SMALL,
     textAlign: 'center',
     marginTop: dynamicSize(5),
@@ -370,6 +441,7 @@ const styles = StyleSheet.create({
   diamondCount: {
     marginLeft: dynamicSize(5),
     fontSize: FONT_SIZE.SMALL,
+    color: COLORS.WHITE,
   },
   buttonStyle: {
     alignSelf: 'center',
@@ -401,8 +473,23 @@ const styles = StyleSheet.create({
   },
   giftNumberText: {
     fontWeight: 'bold',
-    color: COLORS.BLACK,
+    color: COLORS.WHITE,
     paddingHorizontal: dynamicSize(5),
     marginHorizontal: dynamicSize(5),
   },
+  selectedGiftView: {
+    borderColor: COLORS.BABY_PINK,
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  selectedQuantityView: {
+    backgroundColor: COLORS.WHITE,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: COLORS.BABY_PINK,
+    color: COLORS.BABY_PINK,
+  },
+  selectedGiftQuantityNumber: {
+    color: COLORS.BABY_PINK
+  }
 });

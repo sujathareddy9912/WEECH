@@ -268,6 +268,7 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     setStar(hostExtraDetail?.star ? hostExtraDetail?.star : 0);
     const latestImage =
       commentData.length > 0 ? commentData[commentData.length - 1] : null;

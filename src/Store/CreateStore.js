@@ -1,5 +1,5 @@
 import {createNetworkMiddleware} from 'react-native-offline';
-import {applyMiddleware, compose, createStore} from 'redux';
+import {applyMiddleware, compose, createStore,} from 'redux';
 import {createLogger} from 'redux-logger';
 import {createTransform, persistReducer, persistStore} from 'redux-persist';
 import createSensitiveStorage from 'redux-persist-sensitive-storage';

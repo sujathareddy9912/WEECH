@@ -285,7 +285,7 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    if ((channelName, channelToken)) {
+    if (channelName && channelToken) {
       _initEngine();
     }
   }, [channelName, channelToken]);

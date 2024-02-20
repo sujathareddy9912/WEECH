@@ -9,7 +9,9 @@ import {
   Text,
   PermissionsAndroid,
   ScrollView,
+  Animated,
   Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {
   ClientRoleType,
@@ -18,6 +20,7 @@ import {
   ChannelProfileType,
   VideoStreamType,
 } from 'react-native-agora';
+import commonStyle from '../../Component/commonStyles';
 
 import styles from './styles';
 import {COLORS} from '../../Utils/colors';
@@ -25,6 +28,11 @@ import {IMAGE_URL} from '../../Services/Api/Common';
 import {rtmAgoraConfig} from '../../Utils/agoraConfig';
 import {routeNameRef} from '../../Navigator/navigationHelper';
 import {HelperService} from '../../Services/Utils/HelperService';
+import GiftComponent from '../../Component/giftComponent';
+import {socket} from '../../Services/Sockets/sockets';
+import {strings} from '../../localization/config';
+import {isIOS} from '../../Utils/helper';
+import {SCREEN_HEIGHT} from '../../Utils/helper';
 
 import {
   incomingCallQuery,
@@ -48,6 +56,7 @@ import {
   CallActionBottonSheet,
   CallActionBottonSheetAudio,
   IconWithCount,
+  TouchableIcon,
 } from '../../Component/commomComponent';
 
 import {
@@ -58,16 +67,26 @@ import {
   showGiftComponentOnCallAction,
   clearCommentOnDuringCall,
   reconnectLiveStreamAction,
+  getGiftDataAction,
+  commentOnDuringCall,
 } from '../../Redux/Action';
 import {SvgIcon} from '../../Component/icons';
 import {FONT_SIZE} from '../../Utils/fontFamily';
 import {Modal} from 'react-native-paper';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import Dragable from '../../Component/dragable/dragable';
+import Icon from '../../Component/Icons/Icon';
+import Input from '../../Component/Input';
+import {dynamicSize} from '../../Utils/responsive';
+import {SmallProfilePic} from '../../Component/commomComponent';
 
 let timeout = null;
+let giftTimeout = null;
 let checkEndCall = 0;
+const buttonPosition = 64;
 
 const VideoCall = ({navigation, route}) => {
+  const scrollRef = useRef();
   const agoraEngineRef = useRef();
   const dispatch = useDispatch();
   const state = useSelector(state => {
@@ -75,6 +94,7 @@ const VideoCall = ({navigation, route}) => {
   });
   const {userLoginList} = state.authReducer;
   const {showGiftComponentOnCall} = state.loaderReducer;
+  const {callCommentData} = state.streamingReducer;
 
   const initialState = {
     joinSucceed: false,
@@ -92,6 +112,13 @@ const VideoCall = ({navigation, route}) => {
   const [callChargeDetails, setCallChargeDetails] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [isVideoPause, setIsVideoPause] = useState(true);
+  const [isSpeakerOn, setIsSpeakerOn] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [fetchingGifts, setFetchingGifts] = useState(false);
+  const [giftData, updateGiftData] = useState([]);
+  const [commentText, UpdateCommentText] = useState('');
+  const [showComments, setShowComments] = useState(true);
 
   const detail = useMemo(() => {
     return route?.params;
@@ -262,7 +289,9 @@ const VideoCall = ({navigation, route}) => {
           channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
         });
         agoraEngineInit.enableVideo();
-        agoraEngineInit.setRemoteDefaultVideoStreamType(VideoStreamType.VideoStreamHigh);
+        agoraEngineInit.setRemoteDefaultVideoStreamType(
+          VideoStreamType.VideoStreamHigh,
+        );
       } else {
         agoraEngineInit.initialize({
           appId: rtmAgoraConfig.appId,
@@ -315,10 +344,12 @@ const VideoCall = ({navigation, route}) => {
   };
 
   const onVideoPress = async videoStatus => {
+    setIsVideoPause(videoStatus);
     await agoraEngineRef.current?.enableLocalVideo(videoStatus);
   };
 
   const onMicPress = async micStatus => {
+    setIsMuted(micStatus);
     await agoraEngineRef.current?.muteLocalAudioStream(micStatus);
   };
 
@@ -331,6 +362,7 @@ const VideoCall = ({navigation, route}) => {
   };
 
   const onSpeakerVideoPress = async speakerStatus => {
+    setIsSpeakerOn(speakerStatus);
     if (speakerStatus) {
       await agoraEngineRef.current?.disableAudio();
     } else {
@@ -388,7 +420,7 @@ const VideoCall = ({navigation, route}) => {
       receiverId: detail?.receiverId,
       type: callData.isVideoCall ? 'VIDEOCALL' : 'CALL',
       chargeSettle: true,
-      seconds: second
+      seconds: second,
     };
 
     dispatch(
@@ -426,6 +458,131 @@ const VideoCall = ({navigation, route}) => {
   const _hideGiftComponent = () =>
     dispatch(showGiftComponentOnCallAction(false));
 
+  const _fetchGiftList = () => {
+    _fetchGifts();
+    dispatch(showGiftComponentOnCallAction(true));
+  };
+
+  const _fetchGifts = () => {
+    setFetchingGifts(true);
+    dispatch(
+      getGiftDataAction('', data => {
+        setFetchingGifts(false);
+        if (data.status) {
+          updateGiftData(data.giftTypes);
+        }
+      }),
+    );
+  };
+
+  const _onSearch = text => {
+    if (giftTimeout) clearTimeout(giftTimeout);
+    giftTimeout = setTimeout(() => {
+      giftTimeout = null;
+      setFetchingGifts(true);
+      dispatch(
+        getGiftDataAction(text, data => {
+          setFetchingGifts(false);
+          if (data.status) {
+            updateGiftData(data.giftTypes);
+          }
+        }),
+      );
+    }, 500);
+  };
+
+  const onCommentSend = () => {
+    if (commentText !== '') {
+      const data = {
+        token: detail?.liveToken,
+        commentData: {
+          type: 'comment',
+          comment: commentText,
+          name: userLoginList?.user?.name,
+          profilePic: userLoginList?.user?.profile,
+          joinedUsers: userLoginList?.user,
+          senderId: detail?.callerId,
+        },
+      };
+      socket.emit('comment', data);
+      dispatch(commentOnDuringCall(data));
+      _scrollToEnd();
+      UpdateCommentText('');
+    }
+  };
+
+  useEffect(() => {
+    socket.off('comment').on('comment', response => {
+      if (!!response.commentData.comment) {
+        dispatch(commentOnDuringCall(response));
+        _scrollToEnd();
+      }
+    });
+  }, []);
+
+  const _scrollToEnd = () => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      timeout = null;
+      scrollRef?.current?.scrollToEnd();
+    }, 400);
+  };
+
+  const silentCommentForConnection = () => {
+    const data = {
+      token: detail?.liveToken,
+      commentData: {
+        type: 'comment',
+        name: userLoginList?.user?.name,
+        profilePic: userLoginList?.user?.profile,
+        joinedUsers: userLoginList?.user,
+      },
+    };
+    socket.emit('comment', data);
+    const comment = {
+      commentData: {
+        type: 'welcomeText',
+        comment: strings('live.welcomeMessage'),
+      },
+    };
+    dispatch(commentOnDuringCall(comment));
+  };
+
+  useEffect(() => {
+    silentCommentForConnection();
+  }, []);
+
+  const _renderComment = (item, index) => {
+    if (item?.type === 'comment') {
+      return (
+        <TouchableOpacity style={[commonStyle.chatView]}>
+          {item?.profilePic ? (
+            <SmallProfilePic
+              imageStyle={commonStyle.chatPic}
+              url={`${IMAGE_URL}${item?.profilePic}`}
+            />
+          ) : (
+            <View style={commonStyle.picContainer}>
+              <SvgIcon.SmallProfilePlaceholder />
+            </View>
+          )}
+          <View style={commonStyle.chatRightConrtainer}>
+            <MyText style={commonStyle.username}>{item.name}</MyText>
+            <View style={commonStyle.msgBox}>
+              <MyText style={commonStyle.msg}>{item.comment}</MyText>
+            </View>
+          </View>
+        </TouchableOpacity>
+      );
+    } else if (item?.type == 'welcomeText') {
+      return (
+        <View style={[commonStyle.welcomeContainer]}>
+          <MyText style={commonStyle.welcometxt}>{item.comment}</MyText>
+        </View>
+      );
+    }
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <StatusBar
@@ -446,7 +603,7 @@ const VideoCall = ({navigation, route}) => {
               <View
                 style={[
                   styles.nameContainer,
-                  !showGiftComponentOnCall && {zIndex: 10},
+                  !showGiftComponentOnCall && {zIndex: 1},
                 ]}>
                 <View style={[styles.infoCon, {alignSelf: 'flex-start'}]}>
                   <IconWithCount
@@ -524,36 +681,158 @@ const VideoCall = ({navigation, route}) => {
                     />
                   </React.Fragment>
                 )}
+                {detail?.type == CALLING_TYPE.VIDEO &&
+                  !showGiftComponentOnCall && (
+                    <View style={styles.commentView}>
+                      {showComments && (
+                        <KeyboardAvoidingView
+                          behavior={isIOS ? 'padding' : null}
+                          keyboardVerticalOffset={isIOS ? 60 : 0}
+                          enabled
+                          style={styles.keyboardAvoidView}>
+                          <ScrollView
+                            key="comment"
+                            ref={scrollRef}
+                            scrollEventThrottle={16}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{
+                              paddingHorizontal: dynamicSize(10),
+                            }}>
+                            <View style={styles.commentContainer}>
+                              {callCommentData?.map((item, index) =>
+                                _renderComment(item, index),
+                              )}
+                            </View>
+                          </ScrollView>
+                        </KeyboardAvoidingView>
+                      )}
+                    </View>
+                  )}
                 {isJoined && remoteUid !== 0 && (
                   <React.Fragment key={remoteUid}>
-                    <RtcSurfaceView
-                      canvas={{uid: remoteUid}}
-                      style={styles.remoteView}
-                    />
+                    <Dragable style={styles.remoteView}>
+                      <RtcSurfaceView
+                        canvas={{uid: remoteUid}}
+                        style={styles.remoteView}
+                      />
+                    </Dragable>
                   </React.Fragment>
                 )}
               </ScrollView>
             )}
           </MyLinearGradient>
           {detail?.type == CALLING_TYPE.VIDEO ? (
-            <View
-              style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                backgroundColor: 'transparent',
-              }}>
-              <CallActionBottonSheet
-                type={detail?.type}
-                points={callData.points}
-                onCameraPress={onCameraPress}
-                onVideoPress={onVideoPress}
-                onMicPress={onMicPress}
-                onSpeakerPress={onSpeakerVideoPress}
-                onCancelPress={onCancelPress}
-                detail={detail}
-              />
-            </View>
+            <>
+              {!showGiftComponentOnCall && (
+                <View>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: buttonPosition, backgroundColor: COLORS.DARK_RED},
+                    ]}
+                    onPress={onCancelPress}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={'phone-hangup'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 2 * buttonPosition},
+                    ]}
+                    onPress={() => {
+                      onVideoPress(!isVideoPause);
+                    }}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isVideoPause ? 'video' : 'video-off'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 3 * buttonPosition},
+                    ]}
+                    onPress={onCameraPress}>
+                    <Icon
+                      origin="MaterialIcons"
+                      name={'cameraswitch'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 4 * buttonPosition},
+                    ]}
+                    onPress={() => onSpeakerVideoPress(!isSpeakerOn)}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isSpeakerOn ? 'volume-high' : 'volume-low'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 5 * buttonPosition},
+                    ]}
+                    onPress={() => onMicPress(!isMuted)}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isSpeakerOn ? 'microphone' : 'microphone-off'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              <View style={styles.bottomContainer}>
+                <Input
+                  value={commentText}
+                  onChangeText={UpdateCommentText}
+                  placeholder={
+                    true ? strings('live.saySomething') : "You're muted"
+                  }
+                  svgSource={<SvgIcon.CommentIcon />}
+                  style={{marginRight: 16, flex: 1}}
+                  textInputStyle={{fontSize: FONT_SIZE.MEDIUM}}
+                  onSubmitEditing={onCommentSend}
+                  blurOnSubmit={false}
+                  returnKeyType={'send'}
+                  returnKeyLabel="send"
+                />
+                <TouchableOpacity
+                  style={styles.giftIconBtn}
+                  onPress={_fetchGiftList}>
+                  <SvgIcon.SmallGiftIcon />
+                </TouchableOpacity>
+              </View>
+              {showGiftComponentOnCall && (
+                <View style={styles.giftContainer}>
+                  <GiftComponent
+                    fetchingGifts={fetchingGifts}
+                    onSearch={_onSearch}
+                    diamondCount={userLoginList?.user?.points || 0}
+                    topTitleList={giftData}
+                    senderId={userLoginList?.user?._id}
+                    receiverId={detail?.receiverId}
+                    onSendClick={() =>
+                      dispatch(showGiftComponentOnCallAction(false))
+                    }
+                    onSendSuccess={() => {}}
+                  />
+                </View>
+              )}
+            </>
           ) : (
             <View
               style={{

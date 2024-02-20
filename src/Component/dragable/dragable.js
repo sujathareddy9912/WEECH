@@ -23,41 +23,38 @@ function Dragable({children,style}) {
     width.value = event.nativeEvent.layout.width;
   };
 
-  const pan = Gesture.Pan()
-    .onChange(event => {
-      // highlight-next-line
-      offsetX.value += event.changeX;
-      offsetY.value += event.changeY;
-    })
-    // .onFinalize(event => {
-    // //   highlight-start
-    // //   offsetX.value += event.translationX;
-    // //   offsetY.value += event.translationY;
-    // //   offsetX.value = withDecay({
-    // //     velocity: event.velocityX,
-    // //     rubberBandEffect: true,
-    // //     clamp: [-(width.value / 2) + SIZE / 2, width.value / 2 - SIZE / 2],
-    // //   });
-    // //   offsetY.value = withDecay({
-    // //     velocity: event.velocityY,
-    // //     rubberBandEffect: true,
-    // //     clamp: [-(width.value / 2) + SIZE / 2, width.value / 2 - SIZE / 2],
-    // //   });
-    // //   highlight-end
-    // });
+  const pan = Gesture.Pan().onChange(event => {
+    // highlight-next-line
+    offsetX.value += event.changeX;
+    offsetY.value += event.changeY;
+  });
+  // .onFinalize(event => {
+  // //   highlight-start
+  // //   offsetX.value += event.translationX;
+  // //   offsetY.value += event.translationY;
+  // //   offsetX.value = withDecay({
+  // //     velocity: event.velocityX,
+  // //     rubberBandEffect: true,
+  // //     clamp: [-(width.value / 2) + SIZE / 2, width.value / 2 - SIZE / 2],
+  // //   });
+  // //   offsetY.value = withDecay({
+  // //     velocity: event.velocityY,
+  // //     rubberBandEffect: true,
+  // //     clamp: [-(width.value / 2) + SIZE / 2, width.value / 2 - SIZE / 2],
+  // //   });
+  // //   highlight-end
+  // });
 
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [{translateX: offsetX.value}, {translateY: offsetY.value}],
   }));
 
   return (
-      <View onLayout={onLayout} style={styles.wrapper}>
-        <GestureDetector gesture={pan}>
-          <Animated.View style={[animatedStyles]}>
-            {children}
-          </Animated.View>
-        </GestureDetector>
-      </View>
+    <View onLayout={onLayout} style={styles.wrapper}>
+      <GestureDetector gesture={pan}>
+        <Animated.View style={[animatedStyles]}>{children}</Animated.View>
+      </GestureDetector>
+    </View>
   );
 }
 

@@ -392,4 +392,10 @@ const styles = StyleSheet.create({
     width: SCREEN_HEIGHT * 0.04,
     height: SCREEN_HEIGHT * 0.04,
   },
+  giftNumberText: {
+    fontWeight: 'bold',
+    color: COLORS.BLACK,
+    paddingHorizontal: dynamicSize(5),
+    marginHorizontal: dynamicSize(5),
+  },
 });

@@ -156,6 +156,12 @@ export const sendGiftAction = (payload, callBack) => ({
   callBack,
 });
 
+export const hostSendGiftAction = (payload, callBack) => ({
+  type: TYPES.HOST_GIFT_INCOME_ACTION,
+  payload,
+  callBack,
+});
+
 export const refreshDataAction = payload => ({
   type: TYPES.REFRESH_DATA_ACTION,
   payload,

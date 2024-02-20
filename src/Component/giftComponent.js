@@ -241,28 +241,6 @@ const styles = StyleSheet.create({
     padding: dynamicSize(10),
     height: SCREEN_HEIGHT / 2.8,
   },
-  textInput: {
-    borderRadius: dynamicSize(5),
-    backgroundColor: COLORS.LIGHT_GREY_OFFSET,
-    paddingHorizontal: dynamicSize(10),
-  },
-  textInputStyle: {
-    paddingVertical: SCREEN_HEIGHT * 0.01,
-    fontSize: FONT_SIZE.REGULAR_MEDIUM,
-  },
-  inputRowContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  diamondContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    backgroundColor: COLORS.WHITE,
-  },
   diamondText: {
     marginLeft: dynamicSize(10),
     color: COLORS.BABY_PINK,
@@ -294,9 +272,6 @@ const styles = StyleSheet.create({
     marginHorizontal: dynamicSize(5),
     padding: 5,
   },
-  giftList: {
-    // paddingHorizontal: dynamicSize(10),
-  },
   giftSeperator: {
     height: dynamicSize(10),
   },
@@ -316,30 +291,6 @@ const styles = StyleSheet.create({
     marginLeft: dynamicSize(5),
     fontSize: FONT_SIZE.SMALL,
     color: COLORS.WHITE,
-  },
-  buttonStyle: {
-    alignSelf: 'center',
-    backgroundColor: COLORS.BABY_PINK,
-    marginVertical: dynamicSize(15),
-  },
-  buttonText: {
-    color: COLORS.WHITE,
-  },
-  selectedSeperator: {
-    width: dynamicSize(10),
-  },
-  selectedlistContainerStyle: {
-    paddingTop: dynamicSize(20),
-    paddingHorizontal: dynamicSize(20),
-  },
-  selectedCount: {
-    fontSize: FONT_SIZE.REGULAR_MEDIUM,
-    position: 'absolute',
-    right: dynamicSize(25),
-  },
-  selectedContainer: {
-    paddingTop: dynamicSize(10),
-    width: SCREEN_WIDTH / 5,
   },
   giftIcon: {
     width: SCREEN_HEIGHT * 0.04,

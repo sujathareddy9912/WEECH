@@ -76,7 +76,6 @@ const GiftComponent = props => {
   const _renderGiftSeperator = () => <View style={styles.giftSeperator} />;
 
   const newSendGiftAction = async () => {
-    console.log('newSelectedGift on send', newSelectedGift);
     let totalPrice = newSelectedGift?.price * newSelectedGift?.count;
     let totalCount = newSelectedGift?.count;
 
@@ -160,7 +159,7 @@ const GiftComponent = props => {
         />
       </View>
       {!topCategoryList?.[selectedGiftType]?.gifts ? (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={styles.giftTitleRenderingContainer}>
           {fetchingGifts ? <MyIndicator color={COLORS.BABY_PINK} /> : null}
         </View>
       ) : (
@@ -173,33 +172,13 @@ const GiftComponent = props => {
         />
       )}
 
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginVertical: dynamicSize(10),
-          justifyContent: 'space-between',
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
+      <View style={styles.bottomSendGiftContainer}>
+        <View style={styles.diamondContainer}>
           <SvgIcon.SmallDiamond />
           <MyText style={styles.diamondText}>{diamondPoints}</MyText>
         </View>
-        <View
-          style={{
-            backgroundColor: COLORS.LIGHT_GREY_OFFSET,
-            flexDirection: 'row',
-            borderRadius: 20,
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              padding: dynamicSize(5),
-              alignItems: 'center',
-            }}>
+        <View style={styles.giftShareAndQuantityContainer}>
+          <View style={styles.giftQuantityContainer}>
             {giftQuantity.map((e, key) => (
               <Touchable
                 onPress={() => selectGiftQuantity(e?.quantity)}
@@ -280,6 +259,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  giftTitleRenderingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   giftTitle: {
     fontWeight: 'bold',
     color: COLORS.WHITE,
@@ -316,5 +300,25 @@ const styles = StyleSheet.create({
   },
   selectedGiftQuantityNumber: {
     color: COLORS.BABY_PINK,
+  },
+  bottomSendGiftContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: dynamicSize(10),
+    justifyContent: 'space-between',
+  },
+  diamondContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  giftShareAndQuantityContainer: {
+    backgroundColor: COLORS.LIGHT_GREY_OFFSET,
+    flexDirection: 'row',
+    borderRadius: 20,
+  },
+  giftQuantityContainer: {
+    flexDirection: 'row',
+    padding: dynamicSize(5),
+    alignItems: 'center',
   },
 });

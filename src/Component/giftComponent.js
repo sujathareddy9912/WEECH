@@ -48,6 +48,20 @@ const GiftComponent = props => {
   const [selectedGiftType, updateSelectedGiftType] = useState(0);
   const [diamondPoints, setDiamondPoints] = useState(diamondCount);
   const [topCategoryList, setTopCategoryList] = useState(topTitleList || []);
+  const giftQuantity = [
+    {
+      quantity: 1,
+    },
+    {
+      quantity: 15,
+    },
+    {
+      quantity: 30,
+    },
+    {
+      quantity: 60,
+    },
+  ];
 
   useEffect(() => {
     if (topTitleList) setTopCategoryList(topTitleList);
@@ -257,18 +271,11 @@ const GiftComponent = props => {
               padding: dynamicSize(5),
               alignItems: 'center',
             }}>
-            <Touchable onPress={() => alert('1')}>
-              <MyText style={styles.giftNumberText}>1</MyText>
-            </Touchable>
-            <Touchable onPress={() => alert('15')}>
-              <MyText style={styles.giftNumberText}>15</MyText>
-            </Touchable>
-            <Touchable onPress={() => alert('30')}>
-              <MyText style={styles.giftNumberText}>30</MyText>
-            </Touchable>
-            <Touchable onPress={() => alert('60')}>
-              <MyText style={styles.giftNumberText}>60</MyText>
-            </Touchable>
+            {giftQuantity.map((e, key) => (
+              <Touchable onPress={() => alert(e?.quantity)} key={key}>
+                <MyText style={styles.giftNumberText}>{e?.quantity}</MyText>
+              </Touchable>
+            ))}
           </View>
           <Touchable onPress={() => alert('Clicked')}>
             <SvgIcon.GiftIcon />

@@ -551,6 +551,9 @@ const VideoCall = ({navigation, route}) => {
     silentCommentForConnection();
   }, []);
 
+  console.log('tttttttttttt',userLoginList?.user?.points);
+  console.log('tttttttttttt',userLoginList?.user);
+
   const _renderComment = (item, index) => {
     if (item?.type === 'comment') {
       return (

@@ -820,7 +820,7 @@ const VideoCall = ({navigation, route}) => {
                   <GiftComponent
                     fetchingGifts={fetchingGifts}
                     onSearch={_onSearch}
-                    diamondCount={userLoginList?.user?.points || 0}
+                    diamondCount={userLoginList?.user?.myBalance || 0}
                     topTitleList={giftData}
                     senderId={userLoginList?.user?._id}
                     receiverId={detail?.receiverId}

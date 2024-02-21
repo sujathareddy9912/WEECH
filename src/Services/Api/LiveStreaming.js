@@ -618,8 +618,6 @@ export function getEndUserDetailApi(body) {
 
 export function getUserDailyIncome(body) {
   const url = `income/get_user_daily_income`;
-  console.log("daily income",body)
-  console.log("daily URL",url)
   return userApiClient
     .post(url, body, {
       headers: {

@@ -11,7 +11,7 @@ import {
 
 const SIZE = 120;
 
-function Dragable({children,style}) {
+function Dragable({children}) {
   const offsetX = useSharedValue(0);
   const offsetY = useSharedValue(0);
 

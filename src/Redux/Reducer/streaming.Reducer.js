@@ -62,6 +62,7 @@ const streamingReducer = (state = initialState, action) => {
       return {
         ...prevState,
         callCommentData: [],
+        commentData:[],
       };
 
     case TYPES.HOST_USER_DETAIL_ACTION:

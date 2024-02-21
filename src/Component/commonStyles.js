@@ -167,10 +167,6 @@ const commonStyle = StyleSheet.create({
     paddingVertical: SCREEN_HEIGHT * 0.015,
     flexDirection: 'row',
     alignItems: 'center',
-    // bottom: hp(10),
-    // bottom: 0,
-    // position: 'absolute',
-    // alignSelf: 'center',
   },
   subBottomChatRowContainer: {
     flex: 0.9,

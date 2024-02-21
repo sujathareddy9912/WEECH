@@ -160,7 +160,7 @@ const Balance = ({
     const {error} = await presentPaymentSheet();
 
     if (error) {
-      Alert.alert(`Error code: ${error.code}`, error.message);
+      Alert.alert(`${error.code}`, error.message);
       setLoading(false);
     } else {
       const recData = {

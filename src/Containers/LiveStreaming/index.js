@@ -292,7 +292,7 @@ const LiveStreaming = ({navigation, route}) => {
   }, [commentData]);
 
   useEffect(() => {
-    if ((channelName, channelToken)) {
+    if (channelName && channelToken) {
       _initEngine();
     }
   }, [channelName, channelToken]);

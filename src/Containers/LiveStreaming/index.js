@@ -1657,7 +1657,7 @@ const LiveStreaming = ({navigation, route}) => {
                       alignItems: 'center',
                     }}>
                     <IconWithCount
-                      count={hostDetail?.level || 0}
+                      count={`LV ${hostDetail?.level || 0}`}
                       style={{
                         paddingVertical: SCREEN_HEIGHT * 0.005,
                       }}

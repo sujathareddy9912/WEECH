@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useReducer,
-  useEffect,
-  useRef,
-} from 'react';
+import React, {useState, useReducer, useEffect, useRef} from 'react';
 import TextInput from '../../Component/TextInput/TextInput';
 import {
   StatusBar,
@@ -148,7 +143,6 @@ function Profile(props) {
         setProfilePic({
           uri: serverImage.uri,
         });
-        
       }
     })();
   }, [getProfileSuccess]);
@@ -174,7 +168,6 @@ function Profile(props) {
       });
     }
   }, [state.gender]);
-
 
   const handleOnChange = (field, value) => {
     switch (field) {
@@ -268,7 +261,6 @@ function Profile(props) {
       handleScrollToInput(scrollInPutRef);
       return;
     }
-
 
     const requestData = {
       name: state.name,

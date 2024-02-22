@@ -3,6 +3,7 @@ import {CommonTypes} from '../Store/Common/Actions';
 import {all, takeEvery, takeLatest} from 'redux-saga/effects';
 import ProfileSaga from './ProfileSaga/ProfileSaga';
 import GameSaga from './Game/GameSaga';
+import ChatPriceSaga from './MyChatPrice/ChatPriceSaga';
 
 import {
   followerListSaga,
@@ -219,6 +220,7 @@ export default function* root() {
 
     //new
     ProfileSaga(),
-    GameSaga()
+    GameSaga(),
+    ChatPriceSaga(),
   ]);
 }

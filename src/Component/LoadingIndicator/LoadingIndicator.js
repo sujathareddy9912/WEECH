@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Modal, ActivityIndicator, StyleSheet} from 'react-native';
 
-const LodingIndicator = ({
+const LoadingIndicator = ({
   cancelable = false,
   color = 'white',
   animation = 'none', // none,fade,slide
@@ -70,7 +70,7 @@ const LodingIndicator = ({
   );
 };
 
-export default LodingIndicator;
+export default LoadingIndicator;
 
 const styles = StyleSheet.create({
   activityIndicator: {

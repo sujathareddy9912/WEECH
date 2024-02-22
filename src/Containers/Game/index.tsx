@@ -15,6 +15,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {GAME_REQUEST, GAME_RESET} from '../../ActionConstant/game.constant';
 import {handleError} from '../../Utils/handlErrors';
 import LodingIndicator from '../../Component/LoadingIndicator/LoadingIndicator';
+import {WebView} from 'react-native-webview';
 
 interface gameListProps {
   id: number;
@@ -85,7 +86,7 @@ const Game: FC<gameProps> = ({visible = false, setVisible}) => {
             paddingTop: useSafeAreaInsets().top,
           },
         ]}>
-        <View style={[styles.container, {flex: isPlaying ? 1 : 4}]} />
+        <View style={[styles.container, {flex: isPlaying ? 0.5 : 4}]} />
         <View
           style={[
             styles.lowerContainer,
@@ -107,20 +108,42 @@ const Game: FC<gameProps> = ({visible = false, setVisible}) => {
                   color={COLORS.BLACK}
                 />
               </TouchableOpacity>
-              <Icon
+              {/* <Icon
                 origin="Ionicons"
                 name="game-controller"
                 size={200}
                 color={COLORS.RED_COLOR}
+              /> */}
+              <WebView
+                source={{
+                  uri: 'https://iids-game-test.staging-server.in/car-race/?userId=user101',
+                }}
+                style={{flex: 1}}
               />
             </View>
           ) : (
-            <FlatList
-              data={data}
-              renderItem={_renderGameList}
-              horizontal
-              contentContainerStyle={styles.contentContainer}
-            />
+            <View style={{flex: 1, marginTop: 16}}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => {
+                  setVisible(false);
+                  dispatch({type: GAME_RESET});
+                  setPlaying(false);
+                }}>
+                <Icon
+                  origin="Ionicons"
+                  name="close"
+                  size={16}
+                  color={COLORS.BLACK}
+                />
+              </TouchableOpacity>
+              <FlatList
+                data={data}
+                renderItem={_renderGameList}
+                horizontal
+                contentContainerStyle={styles.contentContainer}
+              />
+            </View>
           )}
         </View>
       </View>
@@ -146,8 +169,8 @@ const styles = StyleSheet.create({
   },
   gameContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    gap: 8,
+    marginTop: 8,
   },
   closeButton: {
     backgroundColor: COLORS.WHITE,
@@ -156,9 +179,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
-    top: 16,
-    right: 16,
+    alignSelf: 'flex-end',
   },
   games: {
     backgroundColor: COLORS.WHITE,

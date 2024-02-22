@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   FlatList,
   ScrollView,
@@ -14,17 +14,16 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import Header from '../../../Component/header/Header';
-import {Button, MyText, Touchable} from '../../../Component/commomComponent';
-import BackArrowIcon from '../../../Assets/Icons/WhiteBackIcon.svg';
+import {Button} from '../../../Component/commomComponent';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {SingleDiamond} from '../../../Assets/Icons/diamond';
 import Edit from '../../../Assets/Icons/Edit.svg';
-import {Image} from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import {Actionsheet, Box} from 'native-base';
 import {FONT_FAMILY} from '../../../Utils/fontFamily';
 import {useDispatch, useSelector} from 'react-redux';
 import {profleSetupAction} from '../../../Redux/Action';
+import {CHATPRICE_REQUEST} from '../../../ActionConstant/chatPrice.constant';
 
 const ChatPrice = props => {
   const {navigation} = props;
@@ -36,6 +35,15 @@ const ChatPrice = props => {
     return state?.authReducer?.userLoginList?.user;
   });
   const [userData, setUserData] = useState(stateData);
+
+  const chatReducer = useSelector(state => state.chatPrice);
+
+  console.log('ccccc', chatReducer);
+
+  useEffect(() => {
+    dispatch({type: CHATPRICE_REQUEST});
+  }, []);
+
   const updatePrice = () => {
     let param = {};
     if (isSelected == '0' && optionSelected == 'Free') {

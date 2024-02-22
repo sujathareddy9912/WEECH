@@ -21,7 +21,7 @@ import {
   uploadProfileVideoError,
   deleteProfileImageVideoLoading,
   deleteProfileImageVideoSuccess,
-  deleteProfileImageVideoError
+  deleteProfileImageVideoError,
 } from '../../Actions/Profile/profile.actions';
 
 import {
@@ -31,7 +31,7 @@ import {
   UPDATE_PROFILE_IMAGE_REQUEST,
   GET_PROFILE_VIDEO_REQUEST,
   UPDATE_PROFILE_VIDEO_REQUEST,
-  DELETE_PROFILE_IMAGE_VIDEO_REQUEST
+  DELETE_PROFILE_IMAGE_VIDEO_REQUEST,
 } from '../../ActionConstant/profile.constant';
 
 /** * APIs */
@@ -91,7 +91,7 @@ const deleteFavouriteImageVideosApi = async data => {
   return request({
     url: `users/delete_files`,
     method: 'delete',
-    data
+    data,
   });
 };
 
@@ -233,10 +233,10 @@ function* uploadFavouriteVidoes(data) {
 function* deleteFavouriteImageVidoes(data) {
   try {
     const {payload} = data;
-    console.log('hhhhhhh',payload);
-   yield put(deleteProfileImageVideoLoading());
-   const res = yield call(deleteFavouriteImageVideosApi, payload);
-   console.log(res);
+    console.log('hhhhhhh', payload);
+    yield put(deleteProfileImageVideoLoading());
+    const res = yield call(deleteFavouriteImageVideosApi, payload);
+    console.log(res);
     if (res && res.data.code === 200) {
       yield put(deleteProfileImageVideoSuccess(res.data));
     } else {
@@ -259,7 +259,10 @@ export default function* ProfileSaga() {
   yield takeLatest(UPDATE_PROFILE_REQUEST, updateProfile);
   yield takeLatest(GET_PROFILE_IMAGE_REQUEST, getFavouriteImages);
   yield takeLatest(UPDATE_PROFILE_IMAGE_REQUEST, uploadFavouriteImages);
-  yield takeLatest(GET_PROFILE_VIDEO_REQUEST, getFavouriteVideo)
+  yield takeLatest(GET_PROFILE_VIDEO_REQUEST, getFavouriteVideo);
   yield takeLatest(UPDATE_PROFILE_VIDEO_REQUEST, uploadFavouriteVidoes);
-  yield takeLatest(DELETE_PROFILE_IMAGE_VIDEO_REQUEST, deleteFavouriteImageVidoes);
+  yield takeLatest(
+    DELETE_PROFILE_IMAGE_VIDEO_REQUEST,
+    deleteFavouriteImageVidoes,
+  );
 }

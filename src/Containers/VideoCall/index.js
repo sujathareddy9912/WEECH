@@ -6,12 +6,11 @@ import {
   TouchableWithoutFeedback,
   SafeAreaView,
   StatusBar,
-  Text,
   PermissionsAndroid,
   ScrollView,
-  Animated,
   Alert,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {
   ClientRoleType,
@@ -204,8 +203,16 @@ const VideoCall = ({navigation, route}) => {
   }, [modalVisible]);
 
   useEffect(() => {
+    return () => {
+      clearTimeout(giftTimeout);
+    };
+  }, []);
+
+  useEffect(() => {
     if (showTime) {
-      if (timeout) clearTimeout(timeout);
+      if (timeout) {
+        clearTimeout(timeout);
+      }
       timeout = setTimeout(() => {
         UpdateSecond(second + 1);
       }, 1000);
@@ -520,9 +527,9 @@ const VideoCall = ({navigation, route}) => {
   }, []);
 
   const _scrollToEnd = () => {
-    if (timeout) clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      timeout = null;
+    if (giftTimeout) clearTimeout(giftTimeout);
+    giftTimeout = setTimeout(() => {
+      giftTimeout = null;
       scrollRef?.current?.scrollToEnd();
     }, 400);
   };
@@ -551,8 +558,8 @@ const VideoCall = ({navigation, route}) => {
     silentCommentForConnection();
   }, []);
 
-  console.log('tttttttttttt',userLoginList?.user?.points);
-  console.log('tttttttttttt',userLoginList?.user);
+  console.log('tttttttttttt', userLoginList?.user?.points);
+  console.log('tttttttttttt', userLoginList?.user);
 
   const _renderComment = (item, index) => {
     if (item?.type === 'comment') {

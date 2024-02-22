@@ -33,6 +33,7 @@ import {getUserEarningListAction} from '../../../Redux/Action';
 import {UserServices} from '../../../Services/Api/userServices';
 import {IMAGE_URL} from '../../../Services/Api/Common';
 import {dynamicSize} from '../../../Utils/responsive';
+import LoadingIndicator from '../../../Component/LoadingIndicator/LoadingIndicator';
 
 const MyEarning = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const MyEarning = ({navigation, route}) => {
   const [value, setValue] = useState([]);
   const [maxValue, setMaxValue] = useState(0);
   const [agencyDetail, setAgencyData] = useState();
+  const [loading, setLoading] = useState(false);
 
   const state = useSelector(state => {
     return state;
@@ -49,6 +51,7 @@ const MyEarning = ({navigation, route}) => {
   const {userLoginList} = state.authReducer;
 
   useEffect(() => {
+    setLoading(true);
     getUserEarning();
   }, []);
 
@@ -56,6 +59,7 @@ const MyEarning = ({navigation, route}) => {
     dispatch(
       getUserEarningListAction(result => {
         setMyEarning(result?.data);
+        setLoading(false);
       }),
     );
   };
@@ -181,6 +185,7 @@ const MyEarning = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
+      <LoadingIndicator visible={loading} />
       <StatusBar backgroundColor="transparent" translucent={true} />
       <Header
         title={String('My Earning')}
@@ -242,7 +247,7 @@ const MyEarning = ({navigation, route}) => {
                 )}
               </View>
             </View>
-            
+
             {!!myEarning?.userEarningDollar && (
               <Text style={styles.cardTitle}>
                 =$ {myEarning?.userEarningDollar || 0.0}

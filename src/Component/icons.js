@@ -144,7 +144,8 @@ import PayneerIcon from '../Assets/Icons/PayneerIcon.svg';
 import CardIcon from '../Assets/Icons/CardIcon.svg';
 import VerifiedIcon from '../Assets/Icons/VerifiedIcon.svg';
 import VerificationFailedIcon from '../Assets/Icons/VerificationFailedIcon.svg';
-import WeechaShare from '../Assets/Icons/WeechaShare.svg'
+import WeechaShare from '../Assets/Icons/WeechaShare.svg';
+import SendGift from '../Assets/Icons/sendGift.svg';
 
 export const SvgIcon = {
   liveIconSearch: () => <LiveIconSearch />,
@@ -268,6 +269,7 @@ export const SvgIcon = {
   SmallVideoIcon: () => <SmallVideoIcon />,
   CallDiamond: () => <CallDiamond />,
   CallGift: () => <CallGift />,
+  SendGift: () => <SendGift />,
   CallCamera: () => <CallCamera />,
   CallVideo: () => <CallVideo />,
   CallVideoMute: () => <CallVideoMute />,

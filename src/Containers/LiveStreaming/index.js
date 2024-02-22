@@ -1,5 +1,5 @@
 import moment from 'moment';
-import Lottie from 'lottie-react-native';
+import LottieView from 'lottie-react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import database from '@react-native-firebase/database';
@@ -31,7 +31,7 @@ import {
   RemoteVideoState,
   createAgoraRtcEngine,
   RtcSurfaceView,
-  VideoStreamType
+  VideoStreamType,
 } from 'react-native-agora';
 import {
   heightPercentageToDP as hp,
@@ -172,7 +172,6 @@ const LiveStreaming = ({navigation, route}) => {
     hostExtraDetail,
     likeStatusStream,
   } = state.streamingReducer;
-
 
   const isBroadcaster = useMemo(() => {
     if (route?.params?.type) return route?.params?.type == STREAM_TYPE.HOST;
@@ -490,7 +489,9 @@ const LiveStreaming = ({navigation, route}) => {
         await agoraEngineRef.current?.setChannelProfile(
           ChannelProfileType.ChannelProfileLiveBroadcasting,
         );
-        await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(VideoStreamType.VideoStreamHigh)
+        await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(
+          VideoStreamType.VideoStreamHigh,
+        );
         await agoraEngineRef.current.enableVideo();
         await agoraEngineRef.current.startPreview();
         await agoraEngineRef.current?.setClientRole(
@@ -607,7 +608,9 @@ const LiveStreaming = ({navigation, route}) => {
         appId: rtmAgoraConfig.appId,
         channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
       });
-      await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(VideoStreamType.VideoStreamHigh)
+      await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(
+        VideoStreamType.VideoStreamHigh,
+      );
       agoraEngineInit.enableVideo();
       _addListeners();
       _startCall();
@@ -1207,7 +1210,6 @@ const LiveStreaming = ({navigation, route}) => {
         isAdmin: isAdmin.length,
       },
     };
-    console.log('comentData comentData', comentData);
     socket.emit('live_session', comentData);
 
     dispatch(commentOnLiveStreamAction(comentData));
@@ -1765,23 +1767,20 @@ const LiveStreaming = ({navigation, route}) => {
                       : SCREEN_HEIGHT * 0.06 + useSafeAreaInsets().bottom,
                   },
                 ]}>
-                {heartFlag ? (
-                  <View
-                    style={{
-                      bottom: hp(12),
-                      left: wp(-4),
-                      position: 'absolute',
-                    }}>
-                    <Lottie
-                      source={HEART_ANIMATION}
-                      autoPlay
-                      loop={false}
-                      style={styles.heartFlag}
-                      onAnimationFinish={() =>
-                        isBroadcaster ? setHeartFlag(false) : null
-                      }
-                    />
-                  </View>
+                {!isBroadcaster ? (
+                  <>
+                    {heartFlag ? (
+                      <View style={styles.heartFlagContainer}>
+                        <LottieView
+                          source={HEART_ANIMATION}
+                          autoPlay
+                          loop={false}
+                          style={styles.heartFlag}
+                          onAnimationFinish={() => setHeartFlag(false)}
+                        />
+                      </View>
+                    ) : null}
+                  </>
                 ) : null}
                 {!isBroadcaster ? (
                   <>

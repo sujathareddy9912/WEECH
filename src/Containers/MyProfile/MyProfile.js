@@ -36,7 +36,7 @@ import {IMAGE_URL} from '../../Services/Api/Common';
 import ReferIcon from '../../Assets/Icons/Refer.svg';
 import CrownIcon from '../../Assets/Icons/crown.svg';
 import MoneyBag from '../../Assets/Icons/money_bag.svg';
-import {imagePicker, openCamera, SCREEN_WIDTH} from '../../Utils/helper';
+import {formatNumber, imagePicker, openCamera, SCREEN_WIDTH} from '../../Utils/helper';
 import RechargeIcon from '../../Assets/Icons/Recharge.svg';
 import SettingsIcon from '../../Assets/Icons/Settings.svg';
 import WeechaIcon from '../../Assets/Icons/WeechaIcon.svg';
@@ -338,7 +338,7 @@ const MyProfile = props => {
 
   useEffect(() => {
     Object.keys(profileData).length && getUserStats();
-  }, [profileData]);
+  }, [profileData, userStats]);
 
   useEffect(() => {
     dispatch(
@@ -356,7 +356,9 @@ const MyProfile = props => {
           userId: profileData?._id,
         },
         result => {
-          setUserStats({...result});
+          const formattedValue = formatNumber(result?.gifts);
+          userStats['gifts'] = formattedValue;
+          setUserStats({...result, gifts: formattedValue});
         },
       ),
     );

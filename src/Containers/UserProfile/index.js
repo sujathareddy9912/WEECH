@@ -54,6 +54,7 @@ import requestCameraAndAudioPermission, {
   CALLING_STATUS,
   requestAudioPermission,
   getCountryDetailWithKey,
+  formatNumber,
 } from '../../Utils/helper';
 
 import {
@@ -162,7 +163,9 @@ const UserProfile = props => {
           userId: detail?._id,
         },
         result => {
-          setUserStats({...result});
+          const formattedValue = formatNumber(result?.gifts);
+          userStats['gifts'] = formattedValue;
+          setUserStats({...result, gifts: formattedValue});
         },
       ),
     );

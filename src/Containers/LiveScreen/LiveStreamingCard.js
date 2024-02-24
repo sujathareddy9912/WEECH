@@ -53,7 +53,7 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
               <View style={{bottom: 2}}>
                 <SvgIcon.PoperHeart />
               </View>
-              <MyText style={styles.myStarValue}>{item.adminBadge}</MyText>
+              <MyText style={styles.myStarValue}>{item?.adminBadge}</MyText>
             </LinearGradient>
             {/* ) : (
                 <View />
@@ -119,7 +119,7 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
               </View>
               <View style={styles.imageSubContainer}>
                 <View style={styles.topContainer}>
-                  {!!eachItem.adminBadge ? (
+                  {!!eachItem?.adminBadge ? (
                     <LinearGradient
                       start={{x: 0, y: 0}}
                       end={{x: 1, y: 0}}
@@ -129,7 +129,7 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
                         <SvgIcon.PoperHeart />
                       </View>
                       <MyText style={styles.myStarValue}>
-                        {eachItem.adminBadge}
+                        {eachItem?.adminBadge}
                       </MyText>
                     </LinearGradient>
                   ) : (
@@ -152,16 +152,16 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
                     </View>
 
                     <MyText style={styles.nameStyle}>
-                      {eachItem.name}, {getAge(eachItem?.DateOfBirth) || 23}
+                      {eachItem?.name}, {getAge(eachItem?.DateOfBirth) || 23}
                     </MyText>
                   </View>
                   <View style={styles.starContainer}>
-                    {eachItem.star != 0 && (
+                    {eachItem?.star != 0 && (
                       <View style={styles.starContainer}>
                         <MyImage source={icons.starIcon} />
                         <View style={styles.starText}>
                           <MyText style={styles.starCount}>
-                            {eachItem.star}
+                            {eachItem?.star}
                           </MyText>
                         </View>
                       </View>
@@ -169,7 +169,7 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
                     <View style={styles.groupContainer}>
                       <SvgIcon.OrangeEyeIcon />
                       <MyText style={styles.valueText}>
-                        {eachItem.totalLiveUser || 0}
+                        {eachItem?.totalLiveUser || 0}
                       </MyText>
                     </View>
                   </View>
@@ -188,7 +188,7 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
         </View>
         <View style={styles.imageSubContainer}>
           <View style={styles.topContainer}>
-            {!!item.adminBadge ? (
+            {!!item?.adminBadge ? (
               <LinearGradient
                 start={{x: 0, y: 0}}
                 end={{x: 1, y: 0}}
@@ -197,7 +197,7 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
                 <View style={{bottom: 2}}>
                   <SvgIcon.PoperHeart />
                 </View>
-                <MyText style={styles.myStarValue}>{item.adminBadge}</MyText>
+                <MyText style={styles.myStarValue}>{item?.adminBadge}</MyText>
               </LinearGradient>
             ) : (
               <View />

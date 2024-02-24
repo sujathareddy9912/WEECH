@@ -68,7 +68,7 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
             <View>
               <View style={styles.nameContainer}>
                 <SvgIcon.FlameIcon />
-                <MyText style={styles.joinTextStyle}>{item?.letsJoin}</MyText>
+                <MyText style={styles.joinTextStyle}>{item?.aboutLive}</MyText>
               </View>
 
               <MyText style={styles.nameStyle}>
@@ -105,6 +105,7 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
           // justifyContent:'space-between'
         }}>
         {item.map((eachItem, eachIndex) => {
+          console.log('eeeeeee', eachItem);
           return (
             <TouchableOpacity
               style={{
@@ -146,7 +147,7 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
                     <View style={styles.nameContainer}>
                       <SvgIcon.FlameIcon />
                       <MyText style={styles.joinTextStyle}>
-                        {eachItem?.letsJoin}
+                        {eachItem?.aboutLive}
                       </MyText>
                     </View>
 
@@ -210,7 +211,7 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
             <View>
               <View style={styles.nameContainer}>
                 <SvgIcon.FlameIcon />
-                <MyText style={styles.joinTextStyle}>{item?.letsJoin}</MyText>
+                <MyText style={styles.joinTextStyle}>{item?.aboutLive}</MyText>
               </View>
 
               <MyText style={styles.nameStyle}>

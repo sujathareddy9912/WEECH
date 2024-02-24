@@ -1207,8 +1207,6 @@ const LiveStreaming = ({navigation, route}) => {
         isAdmin: isAdmin.length,
       },
     };
-    console.log('comentData comentData', comentData);
-    socket.emit('live_session', comentData);
 
     dispatch(commentOnLiveStreamAction(comentData));
     dispatch(updateHostPointAction(data?.param?.totalPrice));

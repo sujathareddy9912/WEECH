@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ImageBackground, StatusBar, Pressable, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, {useState, useRef, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {ImageBackground, StatusBar, Pressable, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -10,13 +10,13 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import Geolocation from 'react-native-geolocation-service';
 
 import styles from './styles';
-import { COLORS } from '../../Utils/colors';
+import {COLORS} from '../../Utils/colors';
 import Input from '../../Component/Input';
-import { SvgIcon } from '../../Component/icons';
-import { strings } from '../../localization/config';
-import { dynamicSize } from '../../Utils/responsive';
-import { STREAM_TYPE } from '../../Utils/agoraConfig';
-import { IMAGE_URL } from '../../Services/Api/Common';
+import {SvgIcon} from '../../Component/icons';
+import {strings} from '../../localization/config';
+import {dynamicSize} from '../../Utils/responsive';
+import {STREAM_TYPE} from '../../Utils/agoraConfig';
+import {IMAGE_URL} from '../../Services/Api/Common';
 import SelectImageDialog from '../../Component/SelectImageDialog';
 
 import {
@@ -47,7 +47,7 @@ import requestCameraAndAudioPermission, {
   SCREEN_HEIGHT,
   getCountryDetailWithKey,
 } from '../../Utils/helper';
-import { requestLocationPermission } from '../../Utils/permissionLocation';
+import {requestLocationPermission} from '../../Utils/permissionLocation';
 
 const sheetCustomStyles = {
   wrapper: {
@@ -69,7 +69,7 @@ const options = [
   strings('letsGoLive.pkbattle'),
 ];
 
-const LetsGoLive = ({ navigation }) => {
+const LetsGoLive = ({navigation}) => {
   const state = useSelector(state => {
     return state;
   });
@@ -77,8 +77,7 @@ const LetsGoLive = ({ navigation }) => {
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
 
-  const { userLoginList } = state.authReducer;
-
+  const {userLoginList} = state.authReducer;
 
   const [showLiveOptions, setShowLiveOptions] = useState(false);
   const [selectedLiveOption, setSelectedLiveOption] = useState('');
@@ -91,6 +90,7 @@ const LetsGoLive = ({ navigation }) => {
 
   const [fileBase64, setFileBase64] = useState('');
   const [currentLoc, setCurrentLoc] = useState();
+  const [liveMsg, setLiveMsg] = useState('');
 
   const refRBSheet = useRef();
   const refImageDialog = useRef();
@@ -146,6 +146,7 @@ const LetsGoLive = ({ navigation }) => {
             {
               userId: userLoginList?.user?._id,
               file: fileBase64,
+              aboutLive: liveMsg,
             },
             data => {
               setCreatingLiveStatus(false);
@@ -219,13 +220,13 @@ const LetsGoLive = ({ navigation }) => {
 
   const source = () => {
     if (coverPic) {
-      if (fileUpdateStatus) return { uri: coverPic };
+      if (fileUpdateStatus) return {uri: coverPic};
       else
-        return { uri: checkURL(coverPic) ? `${IMAGE_URL}${coverPic}` : coverPic };
+        return {uri: checkURL(coverPic) ? `${IMAGE_URL}${coverPic}` : coverPic};
     } else return '';
   };
 
-  const _renderVideoOptions = ({ item, index }) => {
+  const _renderVideoOptions = ({item, index}) => {
     return (
       <Touchable onPress={_selectLiveOption(item)} style={styles.liveOptions}>
         <MyText style={styles.liveText}>{item}</MyText>
@@ -254,8 +255,8 @@ const LetsGoLive = ({ navigation }) => {
 
   return (
     <KeyboardAwareScroll
-      style={{ backgroundColor: COLORS.WHITE }}
-      contentContainerStyle={{ alignItems: 'center' }}>
+      style={{backgroundColor: COLORS.WHITE}}
+      contentContainerStyle={{alignItems: 'center'}}>
       <StatusBar
         translucent
         barStyle={'dark-content'}
@@ -269,7 +270,7 @@ const LetsGoLive = ({ navigation }) => {
             customIcon={<SvgIcon.BackIcon />}
             style={[
               styles.backIcon,
-              { top: useSafeAreaInsets().top + SCREEN_HEIGHT * 0.01 },
+              {top: useSafeAreaInsets().top + SCREEN_HEIGHT * 0.01},
             ]}
             onPress={_goBack}
           />
@@ -282,7 +283,7 @@ const LetsGoLive = ({ navigation }) => {
           <View style={styles.imageContainer}>
             {userLoginList?.user?.profile ? (
               <MyImage
-                source={{ uri: `${IMAGE_URL}${userLoginList?.user?.profile}` }}
+                source={{uri: `${IMAGE_URL}${userLoginList?.user?.profile}`}}
                 style={styles.image}
               />
             ) : (
@@ -302,8 +303,9 @@ const LetsGoLive = ({ navigation }) => {
           />
           <MyText style={styles.name}>{userLoginList?.user?.name || ''}</MyText>
         </View>
-        <MyText style={styles.weechaId}>{`${strings('letsGoLive.weechaId')}: ${userLoginList?.user?.userId || ''
-          }`}</MyText>
+        <MyText style={styles.weechaId}>{`${strings('letsGoLive.weechaId')}: ${
+          userLoginList?.user?.userId || ''
+        }`}</MyText>
       </ImageBackground>
       <Touchable
         style={styles.touchContainer}
@@ -328,8 +330,10 @@ const LetsGoLive = ({ navigation }) => {
         multiline
         placeholderTextColor={COLORS.BLACK}
         style={styles.input}
+        value={liveMsg}
         mainContainer={styles.inputContainer}
         textInputStyle={styles.textInput}
+        onChangeText={text => setLiveMsg(text)}
       />
       <Button
         indicator={creatingLiveStatus}
@@ -349,9 +353,8 @@ const LetsGoLive = ({ navigation }) => {
       {showLiveOptions && (
         <CustomModal
           isVisible={showLiveOptions}
-          style={{ backgroundColor: 'transparent' }}
-          onRequestClose={_closeLiveOptions}
-        >
+          style={{backgroundColor: 'transparent'}}
+          onRequestClose={_closeLiveOptions}>
           <View
             style={{
               position: 'absolute',
@@ -361,7 +364,7 @@ const LetsGoLive = ({ navigation }) => {
               shadowOpacity: 1,
               shadowRadius: 10,
               elevation: 5,
-              shadowOffset: { width: 5, height: 5 },
+              shadowOffset: {width: 5, height: 5},
             }}>
             <View
               style={[
@@ -401,10 +404,10 @@ const LetsGoLive = ({ navigation }) => {
             shadowOpacity: 1,
             shadowRadius: 1,
             // elevation: 5,
-            shadowOffset: { width: 0, height: 0 },
+            shadowOffset: {width: 0, height: 0},
           }}>
           <View style={[styles.levelUpAlert]}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{flexDirection: 'row'}}>
               <MyText style={styles.level}>
                 Your level is less than level 10
               </MyText>

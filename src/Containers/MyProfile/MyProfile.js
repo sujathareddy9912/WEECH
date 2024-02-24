@@ -374,6 +374,8 @@ const MyProfile = props => {
         return navigation.navigate('GroupCreation');
       case 'Friends':
         return navigation.navigate('FriendsList');
+      case 'Gift':
+        return navigation.navigate('MyGiftHistory');
       default:
         break;
     }

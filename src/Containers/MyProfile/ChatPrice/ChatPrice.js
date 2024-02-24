@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {
-  FlatList,
   ScrollView,
   StatusBar,
   Text,
@@ -24,6 +23,7 @@ import {FONT_FAMILY} from '../../../Utils/fontFamily';
 import {useDispatch, useSelector} from 'react-redux';
 import {profleSetupAction} from '../../../Redux/Action';
 import {CHATPRICE_REQUEST} from '../../../ActionConstant/chatPrice.constant';
+import LoadingIndicator from '../../../Component/LoadingIndicator/LoadingIndicator';
 
 const ChatPrice = props => {
   const {navigation} = props;
@@ -31,6 +31,9 @@ const ChatPrice = props => {
   const [isOpen, setIsopen] = useState(false);
   const [isSelected, setSelected] = useState('');
   const [optionSelected, setOptionSelected] = useState('');
+  const [priceSlab, setPriceSlab] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   let stateData = useSelector(state => {
     return state?.authReducer?.userLoginList?.user;
   });
@@ -40,9 +43,21 @@ const ChatPrice = props => {
 
   console.log('ccccc', chatReducer);
 
+  const {chatPriceError, chatPriceLoading, chatPriceSuccess} = chatReducer;
+
   useEffect(() => {
     dispatch({type: CHATPRICE_REQUEST});
   }, []);
+
+  useEffect(() => {
+    if (chatPriceSuccess && chatPriceSuccess.data) {
+      setPriceSlab(chatPriceSuccess.data);
+    }
+  }, [chatPriceSuccess]);
+
+  useEffect(() => {
+    setLoading(chatPriceLoading);
+  }, [chatPriceLoading]);
 
   const updatePrice = () => {
     let param = {};
@@ -121,16 +136,24 @@ const ChatPrice = props => {
     setOptionSelected('');
   };
   const getPriceList = index => {
-    if (index == '0') {
-      return ['Free', '500', '800', '1200'];
-    } else {
-      return ['1200', '1800', '2000'];
+    switch (index) {
+      case '0':
+        return priceSlab.chat;
+      case '1':
+        return priceSlab.call;
+      case '2':
+        return priceSlab.videoCall;
+      case '3':
+        return priceSlab.liveRoom;
+      default:
+        return [];
     }
   };
 
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="transparent" translucent={true} />
+      <LoadingIndicator visible={loading} />
       <Header
         title={String('My Chat Price')}
         leftComponent={leftHeaderComponent}
@@ -211,29 +234,18 @@ const ChatPrice = props => {
                   marginTop: hp(1),
                 }}
                 onPress={() => {
-                  setOptionSelected(item);
+                  setOptionSelected(item.value);
                 }}>
-                {isSelected == '0' && index == 0 ? (
-                  <Text
-                    style={[
-                      styles.options,
-                      optionSelected == item && {
-                        opacity: 1,
-                      },
-                    ]}>
-                    {`${item}`}{' '}
-                  </Text>
-                ) : (
-                  <Text
-                    style={[
-                      styles.options,
-                      optionSelected == item && {
-                        opacity: 1,
-                      },
-                    ]}>
-                    {`${item} Dimonds/${isSelected == '0' ? 'reply' : 'mins'} `}{' '}
-                  </Text>
-                )}
+                <Text
+                  style={[
+                    styles.options,
+                    optionSelected === item.value && {
+                      opacity: 1,
+                    },
+                  ]}>
+                  {item.slab} diamonds
+                </Text>
+
                 <View style={styles.seperator} />
               </TouchableOpacity>
             );

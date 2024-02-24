@@ -2,10 +2,10 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
-import { COLORS } from '../../../Utils/colors';
-import { FONT_FAMILY } from '../../../Utils/fontFamily';
+import {COLORS} from '../../../Utils/colors';
+import {FONT_FAMILY} from '../../../Utils/fontFamily';
 
 export const styles = StyleSheet.create({
   container: {
@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   header: {
     backgroundColor: COLORS.TRANSPARENT,
     paddingTop: hp(5),
-    height: hp(12)
+    height: hp(12),
   },
   item: {
     borderWidth: 1,
@@ -40,12 +40,12 @@ export const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.BLACK,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   dimondContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: hp(2)
+    marginTop: hp(2),
   },
   cardTitle: {
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
   edit: {
     position: 'absolute',
     right: wp(-5),
-    top: hp(-3.5)
+    top: hp(-3.5),
   },
   buttonStyle: {
     width: wp(25),
@@ -67,22 +67,22 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.LIGHT_GREEN,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12
+    borderRadius: 12,
   },
   btnLabel: {
     fontSize: 16,
     color: COLORS.WHITE,
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
   },
-  seperator:{
-    width:'100%',
-    borderBottomWidth:0.5,
-    borderColor:COLORS.MID_LIGHT_GREY
+  seperator: {
+    width: '100%',
+    borderBottomWidth: 0.5,
+    borderColor: COLORS.MID_LIGHT_GREY,
   },
-  options:{
-    marginVertical:hp(1.5),
-    fontFamily:FONT_FAMILY.POPPINS_MEDIUM,
-    opacity:0.5,
-    fontSize:16
-  }
+  options: {
+    marginVertical: hp(1.5),
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    opacity: 0.5,
+    fontSize: 16,
+  },
 });

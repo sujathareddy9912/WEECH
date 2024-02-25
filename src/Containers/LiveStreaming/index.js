@@ -1071,9 +1071,10 @@ const LiveStreaming = ({navigation, route}) => {
             </View>
           )}
           <View style={styles.chatRightConrtainer}>
-            <MyText style={styles.username}>{item.name}</MyText>
             <View style={styles.msgBox}>
-              <MyText style={styles.msg}>{item.comment}</MyText>
+              <MyText style={styles.msg}>
+                {item.name}: {item.comment}
+              </MyText>
             </View>
           </View>
         </TouchableOpacity>

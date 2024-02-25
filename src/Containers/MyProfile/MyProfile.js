@@ -507,7 +507,7 @@ const MyProfile = props => {
                 onPress={() => getSocialMediaPress(title)}
                 style={styles.socialInfo}>
                 <MyText style={styles.infoNumeric}>{value}</MyText>
-                <MyText>{title}</MyText>
+                <MyText style={styles.socialTitle}>{title}</MyText>
               </Touchable>
             ))}
           </View>

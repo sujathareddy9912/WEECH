@@ -247,6 +247,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.LIGHT_GREYISH,
     borderRadius: 100,
   },
+  hostRightOptionsContainer: {
+    marginBottom: dynamicSize(20)
+  },
 
   translucent: {
     padding: SCREEN_HEIGHT * 0.012,

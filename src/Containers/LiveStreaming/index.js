@@ -1811,7 +1811,7 @@ const LiveStreaming = ({navigation, route}) => {
                     />
                   </>
                 ) : (
-                  <>
+                  <View style={styles.hostRightOptionsContainer}>
                     <Touchable style={styles.translucent}>
                       <MyText style={styles.pkText}>
                         {strings('live.pk')}
@@ -1821,7 +1821,7 @@ const LiveStreaming = ({navigation, route}) => {
                       customIcon={<SvgIcon.BlueGame />}
                       onPress={() => setShowGames(true)}
                     />
-                  </>
+                  </View>
                 )}
               </View>
 

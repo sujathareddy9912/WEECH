@@ -44,7 +44,7 @@ import CrossPink from '../../Assets/Icons/crossPink.svg';
 import SendIcon from '../../Assets/Icons/BlueSendIcon.svg';
 import VideoCallSmallIcon from '../../Assets/Icons/VideoCallSmallIcon.svg';
 import {COLORS} from '../../Utils/colors';
-import {SvgIcon} from '../../Component/icons';
+import icons, {SvgIcon} from '../../Component/icons';
 import {FONT_SIZE} from '../../Utils/fontFamily';
 import {strings} from '../../localization/config';
 import {dynamicSize} from '../../Utils/responsive';
@@ -1937,28 +1937,58 @@ const LiveStreaming = ({navigation, route}) => {
                       paddingBottom: useSafeAreaInsets().bottom,
                     },
                   ]}>
-                  <Touchable
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={isMute ? icons.mute : icons.voice}
+                        resizeMode={'contain'}
+                        style={{
+                          height: SCREEN_HEIGHT * 0.05,
+                          width: SCREEN_HEIGHT * 0.05,
+                        }}
+                      />
+                    }
                     onPress={onToggleMicrophone}
-                    style={styles.footerIcon}>
-                    {isMute ? (
-                      <SvgIcon.MuteMicrophoneIcon />
-                    ) : (
-                      <SvgIcon.MicrophoneIcon />
-                    )}
-                  </Touchable>
-                  <Touchable
+                  />
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={icons.flipCamera}
+                        resizeMode={'contain'}
+                        style={{
+                          height: SCREEN_HEIGHT * 0.06,
+                          width: SCREEN_HEIGHT * 0.06,
+                        }}
+                      />
+                    }
                     onPress={onChangeCameraDirection}
-                    style={styles.footerIcon}>
-                    <SvgIcon.FlipCameraIcon />
-                  </Touchable>
-                  <Touchable
+                  />
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={icons.share}
+                        resizeMode={'contain'}
+                        style={{
+                          height: SCREEN_HEIGHT * 0.06,
+                          width: SCREEN_HEIGHT * 0.06,
+                        }}
+                      />
+                    }
                     onPress={() => setIsopen(true)}
-                    style={styles.footerIcon}>
-                    <SvgIcon.ShareIcon />
-                  </Touchable>
-                  <Touchable onPress={onShare} style={styles.footerIcon}>
-                    <SvgIcon.MoreOption />
-                  </Touchable>
+                  />
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={icons.threeDots}
+                        resizeMode={'contain'}
+                        style={{
+                          height: SCREEN_HEIGHT * 0.06,
+                          width: SCREEN_HEIGHT * 0.06,
+                        }}
+                      />
+                    }
+                    onPress={onShare}
+                  />
                 </View>
               )}
             </View>

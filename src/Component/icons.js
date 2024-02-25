@@ -325,4 +325,9 @@ export default Icons = {
   diamondIcon: require('../Assets/Images/diamondIcon.png'),
   heartImage: require('../Assets/Images/heartImage.png'),
   freeCard: require('../Assets/Images/freeCard.png'),
+  flipCamera: require('../Assets/Images/flipCamera.png'),
+  mute: require('../Assets/Images/mute.png'),
+  voice: require('../Assets/Images/voice.png'),
+  share: require('../Assets/Images/share.png'),
+  threeDots: require('../Assets/Images/three-dots.png'),
 };

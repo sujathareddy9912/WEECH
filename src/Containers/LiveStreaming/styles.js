@@ -125,10 +125,7 @@ const styles = StyleSheet.create({
 
   bottomMenuContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: dynamicSize(20),
-    borderTopLeftRadius: dynamicSize(10),
-    borderTopRightRadius: dynamicSize(10),
+    justifyContent: 'space-evenly',
   },
 
   loadingText: {

@@ -53,4 +53,32 @@ export const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: 'center',
   },
+  listRenderContainer: {
+    flex: 1,
+    backgroundColor: COLORS.WHITE,
+    padding: dynamicSize(10),
+  },
+
+  // Gift Render FlatList
+  renderingContainer:{
+    backgroundColor: COLORS.LIGHT_PINK,
+    padding: dynamicSize(5),
+    marginVertical: dynamicSize(10),
+    flexDirection: 'row',
+    elevation: 3,
+    borderRadius: 5,
+  },
+  renderingIconStyle: {
+    width: dynamicSize(55),
+    height: dynamicSize(55),
+    borderRadius: 5,
+    elevation: 3,
+  },
+  renderingDetailsContainer: {
+    paddingLeft: dynamicSize(5),
+  },
+  renderingTextStyle: {
+    color: COLORS.BLACK,
+  },
+
 });

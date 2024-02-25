@@ -15,6 +15,8 @@ import {
   removeGrpMemberSaga,
   allowFreeChat,
   shareLiveLinkWithFriends,
+  getReceivedGiftDataSaga,
+  getSendGiftDataSaga,
 } from './userSaga';
 
 import {
@@ -216,6 +218,8 @@ export default function* root() {
     takeLatest(TYPES.GET_CUSTOMER_SUPPORT_MSG_ACTION, getCustomerMsgsSaga),
     takeLatest(TYPES.GET_CUSTOMER_MSG_SEND_ACTION, getCustomerSendMsgSaga),
     takeLatest(TYPES.HOST_GIFT_INCOME_ACTION, getHostGiftDataSaga),
+    takeLatest(TYPES.GET_RECEIVED_GIFT_LIST_ACTION, getReceivedGiftDataSaga),
+    takeLatest(TYPES.GET_SEND_GIFT_LIST_ACTION, getSendGiftDataSaga),
 
     //new
     ProfileSaga(),

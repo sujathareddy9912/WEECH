@@ -5,7 +5,6 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 const TopTab = createMaterialTopTabNavigator();
@@ -18,12 +17,6 @@ import ReceivedGiftHistory from './ReceivedGiftHistory';
 import {MyText, Touchable} from '../../Component/commomComponent';
 
 const MyGiftHistory = ({navigation}) => {
-  const state = useSelector(state => {
-    return state;
-  });
-  const {userLoginList} = state.authReducer;
-  console.log('userLoginList', userLoginList);
-
   const leftHeaderComponent = (
     <TouchableOpacity
       style={styles.backContainer}

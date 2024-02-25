@@ -188,7 +188,6 @@ const MyProfile = props => {
           <View style={styles.locationContainer}>
             <View style={styles.locationInputHeader}>
               <Text style={styles.locationText}>Location</Text>
-              <Text style={styles.currLocation}>My Current Location</Text>
             </View>
             <View style={styles.locationInput}>
               <View style={{flexDirection: 'row'}}>

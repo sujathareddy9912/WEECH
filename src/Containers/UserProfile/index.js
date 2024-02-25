@@ -275,7 +275,6 @@ const UserProfile = props => {
   };
 
   const _renderGallery = ({item, index}) => {
-    console.log(item);
     return (
       <View
         style={[
@@ -283,12 +282,13 @@ const UserProfile = props => {
           {marginHorizontal: index % 3 == 1 ? dynamicSize(10) : 0},
         ]}>
         {item.type.toLowerCase() === 'video'.toLowerCase() && (
-          <Touchable style={{backgroundColor: COLORS.RED, padding: 10}} onPress={()=>handleVideo(item)}>
+          <Touchable
+            style={{backgroundColor: COLORS.RED, padding: 10}}
+            onPress={() => handleVideo(item)}>
             <ImageBackground
               source={{uri: IMAGE_URL + item?.thumbImage}}
               imageStyle={styles.image}
-              style={styles.image}
-              >
+              style={styles.image}>
               <View style={styles.absoluteVideo}>
                 <SvgIcon.SmallVideoIcon />
               </View>
@@ -674,8 +674,6 @@ const UserProfile = props => {
               />
               <TouchableIcon
                 onPress={() => {
-                  console.log(detail.messageCharge);
-                  console.log(userLoginList.user.myBalance);
                   if (detail?.messageCharge < userLoginList?.user?.myBalance) {
                     _createRoom();
                   } else {

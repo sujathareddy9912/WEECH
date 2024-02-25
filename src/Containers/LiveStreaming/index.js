@@ -88,6 +88,7 @@ import {
   getHostExtraDetailAction,
   getHostSendGiftAction,
   hostSendGiftAction,
+  createChatRoomAction,
 } from '../../Redux/Action';
 
 import {
@@ -129,6 +130,7 @@ import {
 import {Actionsheet} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
+import {navigateToScreen} from '../../Navigator/navigationHelper';
 
 const HEART_ANIMATION = require('../../Assets/lottiefiles/heartAnimation.json');
 
@@ -1432,6 +1434,34 @@ const LiveStreaming = ({navigation, route}) => {
     navigation.navigate('LiveSection');
   };
 
+  const _createRoom = () => {
+    const param = {
+      receiverId: hostDetail._id,
+    };
+    dispatch(
+      createChatRoomAction(param, result => {
+        if (result) {
+          setTimeout(() => {
+            navigateToScreen('PersonalChat', {
+              receiverId: hostDetail._id,
+              name: hostDetail.name,
+              profile: hostDetail.profile,
+              chatId: result._id,
+            });
+          }, 500);
+        }
+      }),
+    );
+  };
+
+  function rechargePopup() {
+    Alert.alert('', 'Your account balance is low, Please Recharge.', [
+      {
+        text: 'OK',
+      },
+    ]);
+  }
+
   return (
     <>
       <StatusBar hidden={true} />
@@ -1921,7 +1951,19 @@ const LiveStreaming = ({navigation, route}) => {
                         onPress={_fetchGiftList}
                         customIcon={<SvgIcon.SmallGiftIcon />}
                       />
-                      <TouchableIcon customIcon={<SvgIcon.GreenMail />} />
+                      <TouchableIcon
+                        onPress={() => {
+                          if (
+                            hostDetail?.messageCharge <
+                            userLoginList?.user?.myBalance
+                          ) {
+                            _createRoom();
+                          } else {
+                            rechargePopup();
+                          }
+                        }}
+                        customIcon={<SvgIcon.GreenMail />}
+                      />
                       <TouchableIcon
                         onPress={() => setIsopen(true)}
                         customIcon={<SvgIcon.SmallShare />}

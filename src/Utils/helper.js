@@ -61,7 +61,6 @@ export const imagePicker = async (mediaType = 'photo', isBase64) => {
 };
 
 export const openCamera = async (mediaType = 'photo', isBase64) => {
-  
   return new Promise((resolve, reject) =>
     ImagePicker.openCamera({
       mediaType: mediaType,
@@ -302,4 +301,17 @@ export const uuid = () => {
 
 export const getCountryDetailWithKey = ({key, value}) => {
   return countryCode.filter(item => item[key] === value)[0] || '';
+};
+
+export const formatNumber = num => {
+  if (num >= 1e9) {
+    return (num / 1e9).toFixed(1) + ' B';
+  }
+  if (num >= 1e6) {
+    return (num / 1e6).toFixed(1) + ' M';
+  }
+  if (num >= 1e3) {
+    return (num / 1e3).toFixed(1) + ' M';
+  }
+  return num.toString();
 };

@@ -84,6 +84,7 @@ import TabViewExample from '../Containers/ProfileSetup/ProfileTab';
 import Profile from '../Containers/ProfileSetup/profile';
 import FavouriteImages from '../Containers/ProfileSetup/favouriteImages';
 import FavouriteVideos from '../Containers/ProfileSetup/favouriteVideos';
+import MyGiftHistory from '../Containers/Gift/MyGiftHistory';
 
 // const rtmAdaptor = new RtmAdapter();
 export const Stack = createStackNavigator();
@@ -448,6 +449,11 @@ function AppStack() {
         <Stack.Screen
           name="FavouriteVideos"
           component={FavouriteVideos}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="MyGiftHistory"
+          component={MyGiftHistory}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

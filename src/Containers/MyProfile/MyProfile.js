@@ -36,7 +36,7 @@ import {IMAGE_URL} from '../../Services/Api/Common';
 import ReferIcon from '../../Assets/Icons/Refer.svg';
 import CrownIcon from '../../Assets/Icons/crown.svg';
 import MoneyBag from '../../Assets/Icons/money_bag.svg';
-import {imagePicker, openCamera, SCREEN_WIDTH} from '../../Utils/helper';
+import {formatNumber, imagePicker, openCamera, SCREEN_WIDTH} from '../../Utils/helper';
 import RechargeIcon from '../../Assets/Icons/Recharge.svg';
 import SettingsIcon from '../../Assets/Icons/Settings.svg';
 import WeechaIcon from '../../Assets/Icons/WeechaIcon.svg';
@@ -188,7 +188,6 @@ const MyProfile = props => {
           <View style={styles.locationContainer}>
             <View style={styles.locationInputHeader}>
               <Text style={styles.locationText}>Location</Text>
-              <Text style={styles.currLocation}>My Current Location</Text>
             </View>
             <View style={styles.locationInput}>
               <View style={{flexDirection: 'row'}}>
@@ -338,7 +337,7 @@ const MyProfile = props => {
 
   useEffect(() => {
     Object.keys(profileData).length && getUserStats();
-  }, [profileData]);
+  }, [profileData, userStats]);
 
   useEffect(() => {
     dispatch(
@@ -356,7 +355,9 @@ const MyProfile = props => {
           userId: profileData?._id,
         },
         result => {
-          setUserStats({...result});
+          const formattedValue = formatNumber(result?.gifts);
+          userStats['gifts'] = formattedValue;
+          setUserStats({...result, gifts: formattedValue});
         },
       ),
     );
@@ -372,6 +373,8 @@ const MyProfile = props => {
         return navigation.navigate('GroupCreation');
       case 'Friends':
         return navigation.navigate('FriendsList');
+      case 'Gift':
+        return navigation.navigate('MyGiftHistory');
       default:
         break;
     }
@@ -503,7 +506,7 @@ const MyProfile = props => {
                 onPress={() => getSocialMediaPress(title)}
                 style={styles.socialInfo}>
                 <MyText style={styles.infoNumeric}>{value}</MyText>
-                <MyText>{title}</MyText>
+                <MyText style={styles.socialTitle}>{title}</MyText>
               </Touchable>
             ))}
           </View>

@@ -237,6 +237,44 @@ function deleteUserAccount(params) {
   });
 }
 
+function getReceivedGiftDataAPI(params) {
+  const endPoint = 'gift/gift_received';
+  return userApiClient
+    .post(endPoint, params, {
+      headers: {
+        Authorization: serviceConst.token,
+      },
+    })
+    .then(response => {
+      if (in200s(response.status)) {
+        return response['data'];
+      }
+      return response['data'];
+    })
+    .catch(error => {
+      return error.response.data;
+    });
+}
+
+function getSendGiftDataAPI(params) {
+  const endPoint = 'gift/gift_sends';
+  return userApiClient
+    .post(endPoint, params, {
+      headers: {
+        Authorization: serviceConst.token,
+      },
+    })
+    .then(response => {
+      if (in200s(response.status)) {
+        return response['data'];
+      }
+      return response['data'];
+    })
+    .catch(error => {
+      return error.response.data;
+    });
+}
+
 export const UserServices = {
   followUserApi,
   getFriendsListApi,
@@ -252,4 +290,6 @@ export const UserServices = {
   shareLiveLink,
   getAgencyDetail,
   deleteUserAccount,
+  getReceivedGiftDataAPI,
+  getSendGiftDataAPI,
 };

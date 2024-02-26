@@ -734,3 +734,15 @@ export const getCustomerMsgSendAction = (payload, callBack) => ({
   payload,
   callBack,
 });
+
+export const getReceivedGiftListAction = (payload, callBack) => ({
+  type: TYPES.GET_RECEIVED_GIFT_LIST_ACTION,
+  payload,
+  callBack,
+});
+
+export const getSendGiftListAction = (payload, callBack) => ({
+  type: TYPES.GET_SEND_GIFT_LIST_ACTION,
+  payload,
+  callBack,
+});

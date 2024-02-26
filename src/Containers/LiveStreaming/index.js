@@ -44,7 +44,7 @@ import CrossPink from '../../Assets/Icons/crossPink.svg';
 import SendIcon from '../../Assets/Icons/BlueSendIcon.svg';
 import VideoCallSmallIcon from '../../Assets/Icons/VideoCallSmallIcon.svg';
 import {COLORS} from '../../Utils/colors';
-import {SvgIcon} from '../../Component/icons';
+import icons, {SvgIcon} from '../../Component/icons';
 import {FONT_SIZE} from '../../Utils/fontFamily';
 import {strings} from '../../localization/config';
 import {dynamicSize} from '../../Utils/responsive';
@@ -88,6 +88,7 @@ import {
   getHostExtraDetailAction,
   getHostSendGiftAction,
   hostSendGiftAction,
+  createChatRoomAction,
 } from '../../Redux/Action';
 
 import {
@@ -129,6 +130,7 @@ import {
 import {Actionsheet} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
+import {navigateToScreen} from '../../Navigator/navigationHelper';
 
 const HEART_ANIMATION = require('../../Assets/lottiefiles/heartAnimation.json');
 
@@ -1071,9 +1073,10 @@ const LiveStreaming = ({navigation, route}) => {
             </View>
           )}
           <View style={styles.chatRightConrtainer}>
-            <MyText style={styles.username}>{item.name}</MyText>
             <View style={styles.msgBox}>
-              <MyText style={styles.msg}>{item.comment}</MyText>
+              <MyText style={styles.msg}>
+                {item.name}: {item.comment}
+              </MyText>
             </View>
           </View>
         </TouchableOpacity>
@@ -1431,6 +1434,34 @@ const LiveStreaming = ({navigation, route}) => {
     navigation.navigate('LiveSection');
   };
 
+  const _createRoom = () => {
+    const param = {
+      receiverId: hostDetail._id,
+    };
+    dispatch(
+      createChatRoomAction(param, result => {
+        if (result) {
+          setTimeout(() => {
+            navigateToScreen('PersonalChat', {
+              receiverId: hostDetail._id,
+              name: hostDetail.name,
+              profile: hostDetail.profile,
+              chatId: result._id,
+            });
+          }, 500);
+        }
+      }),
+    );
+  };
+
+  function rechargePopup() {
+    Alert.alert('', 'Your account balance is low, Please Recharge.', [
+      {
+        text: 'OK',
+      },
+    ]);
+  }
+
   return (
     <>
       <StatusBar hidden={true} />
@@ -1657,7 +1688,7 @@ const LiveStreaming = ({navigation, route}) => {
                       alignItems: 'center',
                     }}>
                     <IconWithCount
-                      count={hostDetail?.level || 0}
+                      count={`LV ${hostDetail?.level || 0}`}
                       style={{
                         paddingVertical: SCREEN_HEIGHT * 0.005,
                       }}
@@ -1811,7 +1842,7 @@ const LiveStreaming = ({navigation, route}) => {
                     />
                   </>
                 ) : (
-                  <>
+                  <View style={styles.hostRightOptionsContainer}>
                     <Touchable style={styles.translucent}>
                       <MyText style={styles.pkText}>
                         {strings('live.pk')}
@@ -1821,7 +1852,7 @@ const LiveStreaming = ({navigation, route}) => {
                       customIcon={<SvgIcon.BlueGame />}
                       onPress={() => setShowGames(true)}
                     />
-                  </>
+                  </View>
                 )}
               </View>
 
@@ -1920,7 +1951,19 @@ const LiveStreaming = ({navigation, route}) => {
                         onPress={_fetchGiftList}
                         customIcon={<SvgIcon.SmallGiftIcon />}
                       />
-                      <TouchableIcon customIcon={<SvgIcon.GreenMail />} />
+                      <TouchableIcon
+                        onPress={() => {
+                          if (
+                            hostDetail?.messageCharge <
+                            userLoginList?.user?.myBalance
+                          ) {
+                            _createRoom();
+                          } else {
+                            rechargePopup();
+                          }
+                        }}
+                        customIcon={<SvgIcon.GreenMail />}
+                      />
                       <TouchableIcon
                         onPress={() => setIsopen(true)}
                         customIcon={<SvgIcon.SmallShare />}
@@ -1937,28 +1980,58 @@ const LiveStreaming = ({navigation, route}) => {
                       paddingBottom: useSafeAreaInsets().bottom,
                     },
                   ]}>
-                  <Touchable
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={isMute ? icons.mute : icons.voice}
+                        resizeMode={'contain'}
+                        style={{
+                          height: SCREEN_HEIGHT * 0.05,
+                          width: SCREEN_HEIGHT * 0.05,
+                        }}
+                      />
+                    }
                     onPress={onToggleMicrophone}
-                    style={styles.footerIcon}>
-                    {isMute ? (
-                      <SvgIcon.MuteMicrophoneIcon />
-                    ) : (
-                      <SvgIcon.MicrophoneIcon />
-                    )}
-                  </Touchable>
-                  <Touchable
+                  />
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={icons.flipCamera}
+                        resizeMode={'contain'}
+                        style={{
+                          height: SCREEN_HEIGHT * 0.06,
+                          width: SCREEN_HEIGHT * 0.06,
+                        }}
+                      />
+                    }
                     onPress={onChangeCameraDirection}
-                    style={styles.footerIcon}>
-                    <SvgIcon.FlipCameraIcon />
-                  </Touchable>
-                  <Touchable
+                  />
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={icons.share}
+                        resizeMode={'contain'}
+                        style={{
+                          height: SCREEN_HEIGHT * 0.06,
+                          width: SCREEN_HEIGHT * 0.06,
+                        }}
+                      />
+                    }
                     onPress={() => setIsopen(true)}
-                    style={styles.footerIcon}>
-                    <SvgIcon.ShareIcon />
-                  </Touchable>
-                  <Touchable onPress={onShare} style={styles.footerIcon}>
-                    <SvgIcon.MoreOption />
-                  </Touchable>
+                  />
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={icons.threeDots}
+                        resizeMode={'contain'}
+                        style={{
+                          height: SCREEN_HEIGHT * 0.06,
+                          width: SCREEN_HEIGHT * 0.06,
+                        }}
+                      />
+                    }
+                    onPress={onShare}
+                  />
                 </View>
               )}
             </View>

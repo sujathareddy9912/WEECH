@@ -152,3 +152,33 @@ export function* removeGrpMemberSaga({payload, callBack}) {
     HelperService.showToast('Something went wrong');
   }
 }
+
+export function* getReceivedGiftDataSaga({payload, callBack}) {
+  try {
+    const resp = yield call(UserServices.getReceivedGiftDataAPI, payload);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp.data);
+    } else {
+      callBack(false);
+      HelperService.showToast(resp?.message);
+    }
+  } catch (error) {
+    callBack(false);
+    HelperService.showToast('Something went wrong');
+  }
+}
+
+export function* getSendGiftDataSaga({payload, callBack}) {
+  try {
+    const resp = yield call(UserServices.getSendGiftDataAPI, payload);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp.data);
+    } else {
+      callBack(false);
+      HelperService.showToast(resp?.message);
+    }
+  } catch (error) {
+    callBack(false);
+    HelperService.showToast('Something went wrong');
+  }
+}

@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     width: wp(60),
     fontWeight: '500',
     fontSize: FONT_SIZE.SEMI_BLACK,
+    color: COLORS.BLACK,
   },
   followButton: {
     alignItems: 'center',
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     top: dynamicSize(7),
     right: dynamicSize(7),
     zIndex: 10,
-    backgroundColor:COLORS.TRANSPARENT
+    backgroundColor: COLORS.TRANSPARENT,
   },
   seperator: {
     height: dynamicSize(10),

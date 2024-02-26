@@ -14,8 +14,7 @@ export const getGameSuccess = payload => ({
   payload,
 });
 
-
 export const getGameError = payload => ({
-    type: GAME_ERROR,
-    payload,
-  });
+  type: GAME_ERROR,
+  payload,
+});

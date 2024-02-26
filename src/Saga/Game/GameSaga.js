@@ -9,41 +9,38 @@ import {
 
 /* Api*/
 
-const  getGameApi = async (data) => {
-    return request({
-      url: `language/dummy_data`,
-      method: 'POST',
-      data
-    });
-  };
+const getGameApi = async data => {
+  return request({
+    url: `language/dummy_data`,
+    method: 'POST',
+    data,
+  });
+};
 
+/*SAGA */
 
-  /*SAGA */
-
-  function* getGame(data) {
-    try {
-        const {payload} = data;
-      yield put(getGameLoading());
-      const res = yield call(getGameApi,payload);
-      if (res && res.data.code === 200) {
-        yield put(getGameSuccess(res.data));
-      } else {
-        yield put(getGameError(res.data));
-      }
-    } catch (error) {
-      console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
-      if (error.data) {
-        yield put(
-            getGameError({
-            error: error.data,
-          }),
-        );
-      }
+function* getGame(data) {
+  try {
+    const {payload} = data;
+    yield put(getGameLoading());
+    const res = yield call(getGameApi, payload);
+    if (res && res.data.code === 200) {
+      yield put(getGameSuccess(res.data));
+    } else {
+      yield put(getGameError(res.data));
+    }
+  } catch (error) {
+    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
+    if (error.data) {
+      yield put(
+        getGameError({
+          error: error.data,
+        }),
+      );
     }
   }
+}
 
-
-
-  export default function* GameSaga() {
-    yield takeLatest(GAME_REQUEST, getGame);
-  }
+export default function* GameSaga() {
+  yield takeLatest(GAME_REQUEST, getGame);
+}

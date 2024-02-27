@@ -141,7 +141,6 @@ export function* getChatMessagesSaga({payload, page, callBack}) {
                   : null,
             };
         }) || [];
-      console.log(newData, 'NEW DATAA');
       if (page == 0) {
         yield put(updateChatHistoryAction(newData));
       } else {

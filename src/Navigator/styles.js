@@ -1,25 +1,40 @@
-import { StyleSheet, Dimensions } from 'react-native'
-let width=Dimensions.get('window').width;
-let height=Dimensions.get('window').height;
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {StyleSheet} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {COLORS} from '../Utils/colors';
+
 export default StyleSheet.create({
-    container: {
-        flex:1,
-        backgroundColor: '#181A20'
-    },
-    navIcon:{
-        width:wp('6%'),
-        resizeMode: 'contain'
-    },
-    tabBar: {
-        backgroundColor:'#1F2129',
-        borderTopRightRadius:wp('6%'),
-        borderTopLeftRadius:wp('6%'),
-        height:hp('10%')
-    },
-    tabBarText: {
-        fontSize:wp('3%'),
-        fontFamily:'Inter-Medium',
-        marginBottom:'5%'
-    }
-})
+  container: {
+    flex: 1,
+    backgroundColor: '#181A20',
+  },
+  tabNavContainer: {
+    flexDirection: 'row',
+    width: wp('90%'),
+    backgroundColor: COLORS.WHITE,
+    alignSelf: 'center',
+    borderRadius: wp('8%'),
+    position: 'absolute',
+    bottom: hp('3%'),
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    elevation: 4,
+  },
+  navIcon: {
+    width: wp('6%'),
+    resizeMode: 'contain',
+  },
+  tabBar: {
+    backgroundColor: '#1F2129',
+    borderTopRightRadius: wp('6%'),
+    borderTopLeftRadius: wp('6%'),
+    height: hp('10%'),
+  },
+  tabBarText: {
+    fontSize: wp('3%'),
+    fontFamily: 'Inter-Medium',
+    marginBottom: '5%',
+  },
+});

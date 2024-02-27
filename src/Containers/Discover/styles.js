@@ -45,6 +45,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: wp(2),
   },
+  container: {
+    height: SCREEN_HEIGHT,
+    paddingBottom: dynamicSize(170),
+    backgroundColor: COLORS.WHITE,
+  },
   header: {
     zIndex: 10,
     height: '9%',
@@ -206,11 +211,11 @@ const styles = StyleSheet.create({
     color: COLORS.WHITE,
     fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
   },
-  remoteView:{
+  remoteView: {
     height: '100%',
     width: '100%',
     zIndex: 10,
-  }
+  },
 });
 
 export default styles;

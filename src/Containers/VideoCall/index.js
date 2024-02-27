@@ -205,6 +205,10 @@ const VideoCall = ({navigation, route}) => {
   useEffect(() => {
     return () => {
       clearTimeout(giftTimeout);
+      (async () => {
+        await agoraEngineRef.current?.removeAllListeners();
+        await agoraEngineRef.current?.release();
+      })();
     };
   }, []);
 
@@ -334,9 +338,11 @@ const VideoCall = ({navigation, route}) => {
     }
   };
 
-  const leave = () => {
+  const leave = async () => {
     try {
       agoraEngineRef.current?.leaveChannel();
+      await agoraEngineRef.current?.removeAllListeners();
+      await agoraEngineRef.current?.release();
       setRemoteUid(0);
       setIsJoined(false);
     } catch (e) {

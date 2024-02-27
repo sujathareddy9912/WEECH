@@ -23,6 +23,7 @@ import {
   StatusBar,
   FlatList,
   PermissionsAndroid,
+  Platform,
 } from 'react-native';
 
 import {
@@ -556,6 +557,8 @@ const LiveStreaming = ({navigation, route}) => {
 
   useEffect(() => {
     return () => {
+      // agoraEngineRef.current?.removeAllListeners();
+      // agoraEngineRef.current?.release();
       dispatch(clearLiveStreamDataAction());
     };
   }, []);
@@ -812,6 +815,9 @@ const LiveStreaming = ({navigation, route}) => {
   const _endCallAudiance = async () => {
     try {
       await agoraEngineRef.current?.leaveChannel();
+      await agoraEngineRef.current?.removeAllListeners();
+      await agoraEngineRef.current?.release();
+
       dispatch(
         endLiveStreamingAction({
           userId: userLoginList?.user?._id,

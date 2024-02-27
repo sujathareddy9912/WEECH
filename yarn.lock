@@ -1186,6 +1186,11 @@
   resolved "https://registry.npmjs.org/@ducdh-origin/react-native-twitter-signin/-/react-native-twitter-signin-0.0.3.tgz"
   integrity sha512-nSpBOhpfhzPg83slU1f7Qm2WG7VXrn5M6lFvcbwFgD01jMrl3oGH3XK6nxJxBQX5KPNc4+Tc2iFlyi/YZqJh6A==
 
+"@e-linter/react-native-clear-cache@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/@e-linter/react-native-clear-cache/-/react-native-clear-cache-1.0.2.tgz"
+  integrity sha512-Fgj9b0ocSvbr9FSTbqEW5vUSQIlV5buPqn/avidDwHPPIMgzsayTXRIBkXhm/vOld9cRLnK2cKi9I3J43+UNTg==
+
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
   resolved "https://registry.npmjs.org/@egjs/hammerjs/-/hammerjs-2.0.17.tgz"

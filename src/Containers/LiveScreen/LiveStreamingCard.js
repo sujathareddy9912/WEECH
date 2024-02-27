@@ -105,7 +105,6 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
           // justifyContent:'space-between'
         }}>
         {item.map((eachItem, eachIndex) => {
-          console.log('eeeeeee', eachItem);
           return (
             <TouchableOpacity
               style={{

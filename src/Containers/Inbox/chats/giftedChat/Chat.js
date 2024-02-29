@@ -693,7 +693,7 @@ const PersonalChat = props => {
               lineHeight: 24,
               color: COLORS.PRIMARY_BLUE,
             }}>
-            This is Live Link
+            Join Live
           </MyText>
         </Touchable>
       );

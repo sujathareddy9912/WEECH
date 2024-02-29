@@ -35,6 +35,7 @@ import {
   getSearchUserApi,
   getUserDailyIncome,
   deleteVisitorAPI,
+  clearVisitorAPI,
 } from '../Services/Api/LiveStreaming';
 import {Alert} from 'react-native';
 
@@ -318,6 +319,22 @@ export function* deleteVisitorSaga({payload, callBack}) {
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
       callBack(resp);
       HelperService.showToast('Deleted Successfully');
+    } else {
+      HelperService.showToast(resp?.message);
+      callBack();
+    }
+  } catch (error) {
+    HelperService.showToast('Something went wrong');
+    callBack();
+  }
+}
+
+export function* clearVisitorSaga({callBack}) {
+  try {
+    const resp = yield call(clearVisitorAPI);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+      HelperService.showToast('Clear Successfully');
     } else {
       HelperService.showToast(resp?.message);
       callBack();

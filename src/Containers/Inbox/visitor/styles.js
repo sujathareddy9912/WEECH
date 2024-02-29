@@ -5,7 +5,7 @@ import {
 } from 'react-native-responsive-screen';
 
 import {COLORS} from '../../../Utils/colors';
-import {FONT_FAMILY} from '../../../Utils/fontFamily';
+import {FONT_FAMILY, FONT_SIZE} from '../../../Utils/fontFamily';
 
 export const styles = StyleSheet.create({
   chat: {
@@ -46,5 +46,21 @@ export const styles = StyleSheet.create({
   },
   flatList: {
     backgroundColor: COLORS.WHITE,
+  },
+  clearChat: {
+    width: wp(35),
+    height: hp(5),
+    bottom: hp(11),
+    position: 'absolute',
+    alignSelf: 'center',
+    alignItems: 'center',
+    borderRadius: wp(10),
+    justifyContent: 'center',
+    backgroundColor: '#D9D9D9',
+  },
+  chatTxt: {
+    color: COLORS.BLACK,
+    fontSize: FONT_SIZE.MEDIUM,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
   },
 });

@@ -466,6 +466,25 @@ export function deleteVisitorAPI(body) {
     });
 }
 
+export function clearVisitorAPI() {
+  const url = `visitor/clear_visitor`;
+  return userApiClient
+    .delete(url, {
+      headers: {
+        Authorization: serviceConst.token,
+      },
+    })
+    .then(response => {
+      if (in200s(response.status)) {
+        return response['data'];
+      }
+      return null;
+    })
+    .catch(error => {
+      return null;
+    });
+}
+
 export function getDeleteOneMsgApi(body) {
   const url = `chat/delete_message`;
   return userApiClient

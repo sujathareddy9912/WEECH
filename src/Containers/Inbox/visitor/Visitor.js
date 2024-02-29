@@ -14,12 +14,18 @@ import {styles} from './styles';
 import {COLORS} from '../../../Utils/colors';
 import {IMAGE_URL} from '../../../Services/Api/Common';
 import {
+  clearVisitor,
   deleteVisitor,
   getAnotherUserProfile,
   getVisitorListAction,
 } from '../../../Redux/Action';
 import {getTimeFormat, SCREEN_HEIGHT} from '../../../Utils/helper';
-import {MyIndicator, MyList, MyText} from '../../../Component/commomComponent';
+import {
+  MyIndicator,
+  MyList,
+  MyText,
+  Touchable,
+} from '../../../Component/commomComponent';
 import moment from 'moment';
 
 const dataLimit = 20;
@@ -156,6 +162,14 @@ const Visitor = () => {
     );
   };
 
+  const handleClearVisitor = () => {
+    dispatch(
+      clearVisitor(resp => {
+        setVisitorList([]);
+      }),
+    );
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: COLORS.WHITE}}>
       {fetching ? (
@@ -181,6 +195,14 @@ const Visitor = () => {
         onEndReachedThreshold={0.7}
         onEndReached={_onEndReached}
       />
+      {visitorList.length > 0 ? (
+        <Touchable
+          onPress={() => handleClearVisitor()}
+          activeOpacity={0.7}
+          style={styles.clearChat}>
+          <MyText style={styles.chatTxt}>Clear Visitor</MyText>
+        </Touchable>
+      ) : null}
     </View>
   );
 };

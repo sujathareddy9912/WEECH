@@ -514,6 +514,11 @@ export const deleteVisitor = (payload, callBack) => ({
   callBack,
 });
 
+export const clearVisitor = callBack => ({
+  type: TYPES.CLEAR_VISITOR,
+  callBack,
+});
+
 export const getUserVideoListAction = (payload, callBack) => ({
   type: TYPES.GET_VIDEO_LIST,
   payload,

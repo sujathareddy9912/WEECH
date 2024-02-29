@@ -1,12 +1,20 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, View, Image, Pressable, RefreshControl} from 'react-native';
+import {
+  FlatList,
+  View,
+  Image,
+  Pressable,
+  RefreshControl,
+  Alert,
+} from 'react-native';
 
 import {styles} from './styles';
 import {COLORS} from '../../../Utils/colors';
 import {IMAGE_URL} from '../../../Services/Api/Common';
 import {
+  deleteVisitor,
   getAnotherUserProfile,
   getVisitorListAction,
 } from '../../../Redux/Action';
@@ -98,6 +106,18 @@ const Visitor = () => {
             getAnotherUserProfile({userId: item?.fromUsers?._id}, data => {
               if (data?.user) {
                 navigation.navigate('UserProfile', data?.user);
+              }
+            }),
+          );
+        }}
+        onLongPress={() => {
+          let data = {
+            id: item?._id,
+          };
+          dispatch(
+            deleteVisitor(data, resp => {
+              if (resp?.code === 200) {
+                _fetchRecentChatList();
               }
             }),
           );

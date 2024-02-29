@@ -508,6 +508,12 @@ export const getAnotherUserProfile = (payload, callBack) => ({
   callBack,
 });
 
+export const deleteVisitor = (payload, callBack) => ({
+  type: TYPES.DELETE_VISITOR,
+  payload,
+  callBack,
+});
+
 export const getUserVideoListAction = (payload, callBack) => ({
   type: TYPES.GET_VIDEO_LIST,
   payload,

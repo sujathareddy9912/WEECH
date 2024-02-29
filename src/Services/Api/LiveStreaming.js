@@ -446,6 +446,26 @@ export function getAnotherUserProfileApi(param) {
     });
 }
 
+export function deleteVisitorAPI(body) {
+  const url = `visitor/delete_visitor`;
+  return userApiClient
+    .delete(url, {
+      headers: {
+        Authorization: serviceConst.token,
+      },
+      data: body,
+    })
+    .then(response => {
+      if (in200s(response.status)) {
+        return response['data'];
+      }
+      return null;
+    })
+    .catch(error => {
+      return null;
+    });
+}
+
 export function getDeleteOneMsgApi(body) {
   const url = `chat/delete_message`;
   return userApiClient

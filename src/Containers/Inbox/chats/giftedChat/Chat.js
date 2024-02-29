@@ -651,9 +651,7 @@ const PersonalChat = props => {
     const fetchedResponse = await fetchEndLiveDetails(item?.channelToken);
 
     for (const prop in fetchedResponse) {
-      if (prop !== '_id') {
-        item[prop] = fetchedResponse[prop];
-      }
+      item[prop] = fetchedResponse[prop];
     }
 
     if (kickedOutRooms?.includes(item?.channelToken)) {

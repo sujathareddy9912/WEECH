@@ -231,9 +231,7 @@ const LiveStreaming = ({navigation, route}) => {
   const [hostScreenStatus, UpdateHostScreenStatus] = useState(true);
   const [myEarning, setMyEarning] = useState();
   const [liveUserList, UpdateLiveUserList] = useState([]);
-  const [todayEarning, UpdateTodayEarning] = useState(
-    route?.params?.todayEarning,
-  );
+  const [todayEarning, UpdateTodayEarning] = useState();
 
   const [showGames, setShowGames] = useState(false);
 
@@ -2322,6 +2320,7 @@ const LiveStreaming = ({navigation, route}) => {
                   channelName: channelName,
                   link: 'https://www.google.com',
                   hostId: hostDetail?._id,
+                  hostDetail: hostDetail,
                 });
               }}>
               <View

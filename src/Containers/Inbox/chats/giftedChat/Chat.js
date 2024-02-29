@@ -1,6 +1,6 @@
 import SocketIOClient from 'socket.io-client';
-import {Animated, Platform, StyleSheet, View} from 'react-native';
-import {GiftedChat} from 'react-native-gifted-chat';
+import {Alert, Animated, Platform, StyleSheet, View} from 'react-native';
+import {GiftedChat, MessageText} from 'react-native-gifted-chat';
 import {useDispatch, useSelector} from 'react-redux';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -46,6 +46,8 @@ import {
   getBlockListAction,
   unBlockUserAction,
   getGiftDataAction,
+  hostDetailAction,
+  getHostExtraDetailAction,
 } from '../../../../Redux/Action';
 
 import requestCameraAndAudioPermission, {
@@ -73,8 +75,8 @@ import {
   renderBubble,
   renderMessage,
   renderCustomView,
-  renderMessageText,
   renderSystemMessage,
+  CustomMessageText,
 } from './MessageContainer';
 
 import {
@@ -85,8 +87,12 @@ import {FONT_FAMILY, FONT_SIZE} from '../../../../Utils/fontFamily';
 import SelectImageDialog from '../../../../Component/SelectImageDialog';
 import ReportModal from '../../../../Component/ReportModal';
 // import {socket} from '../../../../Services/Sockets/sockets';
-import {getUserHaveBalance} from '../../../../Services/Api/LiveStreaming';
+import {
+  getEndUserDetailApi,
+  getUserHaveBalance,
+} from '../../../../Services/Api/LiveStreaming';
 import GiftComponent from '../../../../Component/giftComponent';
+import {STREAM_TYPE} from '../../../../Utils/agoraConfig';
 
 const dataLimit = 20,
   initialReply = {
@@ -116,10 +122,14 @@ const PersonalChat = props => {
     });
   }, [chatId]);
 
+  const liveEndSuggestionRef = useRef();
   const dispatch = useDispatch();
   const state = useSelector(state => {
     return state;
   });
+  const {kickedOutRooms, blockedLiveRooms} = useSelector(
+    state => state.streamingReducer,
+  );
 
   const safeArea = useSafeAreaInsets();
 
@@ -142,6 +152,7 @@ const PersonalChat = props => {
   const [fetchingGifts, setFetchingGifts] = useState(false);
   const [giftData, updateGiftData] = useState([]);
   const [mute, setMute] = useState(false);
+  const [liveEndSuggestionData, updateEndLiveSuggestionData] = useState();
 
   const [diamondPoints, setDiamondPoints] = useState(
     userLoginList?.user?.myBalance,
@@ -625,6 +636,108 @@ const PersonalChat = props => {
     }, 500);
   };
 
+  const fetchEndLiveDetails = async channelToken => {
+    const data = {
+      roomId: channelToken,
+    };
+
+    const responseData = await getEndUserDetailApi(data);
+    if (responseData.code === 201 || responseData.code === 200) {
+      return responseData?.data[0]?.userData[0];
+    }
+  };
+
+  const _joinAsAudience = async item => {
+    const fetchedResponse = await fetchEndLiveDetails(item?.channelToken);
+
+    for (const prop in fetchedResponse) {
+      if (prop !== '_id') {
+        item[prop] = fetchedResponse[prop];
+      }
+    }
+
+    if (kickedOutRooms?.includes(item?.channelToken)) {
+      return Alert.alert('You have been kicked out from this live');
+    }
+    if (blockedLiveRooms?.includes(item?.channelToken)) {
+      return Alert.alert('You have been Blocked from this live');
+    }
+    dispatch(
+      hostDetailAction({
+        ...item,
+      }),
+    );
+    navigation.navigate('liveStreaming', {
+      ...item,
+      type: STREAM_TYPE.AUDIENCE,
+      channel: item?.channelName,
+      token: item?.channelToken,
+    });
+    dispatch(getHostExtraDetailAction(item?._id));
+  };
+
+  const renderMessage = props => {
+    if (props.currentMessage.isReply) {
+      return <CustomMessageText {...props} />;
+    }
+    if (props.currentMessage.type === 'Live') {
+      return (
+        <Touchable
+          onPress={() => _joinAsAudience(props.currentMessage)}
+          style={{
+            paddingHorizontal: dynamicSize(10),
+            paddingVertical: dynamicSize(5),
+          }}>
+          <MyText
+            style={{
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+              fontSize: 13,
+              lineHeight: 24,
+              color: COLORS.PRIMARY_BLUE,
+            }}>
+            This is Live Link
+          </MyText>
+        </Touchable>
+      );
+    }
+    return (
+      <>
+        <MessageText
+          {...props}
+          containerStyle={{
+            left: {
+              // backgroundColor: COLORS.WHITE,
+              // borderRadius: wp(4),
+              // backgroundColor:
+              //   props.currentMessage?.type === 'Live' ? 'red' : 'blue',
+            },
+            right: {
+              // backgroundColor: COLORS.BABY_PINK,
+              // borderRadius: wp(4),
+              // backgroundColor:
+              //   props.currentMessage?.type === 'Live' ? 'red' : 'blue',
+            },
+          }}
+          textStyle={{
+            left: {
+              color: COLORS.BLACK,
+            },
+            right: {color: COLORS.BLACK},
+          }}
+          linkStyle={{
+            left: {color: COLORS.PRIMARY_BLUE},
+            right: {color: COLORS.PRIMARY_BLUE},
+          }}
+          customTextStyle={{
+            fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+            fontSize: 13,
+            lineHeight: 24,
+          }}
+        />
+      </>
+    );
+  };
+
   return (
     <>
       <ChatHeader
@@ -777,7 +890,7 @@ const PersonalChat = props => {
             },
           );
         }}
-        renderMessageText={renderMessageText}
+        renderMessageText={renderMessage}
         messagesContainerStyle={{
           paddingBottom: isIOS
             ? safeArea.bottom + dynamicSize(50)

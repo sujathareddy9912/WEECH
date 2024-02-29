@@ -101,6 +101,8 @@ import {
   getHelpCenter,
   getSearchUser,
   getHostGiftDataSaga,
+  deleteVisitorSaga,
+  clearVisitorSaga,
 } from './LiveStreaming';
 
 import {
@@ -183,6 +185,8 @@ export default function* root() {
     takeLatest(TYPES.REPORT_USER, reportUserSaga),
     takeLatest(TYPES.GET_GALLERY_LIST, getGalleryListSaga),
     takeLatest(TYPES.ANOTHER_USER_PROFILE, getAnotherUserProfileSaga),
+    takeLatest(TYPES.DELETE_VISITOR, deleteVisitorSaga),
+    takeLatest(TYPES.CLEAR_VISITOR, clearVisitorSaga),
     takeLatest(TYPES.GET_VIDEO_LIST, getUserVideoSaga),
     takeLatest(TYPES.GET_USER_EARNING, getMyEarningListSaga),
     takeLatest(TYPES.GET_FREE_CARDS, getFreeCardsListSaga),

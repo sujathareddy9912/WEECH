@@ -126,6 +126,12 @@ const styles = StyleSheet.create({
   bottomMenuContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+    paddingBottom: dynamicSize(5),
+  },
+
+  hostIconSize: {
+    height: SCREEN_HEIGHT * 0.04,
+    width: SCREEN_HEIGHT * 0.04,
   },
 
   loadingText: {
@@ -245,7 +251,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   hostRightOptionsContainer: {
-    marginBottom: dynamicSize(20)
+    marginBottom: dynamicSize(20),
   },
 
   translucent: {

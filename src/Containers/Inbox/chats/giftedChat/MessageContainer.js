@@ -160,7 +160,7 @@ export const renderMessage = props => (
   />
 );
 
-const CustomMessageText = props => {
+export const CustomMessageText = props => {
   return (
     <View>
       <View

@@ -2,27 +2,24 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import { Image } from 'react-native-animatable';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {Image} from 'react-native-animatable';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { FlatList, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import {FlatList, StatusBar, Text, TouchableOpacity, View} from 'react-native';
 
-import { styles } from './styles';
-import {
-  getFriendsListAction,
-  shareLiveLinkFriends,
-} from '../../Redux/Action'
+import {styles} from './styles';
+import {getFriendsListAction, shareLiveLinkFriends} from '../../Redux/Action';
 import Gender from '../../Assets/Icons/Gender.svg';
 import Header from '../../Component/header/Header';
-import { IMAGE_URL } from '../../Services/Api/Common';
+import {IMAGE_URL} from '../../Services/Api/Common';
 import CrownIcon from '../../Assets/Icons/crown.svg';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import { Button, MyText, Touchable } from '../../Component/commomComponent';
-import { COLORS } from '../../Utils/colors';
-import { useFocusEffect } from '@react-navigation/native';
+import {Button, MyText, Touchable} from '../../Component/commomComponent';
+import {COLORS} from '../../Utils/colors';
+import {useFocusEffect} from '@react-navigation/native';
 
-const ShareWeechaFriends = ({ navigation, route }) => {
+const ShareWeechaFriends = ({navigation, route}) => {
   // const {
   //   params: { group, members },
   // } = route;
@@ -63,7 +60,7 @@ const ShareWeechaFriends = ({ navigation, route }) => {
         channel_token: route?.params?.channelToken,
         channel_name: route?.params?.channelName,
         hostId: route?.params?.hostId
-      }
+      },
     };
     dispatch(
       shareLiveLinkFriends(payload, res => {
@@ -72,8 +69,8 @@ const ShareWeechaFriends = ({ navigation, route }) => {
     );
   };
 
-  const renderItem = ({ item }) => {
-    const { friendUserId } = item;
+  const renderItem = ({item}) => {
+    const {friendUserId} = item;
     let selectedIndex;
     let selectedArr = selected.filter((id, index) => {
       if (id == friendUserId?._id) {
@@ -89,7 +86,7 @@ const ShareWeechaFriends = ({ navigation, route }) => {
           }}>
           {friendUserId?.profile != '' ? (
             <Image
-              source={{ uri: `${IMAGE_URL}${friendUserId?.profile}` }}
+              source={{uri: `${IMAGE_URL}${friendUserId?.profile}`}}
               style={styles.userImg}
             />
           ) : (

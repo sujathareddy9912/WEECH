@@ -50,6 +50,7 @@ import {MyText, Touchable} from '../Component/commomComponent';
 import {dynamicSize} from '../Utils/responsive';
 import {strings} from '../localization/config';
 import PersonalChat from '../Containers/Inbox/chats/giftedChat/Chat';
+import styles from './styles';
 
 const Tab = createBottomTabNavigator();
 const DiscoverTab = createMaterialTopTabNavigator();
@@ -64,26 +65,7 @@ function BottomTabBar(props) {
   }
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        width: wp('90%'),
-        backgroundColor: 'white',
-        alignSelf: 'center',
-        borderRadius: wp('8%'),
-        position: 'absolute',
-        bottom: hp('3%'),
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        elevation: 4,
-        shadowColor: 'grey',
-        shadowOffset: {
-          height: 2,
-          width: 2,
-        },
-        shadowRadius: 3,
-        shadowOpacity: 0.5,
-      }}>
+    <View style={styles.tabNavContainer}>
       {props.state.routes.map((item, index) => {
         const {options} = props.descriptors[item.key];
         const label =

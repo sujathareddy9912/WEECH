@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ducdh-origin/react-native-twitter-signin": "^0.0.3",
+    "@e-linter/react-native-clear-cache": "^1.0.2",
     "@invertase/react-native-apple-authentication": "^2.3.0",
     "@react-native-async-storage/async-storage": "^1.21.0",
     "@react-native-clipboard/clipboard": "^1.13.2",

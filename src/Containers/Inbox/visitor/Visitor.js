@@ -1,17 +1,31 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, View, Image, Pressable, RefreshControl} from 'react-native';
+import {
+  FlatList,
+  View,
+  Image,
+  Pressable,
+  RefreshControl,
+  Alert,
+} from 'react-native';
 
 import {styles} from './styles';
 import {COLORS} from '../../../Utils/colors';
 import {IMAGE_URL} from '../../../Services/Api/Common';
 import {
+  clearVisitor,
+  deleteVisitor,
   getAnotherUserProfile,
   getVisitorListAction,
 } from '../../../Redux/Action';
 import {getTimeFormat, SCREEN_HEIGHT} from '../../../Utils/helper';
-import {MyIndicator, MyList, MyText} from '../../../Component/commomComponent';
+import {
+  MyIndicator,
+  MyList,
+  MyText,
+  Touchable,
+} from '../../../Component/commomComponent';
 import moment from 'moment';
 
 const dataLimit = 20;
@@ -102,6 +116,18 @@ const Visitor = () => {
             }),
           );
         }}
+        onLongPress={() => {
+          let data = {
+            id: item?._id,
+          };
+          dispatch(
+            deleteVisitor(data, resp => {
+              if (resp?.code === 200) {
+                _fetchRecentChatList();
+              }
+            }),
+          );
+        }}
         style={[styles.chat]}>
         <>
           <View style={styles.imgInfo}>
@@ -136,6 +162,14 @@ const Visitor = () => {
     );
   };
 
+  const handleClearVisitor = () => {
+    dispatch(
+      clearVisitor(resp => {
+        setVisitorList([]);
+      }),
+    );
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: COLORS.WHITE}}>
       {fetching ? (
@@ -161,6 +195,14 @@ const Visitor = () => {
         onEndReachedThreshold={0.7}
         onEndReached={_onEndReached}
       />
+      {visitorList.length > 0 ? (
+        <Touchable
+          onPress={() => handleClearVisitor()}
+          activeOpacity={0.7}
+          style={styles.clearChat}>
+          <MyText style={styles.chatTxt}>Clear Visitor</MyText>
+        </Touchable>
+      ) : null}
     </View>
   );
 };

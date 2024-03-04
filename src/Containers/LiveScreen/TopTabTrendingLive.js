@@ -141,12 +141,15 @@ export default function TopTabTrendingLive({navigation}) {
       getLiveUserListAction(params, async data => {
         if (data?.data?.length) {
           let getedArray = data?.data; // this array is got from API
-          let newArray = [];
           UpdateTotalDataCount(data?.totalData);
-
+          let newArray = [];
           for (let i = 0; i < getedArray.length; i++) {
             if (i === 1) {
-              newArray.push([getedArray[i], getedArray[i + 1]]);
+              if (getedArray.length === 2) {
+                newArray.push([getedArray[i]]);
+              } else {
+                newArray.push([getedArray[i], getedArray[i + 1]]);
+              }
               i++;
             } else {
               newArray.push(getedArray[i]);

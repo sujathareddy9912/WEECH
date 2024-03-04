@@ -385,10 +385,8 @@ const styles = StyleSheet.create({
     borderColor: COLORS.MID_LIGHT_GREY,
   },
   options: {
-    marginVertical: hp(1.5),
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
-    opacity: 0.5,
-    fontSize: 16,
+    color: COLORS.BLACK,
   },
   liveimageContainer: {
     alignSelf: 'center',

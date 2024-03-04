@@ -10,7 +10,7 @@ const DummyPage= () => {
                 backgroundColor="transparent"
                 translucent={true}
                 />
-            <Text>Under making...!</Text>
+            <Text>Comming Soon...!</Text>
         </SafeAreaView>
     )
 }

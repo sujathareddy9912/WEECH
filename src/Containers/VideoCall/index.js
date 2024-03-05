@@ -205,6 +205,10 @@ const VideoCall = ({navigation, route}) => {
   useEffect(() => {
     return () => {
       clearTimeout(giftTimeout);
+      (async () => {
+        await agoraEngineRef.current?.removeAllListeners();
+        await agoraEngineRef.current?.release();
+      })();
     };
   }, []);
 
@@ -298,6 +302,8 @@ const VideoCall = ({navigation, route}) => {
         agoraEngineInit.setRemoteDefaultVideoStreamType(
           VideoStreamType.VideoStreamHigh,
         );
+        const isSupported = agoraEngineInit.isCameraZoomSupported();
+        console.log('isSupported: ' + isSupported);
       } else {
         agoraEngineInit.initialize({
           appId: rtmAgoraConfig.appId,
@@ -334,9 +340,11 @@ const VideoCall = ({navigation, route}) => {
     }
   };
 
-  const leave = () => {
+  const leave = async () => {
     try {
       agoraEngineRef.current?.leaveChannel();
+      await agoraEngineRef.current?.removeAllListeners();
+      await agoraEngineRef.current?.release();
       setRemoteUid(0);
       setIsJoined(false);
     } catch (e) {
@@ -682,7 +690,7 @@ const VideoCall = ({navigation, route}) => {
                 {isJoined && (
                   <React.Fragment key={0}>
                     <RtcSurfaceView
-                      canvas={{uid: 0}}
+                      canvas={{uid: isJoined ? remoteUid : 0}}
                       style={styles.uservideo}
                     />
                   </React.Fragment>
@@ -718,7 +726,7 @@ const VideoCall = ({navigation, route}) => {
                   <React.Fragment key={remoteUid}>
                     <Dragable style={styles.remoteView}>
                       <RtcSurfaceView
-                        canvas={{uid: remoteUid}}
+                        canvas={{uid: isJoined ? 0 : remoteUid}}
                         style={styles.remoteView}
                       />
                     </Dragable>
@@ -793,7 +801,7 @@ const VideoCall = ({navigation, route}) => {
                     onPress={() => onMicPress(!isMuted)}>
                     <Icon
                       origin="MaterialCommunityIcons"
-                      name={isSpeakerOn ? 'microphone' : 'microphone-off'}
+                      name={isMuted ? 'microphone' : 'microphone-off'}
                       size={24}
                       color={COLORS.WHITE}
                     />

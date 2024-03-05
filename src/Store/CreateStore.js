@@ -1,7 +1,7 @@
 import {createNetworkMiddleware} from 'react-native-offline';
 import {applyMiddleware, compose, createStore,} from 'redux';
 import {createLogger} from 'redux-logger';
-import {createTransform, persistReducer, persistStore} from 'redux-persist';
+import {persistReducer, persistStore} from 'redux-persist';
 import createSensitiveStorage from 'redux-persist-sensitive-storage';
 import createSagaMiddleware from 'redux-saga';
 const sensitiveStorage = createSensitiveStorage({

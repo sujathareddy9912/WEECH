@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import database from '@react-native-firebase/database';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Game from '../Game';
 import Icon from '../../Component/Icons/Icon';
@@ -23,6 +23,7 @@ import {
   StatusBar,
   FlatList,
   PermissionsAndroid,
+  Platform,
 } from 'react-native';
 
 import {
@@ -554,6 +555,8 @@ const LiveStreaming = ({navigation, route}) => {
 
   useEffect(() => {
     return () => {
+      // agoraEngineRef.current?.removeAllListeners();
+      // agoraEngineRef.current?.release();
       dispatch(clearLiveStreamDataAction());
     };
   }, []);
@@ -810,6 +813,9 @@ const LiveStreaming = ({navigation, route}) => {
   const _endCallAudiance = async () => {
     try {
       await agoraEngineRef.current?.leaveChannel();
+      await agoraEngineRef.current?.removeAllListeners();
+      await agoraEngineRef.current?.release();
+
       dispatch(
         endLiveStreamingAction({
           userId: userLoginList?.user?._id,

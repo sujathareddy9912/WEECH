@@ -66,6 +66,11 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
           </View>
           <View style={styles.row}>
             <View>
+              <View>
+                <MyText style={styles.nameStyle}>
+                  {item?.distance ? Math.round(item?.distance) + ' : KM' : null}
+                </MyText>
+              </View>
               <View style={styles.nameContainer}>
                 <SvgIcon.FlameIcon />
                 <MyText style={styles.joinTextStyle}>{item?.aboutLive}</MyText>

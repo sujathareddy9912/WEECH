@@ -84,7 +84,9 @@ const LiveStreamingActiveUserList = props => {
     'Kickout',
     'Mute/UnMute',
     'Report',
-    // 'Private call',
+    'Message',
+    'Voice Call',
+    'Video Call',
   ];
 
   const OPTIONS = {

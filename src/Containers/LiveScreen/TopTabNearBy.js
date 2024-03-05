@@ -180,7 +180,11 @@ export default function TopTabNearBy({navigation}) {
 
           for (let i = 0; i < getedArray.length; i++) {
             if (i === 1) {
-              newArray.push([getedArray[i], getedArray[i + 1]]);
+              if (getedArray.length === 2) {
+                newArray.push([getedArray[i]]);
+              } else {
+                newArray.push([getedArray[i], getedArray[i + 1]]);
+              }
               i++;
             } else {
               newArray.push(getedArray[i]);

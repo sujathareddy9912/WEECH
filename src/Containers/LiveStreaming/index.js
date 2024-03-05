@@ -247,6 +247,9 @@ const LiveStreaming = ({navigation, route}) => {
     'Kickout',
     'Mute/UnMute',
     'Report',
+    'Message',
+    'Voice Call',
+    'Video Call',
   ];
 
   const OPTIONS = {
@@ -1253,6 +1256,72 @@ const LiveStreaming = ({navigation, route}) => {
     }
   };
 
+  const checkVoiceCallPossible = async type => {
+    const data = {
+      senderId: userLoginList?.user?._id,
+      receiverId: selectedUser?.joinedUsers?._id,
+      type: type == CALLING_TYPE.VIDEO ? 'VIDEOCALL' : 'CALL',
+    };
+    try {
+      const response = await getUserHaveBalance(data);
+      if (response.data.data) {
+        callingFunctionalityLive(type);
+      }
+    } catch (error) {
+      const data = error.response.data;
+      Alert.alert(data.message);
+    }
+  };
+
+  const callingFunctionalityLive = async type => {
+    const permissionGranted = await requestAudioPermission();
+
+    if (permissionGranted && selectedUser?.joinedUsers) {
+      try {
+        // const userBusyorNot = await checkNodePresentOrNot(route?.params?._id);
+        // if (userBusyorNot) {
+        //   HelperService.showToast('User is busy on another call.');
+        //   return;
+        // }
+
+        // setStartCallIndicator(true);
+        const param = {
+          callerId: userLoginList?.user?._id,
+          receiverId: selectedUser?.joinedUsers?._id,
+          type: type == CALLING_TYPE.VIDEO ? 'VIDEOCALL' : 'CALL',
+        };
+        dispatch(
+          getCAllingDetailAction(param, result => {
+            if (result) {
+              const callingParams = {
+                type: type,
+                status: CALLING_STATUS.CALLING,
+                liveName: result.roomName || 'WeechaTest',
+                liveToken:
+                  result?.token ||
+                  '006151109dddcda44a0913ebd6abc899e45IAC49Tjv8mQr1lDa2gm+K/Hu6jq2IZsP6q/nx4Q8RgifuO8UH5UAAAAAEABMB+AnoaufYgEAAQChq59i',
+                receiverId: selectedUser?.joinedUsers?._id,
+                receiverName: selectedUser?.name,
+                receiverProfilePic: selectedUser?.joinedUsers?.profile,
+                callerId: userLoginList?.user?._id,
+                callerName: userLoginList?.user?.name,
+                callerProfilePic: userLoginList?.user?.profile,
+                callerPoints: userLoginList?.user?.points,
+                receiverPoints: route?.params?.points,
+              };
+              incomingCallQuery(selectedUser?.joinedUsers?._id).set(
+                callingParams,
+              );
+              navigation.navigate('VideoCall', callingParams);
+            }
+          }),
+        );
+      } catch (error) {
+        console.log('error while call creation', error.message);
+      }
+    }
+  };
+
   const callingFunctionality = async type => {
     const permissionGranted = await requestAudioPermission();
 
@@ -1402,8 +1471,22 @@ const LiveStreaming = ({navigation, route}) => {
         setShowActiveUser(false);
         setReport(true);
         return null;
+      case 'Message':
+        if (
+          selectedUser?.joinedUsers?.messageCharge <
+          userLoginList?.user?.myBalance
+        ) {
+          _createLiveMessageRoom();
+        } else {
+          rechargePopup();
+        }
+        return null;
+      case 'Voice Call':
+        return checkVoiceCallPossible(CALLING_TYPE.AUDIO);
+      case 'Video Call':
+        return checkVoiceCallPossible(CALLING_TYPE.VIDEO);
       case 'Private call':
-        return checkCallPossible(CALLING_TYPE.AUDIO)();
+        return checkCallPossible(CALLING_TYPE.AUDIO);
       default:
         return null;
     }
@@ -1450,6 +1533,26 @@ const LiveStreaming = ({navigation, route}) => {
               receiverId: hostDetail._id,
               name: hostDetail.name,
               profile: hostDetail.profile,
+              chatId: result._id,
+            });
+          }, 500);
+        }
+      }),
+    );
+  };
+
+  const _createLiveMessageRoom = () => {
+    const param = {
+      receiverId: selectedUser?.joinedUsers?._id,
+    };
+    dispatch(
+      createChatRoomAction(param, result => {
+        if (result) {
+          setTimeout(() => {
+            navigateToScreen('PersonalChat', {
+              receiverId: selectedUser?.joinedUsers?._id,
+              name: selectedUser?.joinedUsers?.name,
+              profile: hostDetail?.profilePic,
               chatId: result._id,
             });
           }, 500);

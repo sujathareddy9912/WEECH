@@ -12,17 +12,7 @@ import {getAge} from '../../Utils/helper';
 import {dynamicSize} from '../../Utils/responsive';
 
 const _renderCoverImage = (item, index) => {
-  if (item?.coverImage) {
-    return (
-      <MyImage
-        fast
-        borderRadius={5}
-        resizeMode={'cover'}
-        style={[styles.imageContainer, index == 0 ? styles.one : undefined]}
-        source={{uri: `${IMAGE_URL}${item.coverImage}`}}
-      />
-    );
-  } else if (item?.profile)
+  if (item?.profile) {
     return (
       <MyImage
         fast
@@ -30,6 +20,16 @@ const _renderCoverImage = (item, index) => {
         resizeMode={'cover'}
         style={[styles.imageContainer, index == 0 ? styles.one : undefined]}
         source={{uri: `${IMAGE_URL}${item.profile}`}}
+      />
+    );
+  } else if (item?.coverImage)
+    return (
+      <MyImage
+        fast
+        borderRadius={5}
+        resizeMode={'cover'}
+        style={[styles.imageContainer, index == 0 ? styles.one : undefined]}
+        source={{uri: `${IMAGE_URL}${item.coverImage}`}}
       />
     );
   else return <SvgIcon.profilePlaceholder />;
@@ -66,6 +66,11 @@ export default function LiveStreamingCard(item, index, _joinAsAudience) {
           </View>
           <View style={styles.row}>
             <View>
+              <View>
+                <MyText style={styles.nameStyle}>
+                  {item?.distance ? Math.round(item?.distance) + ' : KM' : null}
+                </MyText>
+              </View>
               <View style={styles.nameContainer}>
                 <SvgIcon.FlameIcon />
                 <MyText style={styles.joinTextStyle}>{item?.aboutLive}</MyText>

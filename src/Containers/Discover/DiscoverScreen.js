@@ -17,7 +17,13 @@ import React, {
   useCallback,
 } from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import {ClientRole, ChannelProfile,createAgoraRtcEngine,ClientRoleType,ChannelProfileType} from 'react-native-agora';
+import {
+  ClientRole,
+  ChannelProfile,
+  createAgoraRtcEngine,
+  ClientRoleType,
+  ChannelProfileType,
+} from 'react-native-agora';
 
 import Card from './Card';
 import styles from './styles';
@@ -118,7 +124,7 @@ const DiscoverScreen = props => {
     agoraEngine.current.initialize({
       appId: rtmAgoraConfig.appId,
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
-    })
+    });
     await agoraEngine.current.enableVideo();
     await agoraEngine.current.startPreview();
     await agoraEngine.current?.setClientRole(ClientRoleType.ClientRoleAudience);
@@ -164,7 +170,7 @@ const DiscoverScreen = props => {
   return (
     <>
       <StatusBar backgroundColor={COLORS.BABY_PINK} />
-      <View style={{flex: 1, backgroundColor: COLORS.WHITE}}>
+      <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerContainer}>
             <View style={styles.left}></View>

@@ -232,9 +232,7 @@ const LiveStreaming = ({navigation, route}) => {
   const [hostScreenStatus, UpdateHostScreenStatus] = useState(true);
   const [myEarning, setMyEarning] = useState();
   const [liveUserList, UpdateLiveUserList] = useState([]);
-  const [todayEarning, UpdateTodayEarning] = useState(
-    route?.params?.todayEarning,
-  );
+  const [todayEarning, UpdateTodayEarning] = useState();
 
   const [showGames, setShowGames] = useState(false);
 
@@ -1979,21 +1977,15 @@ const LiveStreaming = ({navigation, route}) => {
                 </View>
               </KeyboardAwareScrollView>
               {isBroadcaster && (
-                <View
-                  style={[
-                    styles.bottomMenuContainer,
-                    {
-                      paddingBottom: useSafeAreaInsets().bottom,
-                    },
-                  ]}>
+                <View style={styles.bottomMenuContainer}>
                   <TouchableIcon
                     customIcon={
                       <Image
                         source={isMute ? icons.mute : icons.voice}
                         resizeMode={'contain'}
                         style={{
-                          height: SCREEN_HEIGHT * 0.05,
-                          width: SCREEN_HEIGHT * 0.05,
+                          height: SCREEN_HEIGHT * 0.035,
+                          width: SCREEN_HEIGHT * 0.035,
                         }}
                       />
                     }
@@ -2004,10 +1996,7 @@ const LiveStreaming = ({navigation, route}) => {
                       <Image
                         source={icons.flipCamera}
                         resizeMode={'contain'}
-                        style={{
-                          height: SCREEN_HEIGHT * 0.06,
-                          width: SCREEN_HEIGHT * 0.06,
-                        }}
+                        style={styles.hostIconSize}
                       />
                     }
                     onPress={onChangeCameraDirection}
@@ -2017,10 +2006,7 @@ const LiveStreaming = ({navigation, route}) => {
                       <Image
                         source={icons.share}
                         resizeMode={'contain'}
-                        style={{
-                          height: SCREEN_HEIGHT * 0.06,
-                          width: SCREEN_HEIGHT * 0.06,
-                        }}
+                        style={styles.hostIconSize}
                       />
                     }
                     onPress={() => setIsopen(true)}
@@ -2030,10 +2016,7 @@ const LiveStreaming = ({navigation, route}) => {
                       <Image
                         source={icons.threeDots}
                         resizeMode={'contain'}
-                        style={{
-                          height: SCREEN_HEIGHT * 0.06,
-                          width: SCREEN_HEIGHT * 0.06,
-                        }}
+                        style={styles.hostIconSize}
                       />
                     }
                     onPress={onShare}
@@ -2343,6 +2326,7 @@ const LiveStreaming = ({navigation, route}) => {
                   channelName: channelName,
                   link: 'https://www.google.com',
                   hostId: hostDetail?._id,
+                  hostDetail: hostDetail,
                 });
               }}>
               <View

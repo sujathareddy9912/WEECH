@@ -75,7 +75,6 @@ export function* getChatMessagesSaga({payload, page, callBack}) {
     const resp = yield call(ChatServices.getChatMessagesApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
       callBack(resp);
-      console.log(resp, 'JIOOOO ');
       const newData =
         resp?.data?.map(item => {
           if (item.type == CHAT_MESSAGE_TYPE.DOCUMENT) {
@@ -141,7 +140,6 @@ export function* getChatMessagesSaga({payload, page, callBack}) {
                   : null,
             };
         }) || [];
-      console.log(newData, 'NEW DATAA');
       if (page == 0) {
         yield put(updateChatHistoryAction(newData));
       } else {

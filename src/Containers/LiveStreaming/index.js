@@ -1545,7 +1545,7 @@ const LiveStreaming = ({navigation, route}) => {
           setTimeout(() => {
             navigateToScreen('PersonalChat', {
               receiverId: selectedUser?.joinedUsers?._id,
-              name: selectedUser?.name,
+              name: selectedUser?.joinedUsers?.name,
               profile: hostDetail?.profilePic,
               chatId: result._id,
             });

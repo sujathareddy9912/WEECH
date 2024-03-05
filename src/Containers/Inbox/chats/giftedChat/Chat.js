@@ -203,11 +203,11 @@ const PersonalChat = props => {
     }
   }, [chatId]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
+  useEffect(() => {
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     const intervalId = BackgroundTimer.setInterval(() => {

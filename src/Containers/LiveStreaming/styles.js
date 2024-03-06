@@ -421,6 +421,19 @@ const styles = StyleSheet.create({
     left: wp(-22),
     position: 'absolute',
   },
+
+  // Share Options
+  shareOptionsContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    marginTop: hp(1),
+  },
+  iconContainer: {
+    width: wp(15),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export default styles;

@@ -104,7 +104,7 @@ export function NotificationModal(props) {
         ...item,
       }),
     );
-    notificationPress();
+    // notificationPress();       // #76
     navigation.navigate('liveStreaming', {
       ...item,
       type: STREAM_TYPE.AUDIENCE,
@@ -118,7 +118,7 @@ export function NotificationModal(props) {
     dispatch(
       getAnotherUserProfile({userId: item?.fromUserData?._id}, data => {
         if (data?.user) {
-          notificationPress();
+          // notificationPress();   // #76
           navigation.navigate('UserProfile', data?.user);
         }
       }),

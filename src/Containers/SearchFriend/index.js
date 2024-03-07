@@ -12,6 +12,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Styles from './Styles';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 
 const SearchFriend = props => {
   const [Interest, setInterest] = useState([
@@ -116,7 +117,7 @@ const SearchFriend = props => {
             style={{
               color: '#fff',
               fontSize: wp('4.3%'),
-              fontFamily: 'AvenirLTStd-Black',
+              fontFamily: FONT_FAMILY.AVENIER_BLACK,
             }}>
             Access to a contact list
           </Text>

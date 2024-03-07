@@ -11,6 +11,7 @@ import Diamonds from '../../Assets/Icons/diamonds.svg';
 import India from '../../Assets/Icons/india.svg';
 import InAppCallReceiving from '../../Contexts/InAppCallReceiving';
 import {IMAGE_URL} from '../../Services/Api/Common';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 
 const Card = props => {
   const receiveCall = React.useContext(InAppCallReceiving);
@@ -53,7 +54,7 @@ const Card = props => {
             position: 'absolute',
             left: '10%',
             top: '2%',
-            fontFamily: 'Roboto',
+            fontFamily: FONT_FAMILY.ROBOTO_BLACK,
             fontWeight: 'bold',
             fontStyle: 'italic',
             color: 'white',
@@ -77,7 +78,7 @@ const Card = props => {
           style={{marginLeft: 20, marginTop: 10}}>
           <Text
             style={{
-              fontFamily: 'Gilroy-Bold',
+              fontFamily: FONT_FAMILY.GILROY_BOLD,
               fontSize: 20,
               color: 'white',
               alignSelf: 'baseline',
@@ -97,7 +98,7 @@ const Card = props => {
           <Diamonds width={'24'} height={'24'} />
           <Text
             style={{
-              fontFamily: 'Gilroy-Bold',
+              fontFamily: FONT_FAMILY.GILROY_BOLD,
               fontSize: 16,
               color: 'white',
               alignSelf: 'baseline',
@@ -118,7 +119,7 @@ const Card = props => {
           <India width={'24'} height={'24'} />
           <Text
             style={{
-              fontFamily: 'Gilroy-Bold',
+              fontFamily: FONT_FAMILY.GILROY_BOLD,
               fontSize: 16,
               color: 'white',
               alignSelf: 'baseline',

@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: wp('5.2%'),
-    fontFamily: 'Gilroy-Bold',
+    fontFamily: FONT_FAMILY.GILROY_BOLD,
     color: 'white',
   },
   right: {

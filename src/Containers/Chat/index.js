@@ -21,6 +21,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Message from './Message';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import firestore from '@react-native-firebase/firestore';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 // const messages = [
 //     {id: 1, type: 'sent', body: {text: 'Hi', image: require('../../Assets/Images/photo.png'), video: '', file: ''}, createdAt: '2021-07-10T04:50:00.000Z', read: 'true'},
 //     {id: 2, type: 'received', body: {text: 'Hi', image: '', video: 'https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_480_1_5MG.mp4', file: ''}, createdAt: '2021-07-10T04:50:00.000Z'},
@@ -124,7 +125,7 @@ const Chat = props => {
             marginLeft: 5,
             marginTop: 20,
             fontSize: 18,
-            fontFamily: 'Mulish-Regular',
+            fontFamily: FONT_FAMILY.MULISH_REGULAR,
           }}>
           Athalia Putri
         </Text>
@@ -181,7 +182,7 @@ const Chat = props => {
               backgroundColor: 'rgba(247, 247, 252, 1)',
               flex: 1,
               fontSize: 14,
-              fontFamily: 'Mulish-Regular',
+              fontFamily: FONT_FAMILY.MULISH_REGULAR,
               paddingHorizontal: 10,
             }}
           />

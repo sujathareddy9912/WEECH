@@ -23,6 +23,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment'; // 292.3K (gzipped: 71.6K)
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {IMAGE_URL} from '../../Services/Api/Common';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 
 const NewRegistration = props => {
   const [name, setName] = React.useState('');
@@ -247,7 +248,7 @@ const NewRegistration = props => {
           </TouchableOpacity> */}
           <Text
             style={{
-              fontFamily: 'Gilroy-Medium',
+              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
               fontSize: 22,
               color: '#000',
               marginLeft: 10,
@@ -258,7 +259,7 @@ const NewRegistration = props => {
         <View style={{width: wp('92%'), alignSelf: 'center'}}>
           <Text
             style={{
-              fontFamily: 'Gilroy-Medium',
+              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
               fontSize: 13,
               color: 'rgba(0, 0, 0, 0.3)',
             }}>
@@ -307,7 +308,7 @@ const NewRegistration = props => {
           <View style={{flex: 1, marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 16,
                 color: '#000',
               }}>
@@ -315,7 +316,7 @@ const NewRegistration = props => {
             </Text>
             <Text
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 10,
                 color: 'rgba(0, 0, 0, 0.3)',
               }}>
@@ -346,7 +347,7 @@ const NewRegistration = props => {
           <View style={{marginLeft: 10, flex: 1}}>
             {/* <Text
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -363,7 +364,7 @@ const NewRegistration = props => {
               style={{
                 height: 40,
                 flex: 1,
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}
@@ -384,7 +385,7 @@ const NewRegistration = props => {
           }}>
           <Text
             style={{
-              fontFamily: 'Gilroy-Medium',
+              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
               fontSize: 12,
               marginLeft: 10,
               color: 'rgba(91, 91, 91, 1)',
@@ -444,7 +445,7 @@ const NewRegistration = props => {
           <View style={{flex: 1, marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -456,7 +457,7 @@ const NewRegistration = props => {
                 setGender(text);
               }}
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}></TextInput>
@@ -477,7 +478,7 @@ const NewRegistration = props => {
           <View style={{flex: 1, marginLeft: 10, height: 40}}>
             {/* <Text
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -492,7 +493,7 @@ const NewRegistration = props => {
                 setCountry(text);
               }}
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}
@@ -518,7 +519,7 @@ const NewRegistration = props => {
             style={{flex: 1, marginLeft: 10}}>
             {/* <Text
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -533,7 +534,7 @@ const NewRegistration = props => {
               <Text
                 style={{
                   marginLeft: 10,
-                  fontFamily: 'Gilroy-Medium',
+                  fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                   fontSize: 16,
                   color: 'rgba(0, 0, 0, 0.4)',
                 }}>
@@ -557,7 +558,7 @@ const NewRegistration = props => {
           <View style={{flex: 1, marginHorizontal: 10}}>
             {/* <Text
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -575,7 +576,7 @@ const NewRegistration = props => {
               style={{
                 textAlignVertical: 'top',
                 minHeight: 100,
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}
@@ -585,7 +586,7 @@ const NewRegistration = props => {
         <View style={{marginTop: 10, width: wp('92%'), alignSelf: 'center'}}>
           <Text
             style={{
-              fontFamily: 'Gilroy-Medium',
+              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
               fontSize: 16,
               color: 'rgba(0,0,0, 1)',
             }}>
@@ -594,7 +595,7 @@ const NewRegistration = props => {
           <Text
             style={{
               marginTop: 5,
-              fontFamily: 'Gilroy-Medium',
+              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
               fontSize: 12,
               color: 'rgba(91, 91, 91, 1)',
             }}>
@@ -755,7 +756,7 @@ const NewRegistration = props => {
           <Text
             style={{
               marginTop: 5,
-              fontFamily: 'Gilroy',
+              fontFamily: FONT_FAMILY.GILROY_REGULAR,
               fontSize: 12,
               color: 'rgba(0,0,0, 1)',
             }}>
@@ -777,7 +778,7 @@ const NewRegistration = props => {
           <View style={{flex: 1, marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 16,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -785,7 +786,7 @@ const NewRegistration = props => {
             </Text>
             <Text
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 10,
                 color: 'rgba(0, 0, 0, 1)',
               }}>
@@ -828,7 +829,7 @@ const NewRegistration = props => {
             }}>
             <Text
               style={{
-                fontFamily: 'Gilroy-Medium',
+                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
                 fontSize: 20,
                 color: 'rgba(255,255,255, 1)',
               }}>

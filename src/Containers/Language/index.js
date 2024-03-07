@@ -20,6 +20,7 @@ import {HelperService} from '../../Services/Utils/HelperService';
 import {useIsFocused} from '@react-navigation/native';
 import {getLanguageAction} from '../../Redux/Action';
 import {MyIndicator} from '../../Component/commomComponent';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 const Language = props => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
@@ -160,7 +161,7 @@ const Language = props => {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={{fontFamily: 'AvenirLTStd-Book'}}>Continue</Text>
+              <Text style={{fontFamily: FONT_FAMILY.AVENIER_BOOK}}>Continue</Text>
             </TouchableOpacity>
           </View>
         ) : null}

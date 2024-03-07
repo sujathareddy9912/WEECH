@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   name: {
     marginLeft: wp(2),
     fontSize: FONT_SIZE.SEMI,
-    fontFamily: IS_ANDROID ? 'SFProText-Medium' : FONT_FAMILY.SF_PRO_MEDIUM,
+    fontFamily: IS_ANDROID ? FONT_FAMILY.SFProText_Medium : FONT_FAMILY.SF_PRO_MEDIUM,
   },
   weechaId: {
     fontSize: FONT_SIZE.SEMI,

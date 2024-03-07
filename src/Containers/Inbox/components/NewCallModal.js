@@ -425,7 +425,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 15,
-    fontFamily: 'Poppins-Medium',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
   },
   info: {
     width: wp(40),
@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
   },
   lastMsg: {
     fontSize: 13,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.TEXT_GRAY,
   },
   imgInfo: {

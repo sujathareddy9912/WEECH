@@ -5,6 +5,7 @@ import { widthPercentageToDP as wp,heightPercentageToDP as hp } from "react-nati
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import Styles from "./Styles";
+import { FONT_FAMILY } from "../../Utils/fontFamily";
 const EditProfile=({navigation})=>{
     const [checked, setChecked] = useState('Male');
     return(
@@ -54,7 +55,7 @@ const EditProfile=({navigation})=>{
                 </View>
                 <TouchableOpacity onPress={()=>{navigation.navigate('InterestScreen')}} style={{marginTop:hp('4%'),justifyContent:'center',alignItems:'center',marginBottom:hp('2%')}}>
                 <LinearGradient start={{x: 0, y: 0}} end={{x: 0, y: 1}} colors={['#6C56F1', '#F329F8']} style={{width:wp('79%'),height:hp('7%'),borderRadius:100,justifyContent:'center',alignItems:'center'}}>
-                <Text style={{color:'#fff',fontSize:wp('4.3%'),fontFamily:'AvenirLTStd-Black'}}>Next</Text>
+                <Text style={{color:'#fff',fontSize:wp('4.3%'),fontFamily:FONT_FAMILY.AVENIER_BLACK}}>Next</Text>
 
                     </LinearGradient>
                 </TouchableOpacity>

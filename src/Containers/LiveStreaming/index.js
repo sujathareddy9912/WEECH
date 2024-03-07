@@ -2422,6 +2422,24 @@ const LiveStreaming = ({navigation, route}) => {
               </View>
               <Text style={[styles.options]}>Friends </Text>
             </TouchableOpacity>
+            <View style={styles.seperator} />
+            <TouchableOpacity
+              style={styles.shareOptionsContainer}
+              onPress={() => {
+                setIsopen(false);
+                navigation.navigate('SelectWeeChaGroup', {
+                  channelToken: channelToken,
+                  channelName: channelName,
+                  link: 'https://www.google.com',
+                  hostId: hostDetail?._id,
+                  hostDetail: hostDetail,
+                });
+              }}>
+              <View style={styles.iconContainer}>
+                <SvgIcon.WeechaShare />
+              </View>
+              <Text style={[styles.options]}>Group </Text>
+            </TouchableOpacity>
           </View>
         </Actionsheet.Content>
       </Actionsheet>

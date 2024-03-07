@@ -85,6 +85,7 @@ import Profile from '../Containers/ProfileSetup/profile';
 import FavouriteImages from '../Containers/ProfileSetup/favouriteImages';
 import FavouriteVideos from '../Containers/ProfileSetup/favouriteVideos';
 import MyGiftHistory from '../Containers/Gift/MyGiftHistory';
+import SelectWeeChaGroup from '../Containers/SelectWeeChaGroup/SelectWeeChaGroup';
 
 // const rtmAdaptor = new RtmAdapter();
 export const Stack = createStackNavigator();
@@ -404,6 +405,11 @@ function AppStack() {
         <Stack.Screen
           name="ShareWeechaFriends"
           component={ShareWeechaFriends}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SelectWeeChaGroup"
+          component={SelectWeeChaGroup}
           options={{headerShown: false}}
         />
         <Stack.Screen

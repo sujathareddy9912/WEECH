@@ -673,6 +673,12 @@ export const shareLiveLinkFriends = (payload, callBack) => ({
   callBack,
 });
 
+export const shareLiveLinkGroups = (payload, callBack) => ({
+  type: TYPES.SHARE_LIVE_LINK_IN_GROUP_CHAT,
+  payload,
+  callBack,
+});
+
 export const getGroupDetails = (payload, callBack) => ({
   type: TYPES.GET_GRP_DETAILS,
   payload,

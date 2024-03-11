@@ -10,7 +10,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {styles} from '../SelectFriend/styles';
 import {COLORS} from '../../Utils/colors';
 import Header from '../../Component/header/Header';
-import {getChatGroups} from '../../Redux/Action';
+import {getChatGroups, shareLiveLinkGroups} from '../../Redux/Action';
 import {MyText, Touchable, Button} from '../../Component/commomComponent';
 import {IMAGE_URL} from '../../Services/Api/Common';
 
@@ -73,7 +73,7 @@ const SelectWeeChaGroup = ({navigation, route}) => {
   const renderItem = ({item}) => {
     let selectedIndex;
     let selectedArr = selected.filter((id, index) => {
-      if (id?._id == item?._id) {       // this line
+      if (id == item?._id) {
         selectedIndex = index;
         return id;
       }
@@ -133,8 +133,7 @@ const SelectWeeChaGroup = ({navigation, route}) => {
               setSelected([...tempArr]);
             } else {
               let tempArr = selected;
-              // tempArr.push(item?._id);         // this and below change the selected
-              tempArr.push(item);
+              tempArr.push(item?._id);
               setSelected([...tempArr]);
             }
           }}>
@@ -154,20 +153,25 @@ const SelectWeeChaGroup = ({navigation, route}) => {
   };
 
   const handleInvite = () => {
-    // const payload = {
-    //   senderId: USER?._id,
-    //   friends: selected,
-    //   roomId: route?.params?.channelToken,
-    //   userName: USER?.name,
-    //   userProfile: USER?.profile,
-    //   liveRoomData: {
-    //     channel_token: route?.params?.channelToken,
-    //     channel_name: route?.params?.channelName,
-    //     hostId: route?.params?.hostId,
-    //   },
-    // };
-
-    console.log('selected', selected);
+    const payload = {
+      senderId: userLoginList?.user?._id,
+      groupId: selected,
+      roomId: route?.params?.channelToken,
+      userName: userLoginList?.user?.name,
+      userProfile: userLoginList?.user?.profile,
+      liveRoomData: {
+        channel_token: route?.params?.channelToken,
+        channel_name: route?.params?.channelName,
+        hostId: route?.params?.hostId,
+        link: route?.params?.link,
+      },
+    };
+    dispatch(
+      shareLiveLinkGroups(payload, res => {
+        console.log('Group response: ', res);
+        navigation.goBack();
+      }),
+    );
   };
 
   return (

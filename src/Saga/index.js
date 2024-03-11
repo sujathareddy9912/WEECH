@@ -18,6 +18,7 @@ import {
   shareLiveLinkWithFriends,
   getReceivedGiftDataSaga,
   getSendGiftDataSaga,
+  shareLiveLinkWithGroups,
 } from './userSaga';
 
 import {
@@ -209,6 +210,7 @@ export default function* root() {
     takeLatest(TYPES.INVITE_TO_GROUP, inviteToGroupSaga),
     takeLatest(TYPES.ALLOW_FREE_CHAT, allowFreeChat),
     takeLatest(TYPES.SHARE_LIVE_LINK_IN_CHAT, shareLiveLinkWithFriends),
+    takeLatest(TYPES.SHARE_LIVE_LINK_IN_GROUP_CHAT, shareLiveLinkWithGroups),
     takeLatest(TYPES.GET_GRP_DETAILS, getGrpDetailsSaga),
     takeLatest(TYPES.MAKE_GRP_ADMIN, makeGrpAdminSaga),
     takeLatest(TYPES.REMOVE_GRP_MEMBER, removeGrpMemberSaga),

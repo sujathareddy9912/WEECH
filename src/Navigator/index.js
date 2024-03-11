@@ -81,7 +81,6 @@ import StartFaceVerification from '../Containers/MyProfile/LiveStreamCenter/Star
 import VerificationStatus from '../Containers/MyProfile/LiveStreamCenter/VerificationStatus';
 import BankDetails from '../Containers/MyProfile/BankDetails/BankDetails';
 import TabViewExample from '../Containers/ProfileSetup/ProfileTab';
-import Profile from '../Containers/ProfileSetup/profile';
 import FavouriteImages from '../Containers/ProfileSetup/favouriteImages';
 import FavouriteVideos from '../Containers/ProfileSetup/favouriteVideos';
 import MyGiftHistory from '../Containers/Gift/MyGiftHistory';

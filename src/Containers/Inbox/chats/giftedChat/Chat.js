@@ -30,9 +30,6 @@ import {
   MyText,
   Touchable,
 } from '../../../../Component/commomComponent';
-import BackgroundTimer from 'react-native-background-timer';
-import PushNotification from 'react-native-push-notification';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import {
   getChatHistoryAction,
@@ -209,15 +206,6 @@ const PersonalChat = props => {
     };
   }, []);
 
-  useEffect(() => {
-    const intervalId = BackgroundTimer.setInterval(() => {
-      socket.emit(SOCKET_EVENTS.SEND_MESSAGE);
-      console.log('socket conecction', socket?.connected);
-    }, 5000);
-
-    BackgroundTimer.clearInterval(intervalId);
-  }, [socket]);
-
   const _fetchChatHistory = () => {
     const param = {
       start: paginationOffset.current,
@@ -250,27 +238,6 @@ const PersonalChat = props => {
     socket
       .off(SOCKET_EVENTS.SEND_MESSAGE)
       .on(SOCKET_EVENTS.SEND_MESSAGE, data => {
-        if (Platform.OS === 'android') {
-          PushNotification.createChannel(
-            {
-              channelId: '1',
-              channelName: 'name',
-            },
-            created => console.log(`createChannel returned '${created}'`),
-          );
-
-          PushNotification.localNotification({
-            title: 'NEW Message - ANDROID',
-            message: 'in',
-            channelId: '1',
-          });
-        } else if (Platform.OS === 'ios') {
-          PushNotificationIOS.addNotificationRequest({
-            id: '1',
-            title: 'NEW Message - IOS',
-            body: 'in',
-          });
-        }
         if (data.type === CHAT_MESSAGE_TYPE.CONTENT) {
           const localMessage = {
             _id: data._id,

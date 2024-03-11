@@ -289,7 +289,7 @@ const LoginPhone = props => {
 
           <View style={{marginTop: hp('15%')}}>
             <View style={{marginBottom: hp('3%')}}>
-              <Text style={{color: '#000000', fontFamily: FONT_FAMILY.AVENIER_BOOK}}>
+              <Text style={{color: '#000000', fontFamily: FONT_FAMILY.POPPINS_REGULAR}}>
                 Other login methods
               </Text>
             </View>

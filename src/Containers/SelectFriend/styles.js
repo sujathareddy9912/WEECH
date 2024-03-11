@@ -60,7 +60,7 @@ export const styles = StyleSheet.create({
   },
   grpName: {
     fontSize: FONT_SIZE.MEDIUM,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.BLACK,
   },
   crownContainer: {

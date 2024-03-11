@@ -161,7 +161,7 @@ const Language = props => {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={{fontFamily: FONT_FAMILY.AVENIER_BOOK}}>Continue</Text>
+              <Text style={{fontFamily: FONT_FAMILY.POPPINS_REGULAR}}>Continue</Text>
             </TouchableOpacity>
           </View>
         ) : null}

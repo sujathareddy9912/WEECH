@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   dropDownText: {
     fontSize: FONT_SIZE.SEMI,
-    fontFamily: FONT_FAMILY.ROBOTO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
   },
   input: {
     width: SCREEN_WIDTH - dynamicSize(50),
@@ -77,10 +77,10 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     color: COLORS.BLACK,
     fontSize: FONT_SIZE.SEMI,
-    fontFamily: FONT_FAMILY.ROBOTO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
   },
   intrest: {
-    fontFamily: FONT_FAMILY.ROBOTO_MEDIUM,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     alignSelf: 'flex-start',
     marginHorizontal: dynamicSize(25),
     fontSize: FONT_SIZE.SEMI,
@@ -161,11 +161,11 @@ const styles = StyleSheet.create({
   name: {
     marginLeft: wp(2),
     fontSize: FONT_SIZE.SEMI,
-    fontFamily: IS_ANDROID ? FONT_FAMILY.SFProText_Medium : FONT_FAMILY.SF_PRO_MEDIUM,
+    fontFamily: IS_ANDROID ? FONT_FAMILY.POPPINS_REGULAR : FONT_FAMILY.POPPINS_REGULAR,
   },
   weechaId: {
     fontSize: FONT_SIZE.SEMI,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     zIndex: 5,
   },
   knowMore: {

@@ -234,7 +234,7 @@ const commonStyle = StyleSheet.create({
     marginLeft: dynamicSize(12),
   },
   username: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.REGULAR,
     textTransform: 'capitalize',
@@ -247,7 +247,7 @@ const commonStyle = StyleSheet.create({
     borderRadius: dynamicSize(50),
   },
   msg: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.REGULAR,
   },

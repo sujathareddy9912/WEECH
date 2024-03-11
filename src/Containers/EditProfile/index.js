@@ -250,7 +250,7 @@ const EditProfile = props => {
           </TouchableOpacity>
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 22,
               color: '#000',
               marginLeft: 10,
@@ -261,7 +261,7 @@ const EditProfile = props => {
         <View style={{width: wp('92%'), alignSelf: 'center'}}>
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 13,
               color: 'rgba(0, 0, 0, 0.3)',
             }}>
@@ -312,7 +312,7 @@ const EditProfile = props => {
           <View style={{flex: 1, marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: '#000',
               }}>
@@ -320,7 +320,7 @@ const EditProfile = props => {
             </Text>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 10,
                 color: 'rgba(0, 0, 0, 0.3)',
               }}>
@@ -351,7 +351,7 @@ const EditProfile = props => {
           <View style={{marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -365,7 +365,7 @@ const EditProfile = props => {
               allowFontScaling={false}
               style={{
                 // height: 40,
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}
@@ -423,7 +423,7 @@ const EditProfile = props => {
           <View style={{flex: 1, marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -435,7 +435,7 @@ const EditProfile = props => {
                 setGender(text);
               }}
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}></TextInput>
@@ -456,7 +456,7 @@ const EditProfile = props => {
           <View style={{flex: 1, marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -469,7 +469,7 @@ const EditProfile = props => {
               }}
               allowFontScaling={false}
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}
@@ -495,7 +495,7 @@ const EditProfile = props => {
             style={{flex: 1, marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -509,7 +509,7 @@ const EditProfile = props => {
               }}
               allowFontScaling={false}
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}
@@ -531,7 +531,7 @@ const EditProfile = props => {
           <View style={{flex: 1, marginHorizontal: 10}}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -545,7 +545,7 @@ const EditProfile = props => {
               allowFontScaling={false}
               style={{
                 minHeight: 40,
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}
@@ -555,7 +555,7 @@ const EditProfile = props => {
         <View style={{marginTop: 10, width: wp('92%'), alignSelf: 'center'}}>
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 16,
               color: 'rgba(0,0,0, 1)',
             }}>
@@ -564,7 +564,7 @@ const EditProfile = props => {
           <Text
             style={{
               marginTop: 5,
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 12,
               color: 'rgba(91, 91, 91, 1)',
             }}>
@@ -725,7 +725,7 @@ const EditProfile = props => {
           <Text
             style={{
               marginTop: 5,
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 12,
               color: 'rgba(0,0,0, 1)',
             }}>
@@ -747,7 +747,7 @@ const EditProfile = props => {
           <View style={{flex: 1, marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -755,7 +755,7 @@ const EditProfile = props => {
             </Text>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 10,
                 color: 'rgba(0, 0, 0, 1)',
               }}>
@@ -798,7 +798,7 @@ const EditProfile = props => {
             }}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 20,
                 color: 'rgba(255,255,255, 1)',
               }}>

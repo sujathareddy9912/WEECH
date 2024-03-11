@@ -248,7 +248,7 @@ const NewRegistration = props => {
           </TouchableOpacity> */}
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 22,
               color: '#000',
               marginLeft: 10,
@@ -259,7 +259,7 @@ const NewRegistration = props => {
         <View style={{width: wp('92%'), alignSelf: 'center'}}>
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 13,
               color: 'rgba(0, 0, 0, 0.3)',
             }}>
@@ -308,7 +308,7 @@ const NewRegistration = props => {
           <View style={{flex: 1, marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: '#000',
               }}>
@@ -316,7 +316,7 @@ const NewRegistration = props => {
             </Text>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 10,
                 color: 'rgba(0, 0, 0, 0.3)',
               }}>
@@ -347,7 +347,7 @@ const NewRegistration = props => {
           <View style={{marginLeft: 10, flex: 1}}>
             {/* <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -364,7 +364,7 @@ const NewRegistration = props => {
               style={{
                 height: 40,
                 flex: 1,
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}
@@ -385,7 +385,7 @@ const NewRegistration = props => {
           }}>
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 12,
               marginLeft: 10,
               color: 'rgba(91, 91, 91, 1)',
@@ -445,7 +445,7 @@ const NewRegistration = props => {
           <View style={{flex: 1, marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -457,7 +457,7 @@ const NewRegistration = props => {
                 setGender(text);
               }}
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}></TextInput>
@@ -478,7 +478,7 @@ const NewRegistration = props => {
           <View style={{flex: 1, marginLeft: 10, height: 40}}>
             {/* <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -493,7 +493,7 @@ const NewRegistration = props => {
                 setCountry(text);
               }}
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}
@@ -519,7 +519,7 @@ const NewRegistration = props => {
             style={{flex: 1, marginLeft: 10}}>
             {/* <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -534,7 +534,7 @@ const NewRegistration = props => {
               <Text
                 style={{
                   marginLeft: 10,
-                  fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 16,
                   color: 'rgba(0, 0, 0, 0.4)',
                 }}>
@@ -558,7 +558,7 @@ const NewRegistration = props => {
           <View style={{flex: 1, marginHorizontal: 10}}>
             {/* <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 12,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -576,7 +576,7 @@ const NewRegistration = props => {
               style={{
                 textAlignVertical: 'top',
                 minHeight: 100,
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: 'rgba(0, 0, 0, 1)',
               }}
@@ -586,7 +586,7 @@ const NewRegistration = props => {
         <View style={{marginTop: 10, width: wp('92%'), alignSelf: 'center'}}>
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 16,
               color: 'rgba(0,0,0, 1)',
             }}>
@@ -595,7 +595,7 @@ const NewRegistration = props => {
           <Text
             style={{
               marginTop: 5,
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 12,
               color: 'rgba(91, 91, 91, 1)',
             }}>
@@ -756,7 +756,7 @@ const NewRegistration = props => {
           <Text
             style={{
               marginTop: 5,
-              fontFamily: FONT_FAMILY.GILROY_REGULAR,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 12,
               color: 'rgba(0,0,0, 1)',
             }}>
@@ -778,7 +778,7 @@ const NewRegistration = props => {
           <View style={{flex: 1, marginLeft: 10}}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 16,
                 color: 'rgba(91, 91, 91, 1)',
               }}>
@@ -786,7 +786,7 @@ const NewRegistration = props => {
             </Text>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 10,
                 color: 'rgba(0, 0, 0, 1)',
               }}>
@@ -829,7 +829,7 @@ const NewRegistration = props => {
             }}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 20,
                 color: 'rgba(255,255,255, 1)',
               }}>

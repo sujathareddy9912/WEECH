@@ -118,12 +118,12 @@ export const styles = StyleSheet.create({
     marginBottom: wp(2),
   },
   locationText: {
-    fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     fontSize: 16,
     color: COLORS.BLACK,
   },
   currLocation: {
-    fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     fontSize: 16,
     color: 'rgba(36, 125, 207, 1)',
   },
@@ -140,7 +140,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: wp(3),
   },
   location: {
-    fontFamily: FONT_FAMILY.GILROY_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: 16,
     color: 'rgba(41, 41, 41, 1)',
   },

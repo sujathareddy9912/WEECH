@@ -80,7 +80,7 @@ export const styles = StyleSheet.create({
   input: {
     width: wp(60),
     marginLeft: dynamicSize(10),
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: getFontSize(15),
   },
   sendBtn: {
@@ -94,7 +94,7 @@ export const styles = StyleSheet.create({
   send: {
     color: '#7287EA',
     fontSize: dynamicSize(16),
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
   },
   itemContainer: {
     alignItems: 'flex-start',
@@ -206,7 +206,7 @@ export const styles = StyleSheet.create({
   },
   opt: {
     fontSize: getFontSize(18),
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
   },
   exitText: {
     fontSize: getFontSize(18),

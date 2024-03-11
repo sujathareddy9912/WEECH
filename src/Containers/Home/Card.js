@@ -54,7 +54,7 @@ const Card = props => {
             position: 'absolute',
             left: '10%',
             top: '2%',
-            fontFamily: FONT_FAMILY.ROBOTO_BLACK,
+            fontFamily: FONT_FAMILY.POPPINS_BOLD,
             fontWeight: 'bold',
             fontStyle: 'italic',
             color: 'white',
@@ -78,7 +78,7 @@ const Card = props => {
           style={{marginLeft: 20, marginTop: 10}}>
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_BOLD,
+              fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
               fontSize: 20,
               color: 'white',
               alignSelf: 'baseline',
@@ -98,7 +98,7 @@ const Card = props => {
           <Diamonds width={'24'} height={'24'} />
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_BOLD,
+              fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
               fontSize: 16,
               color: 'white',
               alignSelf: 'baseline',
@@ -119,7 +119,7 @@ const Card = props => {
           <India width={'24'} height={'24'} />
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_BOLD,
+              fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
               fontSize: 16,
               color: 'white',
               alignSelf: 'baseline',

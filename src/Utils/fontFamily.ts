@@ -2,20 +2,20 @@ import {SCREEN_HEIGHT} from './helper';
 import {getFontSize} from './responsive';
 
 export enum FONT_FAMILY {
-  AVENIER_BLACK = 'AvenirLTStd-Black',
-  AVENIER_BOOK = 'AvenirLTStd-Book',
+  // AVENIER_BLACK = 'AvenirLTStd-Black',
+  // AVENIER_BOOK = 'AvenirLTStd-Book',
   // AVENIER_ROMAN = 'AvenirLTStd-Roman',
 
-  GILROY_BOLD = 'Gilroy-Bold',
+  // GILROY_BOLD = 'Gilroy-Bold',
   // GILROY_HEAVY = 'Gilroy-Heavy',
   // GILROY_LIGHT = 'Gilroy-Light',
-  GILROY_MEDIUM = 'Gilroy-Medium',
-  GILROY_REGULAR = 'Gilroy-Regular',
-  GILROY_SEMIBOLD = 'Gilroy-Semibold',
+  // GILROY_MEDIUM = 'Gilroy-Medium',
+  // GILROY_REGULAR = 'Gilroy-Regular',
+  // GILROY_SEMIBOLD = 'Gilroy-Semibold',
 
-  LATO_REGULAR = 'Lato-Regular',
+  // LATO_REGULAR = 'Lato-Regular',
 
-  MULISH_REGULAR = 'Mulish-Regular',
+  // MULISH_REGULAR = 'Mulish-Regular',
 
   // POPPINS_BLACK = 'Poppins-Black',
   POPPINS_BOLD = 'Poppins-Bold',
@@ -27,27 +27,27 @@ export enum FONT_FAMILY {
   POPPINS_SEMIBOLD = 'Poppins-SemiBold',
   // POPPINS_THIN = 'Poppins-Thin',
 
-  ROBOTO_BLACK = 'Roboto-Black',
+  // ROBOTO_BLACK = 'Roboto-Black',
   // ROBOTO_BLACK_ITALIC = 'Roboto-BlackItalic',
-  ROBOTO_BOLD = 'Roboto-Bold',
+  // ROBOTO_BOLD = 'Roboto-Bold',
   // ROBOTO_BOLD_ITALIC = 'Roboto-BoldItalic',
   // ROBOTO_ITALIC = 'Roboto-Italic',
   // ROBOTO_LIGHT = 'Roboto-Light',
   // ROBOTO_LIGHT_ITALIC = 'Roboto-LightItalic',
-  ROBOTO_MEDIUM = 'Roboto-Medium',
+  // ROBOTO_MEDIUM = 'Roboto-Medium',
   // ROBOTO_MEDIUM_ITALIC = 'Roboto-MediumItalic',
-  ROBOTO_REGULAR = 'Roboto-Regular',
+  // ROBOTO_REGULAR = 'Roboto-Regular',
   // ROBOTO_THIN = 'Roboto-Thin',
   // ROBOTO_THIN_ITALIC = 'Roboto-ThinItalic',
 
-  SF_PRO_REGULAR = 'SFProDisplay-Regular',
-  SF_PRO_BOLD = 'SFProDisplay-Bold',
-  SF_PRO_MEDIUM = 'SFProDisplay-Medium',
-  SF_PRO_SEMIBOLD = 'SFProDisplay-Semibold',
-  SF_PRO_Light = 'SFProDisplay-Light',
-  SFProText_Medium = 'SFProText-Medium',
+  // SF_PRO_REGULAR = 'SFProDisplay-Regular',
+  // SF_PRO_BOLD = 'SFProDisplay-Bold',
+  // SF_PRO_MEDIUM = 'SFProDisplay-Medium',
+  // SF_PRO_SEMIBOLD = 'SFProDisplay-Semibold',
+  // SF_PRO_Light = 'SFProDisplay-Light',
+  // SFProText_Medium = 'SFProText-Medium',
   
-  Inter_Medium = 'Inter-Medium'
+  // Inter_Medium = 'Inter-Medium'
 
 }
 

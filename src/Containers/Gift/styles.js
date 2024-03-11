@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
   },
   textStyle: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.BLACK,
     fontSize: FONT_SIZE.MEDIUM,
     fontWeight: '400',

@@ -194,7 +194,7 @@ export const styles = StyleSheet.create({
   },
   opt: {
     fontSize: getFontSize(18),
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
   },
   exitText: {
     fontSize: getFontSize(18),

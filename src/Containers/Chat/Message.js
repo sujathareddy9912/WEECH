@@ -82,7 +82,7 @@ const Message = props => {
         {props.item.body.text.length > 0 && (
           <Text
             style={[
-              {fontFamily: FONT_FAMILY.MULISH_REGULAR, fontSize: 14},
+              {fontFamily: FONT_FAMILY.POPPINS_REGULAR, fontSize: 14},
               props.item.sentBy === props?.userId
                 ? {color: 'white'}
                 : {color: 'rgba(15, 24, 40, 1)'},
@@ -99,7 +99,7 @@ const Message = props => {
           ]}>
           <Text
             style={[
-              {fontFamily: FONT_FAMILY.LATO_REGULAR, fontSize: 10},
+              {fontFamily: FONT_FAMILY.POPPINS_REGULAR, fontSize: 10},
               props.item.sentBy === props?.userId
                 ? {color: 'white'}
                 : {color: 'rgba(173, 181, 189, 1)'},
@@ -119,7 +119,7 @@ const Message = props => {
               />
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.LATO_REGULAR,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 10,
                   color: 'white',
                 }}>

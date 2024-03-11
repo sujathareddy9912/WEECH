@@ -16,7 +16,7 @@ export default StyleSheet.create({
     },
     skiptext:{
      color:'#F61EDC',
-     fontFamily:FONT_FAMILY.ROBOTO_BOLD,
+     fontFamily:FONT_FAMILY.POPPINS_SEMIBOLD,
      fontSize:wp('4%')
     },
     header:{
@@ -31,12 +31,12 @@ export default StyleSheet.create({
      borderRadius:10
     },
     welcome:{
-     fontFamily:FONT_FAMILY.ROBOTO_BOLD,
+     fontFamily:FONT_FAMILY.POPPINS_SEMIBOLD,
      fontSize:wp('6%'),
      color:'#000000'
     },
     welcomeSubtitle:{
-        fontFamily:FONT_FAMILY.AVENIER_BLACK,
+        fontFamily:FONT_FAMILY.POPPINS_BOLD,
         fontSize:wp('3.3%'),
         color:'#000000B2',
         lineHeight:20
@@ -80,6 +80,6 @@ export default StyleSheet.create({
         
     },
     interesttext:{
-        fontFamily:FONT_FAMILY.ROBOTO_REGULAR,
+        fontFamily:FONT_FAMILY.POPPINS_REGULAR,
     }
   })

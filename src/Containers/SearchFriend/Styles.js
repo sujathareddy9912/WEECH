@@ -16,7 +16,7 @@ export default StyleSheet.create({
     },
     skiptext:{
      color:'#F61EDC',
-     fontFamily:FONT_FAMILY.ROBOTO_BOLD,
+     fontFamily:FONT_FAMILY.POPPINS_SEMIBOLD,
      fontSize:wp('4%')
     },
    
@@ -26,11 +26,11 @@ export default StyleSheet.create({
         marginRight:wp('4%')
     },
     welcome:{
-        fontFamily:FONT_FAMILY.ROBOTO_BOLD,
+        fontFamily:FONT_FAMILY.POPPINS_SEMIBOLD,
         fontSize:wp('5.5%')
        },
        welcomeSubtitle:{
-           fontFamily:FONT_FAMILY.AVENIER_BOOK,
+           fontFamily:FONT_FAMILY.POPPINS_REGULAR,
            fontSize:wp('3.3%'),
            color:'#9E9E9E',
            textAlign:'center',

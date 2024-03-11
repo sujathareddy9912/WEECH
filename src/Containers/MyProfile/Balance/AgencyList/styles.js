@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.WHITE,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
   },
   avatarTxt: {
     color: COLORS.MALEbLUE,

@@ -67,7 +67,7 @@ const MyProfile = props => {
             </TouchableOpacity>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.ROBOTO_REGULAR,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 20,
                 color: '#fff',
                 alignSelf: 'center',
@@ -96,7 +96,7 @@ const MyProfile = props => {
           </View>
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 18,
               color: '#fff',
               alignSelf: 'center',
@@ -106,7 +106,7 @@ const MyProfile = props => {
           </Text>
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 12,
               color: '#fff',
               alignSelf: 'center',
@@ -125,7 +125,7 @@ const MyProfile = props => {
             <View>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 15,
                   color: '#fff',
                   alignSelf: 'center',
@@ -134,7 +134,7 @@ const MyProfile = props => {
               </Text>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 15,
                   color: '#fff',
                   alignSelf: 'center',
@@ -145,7 +145,7 @@ const MyProfile = props => {
             <View>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 15,
                   color: '#fff',
                   alignSelf: 'center',
@@ -154,7 +154,7 @@ const MyProfile = props => {
               </Text>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 15,
                   color: '#fff',
                   alignSelf: 'center',
@@ -165,7 +165,7 @@ const MyProfile = props => {
             <View>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 15,
                   color: '#fff',
                   alignSelf: 'center',
@@ -174,7 +174,7 @@ const MyProfile = props => {
               </Text>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 15,
                   color: '#fff',
                   alignSelf: 'center',
@@ -185,7 +185,7 @@ const MyProfile = props => {
             <View>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 15,
                   color: '#fff',
                   alignSelf: 'center',
@@ -194,7 +194,7 @@ const MyProfile = props => {
               </Text>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 15,
                   color: '#fff',
                   alignSelf: 'center',
@@ -221,7 +221,7 @@ const MyProfile = props => {
               style={{
                 flex: 1,
                 fontSize: 16,
-                fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                 color: 'rgba(52, 43, 43, 1)',
               }}>
               Recharge
@@ -259,7 +259,7 @@ const MyProfile = props => {
               }}>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_BOLD,
+                  fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                   fontSize: 18,
                   color: 'black',
                 }}>
@@ -267,7 +267,7 @@ const MyProfile = props => {
               </Text>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_BOLD,
+                  fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                   fontSize: 21,
                   color: 'rgba(255, 150, 5, 1)',
                 }}>
@@ -295,7 +295,7 @@ const MyProfile = props => {
               <View style={{flexDirection: 'row'}}>
                 <Text
                   style={{
-                    fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                     fontSize: 16,
                     color: '#fff',
                   }}>
@@ -315,7 +315,7 @@ const MyProfile = props => {
                   <CrownIcon />
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 17,
                       color: '#fff',
                       marginLeft: 3,
@@ -351,7 +351,7 @@ const MyProfile = props => {
                 <View style={{flexDirection: 'row'}}>
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_REGULAR,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 16,
                       color: '#000',
                     }}>
@@ -362,7 +362,7 @@ const MyProfile = props => {
                   <DiamondGoldIcon width="17" height="17" />
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 12,
                       color: '#000',
                       marginLeft: 5,
@@ -390,7 +390,7 @@ const MyProfile = props => {
                 <View style={{flexDirection: 'row'}}>
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_REGULAR,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 16,
                       color: '#000',
                     }}>
@@ -401,7 +401,7 @@ const MyProfile = props => {
                   <DiamondGoldIcon width="17" height="17" />
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 12,
                       color: '#000',
                       marginLeft: 5,
@@ -429,7 +429,7 @@ const MyProfile = props => {
                 <View style={{flexDirection: 'row'}}>
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_REGULAR,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 16,
                       color: '#000',
                     }}>
@@ -440,7 +440,7 @@ const MyProfile = props => {
                   <DiamondGoldIcon width="17" height="17" />
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 12,
                       color: '#000',
                       marginLeft: 5,
@@ -474,7 +474,7 @@ const MyProfile = props => {
               style={{
                 flex: 1,
                 fontSize: 16,
-                fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                 color: 'rgba(52, 43, 43, 1)',
               }}>
               Aristocracy
@@ -511,7 +511,7 @@ const MyProfile = props => {
               style={{
                 flex: 1,
                 fontSize: 16,
-                fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                 color: 'rgba(52, 43, 43, 1)',
               }}>
               Host Registration
@@ -548,7 +548,7 @@ const MyProfile = props => {
               style={{
                 flex: 1,
                 fontSize: 16,
-                fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                 color: 'rgba(52, 43, 43, 1)',
               }}>
               Recharge
@@ -585,7 +585,7 @@ const MyProfile = props => {
               style={{
                 flex: 1,
                 fontSize: 16,
-                fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                 color: 'rgba(52, 43, 43, 1)',
               }}>
               Refer Friend
@@ -622,7 +622,7 @@ const MyProfile = props => {
               style={{
                 flex: 1,
                 fontSize: 16,
-                fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                 color: 'rgba(52, 43, 43, 1)',
               }}>
               Free Cards
@@ -662,7 +662,7 @@ const MyProfile = props => {
               style={{
                 flex: 1,
                 fontSize: 16,
-                fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                 color: 'rgba(52, 43, 43, 1)',
               }}>
               Setting
@@ -700,7 +700,7 @@ const MyProfile = props => {
               }}>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                  fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                   fontSize: 18,
                   color: 'black',
                 }}>
@@ -708,7 +708,7 @@ const MyProfile = props => {
               </Text>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_BOLD,
+                  fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                   fontSize: 21,
                   color: 'rgba(255, 150, 5, 1)',
                 }}>
@@ -736,7 +736,7 @@ const MyProfile = props => {
               <View style={{flexDirection: 'row'}}>
                 <Text
                   style={{
-                    fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                     fontSize: 16,
                     color: '#fff',
                   }}>
@@ -756,7 +756,7 @@ const MyProfile = props => {
                   <CrownIcon />
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 17,
                       color: '#fff',
                       marginLeft: 3,
@@ -792,7 +792,7 @@ const MyProfile = props => {
                 <View style={{flexDirection: 'row'}}>
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_REGULAR,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 16,
                       color: '#000',
                     }}>
@@ -803,7 +803,7 @@ const MyProfile = props => {
                   <DiamondGoldIcon width="17" height="17" />
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 12,
                       color: '#000',
                       marginLeft: 5,
@@ -831,7 +831,7 @@ const MyProfile = props => {
                 <View style={{flexDirection: 'row'}}>
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_REGULAR,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 16,
                       color: '#000',
                     }}>
@@ -842,7 +842,7 @@ const MyProfile = props => {
                   <DiamondGoldIcon width="17" height="17" />
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 12,
                       color: '#000',
                       marginLeft: 5,
@@ -870,7 +870,7 @@ const MyProfile = props => {
                 <View style={{flexDirection: 'row'}}>
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_REGULAR,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 16,
                       color: '#000',
                     }}>
@@ -881,7 +881,7 @@ const MyProfile = props => {
                   <DiamondGoldIcon width="17" height="17" />
                   <Text
                     style={{
-                      fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                      fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                       fontSize: 12,
                       color: '#000',
                       marginLeft: 5,
@@ -903,7 +903,7 @@ const MyProfile = props => {
             }}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                 fontSize: 16,
                 color: 'rgba(49, 40, 40, 1)',
               }}>
@@ -911,7 +911,7 @@ const MyProfile = props => {
             </Text>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                 fontSize: 16,
                 color: 'rgba(36, 125, 207, 1)',
               }}>
@@ -934,7 +934,7 @@ const MyProfile = props => {
             <View style={{flexDirection: 'row'}}>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_REGULAR,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 16,
                   color: 'rgba(41, 41, 41, 1)',
                 }}>
@@ -999,7 +999,7 @@ const MyProfile = props => {
             }}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                 fontSize: 16,
                 color: 'rgba(49, 40, 40, 1)',
               }}>
@@ -1022,7 +1022,7 @@ const MyProfile = props => {
             <View style={{flexDirection: 'row'}}>
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_REGULAR,
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 16,
                   color: 'rgba(41, 41, 41, 1)',
                 }}>

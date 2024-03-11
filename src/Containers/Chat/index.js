@@ -125,7 +125,7 @@ const Chat = props => {
             marginLeft: 5,
             marginTop: 20,
             fontSize: 18,
-            fontFamily: FONT_FAMILY.MULISH_REGULAR,
+            fontFamily: FONT_FAMILY.POPPINS_REGULAR,
           }}>
           Athalia Putri
         </Text>
@@ -182,7 +182,7 @@ const Chat = props => {
               backgroundColor: 'rgba(247, 247, 252, 1)',
               flex: 1,
               fontSize: 14,
-              fontFamily: FONT_FAMILY.MULISH_REGULAR,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               paddingHorizontal: 10,
             }}
           />

@@ -187,7 +187,7 @@ const WelcomeScreen = props => {
                 onChangeText={text => {
                   setname(text);
                 }}
-                style={{width: wp('60%'), fontFamily: FONT_FAMILY.AVENIER_BOOK}}
+                style={{width: wp('60%'), fontFamily: FONT_FAMILY.POPPINS_REGULAR}}
                 placeholder={'Enter a name'}
                 placeholderTextColor={'#5B5B5B'}
               />
@@ -202,7 +202,7 @@ const WelcomeScreen = props => {
                 onChangeText={text => {
                   sethomeCountry(text);
                 }}
-                style={{width: wp('60%'), fontFamily: FONT_FAMILY.AVENIER_BOOK}}
+                style={{width: wp('60%'), fontFamily: FONT_FAMILY.POPPINS_REGULAR}}
                 placeholder={'Enter a country'}
                 placeholderTextColor={'#5B5B5B'}
               />
@@ -217,7 +217,7 @@ const WelcomeScreen = props => {
                 onChangeText={text => {
                   sethomeTown(text);
                 }}
-                style={{width: wp('60%'), fontFamily: FONT_FAMILY.AVENIER_BOOK}}
+                style={{width: wp('60%'), fontFamily: FONT_FAMILY.POPPINS_REGULAR}}
                 placeholder={'Enter a home town'}
                 placeholderTextColor={'#5B5B5B'}
               />
@@ -232,7 +232,7 @@ const WelcomeScreen = props => {
                 onChangeText={text => {
                   setDOB(text);
                 }}
-                style={{width: wp('60%'), fontFamily: FONT_FAMILY.AVENIER_BOOK}}
+                style={{width: wp('60%'), fontFamily: FONT_FAMILY.POPPINS_REGULAR}}
                 placeholder={'Enter a DOB'}
                 placeholderTextColor={'#5B5B5B'}
               />
@@ -247,7 +247,7 @@ const WelcomeScreen = props => {
                 onChangeText={text => {
                   setNickname(text);
                 }}
-                style={{width: wp('60%'), fontFamily: FONT_FAMILY.AVENIER_BOOK}}
+                style={{width: wp('60%'), fontFamily: FONT_FAMILY.POPPINS_REGULAR}}
                 placeholder={'Enter a nickname'}
                 placeholderTextColor={'#5B5B5B'}
               />

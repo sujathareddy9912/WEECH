@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   followText: {
     fontSize: FONT_SIZE.REGULAR,
     fontWeight: isAndroid ? 'bold' : '500',
-    fontFamily: FONT_FAMILY.ROBOTO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
   },
   subContainer: {
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     color: COLORS.BLACK,
     fontSize: getFontSize(12),
     paddingHorizontal: dynamicSize(15),
-    fontFamily: isAndroid ? 'SFProText-Medium' : FONT_FAMILY.SF_PRO_MEDIUM,
+    fontFamily: isAndroid ? 'SFProText-Medium' : FONT_FAMILY.POPPINS_REGULAR,
   },
 });
 

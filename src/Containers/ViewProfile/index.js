@@ -101,7 +101,7 @@ const ProfileView = props => {
             </TouchableOpacity>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                 fontSize: 24,
                 color: '#fff',
                 alignSelf: 'center',
@@ -152,7 +152,7 @@ const ProfileView = props => {
           <View style={{marginLeft: 20, marginTop: 5}}>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_BOLD,
+                fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                 fontSize: 25,
                 color: 'rgba(240, 54, 80, 1)',
                 alignSelf: 'baseline',
@@ -185,7 +185,7 @@ const ProfileView = props => {
               <CrownIcon />
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_BOLD,
+                  fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                   fontSize: 12,
                   color: '#fff',
                   alignSelf: 'baseline',
@@ -208,7 +208,7 @@ const ProfileView = props => {
               <FemaleIcon />
               <Text
                 style={{
-                  fontFamily: FONT_FAMILY.GILROY_BOLD,
+                  fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                   fontSize: 12,
                   color: '#fff',
                   alignSelf: 'baseline',
@@ -220,13 +220,13 @@ const ProfileView = props => {
             {/* <Diamonds width={"18"} height={"18"} /> */}
           </View>
           {/* <View style={{flexDirection: 'row', alignSelf: 'baseline', marginLeft: 20, marginTop: 5, height: 18, alignItems: 'center' }}>
-                    <India width={"18"} height={"18"} /><Text style={{fontFamily: FONT_FAMILY.GILROY_BOLD, fontSize: 12, color: '#000', 
+                    <India width={"18"} height={"18"} /><Text style={{fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD, fontSize: 12, color: '#000', 
                                                             alignSelf: 'baseline', marginLeft: 5}}>{props.route.params.details.country}</Text></View> */}
-          {/* <Text style={{fontFamily: FONT_FAMILY.GILROY_MEDIUM, fontSize: 14, color: '#000', alignSelf: 'baseline', marginLeft: 20, marginTop: 20}}>
+          {/* <Text style={{fontFamily: FONT_FAMILY.POPPINS_REGULAR, fontSize: 14, color: '#000', alignSelf: 'baseline', marginLeft: 20, marginTop: 20}}>
                     About Me</Text> */}
           <Text
             style={{
-              fontFamily: FONT_FAMILY.GILROY_REGULAR,
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               lineHeight: 18,
               fontSize: 12,
               color: '#000',
@@ -249,7 +249,7 @@ const ProfileView = props => {
           <View>
             <Text
               style={{
-                fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                 fontSize: 16,
                 color: 'rgba(243, 41, 101, 1)',
                 marginLeft: 20,
@@ -268,7 +268,7 @@ const ProfileView = props => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                     marginLeft: 5,
                   }}>
                   4000/min
@@ -279,7 +279,7 @@ const ProfileView = props => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                     marginLeft: 5,
                   }}>
                   4000/min
@@ -290,7 +290,7 @@ const ProfileView = props => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontFamily: FONT_FAMILY.GILROY_MEDIUM,
+                    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                     marginLeft: 5,
                   }}>
                   4000/min
@@ -318,7 +318,7 @@ const ProfileView = props => {
                 <Text
                   style={{
                     alignSelf: 'center',
-                    fontFamily: FONT_FAMILY.GILROY_BOLD,
+                    fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                     fontSize: 18,
                     color: '#FF9A42',
                   }}>
@@ -327,7 +327,7 @@ const ProfileView = props => {
                 <Text
                   style={{
                     alignSelf: 'center',
-                    fontFamily: FONT_FAMILY.GILROY_REGULAR,
+                    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                     fontSize: 18,
                     color: '#000',
                   }}>
@@ -338,7 +338,7 @@ const ProfileView = props => {
                 <Text
                   style={{
                     alignSelf: 'center',
-                    fontFamily: FONT_FAMILY.GILROY_BOLD,
+                    fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                     fontSize: 18,
                     color: '#FF9A42',
                   }}>
@@ -347,7 +347,7 @@ const ProfileView = props => {
                 <Text
                   style={{
                     alignSelf: 'center',
-                    fontFamily: FONT_FAMILY.GILROY_REGULAR,
+                    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                     fontSize: 18,
                     color: '#000',
                   }}>
@@ -358,7 +358,7 @@ const ProfileView = props => {
                 <Text
                   style={{
                     alignSelf: 'center',
-                    fontFamily: FONT_FAMILY.GILROY_BOLD,
+                    fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                     fontSize: 18,
                     color: '#FF9A42',
                   }}>
@@ -367,7 +367,7 @@ const ProfileView = props => {
                 <Text
                   style={{
                     alignSelf: 'center',
-                    fontFamily: FONT_FAMILY.GILROY_REGULAR,
+                    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                     fontSize: 18,
                     color: '#000',
                   }}>
@@ -391,7 +391,7 @@ const ProfileView = props => {
             <Text
               style={[
                 {
-                  fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                  fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                   fontSize: 14,
                   alignSelf: 'baseline',
                 },
@@ -404,7 +404,7 @@ const ProfileView = props => {
             <Text
               style={[
                 {
-                  fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                  fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                   fontSize: 14,
                   alignSelf: 'baseline',
                 },

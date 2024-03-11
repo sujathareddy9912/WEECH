@@ -75,14 +75,14 @@ const AllBoys = props => {
                     <Text
                       style={{
                         fontSize: 16,
-                        fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                        fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                         marginBottom: hp('0.5%'),
                       }}>
                       {item?.name}
                     </Text>
                   </TouchableOpacity>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 10, fontFamily: FONT_FAMILY.GILROY_BOLD}}>
+                    <Text style={{fontSize: 10, fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD}}>
                       Udaipur, India
                     </Text>
                     <View
@@ -100,7 +100,7 @@ const AllBoys = props => {
                         style={{
                           marginLeft: 2,
                           fontSize: 10,
-                          fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+                          fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                           fontWeight: '600',
                           color: 'rgba(255, 255, 255, 1)',
                         }}>

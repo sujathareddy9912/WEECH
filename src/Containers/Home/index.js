@@ -189,7 +189,7 @@ const Home = props => {
               <Text
                 style={{
                   fontSize: wp('5.2%'),
-                  fontFamily: FONT_FAMILY.GILROY_BOLD,
+                  fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                   color: 'white',
                 }}>
                 Discover
@@ -197,7 +197,7 @@ const Home = props => {
               <Text
                 style={{
                   fontSize: wp('3.7%'),
-                  fontFamily: FONT_FAMILY.GILROY_BOLD,
+                  fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                   color: 'rgba(0,0,0,0.3)',
                 }}>
                 Chicago

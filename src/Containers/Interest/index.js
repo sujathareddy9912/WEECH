@@ -184,7 +184,7 @@ const InterestScreen = props => {
             style={{
               color: '#fff',
               fontSize: wp('4.3%'),
-              fontFamily: FONT_FAMILY.AVENIER_BLACK,
+              fontFamily: FONT_FAMILY.POPPINS_BOLD,
             }}>
             Continue
           </Text>

@@ -20,11 +20,11 @@ export default StyleSheet.create({
         
     },
     welcome:{
-     fontFamily:FONT_FAMILY.ROBOTO_BOLD,
+     fontFamily:FONT_FAMILY.POPPINS_SEMIBOLD,
      fontSize:wp('5.5%')
     },
     welcomeSubtitle:{
-        fontFamily:FONT_FAMILY.AVENIER_BOOK,
+        fontFamily:FONT_FAMILY.POPPINS_REGULAR,
         fontSize:wp('3.3%'),
         color:'#9E9E9E'
     },
@@ -34,7 +34,7 @@ export default StyleSheet.create({
         
     },
     langText:{
-    fontFamily:FONT_FAMILY.AVENIER_BOOK,
+    fontFamily:FONT_FAMILY.POPPINS_REGULAR,
     },
     person1:{
         width:wp('90%'),
@@ -64,6 +64,6 @@ export default StyleSheet.create({
     },
     label:{
         color:'#5B5B5B',
-        fontFamily:FONT_FAMILY.AVENIER_BOOK
+        fontFamily:FONT_FAMILY.POPPINS_REGULAR
     }
   })

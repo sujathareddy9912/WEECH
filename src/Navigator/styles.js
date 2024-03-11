@@ -35,7 +35,7 @@ export default StyleSheet.create({
   },
   tabBarText: {
     fontSize: wp('3%'),
-    fontFamily: FONT_FAMILY.Inter_Medium,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     marginBottom: '5%',
   },
 });

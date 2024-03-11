@@ -65,8 +65,8 @@ const AudioCall = (props) => {
             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: hp('10%'), marginLeft: wp('10%')}}>
               <ImageBackground source={require('../../Assets/Images/man.png')} style={{width: 65, height: 65}} imageStyle={{borderRadius: 100}} />
               <View style={{marginLeft: 10}}>
-              <Text style={{fontFamily: FONT_FAMILY.SF_PRO_REGULAR, fontSize: 32, color: 'rgba(255, 255, 255, 1)'}}>John Smith</Text>
-              <Text style={{fontFamily: FONT_FAMILY.SF_PRO_REGULAR, fontSize: 21, color: 'rgba(255, 255, 255, 0.66)'}}>00:03</Text>
+              <Text style={{fontFamily: FONT_FAMILY.POPPINS_REGULAR, fontSize: 32, color: 'rgba(255, 255, 255, 1)'}}>John Smith</Text>
+              <Text style={{fontFamily: FONT_FAMILY.POPPINS_REGULAR, fontSize: 21, color: 'rgba(255, 255, 255, 0.66)'}}>00:03</Text>
               </View>
             </View>
             <BottomSheet

@@ -77,7 +77,7 @@ const AllGirls = props => {
                         paddingHorizontal: wp('2%'),
                         paddingVertical: wp('1%'),
                         alignSelf: 'center',
-                        fontFamily: FONT_FAMILY.GILROY_SEMIBOLD,
+                        fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                         fontSize: 10,
                         color: 'rgba(241, 86, 125, 1)',
                         maxWidth: wp('48%') / 1.1,

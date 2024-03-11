@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: COLORS.WHITE,
     fontSize: dynamicSize(38),
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
   },
   card: {
     width: wp(42),
@@ -109,7 +109,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     textDecorationLine: 'line-through',
     textDecorationStyle: 'solid',
-    fontFamily: FONT_FAMILY.ROBOTO_MEDIUM,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
   },
   diamondInfo: {
     textAlign: 'center',
@@ -121,7 +121,7 @@ export const styles = StyleSheet.create({
   diamondText: {
     textAlign: 'center',
     color: COLORS.BLACK,
-    fontFamily: FONT_FAMILY.ROBOTO_MEDIUM,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     fontSize: FONT_SIZE.MEDIUM,
   },
   diamondIcon: {

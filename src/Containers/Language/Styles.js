@@ -20,7 +20,7 @@ export default StyleSheet.create({
         
     },
     langText:{
-    fontFamily:FONT_FAMILY.AVENIER_BOOK,
+    fontFamily:FONT_FAMILY.POPPINS_REGULAR,
     },
     person1:{
         width:wp('90%'),

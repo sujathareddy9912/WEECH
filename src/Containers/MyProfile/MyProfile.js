@@ -36,7 +36,12 @@ import {IMAGE_URL} from '../../Services/Api/Common';
 import ReferIcon from '../../Assets/Icons/Refer.svg';
 import CrownIcon from '../../Assets/Icons/crown.svg';
 import MoneyBag from '../../Assets/Icons/money_bag.svg';
-import {formatNumber, imagePicker, openCamera, SCREEN_WIDTH} from '../../Utils/helper';
+import {
+  formatNumber,
+  imagePicker,
+  openCamera,
+  SCREEN_WIDTH,
+} from '../../Utils/helper';
 import RechargeIcon from '../../Assets/Icons/Recharge.svg';
 import SettingsIcon from '../../Assets/Icons/Settings.svg';
 import WeechaIcon from '../../Assets/Icons/WeechaIcon.svg';

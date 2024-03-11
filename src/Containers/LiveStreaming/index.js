@@ -627,6 +627,8 @@ const LiveStreaming = ({navigation, route}) => {
 
   const reconnectAgro = async () => {
     agoraEngineRef.current?.leaveChannel();
+    await agoraEngineRef.current?.removeAllListeners();
+    await agoraEngineRef.current?.release();
     agoraEngineRef.current.initialize({
       appId: rtmAgoraConfig.appId,
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
@@ -1766,7 +1768,11 @@ const LiveStreaming = ({navigation, route}) => {
               {showComments && (
                 <TouchableOpacity
                   style={styles.closeBtn}
-                  onPress={endCallPopup}>
+                  onPress={async () => {
+                    await agoraEngineRef.current?.removeAllListeners();
+                    await agoraEngineRef.current?.release();
+                    endCallPopup();
+                  }}>
                   <Icon
                     origin="AntDesign"
                     name="close"
@@ -2319,13 +2325,13 @@ const LiveStreaming = ({navigation, route}) => {
                     styles.liveimageContainer,
                     {marginTop: 20, backgroundColor: 'green'},
                   ]}>
-                  {item.coverImage ? (
+                  {item.profile ? (
                     <MyImage
                       fast
                       borderRadius={5}
                       resizeMode={'cover'}
                       style={{width: '100%', height: '100%'}}
-                      source={{uri: `${IMAGE_URL}${item.coverImage}`}}
+                      source={{uri: `${IMAGE_URL}${item.profile}`}}
                     />
                   ) : (
                     <MyImage
@@ -2333,7 +2339,7 @@ const LiveStreaming = ({navigation, route}) => {
                       borderRadius={5}
                       resizeMode={'cover'}
                       style={{width: '100%', height: '100%'}}
-                      source={{uri: `${IMAGE_URL}${item.profile}`}}
+                      source={{uri: `${IMAGE_URL}${item.coverImage}`}}
                     />
                   )}
                 </Touchable>

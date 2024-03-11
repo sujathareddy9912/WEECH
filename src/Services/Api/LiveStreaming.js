@@ -445,6 +445,24 @@ export function getAnotherUserProfileApi(param) {
       return null;
     });
 }
+export function updateNotificationStatusApi(body) {
+  const url = `notification/update_notification_status`;
+  return userApiClient
+    .post(url, body, {
+      headers: {
+        Authorization: serviceConst.token,
+      },
+    })
+    .then(response => {
+      if (in200s(response.status)) {
+        return response['data'];
+      }
+      return null;
+    })
+    .catch(error => {
+      return null;
+    });
+}
 
 export function deleteVisitorAPI(body) {
   const url = `visitor/delete_visitor`;

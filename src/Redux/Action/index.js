@@ -508,6 +508,12 @@ export const getAnotherUserProfile = (payload, callBack) => ({
   callBack,
 });
 
+export const updateNotificationStatus = (payload, callBack) => ({
+  type: TYPES.UPDATE_NOTIFICATION_STATUS,
+  payload,
+  callBack,
+});
+
 export const deleteVisitor = (payload, callBack) => ({
   type: TYPES.DELETE_VISITOR,
   payload,

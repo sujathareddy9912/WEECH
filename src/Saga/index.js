@@ -104,6 +104,7 @@ import {
   getHostGiftDataSaga,
   deleteVisitorSaga,
   clearVisitorSaga,
+  updateNotificationStatusSaga,
 } from './LiveStreaming';
 
 import {
@@ -186,6 +187,7 @@ export default function* root() {
     takeLatest(TYPES.REPORT_USER, reportUserSaga),
     takeLatest(TYPES.GET_GALLERY_LIST, getGalleryListSaga),
     takeLatest(TYPES.ANOTHER_USER_PROFILE, getAnotherUserProfileSaga),
+    takeLatest(TYPES.UPDATE_NOTIFICATION_STATUS, updateNotificationStatusSaga),
     takeLatest(TYPES.DELETE_VISITOR, deleteVisitorSaga),
     takeLatest(TYPES.CLEAR_VISITOR, clearVisitorSaga),
     takeLatest(TYPES.GET_VIDEO_LIST, getUserVideoSaga),

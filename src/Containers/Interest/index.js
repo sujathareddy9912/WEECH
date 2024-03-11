@@ -23,6 +23,7 @@ import {prop} from 'ramda';
 import {connect} from 'react-redux';
 import CommonActions from '../../Store/Common/Actions';
 import {HelperService} from '../../Services/Utils/HelperService';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 
 const InterestScreen = props => {
   const [Interest, setInterest] = useState([
@@ -183,7 +184,7 @@ const InterestScreen = props => {
             style={{
               color: '#fff',
               fontSize: wp('4.3%'),
-              fontFamily: 'AvenirLTStd-Black',
+              fontFamily: FONT_FAMILY.POPPINS_BOLD,
             }}>
             Continue
           </Text>

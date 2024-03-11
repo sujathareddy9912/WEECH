@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions } from 'react-native'
 let width=Dimensions.get('window').width;
 let height=Dimensions.get('window').height;
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 export default StyleSheet.create({
     Container: {
      flex:1,
@@ -15,7 +16,7 @@ export default StyleSheet.create({
     },
     skiptext:{
      color:'#F61EDC',
-     fontFamily:'Roboto-Bold',
+     fontFamily:FONT_FAMILY.POPPINS_SEMIBOLD,
      fontSize:wp('4%')
     },
    
@@ -25,11 +26,11 @@ export default StyleSheet.create({
         marginRight:wp('4%')
     },
     welcome:{
-        fontFamily:'Roboto-Bold',
+        fontFamily:FONT_FAMILY.POPPINS_SEMIBOLD,
         fontSize:wp('5.5%')
        },
        welcomeSubtitle:{
-           fontFamily:'AvenirLTStd-Book',
+           fontFamily:FONT_FAMILY.POPPINS_REGULAR,
            fontSize:wp('3.3%'),
            color:'#9E9E9E',
            textAlign:'center',

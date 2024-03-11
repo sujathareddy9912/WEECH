@@ -101,7 +101,7 @@ export const styles = StyleSheet.create({
   shared: {
     fontSize: getFontSize(16),
     color: '#219653',
-    fontFamily: FONT_FAMILY.SF_PRO_BOLD,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     marginTop: dynamicSize(5),
   },
   btn: {

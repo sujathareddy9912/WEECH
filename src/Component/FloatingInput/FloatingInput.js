@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     borderRightColor: COLORS.TEXT_INPUT,
   },
   phoneNumber: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: FONT_SIZE.SEMI,
     marginRight: dynamicSize(5),
   },

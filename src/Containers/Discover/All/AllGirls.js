@@ -13,6 +13,7 @@ import {
 } from 'react-native-responsive-screen';
 import StarFav from '../../../Assets/Icons/star_pro.svg';
 import {IMAGE_URL} from '../../../Services/Api/Common';
+import { FONT_FAMILY } from '../../../Utils/fontFamily';
 
 const AllGirls = props => {
   return (
@@ -76,7 +77,7 @@ const AllGirls = props => {
                         paddingHorizontal: wp('2%'),
                         paddingVertical: wp('1%'),
                         alignSelf: 'center',
-                        fontFamily: 'Gilroy-SemiBold',
+                        fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                         fontSize: 10,
                         color: 'rgba(241, 86, 125, 1)',
                         maxWidth: wp('48%') / 1.1,

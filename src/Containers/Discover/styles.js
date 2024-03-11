@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: wp('5.2%'),
-    fontFamily: 'Gilroy-Bold',
+    fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
     color: 'white',
   },
   right: {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.BLACK_OFFSET,
   },
   name: {
-    fontFamily: FONT_FAMILY.GILROY_BOLD,
+    fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
     fontSize: FONT_SIZE.LARGE,
     color: 'white',
     alignSelf: 'baseline',
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   smallText: {
-    fontFamily: FONT_FAMILY.GILROY_BOLD,
+    fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
     fontSize: FONT_SIZE.REGULAR_MEDIUM,
     color: COLORS.WHITE,
     marginLeft: 5,

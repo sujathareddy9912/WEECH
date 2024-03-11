@@ -15,6 +15,7 @@ import {
 
 import GoldStarIcon from '../../../Assets/Icons/Gold_Star.svg';
 import {IMAGE_URL} from '../../../Services/Api/Common';
+import { FONT_FAMILY } from '../../../Utils/fontFamily';
 
 const AllBoys = props => {
   return (
@@ -74,14 +75,14 @@ const AllBoys = props => {
                     <Text
                       style={{
                         fontSize: 16,
-                        fontFamily: 'Gilroy-SemiBold',
+                        fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
                         marginBottom: hp('0.5%'),
                       }}>
                       {item?.name}
                     </Text>
                   </TouchableOpacity>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 10, fontFamily: 'Gilroy-Regular'}}>
+                    <Text style={{fontSize: 10, fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD}}>
                       Udaipur, India
                     </Text>
                     <View
@@ -99,7 +100,7 @@ const AllBoys = props => {
                         style={{
                           marginLeft: 2,
                           fontSize: 10,
-                          fontFamily: 'SFPRODISPLAYREGULAR',
+                          fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                           fontWeight: '600',
                           color: 'rgba(255, 255, 255, 1)',
                         }}>

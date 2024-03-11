@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
 
   textStyle: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.MEDIUM,
     fontWeight: '400',

@@ -271,6 +271,6 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: dynamicSize(18),
-    fontFamily: FONT_FAMILY.SF_PRO_SEMIBOLD,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
   },
 });

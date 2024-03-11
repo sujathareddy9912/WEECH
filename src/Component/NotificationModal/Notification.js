@@ -24,6 +24,7 @@ import {
   getAnotherUserProfile,
   getHostExtraDetailAction,
   hostDetailAction,
+  updateNotificationStatus,
 } from '../../Redux/Action';
 import {STREAM_TYPE} from '../../Utils/agoraConfig';
 import {useNavigation} from '@react-navigation/native';
@@ -104,7 +105,7 @@ export function NotificationModal(props) {
         ...item,
       }),
     );
-    notificationPress();
+    // notificationPress();       // #76
     navigation.navigate('liveStreaming', {
       ...item,
       type: STREAM_TYPE.AUDIENCE,
@@ -115,11 +116,21 @@ export function NotificationModal(props) {
   };
 
   const profileRedirection = item => {
+    const params = {
+      id: item?._id,
+    };
+
     dispatch(
-      getAnotherUserProfile({userId: item?.fromUserData?._id}, data => {
-        if (data?.user) {
-          notificationPress();
-          navigation.navigate('UserProfile', data?.user);
+      updateNotificationStatus(params, data => {
+        if (data?.code === 200) {
+          dispatch(
+            getAnotherUserProfile({userId: item?.fromUserData?._id}, data => {
+              if (data?.user) {
+                // notificationPress();   // #76
+                navigation.navigate('UserProfile', data?.user);
+              }
+            }),
+          );
         }
       }),
     );

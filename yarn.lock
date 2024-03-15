@@ -8279,7 +8279,7 @@ react-native-background-timer@^2.4.1:
 
 react-native-callkeep@^4.3.12:
   version "4.3.12"
-  resolved "https://registry.npmjs.org/react-native-callkeep/-/react-native-callkeep-4.3.12.tgz"
+  resolved "https://registry.yarnpkg.com/react-native-callkeep/-/react-native-callkeep-4.3.12.tgz#e29b0602f0a2942cfcdabea6d5c6697ee40566f6"
   integrity sha512-MPgnQkJn4k8rorBCcYYl6FtI0Gp3BHrBKE5RZ6dbyQchddy3xIj8K4BcpCuDOrAaRls1jAXceSeeJVBdw2jDHw==
 
 react-native-camera@^4.2.1:

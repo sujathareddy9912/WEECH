@@ -486,8 +486,9 @@ export const makeUserAdmin = (payload, callBack) => ({
   callBack,
 });
 
-export const userLiveMuteFlag = () => ({
+export const userLiveMuteFlag = payload => ({
   type: TYPES.LIVE_USER_MUTE_FLAG,
+  payload,
 });
 
 export const reportUserAction = (payload, callBack) => ({

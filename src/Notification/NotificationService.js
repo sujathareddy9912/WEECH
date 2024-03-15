@@ -6,6 +6,7 @@ import {LOCAL_KEY} from '../Utils/localStorage';
 
 export async function getFCMToken() {
   const fcmToken = await messaging().getToken();
+  console.log('fcm==========', fcmToken);
   return fcmToken;
 }
 

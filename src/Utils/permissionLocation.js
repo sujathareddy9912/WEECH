@@ -16,6 +16,9 @@ export async function requestLocationPermission() {
     {
       title: 'Weecha',
       message: 'Weecha would like access to your location ',
+      buttonNeutral: 'No Thanks',
+      buttonNegative: ' ',
+      buttonPositive: 'OK',
     },
   );
   return granted === RESULTS.GRANTED;

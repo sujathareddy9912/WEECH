@@ -509,6 +509,12 @@ export const getAnotherUserProfile = (payload, callBack) => ({
   callBack,
 });
 
+export const updateNotificationStatus = (payload, callBack) => ({
+  type: TYPES.UPDATE_NOTIFICATION_STATUS,
+  payload,
+  callBack,
+});
+
 export const deleteVisitor = (payload, callBack) => ({
   type: TYPES.DELETE_VISITOR,
   payload,
@@ -670,6 +676,12 @@ export const allowFreeChat = (payload, callBack) => ({
 
 export const shareLiveLinkFriends = (payload, callBack) => ({
   type: TYPES.SHARE_LIVE_LINK_IN_CHAT,
+  payload,
+  callBack,
+});
+
+export const shareLiveLinkGroups = (payload, callBack) => ({
+  type: TYPES.SHARE_LIVE_LINK_IN_GROUP_CHAT,
   payload,
   callBack,
 });

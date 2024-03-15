@@ -199,14 +199,14 @@ const Balance = ({
           />
         </View>
         <View style={styles.diamondInfo}>
-          <View>
-            <MyText style={styles.diamond}>{item?.diamond}</MyText>
-            <MyText style={styles.diamondText}>Diamond</MyText>
+          <MyText style={styles.offerDiamond}>{item?.offeredDiamond}</MyText>
+          <MyText style={styles.diamond}>{item?.diamond}</MyText>
+          <View style={styles.diamondPriceContainer}>
+            <MyText style={styles.diamondText}>
+              <MyText style={styles.diamondText}>$ </MyText>
+              {item?.price}
+            </MyText>
           </View>
-          <MyText style={styles.diamondText}>
-            <MyText style={styles.diamond}>$ </MyText>
-            {item?.price}
-          </MyText>
         </View>
       </Touchable>
     );
@@ -215,7 +215,11 @@ const Balance = ({
   const handleAgreement = () => {};
 
   useEffect(() => {
-    dispatch(getDiamondList(list => setDiamond(list?.data)));
+    dispatch(
+      getDiamondList(list => {
+        setDiamond(list?.data);
+      }),
+    );
   }, []);
 
   useEffect(() => {
@@ -253,7 +257,11 @@ const Balance = ({
             containerStyle={styles.header}
             titleStyle={styles.title}
           />
-          <ScrollView contentContainerStyle={{ justifyContent: 'space-between', paddingBottom: wp(10) }}>
+          <ScrollView
+            contentContainerStyle={{
+              justifyContent: 'space-between',
+              paddingBottom: wp(10),
+            }}>
             <View>
               <View style={styles.inventoryInfo}>
                 <DiamondGold height={26} width={26} />

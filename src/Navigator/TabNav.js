@@ -209,7 +209,7 @@ function BottomTabBar(props) {
 //                           paddingHorizontal: 10,
 //                           borderRadius: wp('5%'),
 //                           fontSize: 14,
-//                           fontFamily: 'Gilroy-Regular',
+//                           fontFamily: FONT_FAMILY.POPPINS_REGULAR,
 //                         },
 //                         props.state.index === 0
 //                           ? {backgroundColor: 'white', color: '#000'}
@@ -233,7 +233,7 @@ function BottomTabBar(props) {
 //                           paddingHorizontal: 10,
 //                           borderRadius: wp('5%'),
 //                           fontSize: 14,
-//                           fontFamily: 'Gilroy-Regular',
+//                           fontFamily: FONT_FAMILY.POPPINS_REGULAR,
 //                         },
 //                         props.state.index === 1
 //                           ? {backgroundColor: 'white', color: '#000'}
@@ -257,7 +257,7 @@ function BottomTabBar(props) {
 //                           paddingHorizontal: 10,
 //                           borderRadius: wp('5%'),
 //                           fontSize: 14,
-//                           fontFamily: 'Gilroy-Regular',
+//                           fontFamily: FONT_FAMILY.POPPINS_REGULAR,
 //                         },
 //                         props.state.index === 2
 //                           ? {backgroundColor: 'white', color: '#000'}
@@ -281,7 +281,7 @@ function BottomTabBar(props) {
 //                           paddingHorizontal: 10,
 //                           borderRadius: wp('5%'),
 //                           fontSize: 14,
-//                           fontFamily: 'Gilroy-Regular',
+//                           fontFamily: FONT_FAMILY.POPPINS_REGULAR,
 //                         },
 //                         props.state.index === 3
 //                           ? {backgroundColor: 'white', color: '#000'}
@@ -327,7 +327,7 @@ function BottomTabBar(props) {
 //           <Text
 //             style={{
 //               fontSize: 20,
-//               fontFamily: 'Gilroy-SemiBold',
+//               fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
 //               marginTop: '5%',
 //               marginLeft: 20,
 //             }}>
@@ -364,7 +364,7 @@ function BottomTabBar(props) {
 //                     <Text
 //                       style={[
 //                         {
-//                           fontFamily: 'Gilroy-Regular',
+//                           fontFamily: FONT_FAMILY.POPPINS_REGULAR,
 //                           fontSize: 15,
 //                           textAlign: 'center',
 //                         },
@@ -393,7 +393,7 @@ function BottomTabBar(props) {
 //               }}>
 //               <Text
 //                 style={{
-//                   fontFamily: 'Gilroy-Regular',
+//                   fontFamily: FONT_FAMILY.POPPINS_REGULAR,
 //                   fontSize: 15,
 //                   alignSelf: 'center',
 //                   color: '#fff',
@@ -615,7 +615,7 @@ const DrawerContent = () => {
       <Text
         style={{
           fontSize: 14,
-          fontFamily: 'Gilroy-Bold',
+          fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
           color: 'rgba(172, 172, 172, 1)',
           marginLeft: '5%',
           marginBottom: hp('3%'),
@@ -640,7 +640,7 @@ const DrawerContent = () => {
           ]}>
           <Text
             style={[
-              {textAlign: 'center', fontSize: 14, fontFamily: 'Gilroy-Bold'},
+              {textAlign: 'center', fontSize: 14, fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD},
               tab === 0 ? {color: '#fff'} : {color: 'rgba(94, 94, 94, 1)'},
             ]}>
             Live
@@ -654,7 +654,7 @@ const DrawerContent = () => {
           ]}>
           <Text
             style={[
-              {textAlign: 'center', fontSize: 14, fontFamily: 'Gilroy-Bold'},
+              {textAlign: 'center', fontSize: 14, fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD},
               tab === 1 ? {color: '#fff'} : {color: 'rgba(94, 94, 94, 1)'},
             ]}>
             Moments
@@ -668,7 +668,7 @@ const DrawerContent = () => {
           ]}>
           <Text
             style={[
-              {textAlign: 'center', fontSize: 14, fontFamily: 'Gilroy-Bold'},
+              {textAlign: 'center', fontSize: 14, fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD},
               tab === 2 ? {color: '#fff'} : {color: 'rgba(94, 94, 94, 1)'},
             ]}>
             Online Friends
@@ -803,7 +803,7 @@ const DrawerContent = () => {
                 <Text
                   style={{
                     fontSize: 10,
-                    fontFamily: 'Gilroy-Medium',
+                    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                     color: 'rgba(243, 41, 101, 1)',
                     marginBottom: 5,
                   }}>
@@ -831,7 +831,7 @@ const DrawerContent = () => {
                       style={{
                         marginLeft: 2,
                         fontSize: 10,
-                        fontFamily: 'Gilroy-Bold',
+                        fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                         color: '#fff',
                       }}>
                       {item.content.watching}

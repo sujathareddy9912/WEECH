@@ -1487,7 +1487,6 @@ const LiveStreaming = ({navigation, route}) => {
         const userInfo = joinedUserDataState.filter(
           user => user?.joinedUsers?._id === selectedUser?.joinedUsers?._id,
         );
-        console.log('qqqqqqqqq', userInfo[0], userInfo[0]?.isMute);
         if (userInfo[0]?.isMute) {
           muteUser(0);
         } else {
@@ -2476,31 +2475,16 @@ const LiveStreaming = ({navigation, route}) => {
               paddingHorizontal: wp(4),
             }}>
             <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                alignItems: 'center',
-                marginTop: hp(1),
-              }}
+              style={styles.shareOptionsContainer}
               onPress={Invite}>
-              <View
-                style={{
-                  width: wp(15),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <SvgIcon.inviteFrnd width={wp(4)} />
+              <View style={styles.iconContainer}>
+                <SvgIcon.inviteFrnd />
               </View>
               <Text style={[styles.options]}>Share </Text>
             </TouchableOpacity>
             <View style={styles.seperator} />
             <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                alignItems: 'center',
-                marginTop: hp(1),
-              }}
+              style={styles.shareOptionsContainer}
               onPress={() => {
                 setIsopen(false);
                 navigation.navigate('ShareWeechaFriends', {
@@ -2511,15 +2495,28 @@ const LiveStreaming = ({navigation, route}) => {
                   hostDetail: hostDetail,
                 });
               }}>
-              <View
-                style={{
-                  width: wp(15),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <SvgIcon.WeechaShare width={wp(4)} />
+              <View style={styles.iconContainer}>
+                <SvgIcon.WeechaShare />
               </View>
               <Text style={[styles.options]}>Friends </Text>
+            </TouchableOpacity>
+            <View style={styles.seperator} />
+            <TouchableOpacity
+              style={styles.shareOptionsContainer}
+              onPress={() => {
+                setIsopen(false);
+                navigation.navigate('SelectWeeChaGroup', {
+                  channelToken: channelToken,
+                  channelName: channelName,
+                  link: 'https://www.google.com',
+                  hostId: hostDetail?._id,
+                  hostDetail: hostDetail,
+                });
+              }}>
+              <View style={styles.iconContainer}>
+                <SvgIcon.WeechaShare />
+              </View>
+              <Text style={[styles.options]}>Group </Text>
             </TouchableOpacity>
           </View>
         </Actionsheet.Content>

@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions } from 'react-native'
 let width=Dimensions.get('window').width;
 let height=Dimensions.get('window').height;
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 export default StyleSheet.create({
     Container: {
      flex:1,
@@ -19,11 +20,11 @@ export default StyleSheet.create({
         
     },
     welcome:{
-     fontFamily:'Roboto-Bold',
+     fontFamily:FONT_FAMILY.POPPINS_SEMIBOLD,
      fontSize:wp('5.5%')
     },
     welcomeSubtitle:{
-        fontFamily:'AvenirLTStd-Book',
+        fontFamily:FONT_FAMILY.POPPINS_REGULAR,
         fontSize:wp('3.3%'),
         color:'#9E9E9E'
     },
@@ -33,7 +34,7 @@ export default StyleSheet.create({
         
     },
     langText:{
-    fontFamily:'AvenirLTStd-Book',
+    fontFamily:FONT_FAMILY.POPPINS_REGULAR,
     },
     person1:{
         width:wp('90%'),
@@ -63,6 +64,6 @@ export default StyleSheet.create({
     },
     label:{
         color:'#5B5B5B',
-        fontFamily:'AvenirLTStd-Book'
+        fontFamily:FONT_FAMILY.POPPINS_REGULAR
     }
   })

@@ -4,6 +4,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {COLORS} from '../Utils/colors';
+import { FONT_FAMILY } from '../Utils/fontFamily';
 
 export default StyleSheet.create({
   container: {
@@ -34,7 +35,7 @@ export default StyleSheet.create({
   },
   tabBarText: {
     fontSize: wp('3%'),
-    fontFamily: 'Inter-Medium',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     marginBottom: '5%',
   },
 });

@@ -5,7 +5,7 @@ import {
 import {StyleSheet} from 'react-native';
 
 import {COLORS} from '../../../Utils/colors';
-import {FONT_FAMILY} from '../../../Utils/fontFamily';
+import {FONT_FAMILY, FONT_SIZE} from '../../../Utils/fontFamily';
 import {dynamicSize} from '../../../Utils/responsive';
 
 export const styles = StyleSheet.create({
@@ -50,11 +50,11 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: COLORS.WHITE,
     fontSize: dynamicSize(38),
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
   },
   card: {
     width: wp(42),
-    height: wp(35),
+    height: wp(40),
     marginEnd: wp(5),
     marginTop: wp(5),
     borderRadius: wp(1),
@@ -97,18 +97,32 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: COLORS.WHITE,
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
-    marginTop: dynamicSize(8)
+    marginTop: dynamicSize(8),
+  },
+  offerDiamond: {
+    textAlign: 'center',
+    color: COLORS.BLACK,
+    fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
+    fontSize: FONT_SIZE.SEMI_LARGE,
   },
   diamond: {
-    color: '#F7A05E',
+    textAlign: 'center',
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
   },
   diamondInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    textAlign: 'center',
     justifyContent: 'space-between',
   },
+  diamondPriceContainer: {
+    backgroundColor: COLORS.GALLERY_PLACEHOLDER_GREY,
+  },
   diamondText: {
+    textAlign: 'center',
     color: COLORS.BLACK,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: FONT_SIZE.MEDIUM,
   },
   diamondIcon: {
     width: dynamicSize(45),

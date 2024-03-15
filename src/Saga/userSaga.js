@@ -108,6 +108,21 @@ export function* shareLiveLinkWithFriends({payload, callBack}) {
   }
 }
 
+export function* shareLiveLinkWithGroups({payload, callBack}) {
+  try {
+    const resp = yield call(UserServices.shareLiveLinkGroup, payload);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+    } else {
+      callBack(false);
+      HelperService.showToast(resp?.message);
+    }
+  } catch (error) {
+    callBack(false);
+    HelperService.showToast('Something went wrong');
+  }
+}
+
 export function* getGrpDetailsSaga({payload, callBack}) {
   try {
     const resp = yield call(UserServices.getGrpDetailsSagaApi, payload);

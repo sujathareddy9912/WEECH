@@ -798,7 +798,7 @@ const ProfileSetup = ({route, navigation}) => {
                 isRequired
                 error={nameError}
                 value={name}
-                labelStyle={{fontFamily: FONT_FAMILY.ROBOTO_MEDIUM}}
+                labelStyle={{fontFamily: FONT_FAMILY.POPPINS_MEDIUM}}
                 onChangeText={_onChangeText(INPUT_TYPES.NAME)}
               />
               {isEdit ? (
@@ -807,7 +807,7 @@ const ProfileSetup = ({route, navigation}) => {
                   label={`${strings('editProfile.gender')}`}
                   isRequired
                   value={gender}
-                  labelStyle={{fontFamily: FONT_FAMILY.ROBOTO_MEDIUM}}
+                  labelStyle={{fontFamily: FONT_FAMILY.POPPINS_MEDIUM}}
                   style={{
                     marginTop: dynamicSize(15),
                   }}
@@ -824,7 +824,7 @@ const ProfileSetup = ({route, navigation}) => {
               {isEdit ? (
                 <InputWithLabel
                   editable={false}
-                  labelStyle={{fontFamily: FONT_FAMILY.ROBOTO_MEDIUM}}
+                  labelStyle={{fontFamily: FONT_FAMILY.POPPINS_MEDIUM}}
                   label={strings('editProfile.dateOfBirth')}
                   isRequired
                   value={dob}
@@ -865,7 +865,7 @@ const ProfileSetup = ({route, navigation}) => {
                 multiline
                 textInputStyle={styles.about}
                 style={styles.marginTop}
-                labelStyle={{fontFamily: FONT_FAMILY.ROBOTO_MEDIUM}}
+                labelStyle={{fontFamily: FONT_FAMILY.POPPINS_MEDIUM}}
                 onChangeText={_onChangeText(INPUT_TYPES.ABOUT)}
               />
               <FilePick

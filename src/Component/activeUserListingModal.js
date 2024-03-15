@@ -419,12 +419,12 @@ const styles = StyleSheet.create({
     padding: dynamicSize(10),
   },
   viewers: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     marginLeft: dynamicSize(20),
     fontSize: FONT_SIZE.SEMI_MEDIUM,
   },
   liveCount: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     marginLeft: dynamicSize(3),
     fontSize: FONT_SIZE.SEMI_MEDIUM,
   },
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     paddingVertical: SCREEN_HEIGHT * 0.01,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: FONT_SIZE.SEMI_LARGE,
   },
   item: {
@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
     paddingLeft: dynamicSize(10),
   },
   name: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: FONT_SIZE.MEDIUM,
   },
   subRightContainer: {
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
     borderRadius: dynamicSize(20),
   },
   options: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: FONT_SIZE.EXTRA_LARGE,
   },
 });

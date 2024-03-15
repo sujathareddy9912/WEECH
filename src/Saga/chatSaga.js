@@ -182,6 +182,25 @@ export function* getGroupMessagesSaga({payload, page, callBack}) {
                     }
                   : null,
             };
+          } else if (item.type == CHAT_MESSAGE_TYPE.LIVE_LINK) {
+            return {
+              ...item,
+              _id: item._id,
+              text: item.content,
+              createdAt: item.createdAt,
+              user: {
+                _id: item.sender,
+                name: item?.userName,
+                avatar: item?.userProfile,
+              },
+              isReply:
+                item?.replyMessageId && item?.isReply
+                  ? {
+                      ...item.isReply,
+                      replyId: item.replyMessageId,
+                    }
+                  : null,
+            };
           } else if (item.type == CHAT_MESSAGE_TYPE.CONTENT)
             return {
               ...item,

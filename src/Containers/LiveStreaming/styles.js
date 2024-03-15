@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   nameContainer: {
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.SMALL,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontWeight: '400',
   },
   padding: {
@@ -182,14 +182,14 @@ const styles = StyleSheet.create({
   },
 
   username: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.REGULAR,
     textTransform: 'capitalize',
   },
 
   msg: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.REGULAR,
   },
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
   },
 
   pkText: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontWeight: '900',
     color: COLORS.YELLOW,
   },
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
   },
 
   userLevel: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontWeight: 'bold',
     fontStyle: 'italic',
     fontSize: FONT_SIZE.MEDIUM,
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
   joinedTheLiveText: {
     marginLeft: SCREEN_HEIGHT * 0.02,
     color: COLORS.WHITE,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: FONT_SIZE.LARGE,
     width: wp(50),
   },
@@ -448,6 +448,18 @@ const styles = StyleSheet.create({
     padding: 8,
     backgroundColor: COLORS.DENIM_BLUE,
     borderRadius: 8,
+  },
+  // Share Options
+  shareOptionsContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    marginTop: hp(1),
+  },
+  iconContainer: {
+    width: wp(15),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

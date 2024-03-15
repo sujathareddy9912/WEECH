@@ -203,7 +203,7 @@ export const renderComposer = props => {
         {...props}
         textInputStyle={{
           flex: 1,
-          fontFamily: FONT_FAMILY.ROBOTO_REGULAR,
+          fontFamily: FONT_FAMILY.POPPINS_REGULAR,
           color: COLORS.WHITE,
           backgroundColor: COLORS.VIOLET,
           borderRadius: 5,

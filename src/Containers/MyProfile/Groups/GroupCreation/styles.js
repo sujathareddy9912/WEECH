@@ -72,7 +72,7 @@ export const styles = StyleSheet.create({
   },
   grpName: {
     fontSize: FONT_SIZE.SEMI_MEDIUM,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
   },
   grpMsg: {
     color: '#B0B0B0',

@@ -59,7 +59,7 @@ const ShareWeechaFriends = ({navigation, route}) => {
       liveRoomData: {
         channel_token: route?.params?.channelToken,
         channel_name: route?.params?.channelName,
-        hostId: route?.params?.hostId
+        hostId: route?.params?.hostId,
       },
     };
     dispatch(

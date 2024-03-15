@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions } from 'react-native'
 let width=Dimensions.get('window').width;
 let height=Dimensions.get('window').height;
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 export default StyleSheet.create({
     Container: {
      flex:1,
@@ -19,7 +20,7 @@ export default StyleSheet.create({
         
     },
     langText:{
-    fontFamily:'AvenirLTStd-Book',
+    fontFamily:FONT_FAMILY.POPPINS_REGULAR,
     },
     person1:{
         width:wp('90%'),

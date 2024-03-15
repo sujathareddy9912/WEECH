@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {ImageBackground, StatusBar, Pressable, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -68,6 +68,11 @@ const options = [
   strings('letsGoLive.multiRoomLive'),
   strings('letsGoLive.pkbattle'),
 ];
+const male_options = [
+  strings('letsGoLive.femaleLive'),
+  strings('letsGoLive.multiRoomLive'),
+  strings('letsGoLive.pkbattle'),
+];
 
 const LetsGoLive = ({navigation}) => {
   const state = useSelector(state => {
@@ -78,6 +83,10 @@ const LetsGoLive = ({navigation}) => {
   const insets = useSafeAreaInsets();
 
   const {userLoginList} = state.authReducer;
+
+  const isMale = useMemo(() => {
+    return userLoginList?.user?.gender?.toLowerCase() == 'male';
+  }, [userLoginList?.user?.gender]);
 
   const [showLiveOptions, setShowLiveOptions] = useState(false);
   const [selectedLiveOption, setSelectedLiveOption] = useState('');
@@ -376,7 +385,7 @@ const LetsGoLive = ({navigation}) => {
               <SvgIcon.LiveLogo />
             </View>
             <MyList
-              data={options}
+              data={isMale ? male_options : options}
               scrollEnabled={false}
               renderItem={_renderVideoOptions}
               ItemSeparatorComponent={_rendeSeperator}

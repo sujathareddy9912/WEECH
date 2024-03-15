@@ -117,7 +117,7 @@ export const styles = StyleSheet.create({
     right: wp(-15),
   },
   follow: {
-    fontFamily: FONT_FAMILY.ROBOTO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontWeight: 'bold',
     color: COLORS.WHITE
   },

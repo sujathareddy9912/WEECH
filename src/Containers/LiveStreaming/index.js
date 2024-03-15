@@ -24,6 +24,7 @@ import {
   FlatList,
   PermissionsAndroid,
   Platform,
+  Modal,
 } from 'react-native';
 
 import {
@@ -85,9 +86,6 @@ import {
   reconnectLiveStreamAction,
   getUserEarningListAction,
   getLiveUserListAction,
-  hostDetailAction,
-  getHostExtraDetailAction,
-  getHostSendGiftAction,
   hostSendGiftAction,
   createChatRoomAction,
 } from '../../Redux/Action';
@@ -114,11 +112,7 @@ import {
   Button,
   MyImage,
 } from '../../Component/commomComponent';
-import {HelperService} from '../../Services/Utils/HelperService';
-import {
-  checkNodePresentOrNot,
-  incomingCallQuery,
-} from '../../firebase/nodeQuery';
+import {incomingCallQuery} from '../../firebase/nodeQuery';
 import ReportModal from '../../Component/ReportModal';
 import MakeRemoveAdmin from '../../Component/Make_RemoveAdmin';
 import {socket} from '../../Services/Sockets/sockets';
@@ -132,6 +126,8 @@ import {Actionsheet} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
 import {navigateToScreen} from '../../Navigator/navigationHelper';
+import {showMessage} from 'react-native-flash-message';
+import {muteDuration} from '../../Utils/formutils/muteDuration';
 
 const HEART_ANIMATION = require('../../Assets/lottiefiles/heartAnimation.json');
 
@@ -186,7 +182,9 @@ const LiveStreaming = ({navigation, route}) => {
   }, [route?.params?.channel]);
 
   const channelToken = useMemo(() => {
-    if (route?.params?.token) return route?.params?.token;
+    if (route?.params?.token) {
+      return route?.params?.token;
+    }
   }, [route?.params?.token]);
 
   const initialState = {
@@ -235,6 +233,7 @@ const LiveStreaming = ({navigation, route}) => {
   const [todayEarning, UpdateTodayEarning] = useState();
 
   const [showGames, setShowGames] = useState(false);
+  const [showTimer, setShowTimer] = useState(false);
 
   const [isVisible, setIsVisible] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
@@ -470,7 +469,29 @@ const LiveStreaming = ({navigation, route}) => {
         data?.type === 'mute_user' &&
         data?.userId === userLoginList?.user?._id
       ) {
-        dispatch(userLiveMuteFlag());
+        dispatch(
+          activeLiveUserListInStreamingAction(
+            {
+              start: 0,
+              limit: 3,
+              roomId: channelToken,
+              userId: userLoginList?.user?._id,
+            },
+            result => {
+              let specificUser = result?.data?.filter(
+                item => item.joinedUsers._id === userLoginList?.user?._id,
+              );
+              if (
+                specificUser?.length > 0 &&
+                !specificUser[0].joinedUsers?.isHost &&
+                !isBroadcaster
+              ) {
+                dispatch(userLiveMuteFlag(specificUser[0]?.isMute));
+                updateJoinedUserDataState(result?.data);
+              }
+            },
+          ),
+        );
       }
       if (data?.type === 'leave_host' && data?.detail?.id === hostDetail?._id) {
         _endCall();
@@ -558,7 +579,7 @@ const LiveStreaming = ({navigation, route}) => {
 
   useEffect(() => {
     return () => {
-      // agoraEngineRef.current?.removeAllListeners();
+      agoraEngineRef.current?.removeAllListeners();
       // agoraEngineRef.current?.release();
       dispatch(clearLiveStreamDataAction());
     };
@@ -574,6 +595,17 @@ const LiveStreaming = ({navigation, route}) => {
           userId: userLoginList?.user?._id,
         },
         data => {
+          let specificUser = data?.data?.filter(
+            item => item.joinedUsers._id === userLoginList?.user?._id,
+          );
+
+          if (
+            specificUser?.length > 0 &&
+            !specificUser[0].joinedUsers?.isHost &&
+            !isBroadcaster
+          ) {
+            dispatch(userLiveMuteFlag(specificUser[0]?.isMute));
+          }
           updateJoinedUserDataState(data?.data);
           const newList = data?.data?.filter(item => item?.isAdmin);
           setAdminList([...newList]);
@@ -627,6 +659,8 @@ const LiveStreaming = ({navigation, route}) => {
 
   const reconnectAgro = async () => {
     agoraEngineRef.current?.leaveChannel();
+    await agoraEngineRef.current?.removeAllListeners();
+    //await agoraEngineRef.current?.release();
     agoraEngineRef.current.initialize({
       appId: rtmAgoraConfig.appId,
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
@@ -1450,23 +1484,15 @@ const LiveStreaming = ({navigation, route}) => {
           ),
         );
       case 'Mute/UnMute':
-        return dispatch(
-          userMute(
-            {
-              userId: selectedUser?.joinedUsers?._id,
-              roomId: selectedUser?.roomId,
-            },
-            () => {
-              socket.emit('live_session', {
-                type: 'mute_user',
-                userId: selectedUser?.joinedUsers?._id,
-                roomId: selectedUser?.roomId,
-                chat_id: selectedUser?.roomId,
-              });
-              _closeActiveUserList();
-            },
-          ),
+        const userInfo = joinedUserDataState.filter(
+          user => user?.joinedUsers?._id === selectedUser?.joinedUsers?._id,
         );
+        if (userInfo[0]?.isMute) {
+          muteUser(0);
+        } else {
+          setShowTimer(true);
+        }
+        return null;
       case 'Report':
         setShowActiveUser(false);
         setReport(true);
@@ -1490,6 +1516,42 @@ const LiveStreaming = ({navigation, route}) => {
       default:
         return null;
     }
+  };
+
+  const muteUser = duration => {
+    dispatch(
+      userMute(
+        {
+          userId: selectedUser?.joinedUsers?._id,
+          roomId: selectedUser?.roomId,
+          duration: duration,
+        },
+        data => {
+          //console.log('uuuuuuuu', data);
+          socket.emit('live_session', {
+            type: 'mute_user',
+            userId: selectedUser?.joinedUsers?._id,
+            roomId: selectedUser?.roomId,
+            chat_id: selectedUser?.roomId,
+          });
+          _closeActiveUserList();
+        },
+      ),
+    );
+    dispatch(
+      activeLiveUserListInStreamingAction(
+        {
+          start: 0,
+          limit: 3,
+          roomId: channelToken,
+          userId: userLoginList?.user?._id,
+        },
+        result => {
+          updateJoinedUserDataState(result?.data);
+        },
+      ),
+    );
+    setShowTimer(false);
   };
 
   const profileRedirection = userId => {
@@ -1568,6 +1630,18 @@ const LiveStreaming = ({navigation, route}) => {
       },
     ]);
   }
+
+  useMemo(() => {
+    if (userLiveMute) {
+      showMessage({
+        message: 'Warning',
+        description: 'Your are muted by the host or admin',
+        type: 'warning',
+        icon: 'warning',
+        duration: 3000,
+      });
+    }
+  }, [userLiveMute]);
 
   return (
     <>
@@ -1766,7 +1840,11 @@ const LiveStreaming = ({navigation, route}) => {
               {showComments && (
                 <TouchableOpacity
                   style={styles.closeBtn}
-                  onPress={endCallPopup}>
+                  onPress={async () => {
+                    await agoraEngineRef.current?.removeAllListeners();
+                    await agoraEngineRef.current?.release();
+                    endCallPopup();
+                  }}>
                   <Icon
                     origin="AntDesign"
                     name="close"
@@ -2018,8 +2096,8 @@ const LiveStreaming = ({navigation, route}) => {
                     onChangeText={UpdateCommentText}
                     placeholder={
                       userLiveMute
-                        ? strings('live.saySomething')
-                        : "You're muted"
+                        ? "You're muted"
+                        : strings('live.saySomething')
                     }
                     svgSource={<SvgIcon.CommentIcon />}
                     style={{
@@ -2033,7 +2111,7 @@ const LiveStreaming = ({navigation, route}) => {
                     //multiline={true}
                     returnKeyType="done"
                     returnKeyLabel="done"
-                    editable={userLiveMute}
+                    editable={!userLiveMute}
                   />
 
                   {isKeyboardShow && (
@@ -2319,13 +2397,13 @@ const LiveStreaming = ({navigation, route}) => {
                     styles.liveimageContainer,
                     {marginTop: 20, backgroundColor: 'green'},
                   ]}>
-                  {item.coverImage ? (
+                  {item.profile ? (
                     <MyImage
                       fast
                       borderRadius={5}
                       resizeMode={'cover'}
                       style={{width: '100%', height: '100%'}}
-                      source={{uri: `${IMAGE_URL}${item.coverImage}`}}
+                      source={{uri: `${IMAGE_URL}${item.profile}`}}
                     />
                   ) : (
                     <MyImage
@@ -2333,7 +2411,7 @@ const LiveStreaming = ({navigation, route}) => {
                       borderRadius={5}
                       resizeMode={'cover'}
                       style={{width: '100%', height: '100%'}}
-                      source={{uri: `${IMAGE_URL}${item.profile}`}}
+                      source={{uri: `${IMAGE_URL}${item.coverImage}`}}
                     />
                   )}
                 </Touchable>
@@ -2444,6 +2522,40 @@ const LiveStreaming = ({navigation, route}) => {
         </Actionsheet.Content>
       </Actionsheet>
       <Game visible={showGames} setVisible={setShowGames} />
+      <Modal transparent visible={showTimer}>
+        <View style={styles.muteModalView}>
+          <View style={styles.muteDetailsContainer}>
+            <View style={styles.muteSelfContainer}>
+              <Text style={styles.muteInfoText}>
+                Mute for Viewer for folling Duration
+              </Text>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => {
+                  setShowTimer(false);
+                }}>
+                <Icon
+                  origin="AntDesign"
+                  name="close"
+                  size={16}
+                  color={'#fff'}
+                />
+              </TouchableOpacity>
+            </View>
+            {muteDuration.map(item => {
+              return (
+                <TouchableOpacity
+                  style={styles.muteTimerBtn}
+                  onPress={() => {
+                    muteUser(item);
+                  }}>
+                  <Text style={{color: COLORS.WHITE}}>{item} Minutes</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };

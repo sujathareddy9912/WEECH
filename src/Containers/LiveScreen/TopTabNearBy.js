@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {View, FlatList, RefreshControl} from 'react-native';
+import {View, FlatList, RefreshControl, Platform} from 'react-native';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import Geolocation from 'react-native-geolocation-service';
 import {useIsFocused} from '@react-navigation/native';

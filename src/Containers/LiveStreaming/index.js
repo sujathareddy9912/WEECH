@@ -1487,7 +1487,6 @@ const LiveStreaming = ({navigation, route}) => {
         const userInfo = joinedUserDataState.filter(
           user => user?.joinedUsers?._id === selectedUser?.joinedUsers?._id,
         );
-        console.log('qqqqqqqqq', userInfo[0], userInfo[0]?.isMute);
         if (userInfo[0]?.isMute) {
           muteUser(0);
         } else {

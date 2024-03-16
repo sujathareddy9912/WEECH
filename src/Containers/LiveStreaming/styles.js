@@ -461,6 +461,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  muteModalView: {
+    flex: 1,
+    backgroundColor: COLORS.TRANSPARENT,
+    justifyContent: 'flex-end',
+  },
+  muteDetailsContainer: {
+    paddingVertical: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    backgroundColor: COLORS.WHITE,
+    paddingHorizontal: 16,
+    gap: 8,
+  },
+  muteSelfContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  muteInfoText: {
+    fontSize: 18,
+    color: COLORS.LIGHT_GREYISH,
+    textAlign: 'center',
+  },
+  muteTimerBtn: {
+    alignItems: 'center',
+    padding: 8,
+    backgroundColor: COLORS.DENIM_BLUE,
+    borderRadius: 8,
+  },
 });
 
 export default styles;

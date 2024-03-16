@@ -30,6 +30,7 @@ import {STREAM_TYPE} from '../../Utils/agoraConfig';
 import {useNavigation} from '@react-navigation/native';
 import styles from './styles';
 import {Modal} from 'react-native-paper';
+import {FONT_FAMILY} from '../../Utils/fontFamily';
 
 export function NotificationModal(props) {
   const {isVisible, notificationPress} = props;
@@ -144,7 +145,7 @@ export function NotificationModal(props) {
         <Image
           resizeMode={'contain'}
           style={styles.coverPicLiveUser}
-          source={{uri: `${IMAGE_URL}${item.coverImage}`}}
+          source={{uri: `${IMAGE_URL}${item?.profile}`}}
         />
         <View style={{marginLeft: dynamicSize(8)}}>
           <View style={styles.liveTypeText}>
@@ -228,7 +229,11 @@ export function NotificationModal(props) {
       <View style={styles.mainContainer}>
         <TouchableOpacity activeOpacity={1} style={styles.headerContainer}>
           <View style={styles.headingStyle}>
-            <Text style={{color: '#979797', fontWeight: '600'}}>
+            <Text
+              style={{
+                color: COLORS.BLACK,
+                fontFamily: FONT_FAMILY.POPPINS_BOLD,
+              }}>
               Notification
             </Text>
           </View>

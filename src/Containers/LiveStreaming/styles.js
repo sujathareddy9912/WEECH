@@ -460,6 +460,7 @@ const styles = StyleSheet.create({
     width: wp(15),
     alignItems: 'center',
     justifyContent: 'center',
+  },
   muteModalView: {
     flex: 1,
     backgroundColor: COLORS.TRANSPARENT,

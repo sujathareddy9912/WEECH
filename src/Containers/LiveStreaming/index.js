@@ -377,7 +377,7 @@ const LiveStreaming = ({navigation, route}) => {
       social: {
         title: 'Weecha',
         descriptionText: 'Look out for this awesome Live Streaming',
-        // imageUrl:''
+        imageUrl: `${IMAGE_URL}${hostDetail?.profile}`,
       },
       android: {
         packageName: 'com.weecha',
@@ -390,8 +390,8 @@ const LiveStreaming = ({navigation, route}) => {
     const options = Platform.select({
       default: {
         title: 'TITLE',
-        subject: 'title',
-        message: `${'Check out this'} ${url}`,
+        subject: 'SUBJECT',
+        url: `${url}`,
       },
     });
     Share.open(options)
@@ -2476,7 +2476,8 @@ const LiveStreaming = ({navigation, route}) => {
             }}>
             <TouchableOpacity
               style={styles.shareOptionsContainer}
-              onPress={Invite}>
+              // onPress={Invite}>
+              onPress={() => Invite()}>
               <View style={styles.iconContainer}>
                 <SvgIcon.inviteFrnd />
               </View>

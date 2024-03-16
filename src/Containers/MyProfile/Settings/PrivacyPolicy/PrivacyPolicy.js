@@ -19,6 +19,7 @@ import {COLORS} from '../../../../Utils/colors';
 import Header from '../../../../Component/header/Header';
 import {getPrivacyPolicy} from '../../../../Redux/Action';
 import {MyText} from '../../../../Component/commomComponent';
+import {FONT_FAMILY} from '../../../../Utils/fontFamily';
 
 const PrivacyPolicy = ({navigation}) => {
   const [userAgreement, setUserAgreement] = useState('');
@@ -102,5 +103,8 @@ const styles = StyleSheet.create({
     color: COLORS.BLACK,
     fontWeight: '700',
   },
-  text: {},
+  text: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    lineHeight: 24,
+  },
 });

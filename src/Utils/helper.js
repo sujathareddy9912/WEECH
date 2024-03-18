@@ -311,7 +311,7 @@ export const formatNumber = num => {
     return (num / 1e6).toFixed(1) + ' M';
   }
   if (num >= 1e3) {
-    return (num / 1e3).toFixed(1) + ' M';
+    return (num / 1e3).toFixed(1) + ' K';
   }
   return num.toString();
 };

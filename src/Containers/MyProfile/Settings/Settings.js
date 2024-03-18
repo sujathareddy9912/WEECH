@@ -137,7 +137,11 @@ const Settings = ({navigation}) => {
       <Touchable
         onPress={() => handleRedirection(item?.id)}
         style={styles.item}>
-        <MyText style={[styles.itemText, {color: item?.titleColor}]}>
+        <MyText
+          style={[
+            styles.itemText,
+            {color: item?.titleColor ? item?.titleColor : COLORS.BLACK},
+          ]}>
           {item.title}
         </MyText>
         {item?.id == 1 || item.id == 8 || item.id == 9 ? (
@@ -145,11 +149,7 @@ const Settings = ({navigation}) => {
             {item?.subText}
           </MyText>
         ) : (
-          <FontAwesome
-            name={'angle-right'}
-            color={COLORS.MID_GREY}
-            size={wp(7)}
-          />
+          <FontAwesome name={'angle-right'} color={COLORS.BLACK} size={wp(7)} />
         )}
       </Touchable>
     );

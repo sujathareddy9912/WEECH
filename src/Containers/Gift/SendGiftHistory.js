@@ -5,8 +5,9 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {styles} from './styles';
 import {getSendGiftListAction} from '../../Redux/Action';
-import {MyImage} from '../../Component/commomComponent';
+import {MyImage, MyText} from '../../Component/commomComponent';
 import {IMAGE_URL} from '../../Services/Api/Common';
+import {calculateTotalGiftPrice} from '../../Utils/helper';
 
 export default function SendGiftHistory() {
   const dispatch = useDispatch();
@@ -48,7 +49,9 @@ export default function SendGiftHistory() {
           <Text style={styles.renderingTextStyle}>
             Gift Name: {giftDetails?.name}
           </Text>
-          <Text style={styles.renderingTextStyle}>Sended By: {receiverUser[0]?.name}</Text>
+          <Text style={styles.renderingTextStyle}>
+            Sended By: {receiverUser[0]?.name}
+          </Text>
           <Text style={styles.renderingTextStyle}>
             Quantity: {giftDetails?.calcType} | {price}
           </Text>
@@ -59,6 +62,9 @@ export default function SendGiftHistory() {
 
   return (
     <View style={styles.listRenderContainer}>
+      <MyText>
+        Total Gift Sended : {calculateTotalGiftPrice(sendGiftList)}
+      </MyText>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={sendGiftList}

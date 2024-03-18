@@ -315,3 +315,11 @@ export const formatNumber = num => {
   }
   return num.toString();
 };
+
+export const calculateTotalGiftPrice = giftList => {
+  let totalPrice = 0;
+  giftList.forEach(gift => {
+    totalPrice += gift.price;
+  });
+  return totalPrice.toFixed(2);
+};

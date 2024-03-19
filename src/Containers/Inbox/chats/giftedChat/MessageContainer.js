@@ -149,24 +149,13 @@ export const renderSystemMessage = props => (
   />
 );
 
-export const renderMessage = props => (
-  <Message
-    {...props}
-    // renderDay={() => <Text>Date</Text>}
-    // containerStyle={{
-    //   left: {backgroundColor: 'red'},
-    //   right: {backgroundColor: 'gold'},
-    // }}
-  />
-);
-
 export const CustomMessageText = props => {
   return (
     <View>
       <View
         style={{
           backgroundColor:
-            props.userId === props.currentMessage.sender
+            props.userId === props?.currentMessage?.sender
               ? COLORS.WHITE
               : '#F0F1F5',
           borderRadius: dynamicSize(20),

@@ -176,6 +176,7 @@ const FriendsList = ({navigation}) => {
           },
         ),
       );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
 

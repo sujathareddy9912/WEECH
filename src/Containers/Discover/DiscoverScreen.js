@@ -16,7 +16,10 @@ import React, {
   createRef,
   useCallback,
 } from 'react';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import {
   ClientRole,
   ChannelProfile,
@@ -46,7 +49,6 @@ import {SvgIcon} from '../../Component/icons';
 import {SCREEN_HEIGHT} from '../../Utils/helper';
 import {dynamicSize} from '../../Utils/responsive';
 import {countryCode} from '../../Utils/countryCode';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export const agoraEngine = createRef();
 
@@ -186,7 +188,7 @@ const DiscoverScreen = props => {
             </Touchable>
           </View>
         </View>
-        <View style={{height: '87%'}}>
+        <View style={{height: hp(100)}}>
           <View
             style={[
               styles.swiperContainer,

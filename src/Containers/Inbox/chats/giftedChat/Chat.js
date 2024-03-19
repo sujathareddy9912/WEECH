@@ -14,6 +14,7 @@ import {
 } from 'react-native-responsive-screen';
 
 import initialMessages from './messages';
+import {Image} from 'react-native-animatable';
 import {COLORS} from '../../../../Utils/colors';
 import ChatHeader from '../../components/ChatHeader';
 import {dynamicSize} from '../../../../Utils/responsive';
@@ -73,7 +74,6 @@ import {
 import {
   renderAvatar,
   renderBubble,
-  renderMessage,
   renderCustomView,
   renderSystemMessage,
   CustomMessageText,
@@ -135,6 +135,7 @@ const PersonalChat = props => {
 
   const {userLoginList} = state.authReducer;
   const {chatHistory} = state.chatReducer;
+  console.log('chat history', chatHistory);
   const navigation = useNavigation();
   const [text, setText] = useState('');
   const [sendMedia, setSendMedia] = useState('');
@@ -686,9 +687,22 @@ const PersonalChat = props => {
         <Touchable
           onPress={() => _joinAsAudience(props.currentMessage)}
           style={{
-            paddingHorizontal: dynamicSize(10),
-            paddingVertical: dynamicSize(5),
+            paddingHorizontal: wp(2),
+            paddingVertical: wp(2),
           }}>
+          <Image
+            source={{
+              uri: `${IMAGE_URL}${props.currentMessage?.liveRoomData?.hostImage}`,
+            }}
+            style={{
+              borderRadius: wp(2),
+              width: wp(50),
+              height: wp(50),
+            }}
+          />
+          <MyText>
+            {props.currentMessage?.liveRoomData?.hostName} is Live
+          </MyText>
           <MyText
             style={{
               fontFamily: FONT_FAMILY.POPPINS_REGULAR,

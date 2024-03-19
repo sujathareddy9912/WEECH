@@ -164,11 +164,12 @@ const SelectWeeChaGroup = ({navigation, route}) => {
         channel_name: route?.params?.channelName,
         hostId: route?.params?.hostId,
         link: route?.params?.link,
+        hostName: route?.params?.hostDetail?.name,
+        hostImage: route?.params?.hostDetail?.profile,
       },
     };
     dispatch(
       shareLiveLinkGroups(payload, res => {
-        console.log('Group response: ', res);
         navigation.goBack();
       }),
     );

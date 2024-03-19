@@ -52,6 +52,7 @@ import {HelperService} from '../../../../Services/Utils/HelperService';
 import {getEndUserDetailApi} from '../../../../Services/Api/LiveStreaming';
 import {FONT_FAMILY} from '../../../../Utils/fontFamily';
 import {STREAM_TYPE} from '../../../../Utils/agoraConfig';
+import {Image} from 'react-native-animatable';
 
 const GIRL_IMG = require('../../../../Assets/Images/girl.png');
 
@@ -348,7 +349,22 @@ const GroupChat = ({navigation, route}) => {
                     borderBottomLeftRadius: dynamicSize(0),
                   },
             ]}>
-            <Touchable onPress={() => _joinAsAudience(item)}>
+            <Touchable
+              onPress={() => _joinAsAudience(item)}
+              style={{
+                marginTop: wp(2),
+              }}>
+              <Image
+                source={{
+                  uri: `${IMAGE_URL}${item?.liveRoomData?.hostImage}`,
+                }}
+                style={{
+                  borderRadius: wp(2),
+                  width: wp(50),
+                  height: wp(50),
+                }}
+              />
+              <MyText>{item?.liveRoomData?.hostName} is Live</MyText>
               <MyText
                 style={{
                   fontFamily: FONT_FAMILY.POPPINS_REGULAR,

@@ -58,7 +58,7 @@ export const MyText = props => {
     <Text
       {...props}
       allowFontScaling={false}
-      style={[{fontFamily: FONT_FAMILY.POPPINS_REGULAR}, props.style]}>
+      style={[{fontFamily: FONT_FAMILY.POPPINS_REGULAR, color: COLORS.BLACK}, props.style]}>
       {props.children}
     </Text>
   );

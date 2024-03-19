@@ -376,7 +376,7 @@ const LiveStreaming = ({navigation, route}) => {
       link: `https://www.google.com?liveName=${channelName}&liveToken=${channelToken}`,
       domainUriPrefix: 'https://weecha.page.link',
       social: {
-        title: 'Weecha',
+        title: `${hostDetail?.name} - WeeCha Live`,
         descriptionText: 'Look out for this awesome Live Streaming',
         imageUrl: `${IMAGE_URL}${hostDetail?.profile}`,
       },
@@ -392,7 +392,7 @@ const LiveStreaming = ({navigation, route}) => {
       default: {
         title: 'TITLE',
         subject: 'SUBJECT',
-        url: `${url}`,
+        url: `Check out this : ${url}`,
       },
     });
     Share.open(options)

@@ -8,7 +8,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import {FlatList, StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+} from 'react-native';
 
 import {styles} from './styles';
 import {COLORS} from '../../../Utils/colors';
@@ -26,12 +33,32 @@ import {MyImage, MyText, Touchable} from '../../../Component/commomComponent';
 
 const FriendsList = ({navigation}) => {
   const [followers, setFollowers] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
   const dispatch = useDispatch();
   const state = useSelector(state => {
     return state;
   });
 
   const {userLoginList} = state.authReducer;
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(
+      getFriendsListAction(
+        {
+          start: 0,
+          limit: 100,
+          userId: userLoginList?.user?._id,
+          search: '',
+        },
+        list => {
+          setFollowers(list?.data);
+          setRefreshing(false);
+        },
+      ),
+    );
+  }, []);
 
   const leftHeaderComponent = (
     <TouchableOpacity
@@ -149,6 +176,7 @@ const FriendsList = ({navigation}) => {
           },
         ),
       );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
 
@@ -163,6 +191,9 @@ const FriendsList = ({navigation}) => {
       />
       <FlatList
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         data={followers}
         renderItem={renderItem}
         keyExtractor={item => item.id}

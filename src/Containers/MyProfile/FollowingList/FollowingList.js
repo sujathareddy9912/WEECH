@@ -8,7 +8,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import {FlatList, StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+  RefreshControl,
+} from 'react-native';
 
 import {styles} from './styles';
 import {COLORS} from '../../../Utils/colors';
@@ -26,12 +33,32 @@ import {MyImage, MyText, Touchable} from '../../../Component/commomComponent';
 
 const FollowingList = ({navigation}) => {
   const [followers, setFollowers] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
   const dispatch = useDispatch();
   const state = useSelector(state => {
     return state;
   });
 
   const {userLoginList} = state.authReducer;
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(
+      getFollowingListAction(
+        {
+          start: 0,
+          limit: 100,
+          userId: userLoginList?.user?._id,
+          search: '',
+        },
+        list => {
+          setFollowers(list?.data);
+          setRefreshing(false);
+        },
+      ),
+    );
+  }, []);
 
   const leftHeaderComponent = (
     <TouchableOpacity
@@ -165,6 +192,9 @@ const FollowingList = ({navigation}) => {
         showsVerticalScrollIndicator={false}
         data={followers}
         renderItem={renderItem}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         keyExtractor={item => item.id}
         contentContainerStyle={styles.list}
         style={{

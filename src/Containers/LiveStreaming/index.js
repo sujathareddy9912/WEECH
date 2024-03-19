@@ -128,6 +128,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {navigateToScreen} from '../../Navigator/navigationHelper';
 import {showMessage} from 'react-native-flash-message';
 import {muteDuration} from '../../Utils/formutils/muteDuration';
+import FastImage from 'react-native-fast-image';
 
 const HEART_ANIMATION = require('../../Assets/lottiefiles/heartAnimation.json');
 
@@ -2322,6 +2323,7 @@ const LiveStreaming = ({navigation, route}) => {
                 height: 160,
                 borderRadius: 80,
                 alignSelf: 'center',
+                //backgroundColor: 'green',
               }}
             />
             {!liveEndSuggestionData?.[0]?.followByMe && !alreadyFollowing && (
@@ -2343,6 +2345,10 @@ const LiveStreaming = ({navigation, route}) => {
               </Touchable>
             )}
           </View>
+
+          {/* <FastImage 
+            source={{uri: ``}}
+          /> */}
 
           <MyText style={{marginTop: 8, textAlign: 'center', fontSize: 18}}>
             {liveEndSuggestionData?.[0]?.userData[0]?.name}

@@ -38,6 +38,7 @@ import {
   isEdit as actionEdit,
 } from '../../Actions/Profile/profile.actions';
 import cacheImage from '../../Utils/ImageCache';
+import moment from 'moment';
 
 const {height, width} = Dimensions.get('window');
 
@@ -343,7 +344,8 @@ function Profile(props) {
           <View style={[styles.datePickerContainerStyle, styles.seperator]}>
             <DateTimePicker
               ref={dobRef}
-              disabled={isEdit}
+              //disabled={isEdit}
+              maximumDate={moment().subtract(18, 'years')}
               labelStyle={styles.label}
               isRequired={true}
               placeHolderStyle={styles.placeholder}

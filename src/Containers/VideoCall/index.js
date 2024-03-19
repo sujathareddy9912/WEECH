@@ -302,8 +302,6 @@ const VideoCall = ({navigation, route}) => {
         agoraEngineInit.setRemoteDefaultVideoStreamType(
           VideoStreamType.VideoStreamHigh,
         );
-        const isSupported = agoraEngineInit.isCameraZoomSupported();
-        console.log('isSupported: ' + isSupported);
       } else {
         agoraEngineInit.initialize({
           appId: rtmAgoraConfig.appId,
@@ -563,6 +561,7 @@ const VideoCall = ({navigation, route}) => {
   };
 
   useEffect(() => {
+    agoraEngineRef?.current?.removeAllListeners();
     silentCommentForConnection();
   }, []);
 

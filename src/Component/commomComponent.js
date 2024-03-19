@@ -1065,30 +1065,6 @@ export const CallActionBottonSheetAudio = props => {
     }
   };
 
-  const silentCommentForConnection = () => {
-    const data = {
-      token: detail?.liveToken,
-      commentData: {
-        type: 'comment',
-        name: userLoginList?.user?.name,
-        profilePic: userLoginList?.user?.profile,
-        joinedUsers: userLoginList?.user,
-      },
-    };
-    socket.emit('comment', data);
-    const comment = {
-      commentData: {
-        type: 'welcomeText',
-        comment: strings('live.welcomeMessage'),
-      },
-    };
-    dispatch(commentOnDuringCall(comment));
-  };
-
-  useEffect(() => {
-    silentCommentForConnection();
-  }, []);
-
   const closeKeyboard = () => {
     Keyboard.dismiss();
   };

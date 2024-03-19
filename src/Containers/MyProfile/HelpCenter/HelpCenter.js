@@ -3,6 +3,7 @@ import {
   Alert,
   FlatList,
   StatusBar,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -13,6 +14,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import {WebView} from 'react-native-webview';
 import Header from '../../../Component/header/Header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
@@ -137,12 +139,22 @@ const HelpCenter = ({navigation}) => {
         containerStyle={styles.header}
         titleStyle={styles.title}
       />
-      <FlatList
+
+      {/* this is old which we are using */}
+      {/* <FlatList
         data={helpData}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.list}
-      />
+      /> */}
+
+      <View style={styles.mainContainer}>
+        <WebView
+          source={{uri: 'http://web.weecha.uk/help_center.html'}}
+          style={styles.webViewContent}
+          scalesPageToFit={false}
+        />
+      </View>
       <IconButton
         onPress={() => {
           navigation.navigate('CustomerCare');

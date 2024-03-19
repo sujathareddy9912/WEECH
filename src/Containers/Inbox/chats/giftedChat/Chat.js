@@ -14,6 +14,7 @@ import {
 } from 'react-native-responsive-screen';
 
 import initialMessages from './messages';
+import {Image} from 'react-native-animatable';
 import {COLORS} from '../../../../Utils/colors';
 import ChatHeader from '../../components/ChatHeader';
 import {dynamicSize} from '../../../../Utils/responsive';
@@ -26,6 +27,7 @@ import {HelperService} from '../../../../Services/Utils/HelperService';
 import {CHAT_MESSAGE_TYPE, SOCKET_EVENTS} from '../../../../Utils/chatHelper';
 import {
   CustomModal,
+  MyImage,
   MyIndicator,
   MyText,
   Touchable,
@@ -73,7 +75,6 @@ import {
 import {
   renderAvatar,
   renderBubble,
-  renderMessage,
   renderCustomView,
   renderSystemMessage,
   CustomMessageText,
@@ -219,7 +220,7 @@ const PersonalChat = props => {
         if (result.totalCount) {
           totalRecord.current = result.totalCount;
         }
-        if (!result.data.length) setShowIndicator(false);
+        if (!result?.data?.length) setShowIndicator(false);
         waitTillFetchingData.current = true;
       }),
     );
@@ -686,9 +687,22 @@ const PersonalChat = props => {
         <Touchable
           onPress={() => _joinAsAudience(props.currentMessage)}
           style={{
-            paddingHorizontal: dynamicSize(10),
-            paddingVertical: dynamicSize(5),
+            paddingHorizontal: wp(2),
+            paddingVertical: wp(2),
           }}>
+          <Image
+            source={{
+              uri: `${IMAGE_URL}${props.currentMessage?.liveRoomData?.hostImage}`,
+            }}
+            style={{
+              borderRadius: wp(2),
+              width: wp(50),
+              height: wp(50),
+            }}
+          />
+          <MyText>
+            {props.currentMessage?.liveRoomData?.hostName} is Live
+          </MyText>
           <MyText
             style={{
               fontFamily: FONT_FAMILY.POPPINS_REGULAR,
@@ -699,6 +713,33 @@ const PersonalChat = props => {
             Join Live
           </MyText>
         </Touchable>
+      );
+    }
+    if (props.currentMessage.type === CHAT_MESSAGE_TYPE.GIFT) {
+      return (
+        <View
+          style={{
+            paddingHorizontal: wp(2),
+            paddingVertical: wp(2),
+          }}>
+          <MyImage
+            fast
+            source={{uri: `${IMAGE_URL}${props.currentMessage?.giftData?.giftImage}`}}
+            style={{
+              width: SCREEN_HEIGHT * 0.1,
+              height: SCREEN_HEIGHT * 0.1,
+            }}
+          />
+          <MyText
+            style={{
+              fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+              fontSize: 13,
+              lineHeight: 24,
+              color: COLORS.BLACK,
+            }}>
+            Received a new gift
+          </MyText>
+        </View>
       );
     }
     return (
@@ -796,7 +837,6 @@ const PersonalChat = props => {
               bottom: useSafeAreaInsets().bottom,
               // SCREEN_HEIGHT * 0.015,
               borderWidth: 1,
-
               zIndex: 10,
             }}
             onSearch={_onSearch}
@@ -810,7 +850,7 @@ const PersonalChat = props => {
                 senderId: userLoginList?.user?._id,
                 receiverId: receiverId,
                 content: `${data?.totalCount} gift's send`,
-                type: CHAT_MESSAGE_TYPE.CONTENT,
+                type: CHAT_MESSAGE_TYPE.GIFT,
                 user: {
                   _id: userLoginList?.user?._id,
                   name: userLoginList?.user?.name,
@@ -818,6 +858,7 @@ const PersonalChat = props => {
                 },
                 userName: userLoginList?.user?.name,
                 userProfile: `${IMAGE_URL}${userLoginList?.user?.profile}`,
+                giftData: data?.giftData,
               };
               if (replyMsg?.replyId) {
                 param.replyMessageId = replyMsg.replyId;

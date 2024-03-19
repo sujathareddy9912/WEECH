@@ -14,11 +14,9 @@ AppRegistry.registerComponent(appName, () => App);
 
 PushNotification.configure({
   onRegister: function (token) {
-    console.log('TOKEN:', token);
   },
 
   onNotification: function (notification) {
-    console.log('NOTIFICATION:', notification);
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
 

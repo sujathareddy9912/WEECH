@@ -38,7 +38,6 @@ const App = () => {
 
   const checkFcmToken = async () => {
     const fcmToken = await getData(LOCAL_KEY.FCM_TOKEN);
-    console.log('fCM ', fcmToken);
 
     if (!fcmToken) {
       checkPermission();
@@ -52,7 +51,6 @@ const App = () => {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('foreground', JSON.stringify(remoteMessage));
       const result = JSON.stringify(remoteMessage);
       if (Platform.OS === 'android') {
         PushNotification.createChannel(

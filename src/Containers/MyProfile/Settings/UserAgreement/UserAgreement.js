@@ -9,6 +9,7 @@ import {
 import {useDispatch} from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import {WebView} from 'react-native-webview';
 
 import {
   widthPercentageToDP as wp,
@@ -56,6 +57,7 @@ const UserAgreement = ({navigation}) => {
   useEffect(() => {
     fetchUserAgreement();
   }, []);
+
   return (
     <>
       <StatusBar backgroundColor="transparent" translucent={true} />
@@ -67,9 +69,11 @@ const UserAgreement = ({navigation}) => {
       />
       <View style={styles.mainContainer}>
         {!loading ? (
-          <ScrollView contentContainerStyle={styles.container}>
-            <MyText style={styles.text}>{userAgreement}</MyText>
-          </ScrollView>
+          <WebView
+            source={{uri: 'http://web.weecha.uk/user_aggrement.html'}}
+            style={styles.webViewContent}
+            scalesPageToFit={false}
+          />
         ) : (
           <ActivityIndicator size={'small'} color={COLORS.BABY_PINK} />
         )}
@@ -85,6 +89,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.WHITE,
     justifyContent: 'center',
+    paddingBottom: wp(10),
+  },
+  webViewContent: {
+    flex: 1,
+    padding: 10,
   },
   container: {
     paddingHorizontal: wp(8),

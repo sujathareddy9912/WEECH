@@ -47,5 +47,15 @@ export const styles = StyleSheet.create({
         borderRadius:10,
         flexDirection:'row',
         alignItems:'center'
-    }
+    },
+    mainContainer: {
+        flex: 1,
+        backgroundColor: COLORS.WHITE,
+        justifyContent: 'center',
+        paddingBottom: wp(10)
+      },
+      webViewContent: {
+        flex: 1,
+        padding: 10,
+      },
 });

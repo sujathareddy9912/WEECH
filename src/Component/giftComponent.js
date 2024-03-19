@@ -84,6 +84,11 @@ const GiftComponent = props => {
       quantity: newSelectedGift?.count ? newSelectedGift?.count : null,
     };
 
+    const giftData = {
+      giftImage: newSelectedGift?.icon ? newSelectedGift?.icon : null,
+      giftName: newSelectedGift?.name ? newSelectedGift?.name : null,
+    };
+
     if (!gifts?.quantity) {
       HelperService.showToast(strings('gift.pleaseSelectGift'));
       return;
@@ -96,10 +101,9 @@ const GiftComponent = props => {
         receiverId: [{userId: receiverId}],
         roomId: roomID,
       };
-
       dispatch(
         sendGiftAction(param, resp => {
-          onSendSuccess({param, totalCount});
+          onSendSuccess({param, totalCount, giftData});
           onSendClick();
         }),
       );

@@ -60,6 +60,8 @@ const ShareWeechaFriends = ({navigation, route}) => {
         channel_token: route?.params?.channelToken,
         channel_name: route?.params?.channelName,
         hostId: route?.params?.hostId,
+        hostName: route?.params?.hostDetail?.name,
+        hostImage: route?.params?.hostDetail?.profile,
       },
     };
     dispatch(
@@ -159,6 +161,7 @@ const ShareWeechaFriends = ({navigation, route}) => {
       </View>
     );
   };
+
   const leftHeaderComponent = (
     <TouchableOpacity
       style={styles.backContainer}

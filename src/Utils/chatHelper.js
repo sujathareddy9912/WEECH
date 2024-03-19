@@ -11,4 +11,5 @@ export const CHAT_MESSAGE_TYPE = {
   AUDIO: 'Audio',
   DOCUMENT: 'Document',
   LIVE_LINK: 'Live',
+  GIFT: 'Gift',
 };

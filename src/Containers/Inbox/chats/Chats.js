@@ -136,8 +136,29 @@ const Chats = ({route}) => {
           radius: 200,
           foreground: true,
         }}
-        style={[styles.chat]}
-        onPress={onPress(item, otherUserData)}>
+        onPress={onPress(item, otherUserData)}
+        onLongPress={() => {
+          Alert.alert(
+            '',
+            `Do you want to delete chat with ${otherUserData?.name}`,
+            [
+              {
+                text: 'NO',
+              },
+              {
+                text: 'YES',
+                onPress: () => {
+                  dispatch(
+                    deleteSelectedChat({chatId: [item?._id]}, result => {
+                      _fetchChatList();
+                    }),
+                  );
+                },
+              },
+            ],
+          );
+        }}
+        style={[styles.chat]}>
         <>
           <View style={styles.imgInfo}>
             <MyImage

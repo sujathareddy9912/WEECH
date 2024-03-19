@@ -133,6 +133,7 @@ function BottomTabBar(props) {
     </View>
   );
 }
+
 // function DiscoverTabBar(props) {
 //   const [isVisible, setIsVisible] = useState(false);
 //   const [selectedCountry, setSelectedCountry] = useState('India');
@@ -640,7 +641,11 @@ const DrawerContent = () => {
           ]}>
           <Text
             style={[
-              {textAlign: 'center', fontSize: 14, fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD},
+              {
+                textAlign: 'center',
+                fontSize: 14,
+                fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
+              },
               tab === 0 ? {color: '#fff'} : {color: 'rgba(94, 94, 94, 1)'},
             ]}>
             Live
@@ -654,7 +659,11 @@ const DrawerContent = () => {
           ]}>
           <Text
             style={[
-              {textAlign: 'center', fontSize: 14, fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD},
+              {
+                textAlign: 'center',
+                fontSize: 14,
+                fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
+              },
               tab === 1 ? {color: '#fff'} : {color: 'rgba(94, 94, 94, 1)'},
             ]}>
             Moments
@@ -668,7 +677,11 @@ const DrawerContent = () => {
           ]}>
           <Text
             style={[
-              {textAlign: 'center', fontSize: 14, fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD},
+              {
+                textAlign: 'center',
+                fontSize: 14,
+                fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
+              },
               tab === 2 ? {color: '#fff'} : {color: 'rgba(94, 94, 94, 1)'},
             ]}>
             Online Friends

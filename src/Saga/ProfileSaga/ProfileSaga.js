@@ -107,7 +107,6 @@ function* getProfile() {
       yield put(getProfileError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         getProfileError({
@@ -129,7 +128,6 @@ function* updateProfile(data) {
       yield put(updateProfileError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         updateProfileError({
@@ -152,7 +150,6 @@ function* getFavouriteImages(data) {
       yield put(getProfileImageError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         getProfileImageError({
@@ -174,7 +171,6 @@ function* uploadFavouriteImages(data) {
       yield put(uploadProfileImageError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         uploadProfileImageError({
@@ -196,7 +192,6 @@ function* getFavouriteVideo(data) {
       yield put(getProfileVideoError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         getProfileVideoError({
@@ -210,7 +205,6 @@ function* getFavouriteVideo(data) {
 function* uploadFavouriteVidoes(data) {
   try {
     const {payload} = data;
-    console.log(payload);
     yield put(uploadProfileVideoLoading());
     const res = yield call(uploadFavouriteVideosApi, payload);
     if (res && res.data.code === 200) {
@@ -219,7 +213,6 @@ function* uploadFavouriteVidoes(data) {
       yield put(uploadProfileVideoError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         uploadProfileVideoError({
@@ -233,17 +226,14 @@ function* uploadFavouriteVidoes(data) {
 function* deleteFavouriteImageVidoes(data) {
   try {
     const {payload} = data;
-    console.log('hhhhhhh', payload);
     yield put(deleteProfileImageVideoLoading());
     const res = yield call(deleteFavouriteImageVideosApi, payload);
-    console.log(res);
     if (res && res.data.code === 200) {
       yield put(deleteProfileImageVideoSuccess(res.data));
     } else {
       yield put(deleteProfileImageVideoError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         deleteProfileImageVideoError({

@@ -7,11 +7,10 @@ export function* followUserSaga({payload, callBack}) {
   try {
     const resp = yield call(UserServices.followUserApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
-      console.log(resp);
       callBack(resp.data);
     } else {
       callBack(false);
-      // HelperService.showToast(resp?.message);
+      HelperService.showToast(resp?.message);
     }
   } catch (error) {
     callBack(false);

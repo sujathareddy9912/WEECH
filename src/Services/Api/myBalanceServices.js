@@ -171,7 +171,6 @@ function linkMail(payload) {
       },
     })
     .then(response => {
-      console.log(response, 'OTPPP');
       if (in200s(response.status)) {
         return response?.data;
       }
@@ -191,7 +190,6 @@ function updateMail(payload) {
       },
     })
     .then(response => {
-      console.log(response, '34OTPPP');
       if (in200s(response.status)) {
         return response?.data;
       }

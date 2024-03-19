@@ -18,7 +18,6 @@ const client = axios.create({
 client.interceptors.request.use(
   async config => {
     const token = await getData(LOCAL_KEY.TOKEN);
-   // console.log('token to send', token);
     if (token) {
       config.headers.Authorization = token;
     }

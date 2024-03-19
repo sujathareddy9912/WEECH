@@ -653,7 +653,6 @@ const UserProfile = props => {
               <TouchableIcon
                 customIcon={<SvgIcon.AudioCallBlue />}
                 onPress={() => {
-                  console.log(detail);
                   if (detail?.callCharge < userLoginList?.user?.myBalance) {
                     callingFunctionality(CALLING_TYPE.AUDIO);
                   } else {

@@ -189,7 +189,6 @@ export function* liveUserMute({payload, callBack}) {
   try {
     const resp = yield call(liveUserMuteApi, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
-      console.log('LiveUserMute', resp);
       callBack(resp);
       // HelperService.showToast('User muted');
     } else {

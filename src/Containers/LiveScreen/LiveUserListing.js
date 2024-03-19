@@ -423,7 +423,6 @@ export default LiveUserListing = ({navigation}) => {
             // justifyContent:'space-between'
           }}>
           {item.map((eachItem, eachIndex) => {
-            console.log('ppppppppp', eachItem);
             return (
               <TouchableOpacity
                 style={{

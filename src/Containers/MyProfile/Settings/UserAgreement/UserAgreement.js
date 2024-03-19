@@ -57,6 +57,7 @@ const UserAgreement = ({navigation}) => {
   useEffect(() => {
     fetchUserAgreement();
   }, []);
+
   return (
     <>
       <StatusBar backgroundColor="transparent" translucent={true} />
@@ -69,10 +70,10 @@ const UserAgreement = ({navigation}) => {
       <View style={styles.mainContainer}>
         {!loading ? (
           <WebView
-          source={{uri: 'http://web.weecha.uk/user_aggrement.html'}}
-          style={styles.webViewContent}
-          scalesPageToFit={false}
-        />
+            source={{uri: 'http://web.weecha.uk/user_aggrement.html'}}
+            style={styles.webViewContent}
+            scalesPageToFit={false}
+          />
         ) : (
           <ActivityIndicator size={'small'} color={COLORS.BABY_PINK} />
         )}
@@ -88,6 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.WHITE,
     justifyContent: 'center',
+    paddingBottom: wp(10),
   },
   webViewContent: {
     flex: 1,

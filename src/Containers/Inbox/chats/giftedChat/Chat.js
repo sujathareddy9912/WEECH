@@ -135,7 +135,6 @@ const PersonalChat = props => {
 
   const {userLoginList} = state.authReducer;
   const {chatHistory} = state.chatReducer;
-  console.log('chat history', chatHistory);
   const navigation = useNavigation();
   const [text, setText] = useState('');
   const [sendMedia, setSendMedia] = useState('');

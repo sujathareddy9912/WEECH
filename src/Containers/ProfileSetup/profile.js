@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     alignSelf: 'center',
-    marginTop: height * 0.05,
+    marginBottom: height * 0.05,
   },
   error: {
     fontSize: 14,

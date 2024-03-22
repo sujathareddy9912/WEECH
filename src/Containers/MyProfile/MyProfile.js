@@ -27,6 +27,7 @@ import {
   getUserStatsAction,
   getUserProfileAction,
   getRechargeAgency,
+  getUserEarningListAction,
 } from '../../Redux/Action';
 import {styles} from './styles';
 import {COLORS} from '../../Utils/colors';
@@ -91,6 +92,7 @@ const MyProfile = props => {
 
   const [toggle, setToggle] = useState(true);
   const [profileData, setProfileData] = useState({});
+  const [earningData, setEarningData] = useState();
   const [userStats, setUserStats] = useState({});
 
   const [fileUpdateStatus, setFileUpdateStatus] = useState(false);
@@ -168,7 +170,7 @@ const MyProfile = props => {
           <View style={styles.rightComponent}>
             <MoneyBag width={wp(5)} />
             <MyText style={{marginLeft: wp(1)}}>
-              {profileData?.myEarning}
+              {earningData?.userWallet}
             </MyText>
           </View>
         );
@@ -337,6 +339,9 @@ const MyProfile = props => {
   useFocusEffect(
     useCallback(() => {
       dispatch(getUserProfileAction(profile => setProfileData(profile)));
+      dispatch(
+        getUserEarningListAction(result => setEarningData(result?.data)),
+      );
     }, []),
   );
 

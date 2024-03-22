@@ -17,19 +17,19 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import { TabView, SceneMap, TabBarItem, TabBar } from 'react-native-tab-view';
+import {TabView, SceneMap, TabBarItem, TabBar} from 'react-native-tab-view';
 
-import { styles } from './styles';
-import { COLORS } from '../../../Utils/colors';
-import { getAgencyList } from '../../../Redux/Action';
+import {styles} from './styles';
+import {COLORS} from '../../../Utils/colors';
+import {getAgencyList} from '../../../Redux/Action';
 import Header from '../../../Component/header/Header';
-import { FONT_FAMILY } from '../../../Utils/fontFamily';
-import Icons, { SvgIcon } from '../../../Component/icons';
-import { getCountryDetailWithKey } from '../../../Utils/helper';
-import { dynamicSize, getFontSize } from '../../../Utils/responsive';
+import {FONT_FAMILY} from '../../../Utils/fontFamily';
+import Icons, {SvgIcon} from '../../../Component/icons';
+import {getCountryDetailWithKey} from '../../../Utils/helper';
+import {dynamicSize, getFontSize} from '../../../Utils/responsive';
 
 import {
   MyText,
@@ -37,21 +37,21 @@ import {
   Touchable,
   MyTextInput,
 } from '../../../Component/commomComponent';
-import { sendWhatsappMsg } from '../../../Utils/sendWhatsappMsg';
+import {sendWhatsappMsg} from '../../../Utils/sendWhatsappMsg';
 
-const FirstRoute = ({ searchText }) => {
+const FirstRoute = ({searchText}) => {
   const [agencyData, setAgencyData] = useState([]);
 
   const state = useSelector(state => {
     return state;
   });
 
-  const { userLoginList } = state.authReducer;
+  const {userLoginList} = state.authReducer;
 
   const dispatch = useDispatch();
-  const renderItem = ({ item, index }) => <Item {...{ item, index }} />;
-  const renderItemForSearch = ({ item, index }) => (
-    <ItemWithoutLevel {...{ item, index }} />
+  const renderItem = ({item, index}) => <Item {...{item, index}} />;
+  const renderItemForSearch = ({item, index}) => (
+    <ItemWithoutLevel {...{item, index}} />
   );
 
   const fetchAgencyList = () => {
@@ -88,7 +88,7 @@ const FirstRoute = ({ searchText }) => {
   }, [searchText]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <FlatList
         data={agencyData}
         renderItem={searchText === '' ? renderItem : renderItemForSearch}
@@ -99,19 +99,19 @@ const FirstRoute = ({ searchText }) => {
   );
 };
 
-const SecondRoute = ({ searchText }) => {
+const SecondRoute = ({searchText}) => {
   const [agencyData, setAgencyData] = useState([]);
 
   const state = useSelector(state => {
     return state;
   });
 
-  const { userLoginList } = state.authReducer;
+  const {userLoginList} = state.authReducer;
 
   const dispatch = useDispatch();
-  const renderItem = ({ item, index }) => <Item {...{ item, index }} />;
-  const renderItemForSearch = ({ item, index }) => (
-    <ItemWithoutLevel {...{ item, index }} />
+  const renderItem = ({item, index}) => <Item {...{item, index}} />;
+  const renderItemForSearch = ({item, index}) => (
+    <ItemWithoutLevel {...{item, index}} />
   );
 
   const fetchAgencyList = () => {
@@ -147,7 +147,7 @@ const SecondRoute = ({ searchText }) => {
     }
   }, [searchText]);
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <FlatList
         data={agencyData}
         renderItem={searchText === '' ? renderItem : renderItemForSearch}
@@ -158,19 +158,19 @@ const SecondRoute = ({ searchText }) => {
   );
 };
 
-const ThirdRoute = ({ searchText }) => {
+const ThirdRoute = ({searchText}) => {
   const [agencyData, setAgencyData] = useState([]);
 
   const state = useSelector(state => {
     return state;
   });
 
-  const { userLoginList } = state.authReducer;
+  const {userLoginList} = state.authReducer;
 
   const dispatch = useDispatch();
-  const renderItem = ({ item, index }) => <Item {...{ item, index }} />;
-  const renderItemForSearch = ({ item, index }) => (
-    <ItemWithoutLevel {...{ item, index }} />
+  const renderItem = ({item, index}) => <Item {...{item, index}} />;
+  const renderItemForSearch = ({item, index}) => (
+    <ItemWithoutLevel {...{item, index}} />
   );
 
   const fetchAgencyList = () => {
@@ -206,7 +206,7 @@ const ThirdRoute = ({ searchText }) => {
     }
   }, [searchText]);
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <FlatList
         data={agencyData}
         renderItem={searchText === '' ? renderItem : renderItemForSearch}
@@ -217,21 +217,21 @@ const ThirdRoute = ({ searchText }) => {
   );
 };
 
-const LiveStreamCenter = ({ navigation }) => {
+const LiveStreamCenter = ({navigation}) => {
   const [index, setIndex] = React.useState(0);
   const [searchText, setSearch] = useState();
 
   const state = useSelector(state => {
     return state;
   });
-  const { userLoginList } = state.authReducer;
+  const {userLoginList} = state.authReducer;
 
   const layout = useWindowDimensions();
 
   const [routes] = React.useState([
-    { key: 'total', title: 'Total' },
-    { key: 'weekly', title: 'Weekly' },
-    { key: 'daily', title: 'Daily' },
+    {key: 'total', title: 'Total'},
+    {key: 'weekly', title: 'Weekly'},
+    {key: 'daily', title: 'Daily'},
   ]);
 
   const leftHeaderComponent = (
@@ -246,7 +246,7 @@ const LiveStreamCenter = ({ navigation }) => {
           marginRight: wp(1),
         }}
       />
-      <Text style={{ color: COLORS.WHITE }}>Back</Text>
+      <Text style={{color: COLORS.WHITE}}>Back</Text>
     </TouchableOpacity>
   );
 
@@ -262,7 +262,7 @@ const LiveStreamCenter = ({ navigation }) => {
     // }
   };
 
-  const renderScene = ({ route }) => {
+  const renderScene = ({route}) => {
     switch (route.key) {
       case 'total':
         return <FirstRoute searchText={searchText} />;
@@ -275,7 +275,7 @@ const LiveStreamCenter = ({ navigation }) => {
     }
   };
 
-  const renderLabel = ({ focused, route }) => {
+  const renderLabel = ({focused, route}) => {
     return (
       <MyText
         style={{
@@ -322,7 +322,7 @@ const LiveStreamCenter = ({ navigation }) => {
       <View style={styles.wrapDark}>
         <View style={styles.inputCon}>
           <View
-            style={{ marginBottom: Platform.OS === 'ios' ? 0 : dynamicSize(5) }}>
+            style={{marginBottom: Platform.OS === 'ios' ? 0 : dynamicSize(5)}}>
             <SvgIcon.searchAgency />
           </View>
           <MyTextInput
@@ -345,8 +345,8 @@ const LiveStreamCenter = ({ navigation }) => {
         renderTabBar={renderTabBar}
         renderScene={renderScene}
         onIndexChange={setIndex}
-        navigationState={{ index, routes }}
-        initialLayout={{ width: layout.width }}
+        navigationState={{index, routes}}
+        initialLayout={{width: layout.width}}
       />
     </View>
   );
@@ -354,20 +354,20 @@ const LiveStreamCenter = ({ navigation }) => {
 
 export default LiveStreamCenter;
 
-const Item = ({ item, index }) => {
+const Item = ({item, index}) => {
   const state = useSelector(state => {
     return state;
   });
-  const { userLoginList } = state.authReducer;
+  const {userLoginList} = state.authReducer;
 
   const {
-    params: { agencyJoined },
+    params: {agencyJoined},
   } = useRoute();
 
   const navigation = useNavigation();
 
   const navigateToAddBank = item => () => {
-    navigation.navigate('AddBankDetailPage', { agencyId: item._id });
+    navigation.navigate('AddBankDetailPage', {agencyId: item._id});
   };
 
   const navigateToChat = item => () => {
@@ -386,7 +386,7 @@ const Item = ({ item, index }) => {
             flexDirection: 'row',
             justifyContent: 'space-evenly',
           }}>
-          <View style={[styles.avatar, { borderWidth: 0 }]}>
+          <View style={[styles.avatar, {borderWidth: 0}]}>
             {index === 0 ? (
               <MyImage source={Icons.agencyWeechaLogo} style={styles.logo} />
             ) : index === 1 ? (
@@ -413,7 +413,7 @@ const Item = ({ item, index }) => {
         </View>
 
         <View style={styles.info}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <MyText style={styles.name}>{item?.name}</MyText>
             <MyImage
               source={
@@ -446,15 +446,15 @@ const Item = ({ item, index }) => {
   );
 };
 
-const ItemWithoutLevel = ({ item, index }) => {
+const ItemWithoutLevel = ({item, index}) => {
   const {
-    params: { agencyJoined },
+    params: {agencyJoined},
   } = useRoute();
 
   const navigation = useNavigation();
 
   const navigateToAddBank = item => () => {
-    navigation.navigate('AddBankDetailPage', { agencyId: item._id });
+    navigation.navigate('AddBankDetailPage', {agencyId: item._id});
   };
 
   const navigateToChat = item => () => {
@@ -480,7 +480,7 @@ const ItemWithoutLevel = ({ item, index }) => {
             flexDirection: 'row',
             justifyContent: 'space-evenly',
           }}>
-          <View style={[styles.avatar, { borderWidth: 0 }]}>
+          <View style={[styles.avatar, {borderWidth: 0}]}>
             <MyText style={styles.avatarTxt}>{index + 1}</MyText>
           </View>
           <View style={[styles.avatar]}>
@@ -488,7 +488,7 @@ const ItemWithoutLevel = ({ item, index }) => {
           </View>
         </View>
         <View style={styles.info}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <MyText style={styles.name}>{item?.name}</MyText>
             <MyImage
               source={

@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 16,
-    fontFamily: FONT_FAMILY.POPPINS_BOLD,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
   },
   list: {
     marginTop: wp(10),

@@ -17,7 +17,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {TabView, SceneMap, TabBarItem, TabBar} from 'react-native-tab-view';
@@ -359,6 +359,9 @@ const Item = ({item, index}) => {
     return state;
   });
   const {userLoginList} = state.authReducer;
+  const isMale = useMemo(() => {
+    return userLoginList?.user?.gender?.toLowerCase() == 'male';
+  }, [userLoginList?.user?.gender]);
 
   const {
     params: {agencyJoined},
@@ -431,7 +434,7 @@ const Item = ({item, index}) => {
           </View>
         </View>
       </View>
-      {!agencyJoined && (
+      {!agencyJoined && !isMale && (
         <Touchable onPress={navigateToAddBank(item)} style={styles.joinBtn}>
           <MyText style={styles.btnText}>Join</MyText>
         </Touchable>
@@ -447,6 +450,15 @@ const Item = ({item, index}) => {
 };
 
 const ItemWithoutLevel = ({item, index}) => {
+  const state = useSelector(state => {
+    return state;
+  });
+  const {userLoginList} = state.authReducer;
+
+  const isMale = useMemo(() => {
+    return userLoginList?.user?.gender?.toLowerCase() == 'male';
+  }, [userLoginList?.user?.gender]);
+
   const {
     params: {agencyJoined},
   } = useRoute();
@@ -506,7 +518,7 @@ const ItemWithoutLevel = ({item, index}) => {
           </View>
         </View>
       </View>
-      {!agencyJoined && (
+      {!agencyJoined && !isMale && (
         <Touchable onPress={navigateToAddBank(item)} style={styles.joinBtn}>
           <MyText style={styles.btnText}>Join</MyText>
         </Touchable>

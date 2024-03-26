@@ -434,11 +434,15 @@ const Item = ({item, index}) => {
           </View>
         </View>
       </View>
-      {!agencyJoined && !isMale && (
-        <Touchable onPress={navigateToAddBank(item)} style={styles.joinBtn}>
-          <MyText style={styles.btnText}>Join</MyText>
-        </Touchable>
-      )}
+
+      {!agencyJoined &&
+        !isMale &&
+        (item?.name === 'WeeCha' ||
+          item?.country === userLoginList?.user?.country) && (
+          <Touchable onPress={navigateToAddBank(item)} style={styles.joinBtn}>
+            <MyText style={styles.btnText}>Join</MyText>
+          </Touchable>
+        )}
 
       {agencyJoined && item?.isJoined && (
         <Touchable onPress={navigateToChat(item)} style={styles.joinBtn}>
@@ -518,11 +522,15 @@ const ItemWithoutLevel = ({item, index}) => {
           </View>
         </View>
       </View>
-      {!agencyJoined && !isMale && (
-        <Touchable onPress={navigateToAddBank(item)} style={styles.joinBtn}>
-          <MyText style={styles.btnText}>Join</MyText>
-        </Touchable>
-      )}
+
+      {!agencyJoined &&
+        !isMale &&
+        (item?.name === 'WeeCha' ||
+          item?.country === userLoginList?.user?.country) && (
+          <Touchable onPress={navigateToAddBank(item)} style={styles.joinBtn}>
+            <MyText style={styles.btnText}>Join</MyText>
+          </Touchable>
+        )}
 
       {agencyJoined && item?.isJoined && (
         <Touchable onPress={navigateToChat(item)} style={styles.joinBtn}>

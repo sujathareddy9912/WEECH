@@ -33,6 +33,12 @@
 				<!-- Accepts URIs that begin with "example://gizmos” -->
 				<data android:scheme="https" android:host="weecha.page.link/1gGs" />
 			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="weecha" />
+			</intent-filter>
 		</activity>
 		<!-- PUSH NOTIFICATION -->
 		<!-- Change the value to true to enable pop-up for in foreground on receiving remote notifications (for prevent duplicating while showing local notifications set this to false) -->

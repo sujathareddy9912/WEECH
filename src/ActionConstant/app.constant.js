@@ -1,0 +1,2 @@
+export const CALL_STATUS = 'CALL_STATUS';
+export const LIVE_STREAM_STATUS = 'LIVE_STREAM_STATUS';

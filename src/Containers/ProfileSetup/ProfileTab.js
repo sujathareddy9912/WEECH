@@ -19,7 +19,7 @@ import FavouriteImages from './favouriteImages';
 import FavouriteVideos from './favouriteVideos';
 import {useSelector, useDispatch} from 'react-redux';
 import {isEdit as actionEdit} from '../../Actions/Profile/profile.actions';
-import { DELETE_PROFILE_IMAGE_VIDEO_RESET } from '../../ActionConstant/profile.constant';
+import {DELETE_PROFILE_IMAGE_VIDEO_RESET} from '../../ActionConstant/profile.constant';
 
 const renderScene = SceneMap({
   profile: Profile,
@@ -70,7 +70,7 @@ function TabViewExample() {
               ]}
               onPress={() => {
                 setIndex(i);
-                dispatch({type:DELETE_PROFILE_IMAGE_VIDEO_RESET})
+                dispatch({type: DELETE_PROFILE_IMAGE_VIDEO_RESET});
               }}>
               <Animated.Text
                 style={index === i ? styles.activeTitle : styles.inActiveTitle}>
@@ -149,12 +149,12 @@ const styles = StyleSheet.create({
   tabBar: {
     //backgroundColor:'red',
     flexDirection: 'row',
-   // paddingTop: StatusBar.currentHeight,
+    // paddingTop: StatusBar.currentHeight,
   },
   tabItem: {
     flex: 1,
     // alignItems: '',
-    marginHorizontal:16,
+    marginHorizontal: 16,
     paddingVertical: 16,
   },
   activeTitle: {

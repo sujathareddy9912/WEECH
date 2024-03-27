@@ -128,7 +128,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import {navigateToScreen} from '../../Navigator/navigationHelper';
 import {showMessage} from 'react-native-flash-message';
 import {muteDuration} from '../../Utils/formutils/muteDuration';
-import FastImage from 'react-native-fast-image';
 
 const HEART_ANIMATION = require('../../Assets/lottiefiles/heartAnimation.json');
 

@@ -38,6 +38,7 @@ const App = () => {
 
   const checkFcmToken = async () => {
     const fcmToken = await getData(LOCAL_KEY.FCM_TOKEN);
+    console.log(fcmToken);
 
     if (!fcmToken) {
       checkPermission();

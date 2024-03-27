@@ -1,5 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {Linking} from 'react-native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import SplashScreen from '../Containers/Splash';
 import WelcomeScreen from '../Containers/WelcomeScreen';
@@ -88,6 +89,8 @@ import SelectWeeChaGroup from '../Containers/SelectWeeChaGroup/SelectWeeChaGroup
 import HostTermsAndConditions from '../Containers/MyProfile/Settings/HostTermsAndConditions/HostTermsAndConditions';
 import WeeChaGuideLine from '../Containers/MyProfile/Settings/WeeChaGuideLine/WeeChaGuideLine';
 
+import messaging from '@react-native-firebase/messaging';
+
 // const rtmAdaptor = new RtmAdapter();
 export const Stack = createStackNavigator();
 
@@ -103,6 +106,55 @@ function AppStack() {
   const [isLoading, setLoading] = useState(true);
   const [loginToken, setToken] = useState(null);
   const [profileStatus, setProfileStatus] = useState(null);
+
+  // LINKING
+
+  const linking = {
+    prefixes: ['weecha://'],
+    config: {
+      screens: {
+        MainTabNavigation: 'MainTabNavigation',
+        AuthStack: {
+          screens: {
+            Login: 'Login',
+          },
+        },
+      },
+    },
+  };
+
+  const notificationNavigation = async result => {
+    const token = await getData(LOCAL_KEY.TOKEN);
+    const {data} = result;
+
+    if (data.type === 'moment' && token) {
+      Linking.openURL('weecha://MainTabNavigation');
+    } else {
+      Linking.openURL('weecha://Login');
+    }
+  };
+
+  messaging().onNotificationOpenedApp(remoteMessage => {
+    console.log(
+      'When the application is running, but in the background',
+      remoteMessage,
+    );
+    if (remoteMessage) {
+      notificationNavigation(remoteMessage);
+    }
+  });
+
+  messaging()
+    .getInitialNotification()
+    .then(remoteMessage => {
+      console.log(
+        'When the application is opened from a quit state',
+        remoteMessage,
+      );
+      if (remoteMessage) {
+        notificationNavigation(remoteMessage);
+      }
+    });
 
   useEffect(() => {
     const _fetchLoginToken = async () => {
@@ -155,6 +207,7 @@ function AppStack() {
 
   return (
     <NavigationContainer
+      linking={linking}
       ref={navigationRef}
       onReady={_onReady}
       onStateChange={_onStateChange}>

@@ -13,6 +13,7 @@ import streamingReducer from '../Redux/Reducer/streaming.Reducer';
 import ProfileReducer from '../Reducer/Profile/profile.reducer';
 import GameReducer from '../Reducer/Game/game.reducer';
 import ChatPriceReducer from '../Reducer/ChatPrice/chatPrice.reducer';
+import AppReducer from '../Reducer/appReucer/app.reducer';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -33,6 +34,7 @@ const appReducer = combineReducers({
   profile: ProfileReducer,
   game: GameReducer,
   chatPrice: ChatPriceReducer,
+  app: AppReducer,
 });
 
 export const rootReducer = (state, action) => {

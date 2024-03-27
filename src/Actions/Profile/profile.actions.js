@@ -22,7 +22,7 @@ import {
   DELETE_PROFILE_IMAGE_VIDEO_ERROR,
   SET_GENDER,
   IS_DONE,
-  IS_EDIT
+  IS_EDIT,
 } from '../../ActionConstant/profile.constant';
 
 export const getProfileLoading = payload => ({
@@ -55,7 +55,6 @@ export const updateProfileError = payload => ({
   payload,
 });
 
-
 export const getProfileImageLoading = payload => ({
   type: GET_PROFILE_IMAGE_LOADING,
   payload,
@@ -71,7 +70,6 @@ export const getProfileImageError = payload => ({
   payload,
 });
 
-
 export const uploadProfileImageLoading = payload => ({
   type: UPDATE_PROFILE_IMAGE_LOADING,
   payload,
@@ -86,7 +84,6 @@ export const uploadProfileImageError = payload => ({
   type: UPDATE_PROFILE_IMAGE_ERROR,
   payload,
 });
-
 
 export const getProfileVideoLoading = payload => ({
   type: GET_PROFILE_VIDEO_LOADING,
@@ -138,16 +135,12 @@ export const setGender = payload => ({
   payload,
 });
 
-export const isEdit = payload =>({
-  type:IS_EDIT,
-  payload
-})
+export const isEdit = payload => ({
+  type: IS_EDIT,
+  payload,
+});
 
 export const isDone = payload => ({
   type: IS_DONE,
   payload,
 });
-
-
-
-

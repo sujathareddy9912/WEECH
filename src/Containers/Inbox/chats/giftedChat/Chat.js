@@ -730,7 +730,7 @@ const PersonalChat = props => {
               height: SCREEN_HEIGHT * 0.1,
             }}
           />
-          <MyText
+          {/* <MyText
             style={{
               fontFamily: FONT_FAMILY.POPPINS_REGULAR,
               fontSize: 13,
@@ -738,7 +738,7 @@ const PersonalChat = props => {
               color: COLORS.BLACK,
             }}>
             Received a new gift
-          </MyText>
+          </MyText> */}
         </View>
       );
     }

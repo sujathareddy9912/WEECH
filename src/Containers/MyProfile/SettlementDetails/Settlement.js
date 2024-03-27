@@ -207,8 +207,8 @@ const Settlement = ({navigation}) => {
               2. Your wallet will receive your salary every Thursday. (It may
               delay due to holidays){'\n'}
               {'\n'}
-              3. The settlement amount must be $10 and it should be integer
-              multiple of $10. The remainder will be accumulated and cashed out
+              3. The settlement amount must be $5 and it should be integer
+              multiple of $5. The remainder will be accumulated and cashed out
               in following settlement cycle
             </Text>
           </View>

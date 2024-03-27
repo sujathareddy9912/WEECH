@@ -767,6 +767,7 @@ function MyTabBar({
           };
           return (
             <Touchable
+              key={index}
               accessibilityRole="button"
               accessibilityState={isFocused ? {selected: true} : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -777,7 +778,7 @@ function MyTabBar({
                 style={[
                   styles.textStyle,
                   {
-                    fontWeight: isFocused ? 'bold' : '',
+                    fontWeight: isFocused ? 'bold' : 500,
                   },
                 ]}>
                 {label}

@@ -86,6 +86,8 @@ import FavouriteImages from '../Containers/ProfileSetup/favouriteImages';
 import FavouriteVideos from '../Containers/ProfileSetup/favouriteVideos';
 import MyGiftHistory from '../Containers/Gift/MyGiftHistory';
 import SelectWeeChaGroup from '../Containers/SelectWeeChaGroup/SelectWeeChaGroup';
+import HostTermsAndConditions from '../Containers/MyProfile/Settings/HostTermsAndConditions/HostTermsAndConditions';
+import WeeChaGuideLine from '../Containers/MyProfile/Settings/WeeChaGuideLine/WeeChaGuideLine';
 
 import messaging from '@react-native-firebase/messaging';
 
@@ -487,6 +489,16 @@ function AppStack() {
         <Stack.Screen
           name="UserAgreement"
           component={UserAgreement}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="WeeChaGuideLine"
+          component={WeeChaGuideLine}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="HostTermsAndConditions"
+          component={HostTermsAndConditions}
           options={{headerShown: false}}
         />
         <Stack.Screen

@@ -272,7 +272,7 @@ const Balance = ({
                 data={diamond}
                 numColumns={2}
                 renderItem={renderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item._id}
                 contentContainerStyle={styles.FlatList}
               />
             </View>

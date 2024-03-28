@@ -7,6 +7,7 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import android.view.WindowManager;
 
+
 public class MainActivity extends ReactActivity {
 
   /**
@@ -20,7 +21,7 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    // getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
   }
   /**
    * Returns the instance of the {@link ReactActivityDelegate}. Here we use a util class {@link

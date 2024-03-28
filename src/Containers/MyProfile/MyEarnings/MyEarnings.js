@@ -147,7 +147,7 @@ const MyEarning = ({navigation, route}) => {
           marginRight: wp(1),
         }}
       />
-      <Text>Back</Text>
+      <Text style={{color: COLORS.BLACK}}>Back</Text>
     </TouchableOpacity>
   );
 
@@ -258,13 +258,18 @@ const MyEarning = ({navigation, route}) => {
               <Coin width={wp(31)} height={hp(17)} style={styles.coin} />
             </View>
           </LinearGradient>
-          <LinearGradient style={styles.card} colors={['#1F79FF', '#0042A5']}>
-            <Text style={styles.cardTitle}>My Wallet</Text>
-            <Text style={styles.cardTitle}>$ {myEarning?.userWallet}</Text>
-            <View style={styles.dollorContainer}>
-              <Dollor width={wp(25)} height={hp(13)} style={styles.dollor} />
-            </View>
-          </LinearGradient>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Settlement');
+            }}>
+            <LinearGradient style={styles.card} colors={['#1F79FF', '#0042A5']}>
+              <Text style={styles.cardTitle}>My Wallet</Text>
+              <Text style={styles.cardTitle}>$ {myEarning?.userWallet}</Text>
+              <View style={styles.dollorContainer}>
+                <Dollor width={wp(25)} height={hp(13)} style={styles.dollor} />
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
         <View style={styles.weeklyContainer}>
           <Text style={styles.chartTitle}>Weekly Report</Text>

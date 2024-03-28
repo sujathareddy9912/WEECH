@@ -561,6 +561,24 @@ export const getUserSettlementDetailAction = (payload, callBack) => ({
   payload,
 });
 
+export const getUserWithdrawalList = (payload, callBack) => ({
+  type: TYPES.GET_USER_WITHDRAWAL_LIST,
+  callBack,
+  payload,
+});
+
+export const addUserWithdrawalReq = (payload, callBack) => ({
+  type: TYPES.ADD_USER_WITHDRAWAL_REQ,
+  callBack,
+  payload,
+});
+
+export const deleteWithdrawalList = (payload, callBack) => ({
+  type: TYPES.DELETE_WITHDRAWAL_LIST,
+  callBack,
+  payload,
+});
+
 export const getBlockListAction = (payload, callBack) => ({
   type: TYPES.GET_BLOCK_LIST,
   callBack,

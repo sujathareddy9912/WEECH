@@ -108,7 +108,9 @@ import {
 } from './LiveStreaming';
 
 import {
+  addWithdrawalReqSaga,
   claimFreeCardSaga,
+  deleteWithdrawalListSaga,
   getAgencyListSaga,
   getBlockListSaga,
   getDiamondListSaga,
@@ -116,6 +118,7 @@ import {
   getFreeCardsListSaga,
   getMyEarningListSaga,
   getSettlementDetailSaga,
+  getWithdrawalListSaga,
   linkMailSaga,
   linkPhoneSaga,
   updateMailSaga,
@@ -196,6 +199,9 @@ export default function* root() {
     takeLatest(TYPES.CLAIM_FREE_CARD, claimFreeCardSaga),
     takeLatest(TYPES.GET_USER_EARNING_DETAIL, getEarningDetailSaga),
     takeLatest(TYPES.GET_USER_SETTLEMENT_DETAIL, getSettlementDetailSaga),
+    takeLatest(TYPES.GET_USER_WITHDRAWAL_LIST, getWithdrawalListSaga),
+    takeLatest(TYPES.DELETE_WITHDRAWAL_LIST, deleteWithdrawalListSaga),
+    takeLatest(TYPES.ADD_USER_WITHDRAWAL_REQ, addWithdrawalReqSaga),
     takeLatest(TYPES.GET_BLOCK_LIST, getBlockListSaga),
     takeLatest(TYPES.LINK_MAIL, linkMailSaga),
     takeLatest(TYPES.UPDATE_MAIL, updateMailSaga),

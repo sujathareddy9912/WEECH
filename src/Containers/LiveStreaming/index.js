@@ -84,7 +84,6 @@ import {
   getAnotherUserProfile,
   getFriendsListAction,
   reconnectLiveStreamAction,
-  getUserEarningListAction,
   getLiveUserListAction,
   hostSendGiftAction,
   createChatRoomAction,
@@ -260,14 +259,6 @@ const LiveStreaming = ({navigation, route}) => {
       'Report',
       'Private call',
     ],
-  };
-
-  const getUserEarning = () => {
-    dispatch(
-      getUserEarningListAction(result => {
-        setMyEarning(result?.data);
-      }),
-    );
   };
 
   useEffect(() => {

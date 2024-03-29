@@ -537,6 +537,11 @@ export const getUserEarningListAction = callBack => ({
   callBack,
 });
 
+export const getUserWalletEarningDetailsAction = callBack => ({
+  type: TYPES.GET_USER_WALLET_EARNING_DETAILS,
+  callBack,
+});
+
 export const getFreeCardListAction = (payload, callBack) => ({
   type: TYPES.GET_FREE_CARDS,
   callBack,

@@ -53,6 +53,21 @@ export function* getMyEarningListSaga({callBack}) {
   }
 }
 
+export function* getUserWalletEarningDetailsSaga({callBack}) {
+  try {
+    const resp = yield call(MyBalanceServices.getMyWalletEarnings);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+    } else {
+      callBack(false);
+      HelperService.showToast(resp?.message);
+    }
+  } catch (error) {
+    callBack(false);
+    HelperService.showToast('Something went wrong');
+  }
+}
+
 export function* getFreeCardsListSaga({callBack, payload}) {
   try {
     const resp = yield call(MyBalanceServices.getFreeCards, payload);

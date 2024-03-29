@@ -67,6 +67,29 @@ function getMyEarnings() {
     });
 }
 
+function getMyWalletEarnings() {
+  let url = `income/user_wallet_earning`;
+  return userApiClient
+    .post(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: serviceConst.token,
+        },
+      },
+    )
+    .then(response => {
+      if (in200s(response.status)) {
+        return response?.data;
+      }
+      return null;
+    })
+    .catch(error => {
+      return null;
+    });
+}
+
 function getFreeCards(payload) {
   let url = `gift/get_user_free_card`;
   return userApiClient
@@ -299,6 +322,7 @@ export const MyBalanceServices = {
   getDiamondListApi,
   getAgencyListApi,
   getMyEarnings,
+  getMyWalletEarnings,
   getEarningDetail,
   getBlockList,
   getSettlementDetail,

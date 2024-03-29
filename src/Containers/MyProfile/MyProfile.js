@@ -339,6 +339,11 @@ const MyProfile = props => {
   useFocusEffect(
     useCallback(() => {
       dispatch(getUserProfileAction(profile => setProfileData(profile)));
+    }, []),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
       dispatch(
         getUserWalletEarningDetailsAction(result => {
           setEarningData(result?.data);

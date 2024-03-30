@@ -148,10 +148,6 @@ function AppStack() {
   messaging()
     .getInitialNotification()
     .then(remoteMessage => {
-      console.log(
-        'When the application is opened from a quit state',
-        remoteMessage,
-      );
       if (remoteMessage) {
         notificationNavigation(remoteMessage);
       }

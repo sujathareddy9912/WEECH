@@ -537,6 +537,11 @@ export const getUserEarningListAction = callBack => ({
   callBack,
 });
 
+export const getUserWalletEarningDetailsAction = callBack => ({
+  type: TYPES.GET_USER_WALLET_EARNING_DETAILS,
+  callBack,
+});
+
 export const getFreeCardListAction = (payload, callBack) => ({
   type: TYPES.GET_FREE_CARDS,
   callBack,
@@ -557,6 +562,24 @@ export const getUserEarningDetailAction = (payload, callBack) => ({
 
 export const getUserSettlementDetailAction = (payload, callBack) => ({
   type: TYPES.GET_USER_SETTLEMENT_DETAIL,
+  callBack,
+  payload,
+});
+
+export const getUserWithdrawalList = (payload, callBack) => ({
+  type: TYPES.GET_USER_WITHDRAWAL_LIST,
+  callBack,
+  payload,
+});
+
+export const addUserWithdrawalReq = (payload, callBack) => ({
+  type: TYPES.ADD_USER_WITHDRAWAL_REQ,
+  callBack,
+  payload,
+});
+
+export const deleteWithdrawalList = (payload, callBack) => ({
+  type: TYPES.DELETE_WITHDRAWAL_LIST,
   callBack,
   payload,
 });

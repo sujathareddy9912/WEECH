@@ -27,7 +27,7 @@ import {
   getUserStatsAction,
   getUserProfileAction,
   getRechargeAgency,
-  getUserEarningListAction,
+  getUserWalletEarningDetailsAction,
 } from '../../Redux/Action';
 import {styles} from './styles';
 import {COLORS} from '../../Utils/colors';
@@ -339,8 +339,15 @@ const MyProfile = props => {
   useFocusEffect(
     useCallback(() => {
       dispatch(getUserProfileAction(profile => setProfileData(profile)));
+    }, []),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
       dispatch(
-        getUserEarningListAction(result => setEarningData(result?.data)),
+        getUserWalletEarningDetailsAction(result => {
+          setEarningData(result?.data);
+        }),
       );
     }, []),
   );

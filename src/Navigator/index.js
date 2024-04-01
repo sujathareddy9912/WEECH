@@ -90,6 +90,7 @@ import HostTermsAndConditions from '../Containers/MyProfile/Settings/HostTermsAn
 import WeeChaGuideLine from '../Containers/MyProfile/Settings/WeeChaGuideLine/WeeChaGuideLine';
 
 import messaging from '@react-native-firebase/messaging';
+import Withdrawal from '../Containers/MyProfile/Withdrawal/Withdrawal';
 
 // const rtmAdaptor = new RtmAdapter();
 export const Stack = createStackNavigator();
@@ -147,10 +148,6 @@ function AppStack() {
   messaging()
     .getInitialNotification()
     .then(remoteMessage => {
-      console.log(
-        'When the application is opened from a quit state',
-        remoteMessage,
-      );
       if (remoteMessage) {
         notificationNavigation(remoteMessage);
       }
@@ -364,6 +361,11 @@ function AppStack() {
         <Stack.Screen
           name="Settlement"
           component={Settlement}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Withdrawal"
+          component={Withdrawal}
           options={{headerShown: false}}
         />
         <Stack.Screen

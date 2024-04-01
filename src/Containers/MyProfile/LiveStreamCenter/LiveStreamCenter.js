@@ -436,9 +436,10 @@ const Item = ({item, index}) => {
       </View>
 
       {!agencyJoined &&
-        !isMale &&
-        (item?.name === 'WeeCha' ||
-          item?.country === userLoginList?.user?.country) && (
+        ((isMale && item?.name === 'WeeCha') ||
+          (!isMale &&
+            (item?.name === 'WeeCha' ||
+              item?.country === userLoginList?.user?.country))) && (
           <Touchable onPress={navigateToAddBank(item)} style={styles.joinBtn}>
             <MyText style={styles.btnText}>Join</MyText>
           </Touchable>
@@ -524,9 +525,10 @@ const ItemWithoutLevel = ({item, index}) => {
       </View>
 
       {!agencyJoined &&
-        !isMale &&
-        (item?.name === 'WeeCha' ||
-          item?.country === userLoginList?.user?.country) && (
+        ((isMale && item?.name === 'WeeCha') ||
+          (!isMale &&
+            (item?.name === 'WeeCha' ||
+              item?.country === userLoginList?.user?.country))) && (
           <Touchable onPress={navigateToAddBank(item)} style={styles.joinBtn}>
             <MyText style={styles.btnText}>Join</MyText>
           </Touchable>

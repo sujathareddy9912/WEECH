@@ -67,6 +67,10 @@ import {
     row:{
       flexDirection:'row',
       alignItems:'center'
+    },
+    withdrawButton: {
+      alignSelf: 'center',
+      marginBottom: hp(2)
     }
   });
   

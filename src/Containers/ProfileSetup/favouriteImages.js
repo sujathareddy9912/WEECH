@@ -174,7 +174,7 @@ function FavouriteImages(props) {
   };
 
   const jumpToNext = () => {
-    dispatch({type:DELETE_PROFILE_IMAGE_VIDEO_RESET});
+    dispatch({type: DELETE_PROFILE_IMAGE_VIDEO_RESET});
     dispatch(actionDone('favouriteImages'));
     props.jumpTo('favouriteVideos');
   };
@@ -217,8 +217,8 @@ function FavouriteImages(props) {
         imagesArray,
         strings(
           appgender === 'female'
-            ? 'validation.imageUploadError '
-            : 'validation.videoMaleUploadError',
+            ? 'validation.imageUploadError'
+            : 'validation.imageMaleUploadError',
         ),
       ),
     );
@@ -258,11 +258,6 @@ function FavouriteImages(props) {
     }
   };
 
-  // const onPressBack = () => {
-  //   dispatch(actionEdit(false));
-  //   navigation.goBack();
-  // };
-
   const onClickSave = () => {
     const count = appgender === 'female' ? 3 : 1;
     const piError = favouriteInfoError(
@@ -271,7 +266,7 @@ function FavouriteImages(props) {
       strings(
         appgender === 'female'
           ? 'validation.imageUploadError'
-          : 'validation.videoMaleUploadError',
+          : 'validation.imageMaleUploadError',
       ),
     );
 
@@ -279,22 +274,6 @@ function FavouriteImages(props) {
       setUserImagesError(piError);
       return;
     }
-
-    // alert(userfavoriteImages)
-    // const iError = favouriteInfoError(
-    //   count,
-    //   userfavoriteImages,
-    //   strings(
-    //     appgender === 'female'
-    //       ? 'validation.imageUploadError'
-    //       : 'validation.imageMaleUploadError',
-    //   ),
-    // );
-
-    // if (iError) {
-    //   setUserImagesError(iError);
-    //   return;
-    // }
 
     setUserImagesError(null);
     let userfavoriteImages = favouriteMedia(userImages);
@@ -351,29 +330,14 @@ function FavouriteImages(props) {
   };
   return (
     <>
-      {/* <GradientBackground>
-       
-        <TouchableOpacity
-          style={[styles.backBtn, {top: useSafeAreaInsets().top}]}
-          onPress={onPressBack}>
-          <Icon
-            origin="AntDesign"
-            name="arrowleft"
-            size={24}
-            color={COLORS.BLACK}
-          />
-        </TouchableOpacity>
-        <Text style={styles.header}>Favourite Images</Text> */}
       <LodingIndicator visible={loading} />
       <ScrollView>
         <View style={styles.seperator}>
-          {/* <Text style={styles.title}>
-            {strings('editProfile.photos')}
-            {gender === 'female' && <Text style={styles.asterick}>*</Text>}
-          </Text> */}
-          <Text style={styles.subtitle}>
-            {strings('editProfile.upload_pic_description')}
-          </Text>
+          {!isEdit && (
+            <Text style={styles.subtitle}>
+              {strings('editProfile.upload_pic_description')}
+            </Text>
+          )}
 
           {userImagesError && (
             <Text style={styles.error}>{userImagesError}</Text>
@@ -397,7 +361,6 @@ function FavouriteImages(props) {
           />
         </View>
         <Button
-          // indicator={updoadingDetails}
           onPress={() => {
             setSkip(false);
             onClickSave();
@@ -421,7 +384,6 @@ function FavouriteImages(props) {
           />
         )}
       </ScrollView>
-      {/* </GradientBackground> */}
     </>
   );
 }

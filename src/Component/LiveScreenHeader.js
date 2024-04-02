@@ -45,7 +45,12 @@ export const LiveScreenHeader = props => {
 
   return (
     <View style={styles.container}>
-      <FlatList horizontal data={headerData} renderItem={renderHeaderValue} />
+      <FlatList
+        horizontal
+        data={headerData}
+        renderItem={renderHeaderValue}
+        showsHorizontalScrollIndicator={false}
+      />
       <View style={styles.rightCon}>
         <Touchable onPress={onSearchPress} style={styles.iconContainer}>
           <SvgIcon.SearchIcon />
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
   },
 
   textStyle: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.MEDIUM,
     fontWeight: '400',

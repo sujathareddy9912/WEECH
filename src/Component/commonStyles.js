@@ -167,10 +167,6 @@ const commonStyle = StyleSheet.create({
     paddingVertical: SCREEN_HEIGHT * 0.015,
     flexDirection: 'row',
     alignItems: 'center',
-    // bottom: hp(10),
-    // bottom: 0,
-    // position: 'absolute',
-    // alignSelf: 'center',
   },
   subBottomChatRowContainer: {
     flex: 0.9,
@@ -238,7 +234,7 @@ const commonStyle = StyleSheet.create({
     marginLeft: dynamicSize(12),
   },
   username: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.REGULAR,
     textTransform: 'capitalize',
@@ -251,7 +247,7 @@ const commonStyle = StyleSheet.create({
     borderRadius: dynamicSize(50),
   },
   msg: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.REGULAR,
   },

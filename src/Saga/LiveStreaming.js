@@ -33,6 +33,10 @@ import {
   unBlockUserApi,
   getHelpCenterApi,
   getSearchUserApi,
+  getUserDailyIncome,
+  deleteVisitorAPI,
+  clearVisitorAPI,
+  updateNotificationStatusApi,
 } from '../Services/Api/LiveStreaming';
 import {Alert} from 'react-native';
 
@@ -309,6 +313,52 @@ export function* getAnotherUserProfileSaga({payload, callBack}) {
     callBack();
   }
 }
+export function* updateNotificationStatusSaga({payload, callBack}) {
+  try {
+    const resp = yield call(updateNotificationStatusApi, payload);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+    } else {
+      HelperService.showToast(resp?.message);
+      callBack();
+    }
+  } catch (error) {
+    HelperService.showToast('Something went wrong');
+    callBack();
+  }
+}
+
+export function* deleteVisitorSaga({payload, callBack}) {
+  try {
+    const resp = yield call(deleteVisitorAPI, payload);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+      HelperService.showToast('Deleted Successfully');
+    } else {
+      HelperService.showToast(resp?.message);
+      callBack();
+    }
+  } catch (error) {
+    HelperService.showToast('Something went wrong');
+    callBack();
+  }
+}
+
+export function* clearVisitorSaga({callBack}) {
+  try {
+    const resp = yield call(clearVisitorAPI);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+      HelperService.showToast('Clear Successfully');
+    } else {
+      HelperService.showToast(resp?.message);
+      callBack();
+    }
+  } catch (error) {
+    HelperService.showToast('Something went wrong');
+    callBack();
+  }
+}
 
 export function* getDeleteOneMsgSaga({payload, callBack}) {
   try {
@@ -401,5 +451,21 @@ export function* getSearchUser({payload, callBack}) {
   } catch (error) {
     HelperService.showToast('Something went wrong');
     callBack([]);
+  }
+}
+
+export function* getHostGiftDataSaga({payload, callBack}) {
+  try {
+    const resp = yield call(getUserDailyIncome, payload);
+    console.log('resp resp', resp);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+    } else {
+      HelperService.showToast(resp?.message);
+      callBack();
+    }
+  } catch (error) {
+    HelperService.showToast('Something went wrong');
+    callBack();
   }
 }

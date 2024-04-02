@@ -1,5 +1,5 @@
 import moment from 'moment';
-import Lottie from 'lottie-react-native';
+import LottieView from 'lottie-react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import database from '@react-native-firebase/database';
@@ -7,6 +7,7 @@ import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Game from '../Game';
+import Icon from '../../Component/Icons/Icon';
 
 import {
   View,
@@ -21,15 +22,18 @@ import {
   PanResponder,
   StatusBar,
   FlatList,
+  PermissionsAndroid,
+  Platform,
+  Modal,
 } from 'react-native';
 
-import RtcEngine, {
-  ClientRole,
-  RtcLocalView,
-  RtcRemoteView,
-  ChannelProfile,
-  VideoRenderMode,
-  VideoRemoteState,
+import {
+  ClientRoleType,
+  ChannelProfileType,
+  RemoteVideoState,
+  createAgoraRtcEngine,
+  RtcSurfaceView,
+  VideoStreamType,
 } from 'react-native-agora';
 import {
   heightPercentageToDP as hp,
@@ -42,7 +46,7 @@ import CrossPink from '../../Assets/Icons/crossPink.svg';
 import SendIcon from '../../Assets/Icons/BlueSendIcon.svg';
 import VideoCallSmallIcon from '../../Assets/Icons/VideoCallSmallIcon.svg';
 import {COLORS} from '../../Utils/colors';
-import {SvgIcon} from '../../Component/icons';
+import icons, {SvgIcon} from '../../Component/icons';
 import {FONT_SIZE} from '../../Utils/fontFamily';
 import {strings} from '../../localization/config';
 import {dynamicSize} from '../../Utils/responsive';
@@ -80,10 +84,9 @@ import {
   getAnotherUserProfile,
   getFriendsListAction,
   reconnectLiveStreamAction,
-  getUserEarningListAction,
   getLiveUserListAction,
-  hostDetailAction,
-  getHostExtraDetailAction,
+  hostSendGiftAction,
+  createChatRoomAction,
 } from '../../Redux/Action';
 
 import {
@@ -108,11 +111,7 @@ import {
   Button,
   MyImage,
 } from '../../Component/commomComponent';
-import {HelperService} from '../../Services/Utils/HelperService';
-import {
-  checkNodePresentOrNot,
-  incomingCallQuery,
-} from '../../firebase/nodeQuery';
+import {incomingCallQuery} from '../../firebase/nodeQuery';
 import ReportModal from '../../Component/ReportModal';
 import MakeRemoveAdmin from '../../Component/Make_RemoveAdmin';
 import {socket} from '../../Services/Sockets/sockets';
@@ -125,18 +124,21 @@ import {
 import {Actionsheet} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
+import {navigateToScreen} from '../../Navigator/navigationHelper';
+import {showMessage} from 'react-native-flash-message';
+import {muteDuration} from '../../Utils/formutils/muteDuration';
 
 const HEART_ANIMATION = require('../../Assets/lottiefiles/heartAnimation.json');
 
 const videoStateMessage = state => {
   switch (state) {
-    case VideoRemoteState.Stopped:
+    case RemoteVideoState.RemoteVideoStateStopped:
       return 'Video turned off by Host';
 
-    case VideoRemoteState.Frozen:
+    case RemoteVideoState.RemoteVideoStateFrozen:
       return 'Connection Issue, Please Wait';
 
-    case VideoRemoteState.Failed:
+    case RemoteVideoState.RemoteVideoStateFailed:
       return 'Network Error';
   }
 };
@@ -179,14 +181,16 @@ const LiveStreaming = ({navigation, route}) => {
   }, [route?.params?.channel]);
 
   const channelToken = useMemo(() => {
-    if (route?.params?.token) return route?.params?.token;
+    if (route?.params?.token) {
+      return route?.params?.token;
+    }
   }, [route?.params?.token]);
 
   const initialState = {
     joinSucceed: false,
     peerIds: [],
   };
-  const agoraEngine = useRef();
+  const agoraEngineRef = useRef();
   const scrollRef = useRef();
   const pan = useRef(new Animated.ValueXY()).current;
   const reconnectAlertStatus = useRef(false);
@@ -210,12 +214,12 @@ const LiveStreaming = ({navigation, route}) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [viewersFollowing, setViewersFollowing] = useState([]);
   const [removeAdminVisible, setRemoveAdminVisible] = useState(false);
-  const [renderNewJoinne, UpdateNewJoinneState] = useState(true);
+  const [renderNewJoinne, UpdateNewJoinneState] = useState(false);
   const [{joinSucceed, peerIds}, setState] = useState(initialState);
   const [joinedUserDataState, updateJoinedUserDataState] = useState([]);
   const [isKeyboardShow, updateKeyboardShow] = useState(false);
   const [broadcasterVideoState, setBroadcasterVideoState] = useState(
-    VideoRemoteState.Decoding,
+    RemoteVideoState.RemoteVideoStateDecoding,
   );
   const [diamondPoints, setDiamondPoints] = useState(
     userLoginList?.user?.myBalance,
@@ -225,11 +229,14 @@ const LiveStreaming = ({navigation, route}) => {
   const [hostScreenStatus, UpdateHostScreenStatus] = useState(true);
   const [myEarning, setMyEarning] = useState();
   const [liveUserList, UpdateLiveUserList] = useState([]);
-  const [todayEarning, UpdateTodayEarning] = useState(
-    route?.params?.todayEarning,
-  );
+  const [todayEarning, UpdateTodayEarning] = useState();
 
-  const [showGames,setShowGames] = useState(false);
+  const [showGames, setShowGames] = useState(false);
+  const [showTimer, setShowTimer] = useState(false);
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [star, setStar] = useState();
 
   const BROAD_OPTIONS = [
     `${isAdmin ? 'Remove Admin' : 'Make Admin'}`,
@@ -238,7 +245,9 @@ const LiveStreaming = ({navigation, route}) => {
     'Kickout',
     'Mute/UnMute',
     'Report',
-    // 'Private call',
+    'Message',
+    'Voice Call',
+    'Video Call',
   ];
 
   const OPTIONS = {
@@ -252,23 +261,42 @@ const LiveStreaming = ({navigation, route}) => {
     ],
   };
 
-  const getUserEarning = () => {
-    dispatch(
-      getUserEarningListAction(result => {
-        setMyEarning(result?.data);
-      }),
-    );
-  };
+  useEffect(() => {
+    setStar(hostExtraDetail?.star ? hostExtraDetail?.star : 0);
+    const latestImage =
+      commentData.length > 0 ? commentData[commentData.length - 1] : null;
+    if (latestImage && latestImage?.image) {
+      setImageSrc(latestImage?.image);
+      setIsVisible(true);
+
+      UpdateTodayEarning(latestImage?.userIncome?.todayEarning);
+      setStar(latestImage?.userIncome?.star);
+
+      // Schedule hiding the gift image after 3 seconds
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    } else {
+      setImageSrc(null);
+      setIsVisible(false);
+    }
+  }, [commentData]);
+
+  useEffect(() => {
+    if (channelName && channelToken) {
+      _initEngine();
+    }
+  }, [channelName, channelToken]);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       backAction,
     );
-    _initEngine();
     _fetchGifts();
     UpdateFirstTimeRender(false);
-    // getUserEarning();
 
     return () => backHandler.remove();
   }, []);
@@ -315,13 +343,13 @@ const LiveStreaming = ({navigation, route}) => {
 
   useEffect(() => {
     if (joinedUserData?.id) {
-      if (joinedTimout) {
-        UpdateNewJoinneState(false);
+      if (joinedTimout || !renderNewJoinne) {
+        UpdateNewJoinneState(true);
       } else {
         dispatch(changeAnimationTypeAction('slideInRight'));
-        joinedTimout = setTimeout(() => {
+        setTimeout(() => {
           joinedTimout = null;
-          UpdateNewJoinneState(true);
+          UpdateNewJoinneState(false);
           dispatch(changeAnimationTypeAction('slideOutLeft'));
         }, 3000);
       }
@@ -336,12 +364,11 @@ const LiveStreaming = ({navigation, route}) => {
   const Invite = async () => {
     const url = await dynamicLinks().buildLink({
       link: `https://www.google.com?liveName=${channelName}&liveToken=${channelToken}`,
-      // domainUriPrefix is created in your Firebase console
       domainUriPrefix: 'https://weecha.page.link',
       social: {
-        title: 'Weecha',
+        title: `${hostDetail?.name} - WeeCha Live`,
         descriptionText: 'Look out for this awesome Live Streaming',
-        // imageUrl:''
+        imageUrl: `${IMAGE_URL}${hostDetail?.profile}`,
       },
       android: {
         packageName: 'com.weecha',
@@ -350,17 +377,12 @@ const LiveStreaming = ({navigation, route}) => {
         bundleId: 'com.weecha',
         appStoreId: '123456789',
       },
-      // optional setup which updates Firebase analytics campaign
-      // "banner". This also needs setting up before hand
-      // analytics: {
-      //   campaign: 'banner',
-      // },
     });
     const options = Platform.select({
       default: {
         title: 'TITLE',
-        subject: 'title',
-        message: `${'Check out this'} ${url}`,
+        subject: 'SUBJECT',
+        url: `Check out this : ${url}`,
       },
     });
     Share.open(options)
@@ -413,9 +435,6 @@ const LiveStreaming = ({navigation, route}) => {
       if (data?.type === 'like_event') {
         dispatch(likeLiveStreamAction(data));
         setHeartFlag(true);
-        // if (data?.userId == userLoginList?.user?._id) {
-        //   dispatch(updateLikedStatusAction());
-        // }
       }
       if (
         data?.type === 'kickout_user' &&
@@ -441,7 +460,29 @@ const LiveStreaming = ({navigation, route}) => {
         data?.type === 'mute_user' &&
         data?.userId === userLoginList?.user?._id
       ) {
-        dispatch(userLiveMuteFlag());
+        dispatch(
+          activeLiveUserListInStreamingAction(
+            {
+              start: 0,
+              limit: 3,
+              roomId: channelToken,
+              userId: userLoginList?.user?._id,
+            },
+            result => {
+              let specificUser = result?.data?.filter(
+                item => item.joinedUsers._id === userLoginList?.user?._id,
+              );
+              if (
+                specificUser?.length > 0 &&
+                !specificUser[0].joinedUsers?.isHost &&
+                !isBroadcaster
+              ) {
+                dispatch(userLiveMuteFlag(specificUser[0]?.isMute));
+                updateJoinedUserDataState(result?.data);
+              }
+            },
+          ),
+        );
       }
       if (data?.type === 'leave_host' && data?.detail?.id === hostDetail?._id) {
         _endCall();
@@ -458,33 +499,53 @@ const LiveStreaming = ({navigation, route}) => {
         data?.type === 'reconnect_live_stream' &&
         data?.detail?.id !== userLoginList?.user?._id
       ) {
-        agoraEngine.current?.leaveChannel();
+        //agoraEngineRef.current?.leaveChannel();
 
-        agoraEngine.current = await RtcEngine.create(rtmAgoraConfig.appId);
-        await agoraEngine.current.enableVideo();
-        await agoraEngine.current.startPreview();
-        await agoraEngine.current?.setChannelProfile(
-          ChannelProfile.LiveBroadcasting,
-        );
-        await agoraEngine.current?.setClientRole(
-          isBroadcaster ? ClientRole.Broadcaster : ClientRole.Audience,
+        //   agoraEngineRef.current = createAgoraRtcEngine();
+        //   await agoraEngineRef.current?.setChannelProfile(
+        //     ChannelProfileType.ChannelProfileLiveBroadcasting,
+        //   );
+        //   await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(
+        //     VideoStreamType.VideoStreamHigh,
+        //   );
+        //   await agoraEngineRef.current.enableVideo();
+        //   await agoraEngineRef.current.startPreview();
+        //   await agoraEngineRef.current?.setClientRole(
+        //     isBroadcaster
+        //       ? ClientRoleType.ClientRoleBroadcaster
+        //       : ClientRoleType.ClientRoleAudience,
+        //   );
+
+        //   agoraEngineRef.current.addListener('onUserJoined', (uid, elapsed) => {
+        //     // If new user
+        //     if (peerIds.indexOf(uid) === -1) {
+        //       setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));
+        //     }
+        //   });
+        //   agoraEngineRef.current.addListener(
+        //     'onRemoteVideoStateChanged',
+        //     (uid, state) => {
+        //       if (uid === 1) setBroadcasterVideoState(state);
+        //     },
+        //   );
+        //   _startCall();
+
+        //  agoraEngineRef.current;
+        // agoraEngine.initialize({
+        //   appId: rtmAgoraConfig.appId,
+        //   channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+        // });
+
+        agoraEngineRef?.current.setClientRole(
+          ClientRoleType.ClientRoleAudience,
         );
 
-        agoraEngine.current.addListener('UserJoined', (uid, elapsed) => {
-          console.log('UserJoined', uid, elapsed);
-          // If new user
-          if (peerIds.indexOf(uid) === -1) {
-            setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));
-          }
+        agoraEngineRef?.current.setChannelProfile(
+          ChannelProfileType.ChannelProfileLiveBroadcasting,
+        );
+        agoraEngineRef.current?.joinChannel(channelToken, channelName, 0, {
+          clientRoleType: ClientRoleType.ClientRoleAudience,
         });
-
-        agoraEngine.current.addListener(
-          'RemoteVideoStateChanged',
-          (uid, state) => {
-            if (uid === 1) setBroadcasterVideoState(state);
-          },
-        );
-        _startCall();
       }
     });
 
@@ -524,6 +585,14 @@ const LiveStreaming = ({navigation, route}) => {
     }
   }, [joinUserCount]);
 
+  useEffect(() => {
+    return () => {
+      agoraEngineRef.current?.removeAllListeners();
+      // agoraEngineRef.current?.release();
+      dispatch(clearLiveStreamDataAction());
+    };
+  }, []);
+
   const getUserJoinedData = () => {
     dispatch(
       activeLiveUserListInStreamingAction(
@@ -534,6 +603,17 @@ const LiveStreaming = ({navigation, route}) => {
           userId: userLoginList?.user?._id,
         },
         data => {
+          let specificUser = data?.data?.filter(
+            item => item.joinedUsers._id === userLoginList?.user?._id,
+          );
+
+          if (
+            specificUser?.length > 0 &&
+            !specificUser[0].joinedUsers?.isHost &&
+            !isBroadcaster
+          ) {
+            dispatch(userLiveMuteFlag(specificUser[0]?.isMute));
+          }
           updateJoinedUserDataState(data?.data);
           const newList = data?.data?.filter(item => item?.isAdmin);
           setAdminList([...newList]);
@@ -542,45 +622,100 @@ const LiveStreaming = ({navigation, route}) => {
     );
   };
 
+  const getPermission = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      ]);
+    }
+  };
+
   const _initEngine = async () => {
-    agoraEngine.current = await RtcEngine.create(rtmAgoraConfig.appId);
-    await agoraEngine.current.enableVideo();
-    await agoraEngine.current.startPreview();
-    await agoraEngine.current?.setChannelProfile(
-      ChannelProfile.LiveBroadcasting,
-    );
-    await agoraEngine.current?.setClientRole(
-      isBroadcaster ? ClientRole.Broadcaster : ClientRole.Audience,
-    );
-    _addListeners();
-    _startCall();
+    try {
+      if (Platform.OS === 'android') {
+        await getPermission();
+      }
+
+      agoraEngineRef.current = createAgoraRtcEngine();
+      const agoraEngineInit = agoraEngineRef.current;
+      agoraEngineInit.registerEventHandler({
+        onJoinChannelSuccess: () => {
+          console.log('Successfully joined the channel ' + channelName);
+        },
+        onUserJoined: (_connection, Uid) => {
+          console.log('Remote user joined with uid ' + Uid);
+        },
+        onUserOffline: (_connection, Uid) => {
+          console.log('Remote user left the channel. uid: ' + Uid);
+        },
+      });
+      agoraEngineInit.initialize({
+        appId: rtmAgoraConfig.appId,
+        channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+      });
+      await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(
+        VideoStreamType.VideoStreamHigh,
+      );
+      agoraEngineInit.enableVideo();
+      _addListeners();
+      _startCall();
+    } catch (e) {
+      console.log('An error occurred', e);
+    }
   };
 
   const reconnectAgro = async () => {
-    agoraEngine.current?.leaveChannel();
-    agoraEngine.current = await RtcEngine.create(rtmAgoraConfig.appId);
-    await agoraEngine.current.enableVideo();
-    await agoraEngine.current.startPreview();
-    await agoraEngine.current?.setChannelProfile(
-      ChannelProfile.LiveBroadcasting,
+    // agoraEngineRef.current?.leaveChannel();
+    // await agoraEngineRef.current?.removeAllListeners();
+    //await agoraEngineRef.current?.release();
+    agoraEngineRef.current = createAgoraRtcEngine();
+    const agoraEngine = agoraEngineRef.current;
+
+    agoraEngine.registerEventHandler({
+      onJoinChannelSuccess: () => {
+        console.log('Successfully joined the channel ' + channelName);
+      },
+      onUserJoined: (_connection, Uid) => {
+        console.log('Remote user joined with uid ' + Uid);
+      },
+      onUserOffline: (_connection, Uid) => {
+        console.log('Remote user left the channel. uid: ' + Uid);
+      },
+      onRejoinChannelSuccess: (conne, uid) => {
+        console.log('Remote user left the channel conn. uid: ' + conne, uid);
+      },
+    });
+    agoraEngine.initialize({
+      appId: rtmAgoraConfig.appId,
+      channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+    });
+    console.log(agoraEngine);
+    agoraEngine.enableVideo();
+    agoraEngine.startPreview();
+    agoraEngine.setClientRole(ClientRoleType.ClientRoleBroadcaster);
+
+    agoraEngine.setChannelProfile(
+      ChannelProfileType.ChannelProfileLiveBroadcasting,
     );
-    await agoraEngine.current?.setClientRole(
-      isBroadcaster ? ClientRole.Broadcaster : ClientRole.Audience,
-    );
+    agoraEngineRef.current?.joinChannel(channelToken, channelName, 1, {
+      clientRoleType: ClientRoleType.ClientRoleBroadcaster,
+    });
 
     updateFirebase();
 
-    agoraEngine.current.addListener('UserJoined', (uid, elapsed) => {
-      console.log('UserJoined', uid, elapsed);
-      // If new user
+    agoraEngineRef.current.addListener('onUserJoined', (uid, elapsed) => {
       if (peerIds.indexOf(uid) === -1) {
         setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));
       }
     });
 
-    agoraEngine.current.addListener('RemoteVideoStateChanged', (uid, state) => {
-      if (uid === 1) setBroadcasterVideoState(state);
-    });
+    agoraEngineRef.current.addListener(
+      'onRemoteVideoStateChanged',
+      (uid, state) => {
+        if (uid === 1) setBroadcasterVideoState(state);
+      },
+    );
 
     _startCall();
     UpdateHostScreenStatus(true);
@@ -653,23 +788,22 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   const _addListeners = () => {
-    agoraEngine.current.addListener('Warning', warn => {
+    agoraEngineRef.current.addListener('Warning', warn => {
       console.log('Warning', warn);
     });
 
-    agoraEngine.current.addListener('Error', err => {
+    agoraEngineRef.current.addListener('onError', err => {
       console.log('Error', err);
     });
 
-    agoraEngine.current.addListener('UserJoined', (uid, elapsed) => {
-      console.log('UserJoined', uid, elapsed);
+    agoraEngineRef.current.addListener('onUserJoined', (uid, elapsed) => {
       // If new user
       if (peerIds.indexOf(uid) === -1) {
         setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));
       }
     });
 
-    agoraEngine.current.addListener('UserOffline', (uid, reason) => {
+    agoraEngineRef.current.addListener('onUserOffline', (uid, reason) => {
       // Remove peer ID from state array
       setState(prevState => ({
         ...prevState,
@@ -678,8 +812,8 @@ const LiveStreaming = ({navigation, route}) => {
     });
 
     // If Local user joins RTC channel
-    agoraEngine.current.addListener(
-      'JoinChannelSuccess',
+    agoraEngineRef.current.addListener(
+      'onJoinChannelSuccess',
       (channel, uid, elapsed) => {
         // Set state variable to true
 
@@ -709,34 +843,45 @@ const LiveStreaming = ({navigation, route}) => {
       },
     );
 
-    agoraEngine.current.addListener('RemoteVideoStateChanged', (uid, state) => {
-      if (uid === 1) setBroadcasterVideoState(state);
-    });
+    agoraEngineRef.current.addListener(
+      'onRemoteVideoStateChanged',
+      (uid, state) => {
+        if (uid === 1) setBroadcasterVideoState(state);
+      },
+    );
   };
 
-  /**
-   * @name startCall
-   * @description Function to start the call
-   */
   const _startCall = async () => {
-    // Join Channel using null token and channel name
-
     const uid = isBroadcaster ? 1 : 0;
 
-    await agoraEngine.current?.joinChannel(
-      channelToken,
-      channelName,
-      null,
-      uid,
-    );
-
-    await agoraEngine.current.stopPreview();
+    if (joinSucceed) {
+      return;
+    }
+    try {
+      agoraEngineRef.current?.setChannelProfile(
+        ChannelProfileType.ChannelProfileLiveBroadcasting,
+      );
+      if (isBroadcaster) {
+        await agoraEngineRef.current.startPreview();
+        agoraEngineRef.current?.joinChannel(channelToken, channelName, uid, {
+          clientRoleType: ClientRoleType.ClientRoleBroadcaster,
+        });
+      } else {
+        agoraEngineRef.current?.joinChannel(channelToken, channelName, uid, {
+          clientRoleType: ClientRoleType.ClientRoleAudience,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const _endCallAudiance = async () => {
     try {
-      await agoraEngine.current?.leaveChannel();
-      await agoraEngine.current?.destroy();
+      await agoraEngineRef.current?.leaveChannel();
+      await agoraEngineRef.current?.removeAllListeners();
+      await agoraEngineRef.current?.release();
+
       dispatch(
         endLiveStreamingAction({
           userId: userLoginList?.user?._id,
@@ -766,7 +911,7 @@ const LiveStreaming = ({navigation, route}) => {
           peerIds: [],
           joinSucceed: false,
         }));
-        dispatch(clearLiveStreamDataAction());
+        //dispatch(clearLiveStreamDataAction());
         navigation.navigate('LiveSection');
       } else {
         socket.emit('live_session', {
@@ -789,7 +934,7 @@ const LiveStreaming = ({navigation, route}) => {
           peerIds: [],
           joinSucceed: false,
         }));
-        dispatch(clearLiveStreamDataAction());
+        // dispatch(clearLiveStreamDataAction());
         navigation.navigate('LiveSection');
       }
     } catch (error) {
@@ -797,14 +942,9 @@ const LiveStreaming = ({navigation, route}) => {
     }
   };
 
-  /**
-   * @name endCall
-   * @description Function to end the call
-   */
   const _endCall = async () => {
     try {
-      await agoraEngine.current?.leaveChannel();
-      await agoraEngine.current?.destroy();
+      await agoraEngineRef.current?.leaveChannel();
       dispatch(
         endLiveStreamingAction({
           userId: userLoginList?.user?._id,
@@ -834,7 +974,7 @@ const LiveStreaming = ({navigation, route}) => {
           peerIds: [],
           joinSucceed: false,
         }));
-        dispatch(clearLiveStreamDataAction());
+        //dispatch(clearLiveStreamDataAction());
         navigation.navigate('LiveSection');
       } else {
         socket.emit('live_session', {
@@ -852,7 +992,7 @@ const LiveStreaming = ({navigation, route}) => {
           peerIds: [],
           joinSucceed: false,
         }));
-        dispatch(clearLiveStreamDataAction());
+        //dispatch(clearLiveStreamDataAction());
       }
     } catch (error) {
       console.log('erroe while leaving streaming==>', error.message);
@@ -866,11 +1006,11 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   const onChangeCameraDirection = async () => {
-    await agoraEngine.current?.switchCamera();
+    await agoraEngineRef.current?.switchCamera();
   };
 
   const onToggleMicrophone = async () => {
-    await agoraEngine.current?.muteLocalAudioStream(!isMute);
+    await agoraEngineRef.current?.muteLocalAudioStream(!isMute);
     updateMuteState(!isMute);
   };
 
@@ -910,7 +1050,8 @@ const LiveStreaming = ({navigation, route}) => {
         <Animatable.View
           animation={animationType}
           easing="ease"
-          duration={3000}>
+          duration={5000}
+          onAnimationEnd={() => UpdateNewJoinneState(false)}>
           <MyLinearGradient
             colors={[COLORS.ORANGE, COLORS.ORANGE1]}
             style={styles.joinedThLiveContainer}>
@@ -1002,9 +1143,10 @@ const LiveStreaming = ({navigation, route}) => {
             </View>
           )}
           <View style={styles.chatRightConrtainer}>
-            <MyText style={styles.username}>{item.name}</MyText>
             <View style={styles.msgBox}>
-              <MyText style={styles.msg}>{item.comment}</MyText>
+              <MyText style={styles.msg}>
+                {item.name}: {item.comment}
+              </MyText>
             </View>
           </View>
         </TouchableOpacity>
@@ -1019,24 +1161,25 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   const renderLocal = () => (
-    <RtcLocalView.SurfaceView
-      channelId={channelName}
-      removeClippedSubviews={false}
-      style={styles.localStreamingView}
-      renderMode={VideoRenderMode.Hidden}
-    />
+    <React.Fragment key={0}>
+      <RtcSurfaceView
+        canvas={{uid: 0}}
+        style={styles.localStreamingView}
+        removeClippedSubviews={false}
+      />
+    </React.Fragment>
   );
 
   const renderHost = () =>
-    broadcasterVideoState === VideoRemoteState.Decoding ? (
-      <RtcRemoteView.SurfaceView
-        uid={1}
-        channelId={channelName}
-        zOrderMediaOverlay={true}
-        removeClippedSubviews={false}
-        style={styles.localStreamingView}
-        renderMode={VideoRenderMode.Hidden}
-      />
+    broadcasterVideoState === RemoteVideoState.RemoteVideoStateDecoding ? (
+      <React.Fragment key={1}>
+        <RtcSurfaceView
+          canvas={{uid: 1}}
+          style={styles.localStreamingView}
+          removeClippedSubviews={false}
+          zOrderMediaOverlay={true}
+        />
+      </React.Fragment>
     ) : (
       <View style={styles.broadcasterVideoStateMessage}>
         <MyText style={styles.broadcasterVideoStateMessageText}>
@@ -1129,6 +1272,7 @@ const LiveStreaming = ({navigation, route}) => {
     const comentData = {
       type: 'comment',
       chat_id: channelToken,
+      giftId: data?.param?.giftId[0]?.giftId,
       commentData: {
         type: 'comment',
         comment: `${data?.totalCount} gift's send by ${userLoginList?.user?.name} `,
@@ -1142,11 +1286,22 @@ const LiveStreaming = ({navigation, route}) => {
     socket.emit('live_session', comentData);
 
     dispatch(commentOnLiveStreamAction(comentData));
-    dispatch(updateHostPointAction(data.param.totalPrice));
+    dispatch(updateHostPointAction(data?.param?.totalPrice));
+
+    const hostGiftIncome = {
+      roomId: channelToken,
+    };
+    dispatch(
+      hostSendGiftAction(hostGiftIncome, resp => {
+        UpdateTodayEarning(resp?.data?.todayEarning);
+        setStar(resp?.data?.star);
+      }),
+    );
+
     hideGift();
   };
 
-  const checkCallPossible = type => async () => {
+  const checkCallPossible = async type => {
     const data = {
       senderId: userLoginList?.user?._id,
       receiverId: route?.params?._id,
@@ -1160,7 +1315,73 @@ const LiveStreaming = ({navigation, route}) => {
       }
     } catch (error) {
       const data = error.response.data;
-      alert(data.message);
+      Alert.alert(data.message);
+    }
+  };
+
+  const checkVoiceCallPossible = async type => {
+    const data = {
+      senderId: userLoginList?.user?._id,
+      receiverId: selectedUser?.joinedUsers?._id,
+      type: type == CALLING_TYPE.VIDEO ? 'VIDEOCALL' : 'CALL',
+    };
+    try {
+      const response = await getUserHaveBalance(data);
+      if (response.data.data) {
+        callingFunctionalityLive(type);
+      }
+    } catch (error) {
+      const data = error.response.data;
+      Alert.alert(data.message);
+    }
+  };
+
+  const callingFunctionalityLive = async type => {
+    const permissionGranted = await requestAudioPermission();
+
+    if (permissionGranted && selectedUser?.joinedUsers) {
+      try {
+        // const userBusyorNot = await checkNodePresentOrNot(route?.params?._id);
+        // if (userBusyorNot) {
+        //   HelperService.showToast('User is busy on another call.');
+        //   return;
+        // }
+
+        // setStartCallIndicator(true);
+        const param = {
+          callerId: userLoginList?.user?._id,
+          receiverId: selectedUser?.joinedUsers?._id,
+          type: type == CALLING_TYPE.VIDEO ? 'VIDEOCALL' : 'CALL',
+        };
+        dispatch(
+          getCAllingDetailAction(param, result => {
+            if (result) {
+              const callingParams = {
+                type: type,
+                status: CALLING_STATUS.CALLING,
+                liveName: result.roomName || 'WeechaTest',
+                liveToken:
+                  result?.token ||
+                  '006151109dddcda44a0913ebd6abc899e45IAC49Tjv8mQr1lDa2gm+K/Hu6jq2IZsP6q/nx4Q8RgifuO8UH5UAAAAAEABMB+AnoaufYgEAAQChq59i',
+                receiverId: selectedUser?.joinedUsers?._id,
+                receiverName: selectedUser?.name,
+                receiverProfilePic: selectedUser?.joinedUsers?.profile,
+                callerId: userLoginList?.user?._id,
+                callerName: userLoginList?.user?.name,
+                callerProfilePic: userLoginList?.user?.profile,
+                callerPoints: userLoginList?.user?.points,
+                receiverPoints: route?.params?.points,
+              };
+              incomingCallQuery(selectedUser?.joinedUsers?._id).set(
+                callingParams,
+              );
+              navigation.navigate('VideoCall', callingParams);
+            }
+          }),
+        );
+      } catch (error) {
+        console.log('error while call creation', error.message);
+      }
     }
   };
 
@@ -1169,11 +1390,11 @@ const LiveStreaming = ({navigation, route}) => {
 
     if (permissionGranted && route?.params) {
       try {
-        const userBusyorNot = await checkNodePresentOrNot(route?.params?._id);
-        if (userBusyorNot) {
-          HelperService.showToast('User is busy on another call.');
-          return;
-        }
+        // const userBusyorNot = await checkNodePresentOrNot(route?.params?._id);
+        // if (userBusyorNot) {
+        //   HelperService.showToast('User is busy on another call.');
+        //   return;
+        // }
 
         // setStartCallIndicator(true);
         const param = {
@@ -1185,7 +1406,7 @@ const LiveStreaming = ({navigation, route}) => {
           getCAllingDetailAction(param, result => {
             if (result) {
               const callingParams = {
-                type: CALLING_TYPE.AUDIO,
+                type: type,
                 status: CALLING_STATUS.CALLING,
                 liveName: result.roomName || 'WeechaTest',
                 liveToken:
@@ -1203,7 +1424,6 @@ const LiveStreaming = ({navigation, route}) => {
               incomingCallQuery(route?.params?._id).set(callingParams);
               navigation.navigate('VideoCall', callingParams);
             }
-            // setStartCallIndicator(false);
           }),
         );
       } catch (error) {
@@ -1293,32 +1513,74 @@ const LiveStreaming = ({navigation, route}) => {
           ),
         );
       case 'Mute/UnMute':
-        return dispatch(
-          userMute(
-            {
-              userId: selectedUser?.joinedUsers?._id,
-              roomId: selectedUser?.roomId,
-            },
-            () => {
-              socket.emit('live_session', {
-                type: 'mute_user',
-                userId: selectedUser?.joinedUsers?._id,
-                roomId: selectedUser?.roomId,
-                chat_id: selectedUser?.roomId,
-              });
-              _closeActiveUserList();
-            },
-          ),
+        const userInfo = joinedUserDataState.filter(
+          user => user?.joinedUsers?._id === selectedUser?.joinedUsers?._id,
         );
+        if (userInfo[0]?.isMute) {
+          muteUser(0);
+        } else {
+          setShowTimer(true);
+        }
+        return null;
       case 'Report':
         setShowActiveUser(false);
         setReport(true);
         return null;
+      case 'Message':
+        if (
+          selectedUser?.joinedUsers?.messageCharge <
+          userLoginList?.user?.myBalance
+        ) {
+          _createLiveMessageRoom();
+        } else {
+          rechargePopup();
+        }
+        return null;
+      case 'Voice Call':
+        return checkVoiceCallPossible(CALLING_TYPE.AUDIO);
+      case 'Video Call':
+        return checkVoiceCallPossible(CALLING_TYPE.VIDEO);
       case 'Private call':
-        return checkCallPossible(CALLING_TYPE.AUDIO)();
+        return checkCallPossible(CALLING_TYPE.AUDIO);
       default:
         return null;
     }
+  };
+
+  const muteUser = duration => {
+    dispatch(
+      userMute(
+        {
+          userId: selectedUser?.joinedUsers?._id,
+          roomId: selectedUser?.roomId,
+          duration: duration,
+        },
+        data => {
+          //console.log('uuuuuuuu', data);
+          socket.emit('live_session', {
+            type: 'mute_user',
+            userId: selectedUser?.joinedUsers?._id,
+            roomId: selectedUser?.roomId,
+            chat_id: selectedUser?.roomId,
+          });
+          _closeActiveUserList();
+        },
+      ),
+    );
+    dispatch(
+      activeLiveUserListInStreamingAction(
+        {
+          start: 0,
+          limit: 3,
+          roomId: channelToken,
+          userId: userLoginList?.user?._id,
+        },
+        result => {
+          updateJoinedUserDataState(result?.data);
+        },
+      ),
+    );
+    setShowTimer(false);
   };
 
   const profileRedirection = userId => {
@@ -1346,32 +1608,73 @@ const LiveStreaming = ({navigation, route}) => {
   }, []);
 
   const _joinAsAudience = item => {
-    // if (kickedOutRooms?.includes(item?.liveToken)) {
-    //   return Alert.alert('You have been kicked out from this live');
-    // }
-    // if (blockedLiveRooms?.includes(item?.liveToken)) {
-    //   return Alert.alert('You have been Blocked from this live');
-    // }
-
     liveEndSuggestionRef.current.close();
     navigation.navigate('LiveSection');
-    // dispatch(
-    //   hostDetailAction({
-    //     ...item,
-    //   }),
-    // );
-    // navigation.reset('liveStreaming', {
-    //   ...item,
-    //   type: STREAM_TYPE.AUDIENCE,
-    //   channel: item?.liveName,
-    //   token: item?.liveToken,
-    // });
-    // dispatch(getHostExtraDetailAction(item?._id));
   };
+
+  const _createRoom = () => {
+    const param = {
+      receiverId: hostDetail._id,
+    };
+    dispatch(
+      createChatRoomAction(param, result => {
+        if (result) {
+          setTimeout(() => {
+            navigateToScreen('PersonalChat', {
+              receiverId: hostDetail._id,
+              name: hostDetail.name,
+              profile: hostDetail.profile,
+              chatId: result._id,
+            });
+          }, 500);
+        }
+      }),
+    );
+  };
+
+  const _createLiveMessageRoom = () => {
+    const param = {
+      receiverId: selectedUser?.joinedUsers?._id,
+    };
+    dispatch(
+      createChatRoomAction(param, result => {
+        if (result) {
+          setTimeout(() => {
+            navigateToScreen('PersonalChat', {
+              receiverId: selectedUser?.joinedUsers?._id,
+              name: selectedUser?.joinedUsers?.name,
+              profile: hostDetail?.profilePic,
+              chatId: result._id,
+            });
+          }, 500);
+        }
+      }),
+    );
+  };
+
+  function rechargePopup() {
+    Alert.alert('', 'Your account balance is low, Please Recharge.', [
+      {
+        text: 'OK',
+      },
+    ]);
+  }
+
+  useMemo(() => {
+    if (userLiveMute) {
+      showMessage({
+        message: 'Warning',
+        description: 'Your are muted by the host or admin',
+        type: 'warning',
+        icon: 'warning',
+        duration: 3000,
+      });
+    }
+  }, [userLiveMute]);
 
   return (
     <>
-      <StatusBar hidden />
+      <StatusBar hidden={true} />
       <SafeArea
         style={[
           styles.container,
@@ -1565,9 +1868,18 @@ const LiveStreaming = ({navigation, route}) => {
             <View>
               {showComments && (
                 <TouchableOpacity
-                  style={{padding: 10, zIndex: 100}}
-                  onPress={endCallPopup}>
-                  <SvgIcon.TranslucentClose />
+                  style={styles.closeBtn}
+                  onPress={async () => {
+                    await agoraEngineRef.current?.removeAllListeners();
+                    await agoraEngineRef.current?.release();
+                    endCallPopup();
+                  }}>
+                  <Icon
+                    origin="AntDesign"
+                    name="close"
+                    size={16}
+                    color={'#fff'}
+                  />
                 </TouchableOpacity>
               )}
             </View>
@@ -1590,7 +1902,7 @@ const LiveStreaming = ({navigation, route}) => {
                       alignItems: 'center',
                     }}>
                     <IconWithCount
-                      count={hostDetail?.level || 0}
+                      count={`LV ${hostDetail?.level || 0}`}
                       style={{
                         paddingVertical: SCREEN_HEIGHT * 0.005,
                       }}
@@ -1618,7 +1930,7 @@ const LiveStreaming = ({navigation, route}) => {
                     colors={[COLORS.ORANGE, COLORS.ORANGE1]}
                     source={<SvgIcon.SmallGlowStar />}
                     tintColor={COLORS.TRANSPARENT}
-                    text={`${hostExtraDetail?.star} star`}
+                    text={`${star} star`}
                     textStyle={{marginLeft: 0}}
                     style={{
                       paddingVertical: SCREEN_HEIGHT * 0.005,
@@ -1643,7 +1955,7 @@ const LiveStreaming = ({navigation, route}) => {
           activeOpacity={1}
           onPress={_closeAllPopup}
           style={{
-            top: hp(58),
+            top: hp(56),
             position: 'absolute',
             width: SCREEN_WIDTH,
             justifyContent: 'flex-end',
@@ -1661,6 +1973,26 @@ const LiveStreaming = ({navigation, route}) => {
           {...panResponder.panHandlers}>
           {showComments && (
             <View style={styles.chatMainContainer}>
+              <View
+                style={{
+                  position: 'absolute',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: SCREEN_WIDTH,
+                  height: SCREEN_HEIGHT,
+                }}>
+                {isVisible && imageSrc ? (
+                  <MyImage
+                    fast
+                    source={{uri: imageSrc}}
+                    style={{
+                      width: SCREEN_WIDTH * 0.5,
+                      height: SCREEN_WIDTH * 0.5,
+                      backgroundColor: 'transparent',
+                    }}
+                  />
+                ) : null}
+              </View>
               <Touchable
                 activeOpacity={1}
                 onPress={_closeAllPopup}
@@ -1680,23 +2012,20 @@ const LiveStreaming = ({navigation, route}) => {
                       : SCREEN_HEIGHT * 0.06 + useSafeAreaInsets().bottom,
                   },
                 ]}>
-                {heartFlag ? (
-                  <View
-                    style={{
-                      bottom: hp(12),
-                      left: wp(-4),
-                      position: 'absolute',
-                    }}>
-                    <Lottie
-                      source={HEART_ANIMATION}
-                      autoPlay
-                      loop={false}
-                      style={styles.heartFlag}
-                      onAnimationFinish={() =>
-                        isBroadcaster ? setHeartFlag(false) : null
-                      }
-                    />
-                  </View>
+                {!isBroadcaster ? (
+                  <>
+                    {heartFlag ? (
+                      <View style={styles.heartFlagContainer}>
+                        <LottieView
+                          source={HEART_ANIMATION}
+                          autoPlay
+                          loop={false}
+                          style={styles.heartFlag}
+                          onAnimationFinish={() => setHeartFlag(false)}
+                        />
+                      </View>
+                    ) : null}
+                  </>
                 ) : null}
                 {!isBroadcaster ? (
                   <>
@@ -1714,23 +2043,30 @@ const LiveStreaming = ({navigation, route}) => {
                     <TouchableIcon
                       style={styles.marginBottom}
                       customIcon={<SvgIcon.SmallCall />}
-                      onPress={checkCallPossible(CALLING_TYPE.AUDIO)}
+                      onPress={() => {
+                        checkCallPossible(CALLING_TYPE.AUDIO);
+                      }}
                     />
                     <TouchableIcon
                       style={styles.marginBottom}
                       customIcon={<VideoCallSmallIcon />}
-                      onPress={checkCallPossible(CALLING_TYPE.VIDEO)}
+                      onPress={() => {
+                        checkCallPossible(CALLING_TYPE.VIDEO);
+                      }}
                     />
                   </>
                 ) : (
-                  <>
+                  <View style={styles.hostRightOptionsContainer}>
                     <Touchable style={styles.translucent}>
                       <MyText style={styles.pkText}>
                         {strings('live.pk')}
                       </MyText>
                     </Touchable>
-                    <TouchableIcon customIcon={<SvgIcon.BlueGame />}  onPress = {()=>setShowGames(true)}/>
-                  </>
+                    <TouchableIcon
+                      customIcon={<SvgIcon.BlueGame />}
+                      onPress={() => setShowGames(true)}
+                    />
+                  </View>
                 )}
               </View>
 
@@ -1757,9 +2093,7 @@ const LiveStreaming = ({navigation, route}) => {
                 behavior={isIOS ? 'position' : null}
                 enabled
                 keyboardShouldPersistTaps={'handled'}
-                contentContainerStyle={{
-                  flex: 1,
-                }}
+                contentContainerStyle={styles.chatKeyboardScrollViewContainer}
                 style={{
                   height: 0,
                 }}>
@@ -1769,17 +2103,8 @@ const LiveStreaming = ({navigation, route}) => {
                   scrollEventThrottle={16}
                   showsVerticalScrollIndicator={false}
                   keyboardShouldPersistTaps={'always'}
-                  contentContainerStyle={[
-                    styles['scrollView'],
-                    {paddingTop: dynamicSize(60)},
-                  ]}>
-                  <View
-                    style={{
-                      width: SCREEN_WIDTH,
-                      flex: 1,
-                      justifyContent: 'flex-end',
-                      marginVertical: dynamicSize(10),
-                    }}>
+                  contentContainerStyle={[styles['scrollView']]}>
+                  <View style={styles.chatContainer}>
                     {commentData?.map((item, index) =>
                       _renderComment(item, index),
                     )}
@@ -1800,8 +2125,8 @@ const LiveStreaming = ({navigation, route}) => {
                     onChangeText={UpdateCommentText}
                     placeholder={
                       userLiveMute
-                        ? strings('live.saySomething')
-                        : "You're muted"
+                        ? "You're muted"
+                        : strings('live.saySomething')
                     }
                     svgSource={<SvgIcon.CommentIcon />}
                     style={{
@@ -1810,12 +2135,12 @@ const LiveStreaming = ({navigation, route}) => {
                         : SCREEN_WIDTH / 2,
                     }}
                     textInputStyle={{fontSize: FONT_SIZE.MEDIUM, width: '100%'}}
-                    //onSubmitEditing={onCommentSend}
+                    onSubmitEditing={onCommentSend}
                     blurOnSubmit={false}
                     //multiline={true}
-                    //returnKeyType='none'
-                    // returnKeyLabel="send"
-                    editable={userLiveMute}
+                    returnKeyType="done"
+                    returnKeyLabel="done"
+                    editable={!userLiveMute}
                   />
 
                   {isKeyboardShow && (
@@ -1832,12 +2157,27 @@ const LiveStreaming = ({navigation, route}) => {
 
                   {!isBroadcaster && !isKeyboardShow ? (
                     <View style={styles.subBottomChatRowContainer}>
-                      <TouchableIcon customIcon={<SvgIcon.BlueGame />}  onPress = {()=>setShowGames(true)}/>
+                      <TouchableIcon
+                        customIcon={<SvgIcon.BlueGame />}
+                        onPress={() => setShowGames(true)}
+                      />
                       <TouchableIcon
                         onPress={_fetchGiftList}
                         customIcon={<SvgIcon.SmallGiftIcon />}
                       />
-                      <TouchableIcon customIcon={<SvgIcon.GreenMail />} />
+                      <TouchableIcon
+                        onPress={() => {
+                          if (
+                            hostDetail?.messageCharge <
+                            userLoginList?.user?.myBalance
+                          ) {
+                            _createRoom();
+                          } else {
+                            rechargePopup();
+                          }
+                        }}
+                        customIcon={<SvgIcon.GreenMail />}
+                      />
                       <TouchableIcon
                         onPress={() => setIsopen(true)}
                         customIcon={<SvgIcon.SmallShare />}
@@ -1847,35 +2187,50 @@ const LiveStreaming = ({navigation, route}) => {
                 </View>
               </KeyboardAwareScrollView>
               {isBroadcaster && (
-                <View
-                  style={[
-                    styles.bottomMenuContainer,
-                    {
-                      paddingBottom: useSafeAreaInsets().bottom,
-                    },
-                  ]}>
-                  <Touchable
+                <View style={styles.bottomMenuContainer}>
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={isMute ? icons.mute : icons.voice}
+                        resizeMode={'contain'}
+                        style={{
+                          height: SCREEN_HEIGHT * 0.035,
+                          width: SCREEN_HEIGHT * 0.035,
+                        }}
+                      />
+                    }
                     onPress={onToggleMicrophone}
-                    style={styles.footerIcon}>
-                    {isMute ? (
-                      <SvgIcon.MuteMicrophoneIcon />
-                    ) : (
-                      <SvgIcon.MicrophoneIcon />
-                    )}
-                  </Touchable>
-                  <Touchable
+                  />
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={icons.flipCamera}
+                        resizeMode={'contain'}
+                        style={styles.hostIconSize}
+                      />
+                    }
                     onPress={onChangeCameraDirection}
-                    style={styles.footerIcon}>
-                    <SvgIcon.FlipCameraIcon />
-                  </Touchable>
-                  <Touchable
+                  />
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={icons.share}
+                        resizeMode={'contain'}
+                        style={styles.hostIconSize}
+                      />
+                    }
                     onPress={() => setIsopen(true)}
-                    style={styles.footerIcon}>
-                    <SvgIcon.ShareIcon />
-                  </Touchable>
-                  <Touchable onPress={onShare} style={styles.footerIcon}>
-                    <SvgIcon.MoreOption />
-                  </Touchable>
+                  />
+                  <TouchableIcon
+                    customIcon={
+                      <Image
+                        source={icons.threeDots}
+                        resizeMode={'contain'}
+                        style={styles.hostIconSize}
+                      />
+                    }
+                    onPress={onShare}
+                  />
                 </View>
               )}
             </View>
@@ -1996,6 +2351,7 @@ const LiveStreaming = ({navigation, route}) => {
                 height: 160,
                 borderRadius: 80,
                 alignSelf: 'center',
+                //backgroundColor: 'green',
               }}
             />
             {!liveEndSuggestionData?.[0]?.followByMe && !alreadyFollowing && (
@@ -2017,6 +2373,10 @@ const LiveStreaming = ({navigation, route}) => {
               </Touchable>
             )}
           </View>
+
+          {/* <FastImage 
+            source={{uri: ``}}
+          /> */}
 
           <MyText style={{marginTop: 8, textAlign: 'center', fontSize: 18}}>
             {liveEndSuggestionData?.[0]?.userData[0]?.name}
@@ -2071,13 +2431,13 @@ const LiveStreaming = ({navigation, route}) => {
                     styles.liveimageContainer,
                     {marginTop: 20, backgroundColor: 'green'},
                   ]}>
-                  {item.coverImage ? (
+                  {item.profile ? (
                     <MyImage
                       fast
                       borderRadius={5}
                       resizeMode={'cover'}
                       style={{width: '100%', height: '100%'}}
-                      source={{uri: `${IMAGE_URL}${item.coverImage}`}}
+                      source={{uri: `${IMAGE_URL}${item.profile}`}}
                     />
                   ) : (
                     <MyImage
@@ -2085,7 +2445,7 @@ const LiveStreaming = ({navigation, route}) => {
                       borderRadius={5}
                       resizeMode={'cover'}
                       style={{width: '100%', height: '100%'}}
-                      source={{uri: `${IMAGE_URL}${item.profile}`}}
+                      source={{uri: `${IMAGE_URL}${item.coverImage}`}}
                     />
                   )}
                 </Touchable>
@@ -2149,31 +2509,17 @@ const LiveStreaming = ({navigation, route}) => {
               paddingHorizontal: wp(4),
             }}>
             <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                alignItems: 'center',
-                marginTop: hp(1),
-              }}
-              onPress={Invite}>
-              <View
-                style={{
-                  width: wp(15),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <SvgIcon.inviteFrnd width={wp(4)} />
+              style={styles.shareOptionsContainer}
+              // onPress={Invite}>
+              onPress={() => Invite()}>
+              <View style={styles.iconContainer}>
+                <SvgIcon.inviteFrnd />
               </View>
               <Text style={[styles.options]}>Share </Text>
             </TouchableOpacity>
             <View style={styles.seperator} />
             <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                alignItems: 'center',
-                marginTop: hp(1),
-              }}
+              style={styles.shareOptionsContainer}
               onPress={() => {
                 setIsopen(false);
                 navigation.navigate('ShareWeechaFriends', {
@@ -2181,22 +2527,70 @@ const LiveStreaming = ({navigation, route}) => {
                   channelName: channelName,
                   link: 'https://www.google.com',
                   hostId: hostDetail?._id,
+                  hostDetail: hostDetail,
                 });
               }}>
-              <View
-                style={{
-                  width: wp(15),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <SvgIcon.WeechaShare width={wp(4)} />
+              <View style={styles.iconContainer}>
+                <SvgIcon.WeechaShare />
               </View>
               <Text style={[styles.options]}>Friends </Text>
+            </TouchableOpacity>
+            <View style={styles.seperator} />
+            <TouchableOpacity
+              style={styles.shareOptionsContainer}
+              onPress={() => {
+                setIsopen(false);
+                navigation.navigate('SelectWeeChaGroup', {
+                  channelToken: channelToken,
+                  channelName: channelName,
+                  link: 'https://www.google.com',
+                  hostId: hostDetail?._id,
+                  hostDetail: hostDetail,
+                });
+              }}>
+              <View style={styles.iconContainer}>
+                <SvgIcon.WeechaShare />
+              </View>
+              <Text style={[styles.options]}>Group </Text>
             </TouchableOpacity>
           </View>
         </Actionsheet.Content>
       </Actionsheet>
-      <Game visible={showGames} setVisible={setShowGames}/>
+      <Game visible={showGames} setVisible={setShowGames} />
+      <Modal transparent visible={showTimer}>
+        <View style={styles.muteModalView}>
+          <View style={styles.muteDetailsContainer}>
+            <View style={styles.muteSelfContainer}>
+              <Text style={styles.muteInfoText}>
+                Mute for Viewer for folling Duration
+              </Text>
+              <TouchableOpacity
+                style={styles.closeBtn}
+                onPress={() => {
+                  setShowTimer(false);
+                }}>
+                <Icon
+                  origin="AntDesign"
+                  name="close"
+                  size={16}
+                  color={'#fff'}
+                />
+              </TouchableOpacity>
+            </View>
+            {muteDuration.map(item => {
+              return (
+                <TouchableOpacity
+                  style={styles.muteTimerBtn}
+                  onPress={() => {
+                    muteUser(item);
+                  }}>
+                  <Text style={{color: COLORS.WHITE}}>{item} Minutes</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };

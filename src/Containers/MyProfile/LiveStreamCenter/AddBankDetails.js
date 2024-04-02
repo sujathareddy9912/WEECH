@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useRoute} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {
@@ -12,19 +14,46 @@ import {
 import {COLORS} from '../../../Utils/colors';
 import {SvgIcon} from '../../../Component/icons';
 import {dynamicSize} from '../../../Utils/responsive';
-import {Button} from '../../../Component/commomComponent';
+import {Button, MyText} from '../../../Component/commomComponent';
 import CountryCodePicker from '../../../Component/countryCodePicker';
+import {strings} from '../../../localization/config';
+import {HelperService} from '../../../Services/Utils/HelperService';
+import {
+  UPDATE_PROFILE_REQUEST,
+  UPDATE_PROFILE_RESET,
+} from '../../../ActionConstant/profile.constant';
+import {FONT_FAMILY} from '../../../Utils/fontFamily';
 
 const AddBankDetailPage = ({navigation}) => {
+  const dispatch = useDispatch();
   const [isShowCountryModal, updateCountryModal] = useState(false);
+  const [tcAndGuideline, setTermsCondition] = useState(false);
+  const [weeChaGuideLine, setWeeChaGuideLine] = useState(false);
+  const reducer = useSelector(state => state.profile);
+  const {updateProfileSuccess} = reducer;
 
   const {
     params: {agencyId},
   } = useRoute();
 
   const openCountryModal = () => {
-    updateCountryModal(true);
+    const requestData = {
+      hostAgreement: tcAndGuideline,
+      weechaGuideLine: weeChaGuideLine,
+    };
+    dispatch({type: UPDATE_PROFILE_REQUEST, payload: requestData});
   };
+
+  useEffect(() => {
+    (async () => {
+      if (updateProfileSuccess) {
+        updateCountryModal(true);
+      }
+    })();
+    return () => {
+      dispatch({type: UPDATE_PROFILE_RESET});
+    };
+  }, [updateProfileSuccess]);
 
   const closeCountryModal = () => {
     updateCountryModal(false);
@@ -59,13 +88,57 @@ const AddBankDetailPage = ({navigation}) => {
           </Text>
         </View>
 
-        <Button
-          width={wp(80)}
-          label={'Continue'}
-          onPress={openCountryModal}
-          labelStyle={styles.btntext}
-          buttonStyle={styles.buttonStyle}
-        />
+        <View>
+          <View style={styles.bottomTextContainer}>
+            <TouchableOpacity
+              onPress={() => setTermsCondition(!tcAndGuideline)}>
+              <MaterialIcons
+                name={tcAndGuideline ? 'check-box' : 'check-box-outline-blank'}
+                color={COLORS.WHITE}
+                size={25}
+              />
+            </TouchableOpacity>
+            <MyText style={styles.bold}>
+              {`${strings('agency.aggrementDescription')} `}
+              <MyText
+                onPress={() => navigation.navigate('HostTermsAndConditions')}
+                style={styles.underline}>{`${strings(
+                'agency.hostTermCondition',
+              )} .`}</MyText>
+            </MyText>
+          </View>
+          <View style={styles.bottomTextContainer}>
+            <TouchableOpacity
+              onPress={() => setWeeChaGuideLine(!weeChaGuideLine)}>
+              <MaterialIcons
+                name={weeChaGuideLine ? 'check-box' : 'check-box-outline-blank'}
+                color={COLORS.WHITE}
+                size={25}
+              />
+            </TouchableOpacity>
+            <MyText style={styles.bold}>
+              {`${strings('agency.aggrementDescription')} `}
+              <MyText
+                onPress={() => navigation.navigate('WeeChaGuideLine')}
+                style={styles.underline}>
+                {`${strings('agency.guideLine')} .`}
+              </MyText>
+            </MyText>
+          </View>
+          <Button
+            width={wp(80)}
+            label={'Continue'}
+            onPress={() => {
+              tcAndGuideline && weeChaGuideLine
+                ? openCountryModal()
+                : HelperService.showToast(
+                    'Please Accept Conditions and Guidline',
+                  );
+            }}
+            labelStyle={styles.btntext}
+            buttonStyle={styles.buttonStyle}
+          />
+        </View>
 
         {!!isShowCountryModal && (
           <CountryCodePicker
@@ -125,11 +198,25 @@ const styles = StyleSheet.create({
     paddingVertical: dynamicSize(16),
     marginBottom: dynamicSize(30),
   },
-
+  bottomTextContainer: {
+    padding: dynamicSize(10),
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   btntext: {
     fontSize: 18,
     lineHeight: 24,
     fontWeight: '600',
     color: COLORS.BLACK,
+  },
+  bold: {
+    marginLeft: 10,
+    color: COLORS.WHITE,
+  },
+  underline: {
+    textDecorationLine: 'underline',
+    marginLeft: 10,
+    color: COLORS.WHITE,
+    fontFamily: FONT_FAMILY.POPPINS_BOLD,
   },
 });

@@ -37,12 +37,12 @@
     "alreadyMember": "Already a Member",
     "signIn": "Sign In"
   },
-  "placeholder":{
-    "name":"Please enter your name",
+  "placeholder": {
+    "name": "Please enter your name",
     "gender": "Please select your gender",
-    "dob":"Please select your birth date",
-    "country":"Please select your country",
-    "about":"Please give brief about yourself"
+    "dob": "Please select your birth date",
+    "country": "Please select your country",
+    "about": "Please give brief about yourself"
   },
   "validation": {
     "requirePhone": "Please enter phone number.",
@@ -51,7 +51,7 @@
     "validPassword": "Password must contain a minimum of 8 characters, which should include at least 1 uppercase letter, 1 lowercase letter, 1 special character and  1 number to make your password strong.",
     "requireConfPassword": "Please enter confirm Passoword.",
     "validConfPassword": "Password and Confirm password must be same.",
-    "requiredGender":"Please select gender.",
+    "requiredGender": "Please select gender.",
     "requiredName": "Please enter name.",
     "validName": "Please enter valid name.",
     "dobError": "Please select your date of birth.",
@@ -82,6 +82,7 @@
   "filePicker": {
     "selectVideo": "SELECT VIDEO",
     "selectPhoto": "SELECT PHOTO",
+    "takeVideo": "Take VIDEO",
     "takePhoto": "Take Photo",
     "chooseFromLibrary": "Choose from library",
     "cancel": "Cancel"
@@ -153,5 +154,10 @@
   },
   "createCall": {
     "newCall": "NEW CHAT"
+  },
+  "agency": {
+    "aggrementDescription": "I accecpt the",
+    "hostTermCondition": "Terms & Condition",
+    "guideLine": "WeeCha Guideline"
   }
 }

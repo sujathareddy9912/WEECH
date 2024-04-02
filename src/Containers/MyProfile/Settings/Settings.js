@@ -4,7 +4,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import React, {useEffect, useState} from 'react';
-// import ClearCache from 'oa-react-native-clear-cache';
+import ClearCache from '@e-linter/react-native-clear-cache';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {getVersion, getBuildNumber} from 'react-native-device-info';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
@@ -23,14 +23,17 @@ import {logOutAction} from '../../../Redux/Action';
 import Header from '../../../Component/header/Header';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../../Utils/helper';
 import {MyText, Touchable} from '../../../Component/commomComponent';
-import { UserServices } from '../../../Services/Api/userServices';
-import { GET_PROFILE_IMAGE_RESET,GET_PROFILE_VIDEO_RESET } from '../../../ActionConstant/profile.constant';
+import {UserServices} from '../../../Services/Api/userServices';
+import {
+  GET_PROFILE_IMAGE_RESET,
+  GET_PROFILE_VIDEO_RESET,
+} from '../../../ActionConstant/profile.constant';
+import {HelperService} from '../../../Services/Utils/HelperService';
 
 const Settings = ({navigation}) => {
   const [cache, setCache] = useState(null);
   const [logout, setLogout] = useState(false);
   const [deleteAccount, setDeleteLogout] = useState(false);
-
 
   const state = useSelector(state => {
     return state;
@@ -82,28 +85,28 @@ const Settings = ({navigation}) => {
     {
       id: 9,
       title: 'Delete Account',
-      titleColor: 'red'
+      titleColor: 'red',
     },
   ];
 
   const onLogOut = async () => {
-    dispatch({type:GET_PROFILE_IMAGE_RESET})
-    dispatch({type:GET_PROFILE_VIDEO_RESET})
+    dispatch({type: GET_PROFILE_IMAGE_RESET});
+    dispatch({type: GET_PROFILE_VIDEO_RESET});
     dispatch(logOutAction());
   };
 
-  const onDeleteAccountPress = async() => {
-     await UserServices.deleteUserAccount(userLoginList?.user?._id)
-     dispatch({type:GET_PROFILE_IMAGE_RESET})
-     dispatch({type:GET_PROFILE_VIDEO_RESET})
-     dispatch(logOutAction());
+  const onDeleteAccountPress = async () => {
+    await UserServices.deleteUserAccount(userLoginList?.user?._id);
+    dispatch({type: GET_PROFILE_IMAGE_RESET});
+    dispatch({type: GET_PROFILE_VIDEO_RESET});
+    dispatch(logOutAction());
   };
 
   const handleClearCache = async () => {
-    // ClearCache.clearAppCache(data => {
-    //   HelperService.showToast('Cache Cleared');
-    //   setCache(data); // will set the new size
-    // });
+    ClearCache.clearAppCache(data => {
+      HelperService.showToast('Cache Cleared');
+      setCache(data); // will set the new size
+    });
   };
 
   const handleRedirection = id => {
@@ -134,17 +137,19 @@ const Settings = ({navigation}) => {
       <Touchable
         onPress={() => handleRedirection(item?.id)}
         style={styles.item}>
-        <MyText style={[styles.itemText,{color: item?.titleColor}]}>{item.title}</MyText>
-        {item?.id == 1 || item.id == 8 || item.id == 9? (
+        <MyText
+          style={[
+            styles.itemText,
+            {color: item?.titleColor ? item?.titleColor : COLORS.BLACK},
+          ]}>
+          {item.title}
+        </MyText>
+        {item?.id == 1 || item.id == 8 || item.id == 9 ? (
           <MyText style={[item?.id == 1 ? styles?.clear : styles.update]}>
             {item?.subText}
           </MyText>
         ) : (
-          <FontAwesome
-            name={'angle-right'}
-            color={COLORS.MID_GREY}
-            size={wp(7)}
-          />
+          <FontAwesome name={'angle-right'} color={COLORS.BLACK} size={wp(7)} />
         )}
       </Touchable>
     );
@@ -167,9 +172,9 @@ const Settings = ({navigation}) => {
   );
 
   useEffect(() => {
-    // ClearCache.getAppCacheSize(data => {
-    //   setCache(data); // will show the App's storage usage in the app's cache.
-    // });
+    ClearCache.getAppCacheSize(data => {
+      setCache(data); // will show the App's storage usage in the app's cache.
+    });
   }, []);
 
   return (
@@ -182,12 +187,12 @@ const Settings = ({navigation}) => {
           containerStyle={styles.header}
           titleStyle={styles.title}
         />
-          <FlatList
-            data={DATA}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-            contentContainerStyle={styles.list}
-          />
+        <FlatList
+          data={DATA}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          contentContainerStyle={styles.list}
+        />
         <View
           style={{
             alignItems: 'center',

@@ -53,6 +53,21 @@ export function* getMyEarningListSaga({callBack}) {
   }
 }
 
+export function* getUserWalletEarningDetailsSaga({callBack}) {
+  try {
+    const resp = yield call(MyBalanceServices.getMyWalletEarnings);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+    } else {
+      callBack(false);
+      HelperService.showToast(resp?.message);
+    }
+  } catch (error) {
+    callBack(false);
+    HelperService.showToast('Something went wrong');
+  }
+}
+
 export function* getFreeCardsListSaga({callBack, payload}) {
   try {
     const resp = yield call(MyBalanceServices.getFreeCards, payload);
@@ -114,6 +129,51 @@ export function* getSettlementDetailSaga({payload, callBack}) {
   }
 }
 
+export function* getWithdrawalListSaga({payload, callBack}) {
+  try {
+    const resp = yield call(MyBalanceServices.getWithdrawalList, payload);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+    } else {
+      callBack(false);
+      HelperService.showToast(resp?.message);
+    }
+  } catch (error) {
+    callBack(false);
+    HelperService.showToast('Something went wrong');
+  }
+}
+
+export function* addWithdrawalReqSaga({payload, callBack}) {
+  try {
+    const resp = yield call(MyBalanceServices.addWithdrawalReq, payload);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+    } else {
+      callBack(false);
+      HelperService.showToast(resp?.message);
+    }
+  } catch (error) {
+    callBack(false);
+    HelperService.showToast('Something went wrong');
+  }
+}
+
+export function* deleteWithdrawalListSaga({payload, callBack}) {
+  try {
+    const resp = yield call(MyBalanceServices.deleteWithdrawalList, payload);
+    if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
+      callBack(resp);
+    } else {
+      callBack(false);
+      HelperService.showToast(resp?.message);
+    }
+  } catch (error) {
+    callBack(false);
+    HelperService.showToast('Something went wrong');
+  }
+}
+
 export function* getBlockListSaga({payload, callBack}) {
   try {
     const resp = yield call(MyBalanceServices.getBlockList, payload);
@@ -133,7 +193,6 @@ export function* linkMailSaga({payload, callBack}) {
   try {
     const resp = yield call(MyBalanceServices.linkMail, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
-      console.log(resp,"34OTPPP");
       callBack(resp);
     } else {
       callBack(resp);
@@ -149,7 +208,6 @@ export function* updateMailSaga({payload, callBack}) {
   try {
     const resp = yield call(MyBalanceServices.updateMail, payload);
     if ((resp && resp.code == 200) || (resp && resp.code == 201)) {
-      console.log(resp,"34MAILLLS");
       callBack(resp);
     } else {
       callBack(resp);

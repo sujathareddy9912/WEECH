@@ -30,11 +30,13 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     marginTop: wp(1),
+    color: COLORS.BLACK
   },
   weechaId: {
     fontSize: 12,
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     marginTop: wp(1),
+    color: COLORS.BLACK
   },
   avatarContainer: {
     height: wp(25),
@@ -64,6 +66,9 @@ export const styles = StyleSheet.create({
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     color: COLORS.MALEbLUE,
   },
+  socialTitle: {
+    color: COLORS.BLACK
+  },
   list: {
     marginBottom: hp(10),
   },
@@ -83,6 +88,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: wp(4),
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    color: COLORS.BLACK
   },
   rightComponent: {
     flexDirection: 'row',
@@ -112,12 +118,12 @@ export const styles = StyleSheet.create({
     marginBottom: wp(2),
   },
   locationText: {
-    fontFamily: 'Gilroy-SemiBold',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     fontSize: 16,
-    color: 'rgba(49, 40, 40, 1)',
+    color: COLORS.BLACK,
   },
   currLocation: {
-    fontFamily: 'Gilroy-SemiBold',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     fontSize: 16,
     color: 'rgba(36, 125, 207, 1)',
   },
@@ -134,7 +140,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: wp(3),
   },
   location: {
-    fontFamily: 'Gilroy-Regular',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: 16,
     color: 'rgba(41, 41, 41, 1)',
   },

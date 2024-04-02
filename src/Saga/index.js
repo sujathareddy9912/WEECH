@@ -3,6 +3,7 @@ import {CommonTypes} from '../Store/Common/Actions';
 import {all, takeEvery, takeLatest} from 'redux-saga/effects';
 import ProfileSaga from './ProfileSaga/ProfileSaga';
 import GameSaga from './Game/GameSaga';
+import ChatPriceSaga from './MyChatPrice/ChatPriceSaga';
 
 import {
   followerListSaga,
@@ -15,6 +16,9 @@ import {
   removeGrpMemberSaga,
   allowFreeChat,
   shareLiveLinkWithFriends,
+  getReceivedGiftDataSaga,
+  getSendGiftDataSaga,
+  shareLiveLinkWithGroups,
 } from './userSaga';
 
 import {
@@ -97,10 +101,16 @@ import {
   liveSessionUserBlock,
   getHelpCenter,
   getSearchUser,
+  getHostGiftDataSaga,
+  deleteVisitorSaga,
+  clearVisitorSaga,
+  updateNotificationStatusSaga,
 } from './LiveStreaming';
 
 import {
+  addWithdrawalReqSaga,
   claimFreeCardSaga,
+  deleteWithdrawalListSaga,
   getAgencyListSaga,
   getBlockListSaga,
   getDiamondListSaga,
@@ -108,6 +118,8 @@ import {
   getFreeCardsListSaga,
   getMyEarningListSaga,
   getSettlementDetailSaga,
+  getUserWalletEarningDetailsSaga,
+  getWithdrawalListSaga,
   linkMailSaga,
   linkPhoneSaga,
   updateMailSaga,
@@ -179,12 +191,19 @@ export default function* root() {
     takeLatest(TYPES.REPORT_USER, reportUserSaga),
     takeLatest(TYPES.GET_GALLERY_LIST, getGalleryListSaga),
     takeLatest(TYPES.ANOTHER_USER_PROFILE, getAnotherUserProfileSaga),
+    takeLatest(TYPES.UPDATE_NOTIFICATION_STATUS, updateNotificationStatusSaga),
+    takeLatest(TYPES.DELETE_VISITOR, deleteVisitorSaga),
+    takeLatest(TYPES.CLEAR_VISITOR, clearVisitorSaga),
     takeLatest(TYPES.GET_VIDEO_LIST, getUserVideoSaga),
     takeLatest(TYPES.GET_USER_EARNING, getMyEarningListSaga),
+    takeLatest(TYPES.GET_USER_WALLET_EARNING_DETAILS, getUserWalletEarningDetailsSaga),
     takeLatest(TYPES.GET_FREE_CARDS, getFreeCardsListSaga),
     takeLatest(TYPES.CLAIM_FREE_CARD, claimFreeCardSaga),
     takeLatest(TYPES.GET_USER_EARNING_DETAIL, getEarningDetailSaga),
     takeLatest(TYPES.GET_USER_SETTLEMENT_DETAIL, getSettlementDetailSaga),
+    takeLatest(TYPES.GET_USER_WITHDRAWAL_LIST, getWithdrawalListSaga),
+    takeLatest(TYPES.DELETE_WITHDRAWAL_LIST, deleteWithdrawalListSaga),
+    takeLatest(TYPES.ADD_USER_WITHDRAWAL_REQ, addWithdrawalReqSaga),
     takeLatest(TYPES.GET_BLOCK_LIST, getBlockListSaga),
     takeLatest(TYPES.LINK_MAIL, linkMailSaga),
     takeLatest(TYPES.UPDATE_MAIL, updateMailSaga),
@@ -201,6 +220,7 @@ export default function* root() {
     takeLatest(TYPES.INVITE_TO_GROUP, inviteToGroupSaga),
     takeLatest(TYPES.ALLOW_FREE_CHAT, allowFreeChat),
     takeLatest(TYPES.SHARE_LIVE_LINK_IN_CHAT, shareLiveLinkWithFriends),
+    takeLatest(TYPES.SHARE_LIVE_LINK_IN_GROUP_CHAT, shareLiveLinkWithGroups),
     takeLatest(TYPES.GET_GRP_DETAILS, getGrpDetailsSaga),
     takeLatest(TYPES.MAKE_GRP_ADMIN, makeGrpAdminSaga),
     takeLatest(TYPES.REMOVE_GRP_MEMBER, removeGrpMemberSaga),
@@ -214,9 +234,13 @@ export default function* root() {
     takeLatest(TYPES.GET_RECHARGE_AGENCY, getRechargeAgencySaga),
     takeLatest(TYPES.GET_CUSTOMER_SUPPORT_MSG_ACTION, getCustomerMsgsSaga),
     takeLatest(TYPES.GET_CUSTOMER_MSG_SEND_ACTION, getCustomerSendMsgSaga),
+    takeLatest(TYPES.HOST_GIFT_INCOME_ACTION, getHostGiftDataSaga),
+    takeLatest(TYPES.GET_RECEIVED_GIFT_LIST_ACTION, getReceivedGiftDataSaga),
+    takeLatest(TYPES.GET_SEND_GIFT_LIST_ACTION, getSendGiftDataSaga),
 
     //new
     ProfileSaga(),
-    GameSaga()
+    GameSaga(),
+    ChatPriceSaga(),
   ]);
 }

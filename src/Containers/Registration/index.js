@@ -30,6 +30,7 @@ import {
 } from '../../Services/Utils/HelperService';
 import {prop} from 'ramda';
 import {StorageUtils} from '../../Helper/storage';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 const {RNTwitterSignIn} = NativeModules;
 const Constants = {
   //Dev Parse keys
@@ -148,23 +149,23 @@ const LoginPhone = props => {
     }
   };
 
-  useEffect(async () => {
-    // if (userLoginList) {
-    //   try {
-    //     await AsyncStorage.setItem('token', userLoginList.tokens.access.token);
-    //     await AsyncStorage.setItem('id', userLoginList._id);
-    //     await AsyncStorage.setItem('gender', userLoginList.gender);
-    //   } catch (e) {
-    //     // saving error
-    //   }
-    //   // StorageUtils.setStringValue(
-    //   //   'token',
-    //   //  JSON.stringify(,
-    //   // );
-    //   props.navigation.navigate('MainTabNavigation', {screen: 'LiveSection'});
-    // }
-    //
-  }, [userLoginList]);
+  // useEffect(async () => {
+  // if (userLoginList) {
+  //   try {
+  //     await AsyncStorage.setItem('token', userLoginList.tokens.access.token);
+  //     await AsyncStorage.setItem('id', userLoginList._id);
+  //     await AsyncStorage.setItem('gender', userLoginList.gender);
+  //   } catch (e) {
+  //     // saving error
+  //   }
+  //   // StorageUtils.setStringValue(
+  //   //   'token',
+  //   //  JSON.stringify(,
+  //   // );
+  //   props.navigation.navigate('MainTabNavigation', {screen: 'LiveSection'});
+  // }
+  //
+  // }, [userLoginList]);
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
@@ -288,7 +289,7 @@ const LoginPhone = props => {
 
           <View style={{marginTop: hp('15%')}}>
             <View style={{marginBottom: hp('3%')}}>
-              <Text style={{color: '#000000', fontFamily: 'AvenirLTStd-Book'}}>
+              <Text style={{color: '#000000', fontFamily: FONT_FAMILY.POPPINS_REGULAR}}>
                 Other login methods
               </Text>
             </View>

@@ -140,6 +140,24 @@ function shareLiveLink(params) {
       return error.response.data;
     });
 }
+function shareLiveLinkGroup(params) {
+  const endPoint = 'chat/share_live_link_group';
+  return userApiClient
+    .post(endPoint, params, {
+      headers: {
+        Authorization: serviceConst.token,
+      },
+    })
+    .then(response => {
+      if (in200s(response.status)) {
+        return response['data'];
+      }
+      return response['data'];
+    })
+    .catch(error => {
+      return error.response.data;
+    });
+}
 
 function getGrpDetailsSagaApi(params) {
   const endPoint = `chat/get_groups_details/${params}`;
@@ -237,6 +255,44 @@ function deleteUserAccount(params) {
   });
 }
 
+function getReceivedGiftDataAPI(params) {
+  const endPoint = 'gift/gift_received';
+  return userApiClient
+    .post(endPoint, params, {
+      headers: {
+        Authorization: serviceConst.token,
+      },
+    })
+    .then(response => {
+      if (in200s(response.status)) {
+        return response['data'];
+      }
+      return response['data'];
+    })
+    .catch(error => {
+      return error.response.data;
+    });
+}
+
+function getSendGiftDataAPI(params) {
+  const endPoint = 'gift/gift_sends';
+  return userApiClient
+    .post(endPoint, params, {
+      headers: {
+        Authorization: serviceConst.token,
+      },
+    })
+    .then(response => {
+      if (in200s(response.status)) {
+        return response['data'];
+      }
+      return response['data'];
+    })
+    .catch(error => {
+      return error.response.data;
+    });
+}
+
 export const UserServices = {
   followUserApi,
   getFriendsListApi,
@@ -250,6 +306,9 @@ export const UserServices = {
   saveFcmTokenApi,
   updateFcmTokenApi,
   shareLiveLink,
+  shareLiveLinkGroup,
   getAgencyDetail,
   deleteUserAccount,
+  getReceivedGiftDataAPI,
+  getSendGiftDataAPI,
 };

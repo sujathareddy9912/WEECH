@@ -10,5 +10,6 @@ export const CHAT_MESSAGE_TYPE = {
   VIDEO: 'Video',
   AUDIO: 'Audio',
   DOCUMENT: 'Document',
-  LIVE_LINK:"Live"
+  LIVE_LINK: 'Live',
+  GIFT: 'Gift',
 };

@@ -1,37 +1,40 @@
-import {useRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {BlurView} from '@react-native-community/blur';
 import database from '@react-native-firebase/database';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
-  ImageBackground,
   View,
   TouchableWithoutFeedback,
   SafeAreaView,
   StatusBar,
+  PermissionsAndroid,
+  ScrollView,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-
-import RtcEngine, {
-  ClientRole,
-  RtcLocalView,
-  RtcRemoteView,
-  ChannelProfile,
-  VideoRenderMode,
+import {
+  ClientRoleType,
+  createAgoraRtcEngine,
+  RtcSurfaceView,
+  ChannelProfileType,
+  VideoStreamType,
 } from 'react-native-agora';
+import commonStyle from '../../Component/commonStyles';
 
 import styles from './styles';
 import {COLORS} from '../../Utils/colors';
-import India from '../../Assets/Icons/india.svg';
-import {dynamicSize} from '../../Utils/responsive';
 import {IMAGE_URL} from '../../Services/Api/Common';
 import {rtmAgoraConfig} from '../../Utils/agoraConfig';
 import {routeNameRef} from '../../Navigator/navigationHelper';
 import {HelperService} from '../../Services/Utils/HelperService';
+import GiftComponent from '../../Component/giftComponent';
+import {socket} from '../../Services/Sockets/sockets';
+import {strings} from '../../localization/config';
+import {isIOS} from '../../Utils/helper';
+import {SCREEN_HEIGHT} from '../../Utils/helper';
 
 import {
   incomingCallQuery,
-  checkNodePresentOrNot,
   removedbNodeIfExist,
   disableIncomingCallQuery,
 } from '../../firebase/nodeQuery';
@@ -41,7 +44,6 @@ import {
   CALLING_TYPE,
   getAge,
   getCountryDetailWithKey,
-  SCREEN_HEIGHT,
   SCREEN_WIDTH,
   secondsToHourMinute,
 } from '../../Utils/helper';
@@ -49,41 +51,49 @@ import {
 import {
   MyText,
   MyImage,
-  MyIndicator,
   MyLinearGradient,
   CallActionBottonSheet,
   CallActionBottonSheetAudio,
   IconWithCount,
+  TouchableIcon,
 } from '../../Component/commomComponent';
 
 import {
-  joinHostPeerIdAction,
   updateCallPeerIdAction,
   incomingCallPopupAction,
-  joinAudiencePeerIdAction,
   leaveCallingRoomAction,
   createIncomeCallAction,
   showGiftComponentOnCallAction,
-  incomingCallDataAction,
   clearCommentOnDuringCall,
   reconnectLiveStreamAction,
+  getGiftDataAction,
+  commentOnDuringCall,
 } from '../../Redux/Action';
-import {heightPercentageToDP} from 'react-native-responsive-screen';
 import {SvgIcon} from '../../Component/icons';
 import {FONT_SIZE} from '../../Utils/fontFamily';
+import {Modal} from 'react-native-paper';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import Dragable from '../../Component/dragable/dragable';
+import Icon from '../../Component/Icons/Icon';
+import Input from '../../Component/Input';
+import {dynamicSize} from '../../Utils/responsive';
+import {SmallProfilePic} from '../../Component/commomComponent';
 
 let timeout = null;
+let giftTimeout = null;
+let checkEndCall = 0;
+const buttonPosition = 64;
 
 const VideoCall = ({navigation, route}) => {
-  const routeName = useRoute();
-  const agoraEngine = useRef();
+  const scrollRef = useRef();
+  const agoraEngineRef = useRef();
   const dispatch = useDispatch();
   const state = useSelector(state => {
     return state;
   });
   const {userLoginList} = state.authReducer;
-  const {peerId} = state.callReducer;
   const {showGiftComponentOnCall} = state.loaderReducer;
+  const {callCommentData} = state.streamingReducer;
 
   const initialState = {
     joinSucceed: false,
@@ -96,6 +106,18 @@ const VideoCall = ({navigation, route}) => {
   const [showTime, UpdateTimeStatus] = useState(false);
   const [{joinSucceed, switchCamera, peerIds}, setState] =
     useState(initialState);
+  const [remoteUid, setRemoteUid] = useState(0);
+  const [isJoined, setIsJoined] = useState(false);
+  const [callChargeDetails, setCallChargeDetails] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isVideoPause, setIsVideoPause] = useState(true);
+  const [isSpeakerOn, setIsSpeakerOn] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [fetchingGifts, setFetchingGifts] = useState(false);
+  const [giftData, updateGiftData] = useState([]);
+  const [commentText, UpdateCommentText] = useState('');
+  const [showComments, setShowComments] = useState(true);
 
   const detail = useMemo(() => {
     return route?.params;
@@ -162,13 +184,42 @@ const VideoCall = ({navigation, route}) => {
     };
   }, []);
 
+  useMemo(() => {
+    if (modalVisible) {
+      Alert.alert(
+        '',
+        'Please recharge, other wise you call will end within a minute',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              setShowPopup(true);
+              setModalVisible(false);
+            },
+          },
+        ],
+      );
+    }
+  }, [modalVisible]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(giftTimeout);
+      (async () => {
+        await agoraEngineRef.current?.removeAllListeners();
+        await agoraEngineRef.current?.release();
+      })();
+    };
+  }, []);
+
   useEffect(() => {
     if (showTime) {
-      if (timeout) clearTimeout(timeout);
+      if (timeout) {
+        clearTimeout(timeout);
+      }
       timeout = setTimeout(() => {
         UpdateSecond(second + 1);
       }, 1000);
-
       if (
         second != 0 &&
         second % 60 === 0 &&
@@ -183,127 +234,151 @@ const VideoCall = ({navigation, route}) => {
   }, [showTime, second]);
 
   useEffect(() => {
+    if (callChargeDetails) {
+      let perSecondCharge = callChargeDetails.balance?.charge / 60;
+      checkEndCall = checkEndCall + Math.abs(perSecondCharge);
+      if (
+        !callChargeDetails.data.call &&
+        callChargeDetails.data.message.toLowerCase() ==
+          'Insufficient balance !!'.toLowerCase()
+      ) {
+        onCancelPress();
+      } else if (
+        callChargeDetails.data.call &&
+        callChargeDetails.data.balance <= callChargeDetails.data.charge &&
+        callChargeDetails.data.message.toLowerCase() ==
+          'success'.toLowerCase() &&
+        !showPopup
+      ) {
+        setModalVisible(true);
+      }
+    }
+  }, [second]);
+
+  useEffect(() => {
     if (channelToken && channelName) {
-      _initEngine();
-      return async () => {
-        // await _destroyCallRefrence();
-      };
+      setupVideoSDKEngine();
     }
   }, [channelToken, channelName]);
 
-  const _initEngine = async () => {
+  const getPermission = async () => {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      ]);
+    }
+  };
+
+  const setupVideoSDKEngine = async () => {
     try {
-      agoraEngine.current = await RtcEngine.create(rtmAgoraConfig.appId);
-      if (callData.isVideoCall) {
-        await agoraEngine.current?.enableVideo();
-        await agoraEngine.current?.startPreview();
+      if (Platform.OS === 'android') {
+        await getPermission();
+      }
+      agoraEngineRef.current = createAgoraRtcEngine();
+      const agoraEngineInit = agoraEngineRef.current;
+      agoraEngineInit.registerEventHandler({
+        onJoinChannelSuccess: () => {
+          setIsJoined(true);
+        },
+        onUserJoined: (_connection, Uid) => {
+          setRemoteUid(Uid);
+        },
+        onUserOffline: (_connection, Uid) => {
+          setRemoteUid(0);
+          onCancelPress();
+        },
+        onConnectionLost: _connection => {
+          console.log('Please check your internet connection.');
+        },
+      });
+
+      if (detail?.type === CALLING_TYPE.VIDEO) {
+        agoraEngineInit.initialize({
+          appId: rtmAgoraConfig.appId,
+          channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+        });
+        agoraEngineInit.enableVideo();
+        agoraEngineInit.setRemoteDefaultVideoStreamType(
+          VideoStreamType.VideoStreamHigh,
+        );
       } else {
-        await agoraEngine.current?.enableAudio();
+        agoraEngineInit.initialize({
+          appId: rtmAgoraConfig.appId,
+        });
       }
-      await agoraEngine.current?.setChannelProfile(
-        ChannelProfile.LiveBroadcasting,
-      );
-      await agoraEngine.current?.setClientRole(ClientRole.Broadcaster);
-      _addListeners();
-      _startCall();
-    } catch (error) {
-      console.log('init error==>', error.message);
+      join();
+    } catch (e) {
+      console.log(e);
     }
   };
 
-  const _addListeners = () => {
-    agoraEngine.current?.addListener('Warning', warn => {
-      console.log('Warning', warn);
-    });
-
-    agoraEngine.current?.addListener('Error', err => {
-      console.log('Error', err);
-    });
-
-    agoraEngine.current?.addListener('UserJoined', (uid, elapsed) => {
-      console.log('UserJoined', uid, elapsed);
-      // If new user
-      if (peerId.indexOf(uid) === -1) {
-        dispatch(joinAudiencePeerIdAction(uid));
-      }
-    });
-
-    // for video call if user leaves the room
-    agoraEngine.current?.addListener('UserOffline', (uid, reason) => {
-      console.log('UserOffline', uid, reason);
-      // Remove peer ID from state array
-      onCancelPress();
-    });
-
-    // If Local user joins RTC channel
-    agoraEngine.current?.addListener(
-      'JoinChannelSuccess',
-      (channel, uid, elapsed) => {
-        console.log('JoinChannelSuccess', channel, uid, elapsed);
-        // Set state variable to true
-        setState(prevState => ({
-          ...prevState,
-          joinSucceed: true,
-        }));
-        dispatch(joinHostPeerIdAction(uid));
-      },
-      error => {
-        console.log('JoinChannel Failure', error);
-      },
-    );
-
-    agoraEngine.current?.addListener(
-      'RemoteVideoStateChanged',
-      (uid, state) => {
-        // if (uid === 1) setBroadcasterVideoState(state);
-      },
-    );
-  };
-
-  const _startCall = async () => {
+  const join = async () => {
     if (callData.isVideoCall) {
-      await agoraEngine.current?.leaveChannel();
+      await agoraEngineRef.current?.leaveChannel();
     }
-    const uid = 0;
 
-    await agoraEngine.current?.joinChannel(
-      channelToken,
-      channelName,
-      null,
-      uid,
-    );
-    if (!callData.isVideoCall) {
-      await agoraEngine.current?.setEnableSpeakerphone(false);
+    try {
+      agoraEngineRef.current?.setChannelProfile(
+        ChannelProfileType.ChannelProfileCommunication,
+      );
+      if (detail?.type === CALLING_TYPE.VIDEO) {
+        agoraEngineRef.current?.startPreview();
+      }
+      agoraEngineRef.current?.joinChannel(
+        channelToken,
+        channelName,
+        rtmAgoraConfig.uid,
+        {
+          clientRoleType: ClientRoleType.ClientRoleBroadcaster,
+        },
+      );
+    } catch (e) {
+      console.log(e);
     }
-    await agoraEngine.current?.stopPreview();
+  };
+
+  const leave = async () => {
+    try {
+      agoraEngineRef.current?.leaveChannel();
+      await agoraEngineRef.current?.removeAllListeners();
+      await agoraEngineRef.current?.release();
+      setRemoteUid(0);
+      setIsJoined(false);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const onCameraPress = async () => {
-    await agoraEngine.current?.switchCamera();
+    await agoraEngineRef.current?.switchCamera();
     setState(prevState => ({...prevState, switchCamera: !switchCamera}));
   };
 
   const onVideoPress = async videoStatus => {
-    await agoraEngine.current?.enableLocalVideo(videoStatus);
+    setIsVideoPause(videoStatus);
+    await agoraEngineRef.current?.enableLocalVideo(videoStatus);
   };
 
   const onMicPress = async micStatus => {
-    await agoraEngine.current?.muteLocalAudioStream(micStatus);
+    setIsMuted(micStatus);
+    await agoraEngineRef.current?.muteLocalAudioStream(micStatus);
   };
 
   const onSpeakerPress = async speakerStatus => {
     if (speakerStatus) {
-      await agoraEngine.current?.setEnableSpeakerphone(true);
+      await agoraEngineRef.current?.setEnableSpeakerphone(true);
     } else {
-      await agoraEngine.current?.setEnableSpeakerphone(false);
+      await agoraEngineRef.current?.setEnableSpeakerphone(false);
     }
   };
 
   const onSpeakerVideoPress = async speakerStatus => {
+    setIsSpeakerOn(speakerStatus);
     if (speakerStatus) {
-      await agoraEngine.current?.disableAudio();
+      await agoraEngineRef.current?.disableAudio();
     } else {
-      await agoraEngine.current?.enableAudio();
+      await agoraEngineRef.current?.enableAudio();
     }
   };
 
@@ -318,20 +393,15 @@ const VideoCall = ({navigation, route}) => {
 
     referenceForLiveStatus.set({isLive: false, isBusy: false});
     dispatch(incomingCallPopupAction(false));
-    // const newData = {...detail, status: CALLING_STATUS.REJECTED};
-    // incomingCallQuery(detail?.receiverId).set(newData);
-    dispatch(incomingCallDataAction({}));
     dispatch(reconnectLiveStreamAction(true));
     incomingCallQuery(detail?.receiverId).off('value', snaphot => {});
-
-    // _destroyCallRefrence();
     _leaveRoom();
+    leave();
   };
 
   const _destroyCallRefrence = async () => {
     try {
-      await agoraEngine.current?.leaveChannel();
-      await agoraEngine?.current?.destroy();
+      await agoraEngineRef.current?.leaveChannel();
       await removedbNodeIfExist(detail.receiverId);
       await disableIncomingCallQuery(detail.receiverId);
       dispatch(clearCommentOnDuringCall());
@@ -350,9 +420,8 @@ const VideoCall = ({navigation, route}) => {
     };
     dispatch(leaveCallingRoomAction(param));
   };
-
   useEffect(() => {
-    if (route?.params?.receiverId !== userLoginList?.user?._id) {
+    if (detail?.receiverId !== userLoginList?.user?._id) {
       _incomeCreate();
     }
   }, []);
@@ -363,12 +432,14 @@ const VideoCall = ({navigation, route}) => {
       receiverId: detail?.receiverId,
       type: callData.isVideoCall ? 'VIDEOCALL' : 'CALL',
       chargeSettle: true,
+      seconds: second,
     };
 
     dispatch(
       createIncomeCallAction(param, result => {
-        if (!result.status) {
-          onCancelPress();
+        checkEndCall = 0;
+        if (result && result !== undefined) {
+          setCallChargeDetails(result);
         }
       }),
     );
@@ -384,45 +455,154 @@ const VideoCall = ({navigation, route}) => {
 
     dispatch(
       createIncomeCallAction(param, result => {
-        if (!result.status) {
-          onCancelPress();
+        checkEndCall = 0;
+        if (
+          result &&
+          result !== undefined &&
+          result.balance.balance < result.balance.charge
+        ) {
+          setModalVisible(true);
         }
       }),
-    );
-  };
-
-  const renderLocal = () => {
-    return (
-      <RtcLocalView.SurfaceView
-        style={[styles.videoContainer, {borderRadius: dynamicSize(10)}]}
-        uid={peerId?.[0] || 0}
-        channelId={channelName}
-        removeClippedSubviews={false}
-        renderMode={VideoRenderMode.Hidden}
-        zOrderMediaOverlay={true}
-      />
-    );
-  };
-
-  const renderHost = () => {
-    return (
-      <RtcRemoteView.SurfaceView
-        style={styles.videoContainer}
-        uid={peerId?.[1] || 1}
-        removeClippedSubviews={false}
-        channelId={channelName}
-        renderMode={VideoRenderMode.Hidden}
-        zOrderMediaOverlay={true}
-      />
     );
   };
 
   const _hideGiftComponent = () =>
     dispatch(showGiftComponentOnCallAction(false));
 
+  const _fetchGiftList = () => {
+    _fetchGifts();
+    dispatch(showGiftComponentOnCallAction(true));
+  };
+
+  const _fetchGifts = () => {
+    setFetchingGifts(true);
+    dispatch(
+      getGiftDataAction('', data => {
+        setFetchingGifts(false);
+        if (data.status) {
+          updateGiftData(data.giftTypes);
+        }
+      }),
+    );
+  };
+
+  const _onSearch = text => {
+    if (giftTimeout) clearTimeout(giftTimeout);
+    giftTimeout = setTimeout(() => {
+      giftTimeout = null;
+      setFetchingGifts(true);
+      dispatch(
+        getGiftDataAction(text, data => {
+          setFetchingGifts(false);
+          if (data.status) {
+            updateGiftData(data.giftTypes);
+          }
+        }),
+      );
+    }, 500);
+  };
+
+  const onCommentSend = () => {
+    if (commentText !== '') {
+      const data = {
+        token: detail?.liveToken,
+        commentData: {
+          type: 'comment',
+          comment: commentText,
+          name: userLoginList?.user?.name,
+          profilePic: userLoginList?.user?.profile,
+          joinedUsers: userLoginList?.user,
+          senderId: detail?.callerId,
+        },
+      };
+      socket.emit('comment', data);
+      dispatch(commentOnDuringCall(data));
+      _scrollToEnd();
+      UpdateCommentText('');
+    }
+  };
+
+  useEffect(() => {
+    socket.off('comment').on('comment', response => {
+      if (!!response.commentData.comment) {
+        dispatch(commentOnDuringCall(response));
+        _scrollToEnd();
+      }
+    });
+  }, []);
+
+  const _scrollToEnd = () => {
+    if (giftTimeout) clearTimeout(giftTimeout);
+    giftTimeout = setTimeout(() => {
+      giftTimeout = null;
+      scrollRef?.current?.scrollToEnd();
+    }, 400);
+  };
+
+  const silentCommentForConnection = () => {
+    const data = {
+      token: detail?.liveToken,
+      commentData: {
+        type: 'comment',
+        name: userLoginList?.user?.name,
+        profilePic: userLoginList?.user?.profile,
+        joinedUsers: userLoginList?.user,
+      },
+    };
+    socket.emit('comment', data);
+    const comment = {
+      commentData: {
+        type: 'welcomeText',
+        comment: strings('live.welcomeMessage'),
+      },
+    };
+    dispatch(commentOnDuringCall(comment));
+  };
+
+  useEffect(() => {
+    agoraEngineRef?.current?.removeAllListeners();
+    silentCommentForConnection();
+  }, []);
+
+  const _renderComment = (item, index) => {
+    if (item?.type === 'comment') {
+      return (
+        <TouchableOpacity style={[commonStyle.chatView]}>
+          {item?.profilePic ? (
+            <SmallProfilePic
+              imageStyle={commonStyle.chatPic}
+              url={`${IMAGE_URL}${item?.profilePic}`}
+            />
+          ) : (
+            <View style={commonStyle.picContainer}>
+              <SvgIcon.SmallProfilePlaceholder />
+            </View>
+          )}
+          <View style={commonStyle.chatRightConrtainer}>
+            <MyText style={commonStyle.username}>{item.name}</MyText>
+            <View style={commonStyle.msgBox}>
+              <MyText style={commonStyle.msg}>{item.comment}</MyText>
+            </View>
+          </View>
+        </TouchableOpacity>
+      );
+    } else if (item?.type == 'welcomeText') {
+      return (
+        <View style={[commonStyle.welcomeContainer]}>
+          <MyText style={commonStyle.welcometxt}>{item.comment}</MyText>
+        </View>
+      );
+    }
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
+      <StatusBar
+        translucent={true}
+        backgroundColor={'transparent'}
+        hidden={true}
+      />
       <TouchableWithoutFeedback onPress={_hideGiftComponent}>
         <View style={styles.mainContainer}>
           <MyLinearGradient
@@ -436,7 +616,7 @@ const VideoCall = ({navigation, route}) => {
               <View
                 style={[
                   styles.nameContainer,
-                  !showGiftComponentOnCall && {zIndex: 10},
+                  !showGiftComponentOnCall && {zIndex: 1},
                 ]}>
                 <View style={[styles.infoCon, {alignSelf: 'flex-start'}]}>
                   <IconWithCount
@@ -503,54 +683,170 @@ const VideoCall = ({navigation, route}) => {
             {!callData.isVideoCall ? (
               <View style={[styles.imageBackgroundStyle]}></View>
             ) : (
-              <View>
-                {peerId?.length > 1 ? renderHost() : null}
-                {peerId?.length == 1 ? renderLocal() : null}
-                {peerId?.length > 1 ? (
-                  <MyLinearGradient
-                    colors={[
-                      COLORS.WHITE,
-                      COLORS.GRADIENT_PINK,
-                      COLORS.GRADIENT_VIOLET,
-                    ]}
-                    style={styles.firstPartyVideoContainer}>
-                    <RtcLocalView.SurfaceView
-                      style={[
-                        styles.videoContainer,
-                        {borderRadius: dynamicSize(10)},
-                      ]}
-                      uid={peerId?.[0] || 0}
-                      channelId={channelName}
-                      removeClippedSubviews={false}
-                      renderMode={VideoRenderMode.Hidden}
-                      zOrderMediaOverlay={true}
+              <ScrollView
+                style={styles.scroll}
+                contentContainerStyle={styles.scrollContainer}>
+                {isJoined && (
+                  <React.Fragment key={0}>
+                    <RtcSurfaceView
+                      canvas={{uid: isJoined ? remoteUid : 0}}
+                      style={styles.uservideo}
                     />
-                  </MyLinearGradient>
-                ) : null}
-              </View>
+                  </React.Fragment>
+                )}
+                {detail?.type == CALLING_TYPE.VIDEO &&
+                  !showGiftComponentOnCall && (
+                    <View style={styles.commentView}>
+                      {showComments && (
+                        <KeyboardAvoidingView
+                          behavior={isIOS ? 'padding' : null}
+                          keyboardVerticalOffset={isIOS ? 60 : 0}
+                          enabled
+                          style={styles.keyboardAvoidView}>
+                          <ScrollView
+                            key="comment"
+                            ref={scrollRef}
+                            scrollEventThrottle={16}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{
+                              paddingHorizontal: dynamicSize(10),
+                            }}>
+                            <View style={styles.commentContainer}>
+                              {callCommentData?.map((item, index) =>
+                                _renderComment(item, index),
+                              )}
+                            </View>
+                          </ScrollView>
+                        </KeyboardAvoidingView>
+                      )}
+                    </View>
+                  )}
+                {isJoined && remoteUid !== 0 && (
+                  <React.Fragment key={remoteUid}>
+                    <Dragable style={styles.remoteView}>
+                      <RtcSurfaceView
+                        canvas={{uid: isJoined ? 0 : remoteUid}}
+                        style={styles.remoteView}
+                      />
+                    </Dragable>
+                  </React.Fragment>
+                )}
+              </ScrollView>
             )}
           </MyLinearGradient>
-
           {detail?.type == CALLING_TYPE.VIDEO ? (
-            <View
-              style={{
-                // top: heightPercentageToDP(0),
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                backgroundColor: 'transparent',
-              }}>
-              <CallActionBottonSheet
-                type={detail?.type}
-                points={callData.points}
-                onCameraPress={onCameraPress}
-                onVideoPress={onVideoPress}
-                onMicPress={onMicPress}
-                onSpeakerPress={onSpeakerVideoPress}
-                onCancelPress={onCancelPress}
-                detail={detail}
-              />
-            </View>
+            <>
+              {!showGiftComponentOnCall && (
+                <View>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: buttonPosition, backgroundColor: COLORS.DARK_RED},
+                    ]}
+                    onPress={onCancelPress}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={'phone-hangup'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 2 * buttonPosition},
+                    ]}
+                    onPress={() => {
+                      onVideoPress(!isVideoPause);
+                    }}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isVideoPause ? 'video' : 'video-off'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 3 * buttonPosition},
+                    ]}
+                    onPress={onCameraPress}>
+                    <Icon
+                      origin="MaterialIcons"
+                      name={'cameraswitch'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 4 * buttonPosition},
+                    ]}
+                    onPress={() => onSpeakerVideoPress(!isSpeakerOn)}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isSpeakerOn ? 'volume-high' : 'volume-low'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.operationBtnStyle,
+                      {top: 5 * buttonPosition},
+                    ]}
+                    onPress={() => onMicPress(!isMuted)}>
+                    <Icon
+                      origin="MaterialCommunityIcons"
+                      name={isMuted ? 'microphone' : 'microphone-off'}
+                      size={24}
+                      color={COLORS.WHITE}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              <View style={styles.bottomContainer}>
+                <Input
+                  value={commentText}
+                  onChangeText={UpdateCommentText}
+                  placeholder={
+                    true ? strings('live.saySomething') : "You're muted"
+                  }
+                  svgSource={<SvgIcon.CommentIcon />}
+                  style={{marginRight: 16, flex: 1}}
+                  textInputStyle={{fontSize: FONT_SIZE.MEDIUM}}
+                  onSubmitEditing={onCommentSend}
+                  blurOnSubmit={false}
+                  returnKeyType={'send'}
+                  returnKeyLabel="send"
+                />
+                <TouchableOpacity
+                  style={styles.giftIconBtn}
+                  onPress={_fetchGiftList}>
+                  <SvgIcon.SmallGiftIcon />
+                </TouchableOpacity>
+              </View>
+
+              {showGiftComponentOnCall && (
+                <View style={styles.giftContainer}>
+                  <GiftComponent
+                    fetchingGifts={fetchingGifts}
+                    onSearch={_onSearch}
+                    diamondCount={userLoginList?.user?.myBalance || 0}
+                    topTitleList={giftData}
+                    senderId={userLoginList?.user?._id}
+                    receiverId={detail?.receiverId}
+                    onSendClick={() =>
+                      dispatch(showGiftComponentOnCallAction(false))
+                    }
+                    onSendSuccess={() => {}}
+                  />
+                </View>
+              )}
+            </>
           ) : (
             <View
               style={{
@@ -558,7 +854,7 @@ const VideoCall = ({navigation, route}) => {
                 position: 'absolute',
                 width: '100%',
                 backgroundColor: 'transparent',
-                zIndex: 100,
+                zIndex: 1,
               }}>
               <CallActionBottonSheetAudio
                 type={detail?.type}

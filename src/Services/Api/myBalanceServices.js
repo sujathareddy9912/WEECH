@@ -67,6 +67,29 @@ function getMyEarnings() {
     });
 }
 
+function getMyWalletEarnings() {
+  let url = `income/user_wallet_earning`;
+  return userApiClient
+    .post(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: serviceConst.token,
+        },
+      },
+    )
+    .then(response => {
+      if (in200s(response.status)) {
+        return response?.data;
+      }
+      return null;
+    })
+    .catch(error => {
+      return null;
+    });
+}
+
 function getFreeCards(payload) {
   let url = `gift/get_user_free_card`;
   return userApiClient
@@ -143,6 +166,63 @@ function getSettlementDetail(payload) {
     });
 }
 
+function getWithdrawalList(payload) {
+  let url = `income/get_withdrawal_list`;
+  return userApiClient
+    .post(url, JSON.stringify(payload), {
+      headers: {
+        Authorization: serviceConst.token,
+      },
+    })
+    .then(response => {
+      if (in200s(response.status)) {
+        return response?.data;
+      }
+      return null;
+    })
+    .catch(error => {
+      return null;
+    });
+}
+
+function addWithdrawalReq(payload) {
+  let url = `income/add_withdrawal_request`;
+  return userApiClient
+    .post(url, JSON.stringify(payload), {
+      headers: {
+        Authorization: serviceConst.token,
+      },
+    })
+    .then(response => {
+      if (in200s(response.status)) {
+        return response?.data;
+      }
+      return null;
+    })
+    .catch(error => {
+      return null;
+    });
+}
+
+function deleteWithdrawalList(payload) {
+  let url = `income/delete_withdrawal_list`;
+  return userApiClient
+    .post(url, JSON.stringify(payload), {
+      headers: {
+        Authorization: serviceConst.token,
+      },
+    })
+    .then(response => {
+      if (in200s(response.status)) {
+        return response?.data;
+      }
+      return null;
+    })
+    .catch(error => {
+      return null;
+    });
+}
+
 function getBlockList(payload) {
   let url = `block/get_block_user`;
   return userApiClient
@@ -171,7 +251,6 @@ function linkMail(payload) {
       },
     })
     .then(response => {
-      console.log(response, 'OTPPP');
       if (in200s(response.status)) {
         return response?.data;
       }
@@ -191,7 +270,6 @@ function updateMail(payload) {
       },
     })
     .then(response => {
-      console.log(response, '34OTPPP');
       if (in200s(response.status)) {
         return response?.data;
       }
@@ -244,9 +322,13 @@ export const MyBalanceServices = {
   getDiamondListApi,
   getAgencyListApi,
   getMyEarnings,
+  getMyWalletEarnings,
   getEarningDetail,
   getBlockList,
   getSettlementDetail,
+  getWithdrawalList,
+  deleteWithdrawalList,
+  addWithdrawalReq,
   getFreeCards,
   claimFreeCard,
   linkMail,

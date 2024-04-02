@@ -25,6 +25,7 @@ import {connect} from 'react-redux';
 import CommonActions from '../../Store/Common/Actions';
 import {clearAllData, storeData} from '../../Utils/helper';
 import {LOCAL_KEY} from '../../Utils/localStorage';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 // import { PanGestureHandler } from 'react-native-gesture-handler';
 // import * as Animatable from 'react-native-animatable';
 // import Animated, {runOnJS,
@@ -188,7 +189,7 @@ const Home = props => {
               <Text
                 style={{
                   fontSize: wp('5.2%'),
-                  fontFamily: 'Gilroy-Bold',
+                  fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                   color: 'white',
                 }}>
                 Discover
@@ -196,7 +197,7 @@ const Home = props => {
               <Text
                 style={{
                   fontSize: wp('3.7%'),
-                  fontFamily: 'Gilroy-Bold',
+                  fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                   color: 'rgba(0,0,0,0.3)',
                 }}>
                 Chicago

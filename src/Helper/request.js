@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import Config from 'react-native-config';
+import Config from 'react-native-config';
 // import KeychainServices from '../storage/keychain';
 // import storageKey from '../../constants/storage';
 import {LOCAL_KEY} from '../Utils/localStorage';
@@ -18,7 +18,6 @@ const client = axios.create({
 client.interceptors.request.use(
   async config => {
     const token = await getData(LOCAL_KEY.TOKEN);
-   // console.log('token to send', token);
     if (token) {
       config.headers.Authorization = token;
     }

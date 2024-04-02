@@ -11,7 +11,7 @@ const initialState = {
   animationType: 'slideInRight',
   hostExtraDetail: {},
   agoraInitializedStatus: false,
-  userLiveMute: true,
+  userLiveMute: false,
   kickedOutRooms: [],
   blockedLiveRooms: [],
 };
@@ -62,6 +62,7 @@ const streamingReducer = (state = initialState, action) => {
       return {
         ...prevState,
         callCommentData: [],
+        commentData: [],
       };
 
     case TYPES.HOST_USER_DETAIL_ACTION:
@@ -130,7 +131,7 @@ const streamingReducer = (state = initialState, action) => {
     case TYPES.LIVE_USER_MUTE_FLAG:
       return {
         ...prevState,
-        userLiveMute: !prevState.userLiveMute,
+        userLiveMute: payload,
       };
 
     case TYPES.PUT_IN_KICKOUT_ROOM: {

@@ -4,9 +4,8 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {firebase} from '@react-native-firebase/database';
 
 import {
-  RtcRemoteView,
-  VideoRenderMode,
-  VideoRemoteState,
+  RtcSurfaceView,
+  RemoteVideoState
 } from 'react-native-agora';
 import LiveIcon from '../../Assets/Icons/discoverLive.svg';
 import styles from './styles';
@@ -78,7 +77,7 @@ const Card = props => {
   );
 
   const [broadcasterVideoState, setBroadcasterVideoState] = useState(
-    VideoRemoteState.Decoding,
+    RemoteVideoState.RemoteVideoStateDecoding
   );
   const [{joinSucceed, peerIds}, setState] = useState(initialState);
   const [startCallIndicator, setStartCallIndicator] = useState(false);
@@ -126,23 +125,18 @@ const Card = props => {
   };
 
   const _addListeners = () => {
-    agoraEngine.current?.addListener('Warning', warn => {
-      console.log('Warning', warn);
-    });
-
-    agoraEngine.current?.addListener('Error', err => {
+    agoraEngine.current?.addListener('onError', err => {
       console.log('Error', err);
     });
 
-    agoraEngine.current?.addListener('UserJoined', (uid, elapsed) => {
-      console.log('UserJoined', uid, elapsed);
+    agoraEngine.current?.addListener('onUserJoined', (uid, elapsed) => {
       // If new user
       if (peerIds.indexOf(uid) === -1) {
         setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));
       }
     });
 
-    agoraEngine.current?.addListener('UserOffline', (uid, reason) => {
+    agoraEngine.current?.addListener('onUserOffline', (uid, reason) => {
       console.log('UserOffline', uid, reason);
       // Remove peer ID from state array
       setState(prevState => ({
@@ -153,7 +147,7 @@ const Card = props => {
 
     // If Local user joins RTC channel
     agoraEngine.current?.addListener(
-      'JoinChannelSuccess',
+      'onJoinChannelSuccess',
       (channel, uid, elapsed) => {
         console.log('JoinChannelSuccess', channel, uid, elapsed);
         // Set state variable to true
@@ -162,7 +156,7 @@ const Card = props => {
     );
 
     agoraEngine.current?.addListener(
-      'RemoteVideoStateChanged',
+      'onRemoteVideoStateChanged',
       (uid, state) => {
         if (uid === 1) setBroadcasterVideoState(state);
       },
@@ -311,19 +305,27 @@ const Card = props => {
   };
 
   const renderHost = () =>
-    broadcasterVideoState === VideoRemoteState.Decoding ? (
-      <RtcRemoteView.SurfaceView
-        uid={1}
-        channelId={channelName}
-        zOrderMediaOverlay={true}
-        removeClippedSubviews={false}
-        style={{
-          height: '100%',
-          width: '100%',
-          zIndex: 10,
-        }}
-        renderMode={VideoRenderMode.Hidden}
-      />
+    broadcasterVideoState === RemoteVideoState.RemoteVideoStateDecoding ? (
+      // <RtcRemoteView.SurfaceView
+      //   uid={1}
+      //   channelId={channelName}
+      //   zOrderMediaOverlay={true}
+      //   removeClippedSubviews={false}
+      //   style={{
+      //     height: '100%',
+      //     width: '100%',
+      //     zIndex: 10,
+      //   }}
+      //   renderMode={VideoRenderMode.Hidden}
+      // />
+      <React.Fragment key={1}>
+        <RtcSurfaceView
+          canvas={{uid: 1}}
+          style={styles.remoteView}
+          removeClippedSubviews={false}
+          zOrderMediaOverlay={true}
+        />
+      </React.Fragment>
     ) : (
       <MyIndicator color={COLORS.BABY_PINK} />
     );

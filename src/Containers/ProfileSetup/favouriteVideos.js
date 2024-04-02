@@ -21,7 +21,6 @@ import {createThumbnail} from 'react-native-create-thumbnail';
 import {strings} from '../../localization/config';
 import {showMessage} from 'react-native-flash-message';
 import {reset} from '../../Navigator/navigationHelper';
-import GradientBackground from '../../Component/GardientBackground/GardientBackGround';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '../../Component/commomComponent';
 import {useSelector, useDispatch} from 'react-redux';
@@ -29,7 +28,8 @@ import {
   GET_PROFILE_VIDEO_REQUEST,
   UPDATE_PROFILE_VIDEO_RESET,
   UPDATE_PROFILE_VIDEO_REQUEST,
-  DELETE_PROFILE_IMAGE_VIDEO_RESET
+  DELETE_PROFILE_IMAGE_VIDEO_RESET,
+  DELETE_PROFILE_IMAGE_VIDEO_REQUEST,
 } from '../../ActionConstant/profile.constant';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Video from 'react-native-video';
@@ -86,14 +86,23 @@ function FavouriteVideos() {
   }, [getProfileSuccess]);
 
   useEffect(() => {
-    setLoading(updateProfileVideoLoading || getProfileVideoLoading || deleteProfileImageVideoLoading);
-  }, [updateProfileVideoLoading, getProfileVideoLoading,deleteProfileImageVideoLoading]);
+    setLoading(
+      updateProfileVideoLoading ||
+        getProfileVideoLoading ||
+        deleteProfileImageVideoLoading,
+    );
+  }, [
+    updateProfileVideoLoading,
+    getProfileVideoLoading,
+    deleteProfileImageVideoLoading,
+  ]);
 
   useEffect(() => {
     if (getProfileVideoSuccess) {
       let videos = getProfileVideoSuccess.user.map(item => ({
         uri: `https://api.weecha.uk/v1/uploads/${item.file}`,
         id: item._id,
+        thumbnail: `https://api.weecha.uk/v1/uploads/${item.thumbImage}`,
       }));
       videos = [...videos, userVideos];
       setUserVideos(videos);
@@ -125,8 +134,8 @@ function FavouriteVideos() {
     }
 
     return () => {
-      setUserVideos([{}])
-     // dispatch({type: GET_PROFILE_VIDEO_RESET});
+      setUserVideos([{}]);
+      // dispatch({type: GET_PROFILE_VIDEO_RESET});
       dispatch({type: UPDATE_PROFILE_VIDEO_RESET});
     };
   }, [updateProfileVideoSuccess]);
@@ -178,10 +187,9 @@ function FavouriteVideos() {
   }
 
   const jumpToNext = () => {
-    dispatch({type:DELETE_PROFILE_IMAGE_VIDEO_RESET})
+    dispatch({type: DELETE_PROFILE_IMAGE_VIDEO_RESET});
     dispatch(actionDone('favouriteVideos'));
     reset('MainTabNavigation');
-    
   };
 
   function _openImagePicker() {
@@ -199,16 +207,12 @@ function FavouriteVideos() {
   };
 
   const videoValidation = videoArray => {
-    const count = appgender === 'female' ? 3 : 1;
+    const count = 1;
     setUserVideosError(
       favouriteInfoError(
         count,
         videoArray,
-        strings(
-          appgender === 'female'
-            ? 'validation.videoUploadError'
-            : 'validation.videoMaleUploadError',
-        ),
+        strings('validation.videoMaleUploadError'),
       ),
     );
   };
@@ -284,13 +288,13 @@ function FavouriteVideos() {
   // };
 
   const onClickSave = () => {
-    const count = appgender === 'female' ? 3 : 1;
+    const count = appgender === 'female' ? 1 : 1;
     const piError = favouriteInfoError(
       count,
       userVideos,
       strings(
         appgender === 'female'
-          ? 'validation.videoUploadError'
+          ? 'validation.videoMaleUploadError'
           : 'validation.videoMaleUploadError',
       ),
     );
@@ -301,29 +305,13 @@ function FavouriteVideos() {
     }
     setUserVideosError(null);
     let userfavoriteVideos = favouriteMedia(userVideos);
-
-    // const vError = favouriteInfoError(
-    //   count,
-    //   userfavoriteVideos,
-    //   strings(
-    //     appgender === 'female'
-    //       ? 'validation.videoUploadError'
-    //       : 'validation.videoMaleUploadError',
-    //   ),
-    // );
-
-    // if (vError) {
-    //   setUserVideosError(vError);
-    //   return;
-    // }
-
     dispatch({
       type: UPDATE_PROFILE_VIDEO_REQUEST,
       payload: userfavoriteVideos,
     });
   };
 
-  const deleteImages = id => {
+  const deleteVideos = id => {
     if (id) {
       const requestData = {
         id: id,
@@ -351,15 +339,20 @@ function FavouriteVideos() {
     if (item && item?.uri) {
       return (
         <>
-          {item.thumbnail ? (
-            <ImageBackground
-              source={{uri: item.thumbnail}}
-              style={styles.profilePhotos(index)}
-              imageStyle={styles.profilePhotosStyle}>
+          <ImageBackground
+            source={{uri: item.thumbnail}}
+            style={styles.profilePhotos(index)}
+            imageStyle={styles.profilePhotosStyle}>
+            <TouchableOpacity
+              style={styles.playIcon}
+              onPress={() => {
+                setVideoUri(item.uri);
+                refRBSheet.current.open();
+              }}>
               <TouchableOpacity
                 style={styles.closeBtn}
                 onPress={() => {
-                  deleteImages(item.id)
+                  deleteVideos(item?.id);
                   removeImages(index);
                 }}>
                 <Icon
@@ -369,24 +362,14 @@ function FavouriteVideos() {
                   color={COLORS.WHITE}
                 />
               </TouchableOpacity>
-            </ImageBackground>
-          ) : (
-            <View style={styles.profilePhotos(index)}>
-              <TouchableOpacity
-                style={styles.playIcon}
-                onPress={() => {
-                  setVideoUri(item.uri);
-                  refRBSheet.current.open();
-                }}>
-                <Icon
-                  origin="AntDesign"
-                  name={'play'}
-                  size={30}
-                  color={COLORS.WHITE}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
+              <Icon
+                origin="AntDesign"
+                name={'play'}
+                size={30}
+                color={COLORS.WHITE}
+              />
+            </TouchableOpacity>
+          </ImageBackground>
         </>
       );
     } else {
@@ -402,28 +385,14 @@ function FavouriteVideos() {
 
   return (
     <>
-      {/* <GradientBackground> */}
-      {/* <TouchableOpacity
-          style={[styles.backBtn, {top: useSafeAreaInsets().top}]}
-          onPress={onPressBack}>
-          <Icon
-            origin="AntDesign"
-            name="arrowleft"
-            size={24}
-            color={COLORS.BLACK}
-          />
-        </TouchableOpacity>
-        <Text style={styles.header}>Favourite Videos</Text> */}
       <LodingIndicator visible={loading} />
       <ScrollView>
         <View style={styles.seperator}>
-          {/* <Text style={styles.title}>
-            {strings('editProfile.videos')}{' '}
-            {gender === 'female' && <Text style={styles.asterick}>*</Text>}
-          </Text> */}
-          <Text style={styles.subtitle}>
-            {strings(`editProfile.upload_video_description`)}
-          </Text>
+          {!isEdit && (
+            <Text style={styles.subtitle}>
+              {strings(`editProfile.upload_video_description`)}
+            </Text>
+          )}
           {userVidoesError && (
             <Text style={styles.error}>{userVidoesError}</Text>
           )}
@@ -438,7 +407,7 @@ function FavouriteVideos() {
           )}
           <SelectImageDialog
             key="imageRef"
-            isVideo={false}
+            isVideo={true}
             ref={favouriteVideoRef}
             onPressTakePhoto={_takePhoto}
             onPressChooseFromLibrary={_chooseFromLib}
@@ -447,7 +416,6 @@ function FavouriteVideos() {
         </View>
 
         <Button
-          // indicator={updoadingDetails}
           onPress={() => {
             setSkip(false);
             onClickSave();
@@ -498,7 +466,6 @@ function FavouriteVideos() {
                 source={{uri: videoUri}}
                 style={styles.video}
                 repeat={false}
-                // paused={paused}
                 onBuffer={onBuffer}
                 onLoadStart={onLoadStart}
                 onLoad={onLoad}
@@ -519,7 +486,6 @@ function FavouriteVideos() {
           </View>
         </View>
       </RBSheet>
-      {/* </GradientBackground> */}
     </>
   );
 }
@@ -610,7 +576,7 @@ const styles = StyleSheet.create({
   },
   playIcon: {
     flex: 1,
-    backgroundColor: COLORS.GALLERY_PLACEHOLDER_GREY,
+    backgroundColor: COLORS.TRANSPARENT,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 16,

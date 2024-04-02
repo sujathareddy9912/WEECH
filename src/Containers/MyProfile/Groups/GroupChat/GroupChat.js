@@ -9,7 +9,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {View, Keyboard, FlatList, StatusBar, ScrollView} from 'react-native';
+import {
+  View,
+  Keyboard,
+  FlatList,
+  StatusBar,
+  ScrollView,
+  Alert,
+} from 'react-native';
 
 import {styles} from './styles';
 import {
@@ -35,11 +42,17 @@ import {
   getAnotherUserProfile,
   uploadChatMediaFileAction,
   appendSocketGroupChatDataAction,
+  hostDetailAction,
+  getHostExtraDetailAction,
 } from '../../../../Redux/Action';
 import requestCameraAndAudioPermission, {
   getCountryDetailWithKey,
 } from '../../../../Utils/helper';
 import {HelperService} from '../../../../Services/Utils/HelperService';
+import {getEndUserDetailApi} from '../../../../Services/Api/LiveStreaming';
+import {FONT_FAMILY} from '../../../../Utils/fontFamily';
+import {STREAM_TYPE} from '../../../../Utils/agoraConfig';
+import {Image} from 'react-native-animatable';
 
 const GIRL_IMG = require('../../../../Assets/Images/girl.png');
 
@@ -91,6 +104,9 @@ const GroupChat = ({navigation, route}) => {
 
   const {userLoginList} = state.authReducer;
   const {grpChatHistory} = state.chatReducer;
+  const {kickedOutRooms, blockedLiveRooms} = useSelector(
+    state => state.streamingReducer,
+  );
 
   const GRP_ACTIONS = [
     'Edit Group',
@@ -199,6 +215,46 @@ const GroupChat = ({navigation, route}) => {
     setEmoji(emojiObject.emoji);
   };
 
+  const fetchEndLiveDetails = async channelToken => {
+    const data = {
+      roomId: channelToken,
+    };
+
+    const responseData = await getEndUserDetailApi(data);
+    if (responseData.code === 201 || responseData.code === 200) {
+      return responseData?.data[0]?.userData[0];
+    }
+  };
+
+  const _joinAsAudience = async item => {
+    const fetchedResponse = await fetchEndLiveDetails(
+      item?.liveRoomData?.channel_token,
+    );
+
+    for (const prop in fetchedResponse) {
+      item[prop] = fetchedResponse[prop];
+    }
+
+    if (kickedOutRooms?.includes(item?.liveRoomData?.channel_token)) {
+      return Alert.alert('You have been kicked out from this live');
+    }
+    if (blockedLiveRooms?.includes(item?.liveRoomData?.channel_token)) {
+      return Alert.alert('You have been Blocked from this live');
+    }
+    dispatch(
+      hostDetailAction({
+        ...item,
+      }),
+    );
+    navigation.navigate('liveStreaming', {
+      ...item,
+      type: STREAM_TYPE.AUDIENCE,
+      channel: item?.liveRoomData?.channel_name,
+      token: item?.liveRoomData?.channel_token,
+    });
+    dispatch(getHostExtraDetailAction(item?._id));
+  };
+
   const renderItem = ({item}) => (
     <View
       style={[
@@ -280,6 +336,49 @@ const GroupChat = ({navigation, route}) => {
               {moment(item?.createdAt).format('hh:mm A')}
             </MyText>
           </Touchable>
+        ) : item?.type === CHAT_MESSAGE_TYPE.LIVE_LINK ? (
+          <View
+            style={[
+              styles.msgCon,
+              item?.user?._id === userLoginList?.user?._id
+                ? {
+                    backgroundColor: '#C2E2FF',
+                    borderBottomRightRadius: dynamicSize(0),
+                  }
+                : {
+                    borderBottomLeftRadius: dynamicSize(0),
+                  },
+            ]}>
+            <Touchable
+              onPress={() => _joinAsAudience(item)}
+              style={{
+                marginTop: wp(2),
+              }}>
+              <Image
+                source={{
+                  uri: `${IMAGE_URL}${item?.liveRoomData?.hostImage}`,
+                }}
+                style={{
+                  borderRadius: wp(2),
+                  width: wp(50),
+                  height: wp(50),
+                }}
+              />
+              <MyText>{item?.liveRoomData?.hostName} is Live</MyText>
+              <MyText
+                style={{
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+                  fontSize: 13,
+                  lineHeight: 24,
+                  color: COLORS.PRIMARY_BLUE,
+                }}>
+                Join Live
+              </MyText>
+            </Touchable>
+            <MyText style={styles.time}>
+              {moment(item?.createdAt).format('hh:mm A')}
+            </MyText>
+          </View>
         ) : (
           <View
             style={[

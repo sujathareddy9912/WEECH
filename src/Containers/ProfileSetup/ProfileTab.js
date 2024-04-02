@@ -19,7 +19,7 @@ import FavouriteImages from './favouriteImages';
 import FavouriteVideos from './favouriteVideos';
 import {useSelector, useDispatch} from 'react-redux';
 import {isEdit as actionEdit} from '../../Actions/Profile/profile.actions';
-import { DELETE_PROFILE_IMAGE_VIDEO_RESET } from '../../ActionConstant/profile.constant';
+import {DELETE_PROFILE_IMAGE_VIDEO_RESET} from '../../ActionConstant/profile.constant';
 
 const renderScene = SceneMap({
   profile: Profile,
@@ -70,14 +70,14 @@ function TabViewExample() {
               ]}
               onPress={() => {
                 setIndex(i);
-                dispatch({type:DELETE_PROFILE_IMAGE_VIDEO_RESET})
+                dispatch({type: DELETE_PROFILE_IMAGE_VIDEO_RESET});
               }}>
               <Animated.Text
                 style={index === i ? styles.activeTitle : styles.inActiveTitle}>
                 {route.title}
               </Animated.Text>
 
-              {appgender === 'female' &&
+              {/* {appgender === 'female' &&
                 !isEdit &&
                 index !== i &&
                 !isDone?.includes(route.key) && (
@@ -89,7 +89,7 @@ function TabViewExample() {
                       size={12}
                     />
                   </View>
-                )}
+                )} */}
             </TouchableOpacity>
           );
         })}
@@ -147,20 +147,24 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   tabBar: {
+    //backgroundColor:'red',
     flexDirection: 'row',
-    paddingTop: StatusBar.currentHeight,
+    // paddingTop: StatusBar.currentHeight,
   },
   tabItem: {
     flex: 1,
-    alignItems: 'center',
-    padding: 16,
+    // alignItems: '',
+    marginHorizontal: 16,
+    paddingVertical: 16,
   },
   activeTitle: {
     fontSize: 18,
     color: COLORS.VERIFIED_GREEN,
+    textAlign: 'center',
   },
   inActiveTitle: {
     fontSize: 18,
     color: COLORS.MID_GREY,
+    textAlign: 'center',
   },
 });

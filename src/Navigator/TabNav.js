@@ -25,7 +25,6 @@ import FilterIcon from '../Assets/Icons/filter.svg';
 import EyeIcon from '../Assets/Icons/eye.svg';
 import DummyPage from '../Containers/DummyPage';
 import LinearGradient from 'react-native-linear-gradient';
-import {createDrawerNavigator} from '@react-navigation/drawer';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
 import All from '../Containers/Discover/All';
@@ -51,10 +50,11 @@ import {MyText, Touchable} from '../Component/commomComponent';
 import {dynamicSize} from '../Utils/responsive';
 import {strings} from '../localization/config';
 import PersonalChat from '../Containers/Inbox/chats/giftedChat/Chat';
+import styles from './styles';
 
 const Tab = createBottomTabNavigator();
 const DiscoverTab = createMaterialTopTabNavigator();
-const Drawer = createDrawerNavigator();
+// const Drawer = createDrawerNavigator();
 
 function BottomTabBar(props) {
   const focusedOptions =
@@ -65,26 +65,7 @@ function BottomTabBar(props) {
   }
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        width: wp('90%'),
-        backgroundColor: 'white',
-        alignSelf: 'center',
-        borderRadius: wp('8%'),
-        position: 'absolute',
-        bottom: hp('3%'),
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        elevation: 4,
-        shadowColor: 'grey',
-        shadowOffset: {
-          height: 2,
-          width: 2,
-        },
-        shadowRadius: 3,
-        shadowOpacity: 0.5,
-      }}>
+    <View style={styles.tabNavContainer}>
       {props.state.routes.map((item, index) => {
         const {options} = props.descriptors[item.key];
         const label =
@@ -152,284 +133,285 @@ function BottomTabBar(props) {
     </View>
   );
 }
-function DiscoverTabBar(props) {
-  const [isVisible, setIsVisible] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState('India');
-  const [countries, setCountries] = useState([
-    {
-      name: 'Bangladesh',
-      selected: true,
-    },
-    {
-      name: 'England',
-      selected: false,
-    },
-    {
-      name: 'Australia',
-      selected: false,
-    },
-    {
-      name: 'USA',
-      selected: false,
-    },
-    {
-      name: 'India',
-      selected: false,
-    },
-    {
-      name: 'Pakistan',
-      selected: false,
-    },
-    {
-      name: 'Nepal',
-      selected: false,
-    },
-    {
-      name: 'Russia',
-      selected: false,
-    },
-  ]);
-  return (
-    <>
-      <LinearGradient
-        colors={['rgba(72, 101, 255, 1)', 'rgba(249, 70, 253, 1)']}
-        style={{
-          flexDirection: 'row',
-          width: wp('100%'),
-          backgroundColor: 'white',
-          alignSelf: 'center',
-          paddingTop: hp('8%'),
-          paddingBottom: hp('1.5%'),
-          alignItems: 'center',
-          elevation: 4,
-          flexDirection: 'row',
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            width: wp('80%'),
-            justifyContent: 'space-evenly',
-          }}>
-          {props.state.routes.map((item, index) => {
-            return (
-              <>
-                {item.name === 'All' ? (
-                  <TouchableOpacity
-                    style={{alignSelf: 'baseline'}}
-                    onPress={() => {
-                      // Navigate using the `navigation` prop that you received
-                      props.navigation.navigate(item.name);
-                    }}>
-                    <Text
-                      style={[
-                        {
-                          alignSelf: 'center',
-                          paddingVertical: 2,
-                          paddingHorizontal: 10,
-                          borderRadius: wp('5%'),
-                          fontSize: 14,
-                          fontFamily: 'Gilroy-Regular',
-                        },
-                        props.state.index === 0
-                          ? {backgroundColor: 'white', color: '#000'}
-                          : {color: '#fff'},
-                      ]}>
-                      ALL
-                    </Text>
-                  </TouchableOpacity>
-                ) : item.name === 'Nearby' ? (
-                  <TouchableOpacity
-                    style={{alignSelf: 'baseline'}}
-                    onPress={() => {
-                      // Navigate using the `navigation` prop that you received
-                      props.navigation.navigate(item.name);
-                    }}>
-                    <Text
-                      style={[
-                        {
-                          alignSelf: 'center',
-                          paddingVertical: 2,
-                          paddingHorizontal: 10,
-                          borderRadius: wp('5%'),
-                          fontSize: 14,
-                          fontFamily: 'Gilroy-Regular',
-                        },
-                        props.state.index === 1
-                          ? {backgroundColor: 'white', color: '#000'}
-                          : {color: '#fff'},
-                      ]}>
-                      Nearby
-                    </Text>
-                  </TouchableOpacity>
-                ) : item.name === 'Popular' ? (
-                  <TouchableOpacity
-                    style={{alignSelf: 'baseline'}}
-                    onPress={() => {
-                      // Navigate using the `navigation` prop that you received
-                      props.navigation.navigate(item.name);
-                    }}>
-                    <Text
-                      style={[
-                        {
-                          alignSelf: 'center',
-                          paddingVertical: 2,
-                          paddingHorizontal: 10,
-                          borderRadius: wp('5%'),
-                          fontSize: 14,
-                          fontFamily: 'Gilroy-Regular',
-                        },
-                        props.state.index === 2
-                          ? {backgroundColor: 'white', color: '#000'}
-                          : {color: '#fff'},
-                      ]}>
-                      Popular
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    style={{alignSelf: 'baseline'}}
-                    onPress={() => {
-                      // Navigate using the `navigation` prop that you received
-                      props.navigation.navigate(item.name);
-                    }}>
-                    <Text
-                      style={[
-                        {
-                          alignSelf: 'center',
-                          paddingVertical: 2,
-                          paddingHorizontal: 10,
-                          borderRadius: wp('5%'),
-                          fontSize: 14,
-                          fontFamily: 'Gilroy-Regular',
-                        },
-                        props.state.index === 3
-                          ? {backgroundColor: 'white', color: '#000'}
-                          : {color: '#fff'},
-                      ]}>
-                      PK
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </>
-            );
-          })}
-        </View>
-        <TouchableOpacity
-          style={{width: wp('10%')}}
-          onPress={() => {
-            // Navigate using the `navigation` prop that you received
-            //   props.navigation.navigate(item.name);
-            setIsVisible(!isVisible);
-          }}>
-          <FilterIcon width={wp('6%')} height={wp('6%')} fill="white" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{width: wp('10%')}}
-          onPress={() => {
-            // Navigate using the `navigation` prop that you received
-            //   props.navigation.navigate(item.name);
-            props.navigation.openDrawer();
-          }}>
-          <NotificationsIcon width={wp('6%')} height={wp('6%')} fill="white" />
-        </TouchableOpacity>
-      </LinearGradient>
-      <Modal
-        isVisible={isVisible}
-        style={{margin: 0, padding: 0, justifyContent: 'flex-end'}}>
-        <View
-          style={{
-            height: hp('45%'),
-            backgroundColor: 'white',
-            borderTopLeftRadius: hp('5%'),
-            borderTopRightRadius: hp('5%'),
-          }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: 'Gilroy-SemiBold',
-              marginTop: '5%',
-              marginLeft: 20,
-            }}>
-            Country/Region
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: 20,
-              flexWrap: 'wrap',
-              marginTop: 10,
-              height: '60%',
-            }}>
-            {countries.map((item, index) => {
-              return (
-                <View style={{width: '33.33%', marginTop: 10}}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setSelectedCountry(item.name);
-                    }}
-                    style={[
-                      {
-                        borderWidth: 1,
-                        width: '95%',
-                        alignSelf: 'center',
-                        paddingVertical: 5,
-                        paddingHorizontal: 5,
-                        borderRadius: 100,
-                      },
-                      selectedCountry === item.name
-                        ? {borderColor: 'rgba(243, 41, 101, 1)'}
-                        : {borderColor: 'rgba(196, 196, 196, 1)'},
-                    ]}>
-                    <Text
-                      style={[
-                        {
-                          fontFamily: 'Gilroy-Regular',
-                          fontSize: 15,
-                          textAlign: 'center',
-                        },
-                        selectedCountry === item.name
-                          ? {color: 'rgba(243, 41, 101, 1)'}
-                          : {color: 'rgba(196, 196, 196, 1)'},
-                      ]}>
-                      {item.name}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              setIsVisible(!isVisible);
-            }}>
-            <LinearGradient
-              colors={['rgba(251, 81, 96, 1)', 'rgba(237, 46, 76, 1)']}
-              style={{
-                width: '90%',
-                alignSelf: 'center',
-                paddingVertical: hp('1.5%'),
-                borderRadius: 100,
-              }}>
-              <Text
-                style={{
-                  fontFamily: 'Gilroy-Regular',
-                  fontSize: 15,
-                  alignSelf: 'center',
-                  color: '#fff',
-                }}>
-                OK
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-    </>
-  );
-}
+
+// function DiscoverTabBar(props) {
+//   const [isVisible, setIsVisible] = useState(false);
+//   const [selectedCountry, setSelectedCountry] = useState('India');
+//   const [countries, setCountries] = useState([
+//     {
+//       name: 'Bangladesh',
+//       selected: true,
+//     },
+//     {
+//       name: 'England',
+//       selected: false,
+//     },
+//     {
+//       name: 'Australia',
+//       selected: false,
+//     },
+//     {
+//       name: 'USA',
+//       selected: false,
+//     },
+//     {
+//       name: 'India',
+//       selected: false,
+//     },
+//     {
+//       name: 'Pakistan',
+//       selected: false,
+//     },
+//     {
+//       name: 'Nepal',
+//       selected: false,
+//     },
+//     {
+//       name: 'Russia',
+//       selected: false,
+//     },
+//   ]);
+//   return (
+//     <>
+//       <LinearGradient
+//         colors={['rgba(72, 101, 255, 1)', 'rgba(249, 70, 253, 1)']}
+//         style={{
+//           flexDirection: 'row',
+//           width: wp('100%'),
+//           backgroundColor: 'white',
+//           alignSelf: 'center',
+//           paddingTop: hp('8%'),
+//           paddingBottom: hp('1.5%'),
+//           alignItems: 'center',
+//           elevation: 4,
+//           flexDirection: 'row',
+//         }}>
+//         <View
+//           style={{
+//             flexDirection: 'row',
+//             width: wp('80%'),
+//             justifyContent: 'space-evenly',
+//           }}>
+//           {props.state.routes.map((item, index) => {
+//             return (
+//               <>
+//                 {item.name === 'All' ? (
+//                   <TouchableOpacity
+//                     style={{alignSelf: 'baseline'}}
+//                     onPress={() => {
+//                       // Navigate using the `navigation` prop that you received
+//                       props.navigation.navigate(item.name);
+//                     }}>
+//                     <Text
+//                       style={[
+//                         {
+//                           alignSelf: 'center',
+//                           paddingVertical: 2,
+//                           paddingHorizontal: 10,
+//                           borderRadius: wp('5%'),
+//                           fontSize: 14,
+//                           fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+//                         },
+//                         props.state.index === 0
+//                           ? {backgroundColor: 'white', color: '#000'}
+//                           : {color: '#fff'},
+//                       ]}>
+//                       ALL
+//                     </Text>
+//                   </TouchableOpacity>
+//                 ) : item.name === 'Nearby' ? (
+//                   <TouchableOpacity
+//                     style={{alignSelf: 'baseline'}}
+//                     onPress={() => {
+//                       // Navigate using the `navigation` prop that you received
+//                       props.navigation.navigate(item.name);
+//                     }}>
+//                     <Text
+//                       style={[
+//                         {
+//                           alignSelf: 'center',
+//                           paddingVertical: 2,
+//                           paddingHorizontal: 10,
+//                           borderRadius: wp('5%'),
+//                           fontSize: 14,
+//                           fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+//                         },
+//                         props.state.index === 1
+//                           ? {backgroundColor: 'white', color: '#000'}
+//                           : {color: '#fff'},
+//                       ]}>
+//                       Nearby
+//                     </Text>
+//                   </TouchableOpacity>
+//                 ) : item.name === 'Popular' ? (
+//                   <TouchableOpacity
+//                     style={{alignSelf: 'baseline'}}
+//                     onPress={() => {
+//                       // Navigate using the `navigation` prop that you received
+//                       props.navigation.navigate(item.name);
+//                     }}>
+//                     <Text
+//                       style={[
+//                         {
+//                           alignSelf: 'center',
+//                           paddingVertical: 2,
+//                           paddingHorizontal: 10,
+//                           borderRadius: wp('5%'),
+//                           fontSize: 14,
+//                           fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+//                         },
+//                         props.state.index === 2
+//                           ? {backgroundColor: 'white', color: '#000'}
+//                           : {color: '#fff'},
+//                       ]}>
+//                       Popular
+//                     </Text>
+//                   </TouchableOpacity>
+//                 ) : (
+//                   <TouchableOpacity
+//                     style={{alignSelf: 'baseline'}}
+//                     onPress={() => {
+//                       // Navigate using the `navigation` prop that you received
+//                       props.navigation.navigate(item.name);
+//                     }}>
+//                     <Text
+//                       style={[
+//                         {
+//                           alignSelf: 'center',
+//                           paddingVertical: 2,
+//                           paddingHorizontal: 10,
+//                           borderRadius: wp('5%'),
+//                           fontSize: 14,
+//                           fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+//                         },
+//                         props.state.index === 3
+//                           ? {backgroundColor: 'white', color: '#000'}
+//                           : {color: '#fff'},
+//                       ]}>
+//                       PK
+//                     </Text>
+//                   </TouchableOpacity>
+//                 )}
+//               </>
+//             );
+//           })}
+//         </View>
+//         <TouchableOpacity
+//           style={{width: wp('10%')}}
+//           onPress={() => {
+//             // Navigate using the `navigation` prop that you received
+//             //   props.navigation.navigate(item.name);
+//             setIsVisible(!isVisible);
+//           }}>
+//           <FilterIcon width={wp('6%')} height={wp('6%')} fill="white" />
+//         </TouchableOpacity>
+//         <TouchableOpacity
+//           style={{width: wp('10%')}}
+//           onPress={() => {
+//             // Navigate using the `navigation` prop that you received
+//             //   props.navigation.navigate(item.name);
+//             props.navigation.openDrawer();
+//           }}>
+//           <NotificationsIcon width={wp('6%')} height={wp('6%')} fill="white" />
+//         </TouchableOpacity>
+//       </LinearGradient>
+//       <Modal
+//         isVisible={isVisible}
+//         style={{margin: 0, padding: 0, justifyContent: 'flex-end'}}>
+//         <View
+//           style={{
+//             height: hp('45%'),
+//             backgroundColor: 'white',
+//             borderTopLeftRadius: hp('5%'),
+//             borderTopRightRadius: hp('5%'),
+//           }}>
+//           <Text
+//             style={{
+//               fontSize: 20,
+//               fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+//               marginTop: '5%',
+//               marginLeft: 20,
+//             }}>
+//             Country/Region
+//           </Text>
+//           <View
+//             style={{
+//               flexDirection: 'row',
+//               marginHorizontal: 20,
+//               flexWrap: 'wrap',
+//               marginTop: 10,
+//               height: '60%',
+//             }}>
+//             {countries.map((item, index) => {
+//               return (
+//                 <View style={{width: '33.33%', marginTop: 10}}>
+//                   <TouchableOpacity
+//                     onPress={() => {
+//                       setSelectedCountry(item.name);
+//                     }}
+//                     style={[
+//                       {
+//                         borderWidth: 1,
+//                         width: '95%',
+//                         alignSelf: 'center',
+//                         paddingVertical: 5,
+//                         paddingHorizontal: 5,
+//                         borderRadius: 100,
+//                       },
+//                       selectedCountry === item.name
+//                         ? {borderColor: 'rgba(243, 41, 101, 1)'}
+//                         : {borderColor: 'rgba(196, 196, 196, 1)'},
+//                     ]}>
+//                     <Text
+//                       style={[
+//                         {
+//                           fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+//                           fontSize: 15,
+//                           textAlign: 'center',
+//                         },
+//                         selectedCountry === item.name
+//                           ? {color: 'rgba(243, 41, 101, 1)'}
+//                           : {color: 'rgba(196, 196, 196, 1)'},
+//                       ]}>
+//                       {item.name}
+//                     </Text>
+//                   </TouchableOpacity>
+//                 </View>
+//               );
+//             })}
+//           </View>
+//           <TouchableOpacity
+//             onPress={() => {
+//               setIsVisible(!isVisible);
+//             }}>
+//             <LinearGradient
+//               colors={['rgba(251, 81, 96, 1)', 'rgba(237, 46, 76, 1)']}
+//               style={{
+//                 width: '90%',
+//                 alignSelf: 'center',
+//                 paddingVertical: hp('1.5%'),
+//                 borderRadius: 100,
+//               }}>
+//               <Text
+//                 style={{
+//                   fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+//                   fontSize: 15,
+//                   alignSelf: 'center',
+//                   color: '#fff',
+//                 }}>
+//                 OK
+//               </Text>
+//             </LinearGradient>
+//           </TouchableOpacity>
+//         </View>
+//       </Modal>
+//     </>
+//   );
+// }
 
 const LiveUserStack = () => {
   return (
-    <Stack.Navigator headerMode="screen">
+    <Stack.Navigator>
       <Stack.Screen
         name="LiveSection"
         component={LiveUserListing}
@@ -456,7 +438,7 @@ const LiveUserStack = () => {
 
 const DummyPageStack = () => {
   return (
-    <Stack.Navigator headerMode="screen" screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Online" component={DummyPage} />
     </Stack.Navigator>
   );
@@ -464,7 +446,7 @@ const DummyPageStack = () => {
 
 const HomeStack = () => {
   return (
-    <Stack.Navigator headerMode="screen" screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="DiscoverScreen" component={DiscoverScreen} />
       <Stack.Screen name="UserProfile" component={UserProfile} />
       <Stack.Screen name="PersonalChat" component={PersonalChat} />
@@ -508,7 +490,7 @@ const InboxStack = () => {
   };
 
   return (
-    <Stack.Navigator headerMode="screen">
+    <Stack.Navigator>
       <Stack.Screen
         name="Inbox"
         component={InboxNavigator}
@@ -532,7 +514,7 @@ const InboxStack = () => {
 
 const ProfileStack = () => {
   return (
-    <Stack.Navigator headerMode="screen" screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Profile" component={MyProfile} />
     </Stack.Navigator>
   );
@@ -574,7 +556,10 @@ export default TabNav = () => {
   return (
     <Tab.Navigator
       initialRouteName="LiveSection"
-      tabBar={props => <BottomTabBar {...props} />}>
+      tabBar={props => <BottomTabBar {...props} />}
+      screenOptions={{
+        headerShown: false,
+      }}>
       <Tab.Screen
         name={'LiveSection'}
         component={LiveUserStack}
@@ -631,7 +616,7 @@ const DrawerContent = () => {
       <Text
         style={{
           fontSize: 14,
-          fontFamily: 'Gilroy-Bold',
+          fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
           color: 'rgba(172, 172, 172, 1)',
           marginLeft: '5%',
           marginBottom: hp('3%'),
@@ -656,7 +641,11 @@ const DrawerContent = () => {
           ]}>
           <Text
             style={[
-              {textAlign: 'center', fontSize: 14, fontFamily: 'Gilroy-Bold'},
+              {
+                textAlign: 'center',
+                fontSize: 14,
+                fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
+              },
               tab === 0 ? {color: '#fff'} : {color: 'rgba(94, 94, 94, 1)'},
             ]}>
             Live
@@ -670,7 +659,11 @@ const DrawerContent = () => {
           ]}>
           <Text
             style={[
-              {textAlign: 'center', fontSize: 14, fontFamily: 'Gilroy-Bold'},
+              {
+                textAlign: 'center',
+                fontSize: 14,
+                fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
+              },
               tab === 1 ? {color: '#fff'} : {color: 'rgba(94, 94, 94, 1)'},
             ]}>
             Moments
@@ -684,7 +677,11 @@ const DrawerContent = () => {
           ]}>
           <Text
             style={[
-              {textAlign: 'center', fontSize: 14, fontFamily: 'Gilroy-Bold'},
+              {
+                textAlign: 'center',
+                fontSize: 14,
+                fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
+              },
               tab === 2 ? {color: '#fff'} : {color: 'rgba(94, 94, 94, 1)'},
             ]}>
             Online Friends
@@ -819,7 +816,7 @@ const DrawerContent = () => {
                 <Text
                   style={{
                     fontSize: 10,
-                    fontFamily: 'Gilroy-Medium',
+                    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                     color: 'rgba(243, 41, 101, 1)',
                     marginBottom: 5,
                   }}>
@@ -847,7 +844,7 @@ const DrawerContent = () => {
                       style={{
                         marginLeft: 2,
                         fontSize: 10,
-                        fontFamily: 'Gilroy-Bold',
+                        fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
                         color: '#fff',
                       }}>
                       {item.content.watching}
@@ -882,16 +879,16 @@ const DrawerContent = () => {
 //   );
 // };
 
-const DiscoverTabNav = () => {
-  return (
-    <DiscoverTab.Navigator tabBar={props => <DiscoverTabBar {...props} />}>
-      <Tab.Screen name={'All'} component={All} />
-      <Tab.Screen name={'Nearby'} component={DummyPage} />
-      <Tab.Screen name={'Popular'} component={DummyPage} />
-      <Tab.Screen name={'PK'} component={DummyPage} />
-    </DiscoverTab.Navigator>
-  );
-};
+// const DiscoverTabNav = () => {
+//   return (
+//     <DiscoverTab.Navigator tabBar={props => <DiscoverTabBar {...props} />}>
+//       <Tab.Screen name={'All'} component={All} />
+//       <Tab.Screen name={'Nearby'} component={DummyPage} />
+//       <Tab.Screen name={'Popular'} component={DummyPage} />
+//       <Tab.Screen name={'PK'} component={DummyPage} />
+//     </DiscoverTab.Navigator>
+//   );
+// };
 
 // export default DiscoverDrawer;
 

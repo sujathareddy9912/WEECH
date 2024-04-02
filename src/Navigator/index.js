@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useMemo, useState} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {Linking} from 'react-native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import SplashScreen from '../Containers/Splash';
-import welcomeScreen from '../Containers/WelcomeScreen';
+import WelcomeScreen from '../Containers/WelcomeScreen';
 import EditProfile from '../Containers/EditProfile';
 import InterestScreen from '../Containers/Interest';
 import SearchFriend from '../Containers/SearchFriend';
@@ -81,9 +83,15 @@ import StartFaceVerification from '../Containers/MyProfile/LiveStreamCenter/Star
 import VerificationStatus from '../Containers/MyProfile/LiveStreamCenter/VerificationStatus';
 import BankDetails from '../Containers/MyProfile/BankDetails/BankDetails';
 import TabViewExample from '../Containers/ProfileSetup/ProfileTab';
-import Profile from '../Containers/ProfileSetup/profile';
 import FavouriteImages from '../Containers/ProfileSetup/favouriteImages';
 import FavouriteVideos from '../Containers/ProfileSetup/favouriteVideos';
+import MyGiftHistory from '../Containers/Gift/MyGiftHistory';
+import SelectWeeChaGroup from '../Containers/SelectWeeChaGroup/SelectWeeChaGroup';
+import HostTermsAndConditions from '../Containers/MyProfile/Settings/HostTermsAndConditions/HostTermsAndConditions';
+import WeeChaGuideLine from '../Containers/MyProfile/Settings/WeeChaGuideLine/WeeChaGuideLine';
+
+import messaging from '@react-native-firebase/messaging';
+import Withdrawal from '../Containers/MyProfile/Withdrawal/Withdrawal';
 
 // const rtmAdaptor = new RtmAdapter();
 export const Stack = createStackNavigator();
@@ -100,6 +108,119 @@ function AppStack() {
   const [isLoading, setLoading] = useState(true);
   const [loginToken, setToken] = useState(null);
   const [profileStatus, setProfileStatus] = useState(null);
+
+  const NAVIGATION_IDS = ['MainTabNavigation', 'Login', 'moment'];
+
+  // LINKING
+
+  // const linking = {
+  //   prefixes: ['weecha://'],
+  //   config: {
+  //     screens: {
+  //       MainTabNavigation: 'MainTabNavigation',
+  //       AuthStack: {
+  //         screens: {
+  //           Login: 'Login',
+  //         },
+  //       },
+  //     },
+  //   },
+  // };
+
+  // const notificationNavigation = async result => {
+  //   const token = await getData(LOCAL_KEY.TOKEN);
+  //   const {data} = result;
+
+  //   if (data.type === 'moment' && token) {
+  //     Linking.openURL('weecha://MainTabNavigation');
+  //   } else {
+  //     Linking.openURL('weecha://Login');
+  //   }
+  // };
+
+  // messaging().onNotificationOpenedApp(remoteMessage => {
+  //   console.log(
+  //     'When the application is running, but in the background',
+  //     remoteMessage,
+  //   );
+  //   if (remoteMessage) {
+  //     notificationNavigation(remoteMessage);
+  //   }
+  // });
+
+  // messaging()
+  //   .getInitialNotification()
+  //   .then(remoteMessage => {
+  //     console.log(
+  //       'When the application is opened from a quit state',
+  //       remoteMessage,
+  //     );
+  //     if (remoteMessage) {
+  //       notificationNavigation(remoteMessage);
+  //     }
+  //   });
+
+  async function buildDeepLinkFromNotificationData(data) {
+    const token = await getData(LOCAL_KEY.TOKEN);
+
+    const navigationId = data;
+    if (!NAVIGATION_IDS.includes(navigationId)) {
+      console.warn('Unverified navigationId', navigationId);
+      return null;
+    }
+    if (data === 'moment' && token) {
+      return 'weecha://MainTabNavigation';
+    }
+    console.warn('Missing postId');
+    return 'weecha://Login';
+  }
+
+  const linking = {
+    prefixes: ['weecha://'],
+    config: {
+      screens: {
+        MainTabNavigation: 'MainTabNavigation',
+        AuthStack: {
+          screens: {
+            Login: 'Login',
+          },
+        },
+      },
+    },
+    async getInitialURL() {
+      const url = await Linking.getInitialURL();
+      if (typeof url === 'string') {
+        return url;
+      }
+      //getInitialNotification: When the application is opened from a quit state.
+      const message = await messaging().getInitialNotification();
+      const deeplinkURL = buildDeepLinkFromNotificationData(
+        message?.data?.type,
+      );
+      if (typeof deeplinkURL === 'string') {
+        return deeplinkURL;
+      }
+    },
+    subscribe(listener) {
+      const onReceiveURL = ({url}) => listener(url);
+
+      // Listen to incoming links from deep linking
+      const linkingSubscription = Linking.addEventListener('url', onReceiveURL);
+
+      //onNotificationOpenedApp: When the application is running, but in the background.
+      const unsubscribe = messaging().onNotificationOpenedApp(remoteMessage => {
+        const url = buildDeepLinkFromNotificationData(remoteMessage.data.type);
+        if (typeof url === 'string') {
+          listener(url);
+        }
+      });
+
+      return () => {
+        linkingSubscription.remove();
+        unsubscribe();
+      };
+    },
+  };
 
   useEffect(() => {
     const _fetchLoginToken = async () => {
@@ -136,7 +257,9 @@ function AppStack() {
   const initialRouteName = useMemo(() => {
     if (loginToken) {
       return profileStatus ? 'ProfileSetup' : 'MainTabNavigation';
-    } else return 'AuthStack';
+    } else {
+      return 'AuthStack';
+    }
   }, [loginToken]);
 
   const _onReady = () => {
@@ -152,6 +275,7 @@ function AppStack() {
 
   return (
     <NavigationContainer
+      linking={linking}
       ref={navigationRef}
       onReady={_onReady}
       onStateChange={_onStateChange}>
@@ -159,7 +283,6 @@ function AppStack() {
       {/* <InAppCallReceivingContext.Provider value={rtmAdaptor}> */}
       <Stack.Navigator
         // initialRouteName={initialRouteName}
-        headerMode={'screen'}
         initialRouteName="SplashScreen">
         <Stack.Screen
           name="SplashScreen"
@@ -207,8 +330,8 @@ function AppStack() {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="welcomeScreen"
-          component={welcomeScreen}
+          name="WelcomeScreen"
+          component={WelcomeScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
@@ -312,6 +435,11 @@ function AppStack() {
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name="Withdrawal"
+          component={Withdrawal}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="CustomerCare"
           component={CustomerCare}
           options={{headerShown: false}}
@@ -407,6 +535,11 @@ function AppStack() {
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name="SelectWeeChaGroup"
+          component={SelectWeeChaGroup}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="LinkMail"
           component={LinkMail}
           options={{headerShown: false}}
@@ -432,6 +565,16 @@ function AppStack() {
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name="WeeChaGuideLine"
+          component={WeeChaGuideLine}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="HostTermsAndConditions"
+          component={HostTermsAndConditions}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="SearchStream"
           component={SearchStream}
           options={{headerShown: false}}
@@ -449,6 +592,11 @@ function AppStack() {
         <Stack.Screen
           name="FavouriteVideos"
           component={FavouriteVideos}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="MyGiftHistory"
+          component={MyGiftHistory}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

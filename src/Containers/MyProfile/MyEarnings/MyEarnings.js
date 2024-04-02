@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
+  ActivityIndicator,
   ScrollView,
   StatusBar,
   Text,
@@ -29,7 +30,10 @@ import {
 import * as scale from 'd3-scale';
 import {FONT_FAMILY} from '../../../Utils/fontFamily';
 import {useDispatch, useSelector} from 'react-redux';
-import {getUserEarningListAction} from '../../../Redux/Action';
+import {
+  getUserEarningListAction,
+  getUserWalletEarningDetailsAction,
+} from '../../../Redux/Action';
 import {UserServices} from '../../../Services/Api/userServices';
 import {IMAGE_URL} from '../../../Services/Api/Common';
 import {dynamicSize} from '../../../Utils/responsive';
@@ -37,10 +41,12 @@ import {dynamicSize} from '../../../Utils/responsive';
 const MyEarning = ({navigation, route}) => {
   const dispatch = useDispatch();
   const [myEarning, setMyEarning] = useState([]);
+  const [myEarningGraph, setMyEarningGraph] = useState([]);
   const [label, setLabel] = useState([]);
   const [value, setValue] = useState([]);
   const [maxValue, setMaxValue] = useState(0);
   const [agencyDetail, setAgencyData] = useState();
+  const [loading, setLoading] = useState(false);
 
   const state = useSelector(state => {
     return state;
@@ -49,13 +55,20 @@ const MyEarning = ({navigation, route}) => {
   const {userLoginList} = state.authReducer;
 
   useEffect(() => {
+    setLoading(true);
     getUserEarning();
   }, []);
 
   const getUserEarning = () => {
     dispatch(
-      getUserEarningListAction(result => {
+      getUserWalletEarningDetailsAction(result => {
         setMyEarning(result?.data);
+      }),
+    );
+    dispatch(
+      getUserEarningListAction(result => {
+        setMyEarningGraph(result?.data?.weekGraph);
+        setLoading(false);
       }),
     );
   };
@@ -64,16 +77,16 @@ const MyEarning = ({navigation, route}) => {
     let max = 0;
     let tempLabel = [];
     let tempValue = [];
-    myEarning?.weekGraph &&
-      myEarning?.weekGraph.map(item => {
+    myEarningGraph &&
+      myEarningGraph.map(item => {
         item?.total > max && (max = item?.total);
         tempLabel.push(item?.day);
         tempValue.push(Number(item?.total));
       });
     setMaxValue(Number(max));
-    setLabel([...tempLabel].reverse());
-    setValue([...tempValue].reverse());
-  }, [myEarning]);
+    setLabel([...tempLabel]);
+    setValue([...tempValue]);
+  }, [myEarningGraph]);
 
   const getAgencyDetails = async () => {
     const data = await UserServices.getAgencyDetail(
@@ -115,6 +128,7 @@ const MyEarning = ({navigation, route}) => {
         </SvgText>
       );
     });
+
   const LabelsX = ({x, y, bandwidth, data}) =>
     data.map((value, index) => {
       return (
@@ -131,6 +145,7 @@ const MyEarning = ({navigation, route}) => {
         </SvgText>
       );
     });
+
   const leftHeaderComponent = (
     <TouchableOpacity
       style={styles.backContainer}
@@ -143,7 +158,7 @@ const MyEarning = ({navigation, route}) => {
           marginRight: wp(1),
         }}
       />
-      <Text>Back</Text>
+      <Text style={{color: COLORS.BLACK}}>Back</Text>
     </TouchableOpacity>
   );
 
@@ -242,7 +257,7 @@ const MyEarning = ({navigation, route}) => {
                 )}
               </View>
             </View>
-            
+
             {!!myEarning?.userEarningDollar && (
               <Text style={styles.cardTitle}>
                 =$ {myEarning?.userEarningDollar || 0.0}
@@ -253,33 +268,43 @@ const MyEarning = ({navigation, route}) => {
               <Coin width={wp(31)} height={hp(17)} style={styles.coin} />
             </View>
           </LinearGradient>
-          <LinearGradient style={styles.card} colors={['#1F79FF', '#0042A5']}>
-            <Text style={styles.cardTitle}>My Wallet</Text>
-            <Text style={styles.cardTitle}>$ {myEarning?.userWallet}</Text>
-            <View style={styles.dollorContainer}>
-              <Dollor width={wp(25)} height={hp(13)} style={styles.dollor} />
-            </View>
-          </LinearGradient>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Settlement');
+            }}>
+            <LinearGradient style={styles.card} colors={['#1F79FF', '#0042A5']}>
+              <Text style={styles.cardTitle}>My Wallet</Text>
+              <Text style={styles.cardTitle}>$ {myEarning?.userWallet}</Text>
+              <View style={styles.dollorContainer}>
+                <Dollor width={wp(25)} height={hp(13)} style={styles.dollor} />
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
         <View style={styles.weeklyContainer}>
           <Text style={styles.chartTitle}>Weekly Report</Text>
-          <BarChart
-            spacingInner={0.8}
-            spacingOuter={0.1}
-            gridMin={0}
-            gridMax={maxValue + (30 * maxValue) / 100}
-            style={styles.bar}
-            data={value}
-            animate={true}
-            animationDuration={1000}
-            xScale={scale.scaleTime}
-            svg={{fill: 'url(#gradient)'}}
-            contentInset={{top: 0, bottom: 25, left: 15, right: 15}}>
-            <Gradient />
-            <LabelsX />
-            <LabelsY />
-          </BarChart>
+          {loading ? (
+            <ActivityIndicator />
+          ) : (
+            <BarChart
+              spacingInner={0.8}
+              spacingOuter={0.1}
+              gridMin={0}
+              gridMax={maxValue + (30 * maxValue) / 100}
+              style={styles.bar}
+              data={value}
+              animate={true}
+              animationDuration={1000}
+              xScale={scale.scaleTime}
+              svg={{fill: 'url(#gradient)'}}
+              contentInset={{top: 0, bottom: 25, left: 15, right: 15}}>
+              <Gradient />
+              <LabelsX />
+              <LabelsY />
+            </BarChart>
+          )}
         </View>
+
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('EarningDetails');
@@ -323,24 +348,24 @@ const MyEarning = ({navigation, route}) => {
           </Text>
           <TableRow
             leftColm={'Total'}
-            rightColm={myEarning?.todayData && myEarning?.todayData[0]?.total}
+            rightColm={myEarning?.todayData && myEarning?.todayData?.total}
           />
           <TableRow
             leftColm={'Live Duration'}
             rightColm={`${
-              myEarning?.todayData && myEarning?.todayData[0]?.liveMinutes
+              myEarning?.todayData && myEarning?.todayData?.liveMinutes
             }/mins`}
           />
           <TableRow
             leftColm={'Call Duration'}
             rightColm={`${
-              myEarning?.todayData && myEarning?.todayData[0]?.liveMinutes
+              myEarning?.todayData && myEarning?.todayData?.liveMinutes
             }/mins`}
           />
           <TableRow
             leftColm={'Chat'}
             rightColm={`${
-              myEarning?.todayData && myEarning?.todayData[0]?.liveMinutes
+              myEarning?.todayData && myEarning?.todayData?.liveMinutes
             } Message`}
           />
         </View>

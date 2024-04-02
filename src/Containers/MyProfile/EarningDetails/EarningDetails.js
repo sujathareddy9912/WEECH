@@ -27,10 +27,25 @@ const EarningDetails = ({navigation}) => {
   const maxDate = moment(
     moment().subtract(0, 'Y').format('YYYY-MM-DD'),
   ).toDate();
+
+  // This function is to get current week start and end dates
+  var today = new Date();
+  var day = today.getDay(); // Get current day (0 - Sunday, 1 - Monday, ..., 6 - Saturday)
+  var diff = today.getDate() - day + (day == 0 ? -6 : 1); // Adjust to get Monday if today is Sunday
+  var startOfWeek = new Date(today.setDate(diff));
+  var endOfWeek = new Date(today.setDate(diff + 6));
+  // This function is to get current week start and end dates
+
+  // This function is to get one Month date
+  var oneMonth = new Date();
+  const oneMonthAgo = today.getMonth();
+  oneMonth.setMonth(oneMonthAgo - 1);
+  // This function is to get one Month date
+
   const dispatch = useDispatch();
   const [datePicker, setDatePicker] = useState(false);
   const [from, setFrom] = useState(false);
-  const [todate, setToDate] = useState(dobFormat(maxDate));
+  const [todate, setToDate] = useState(dobFormat(startOfWeek));
   const [fromdate, setFromDate] = useState(dobFormat(maxDate));
   const [choosenDate, setChoosenDate] = useState(moment().toDate());
   const [earningDetailList, setEarningDetailList] = useState([]);
@@ -70,7 +85,7 @@ const EarningDetails = ({navigation}) => {
           marginRight: wp(1),
         }}
       />
-      <Text>Back</Text>
+      <Text style={{color: COLORS.BLACK}}>Back</Text>
     </TouchableOpacity>
   );
 
@@ -160,14 +175,11 @@ const EarningDetails = ({navigation}) => {
               <AntDesign name={'down'} size={wp(5)} color={COLORS.NAVY_BLUE} />
             </TouchableOpacity>
           </View>
+
           {/* <TouchableOpacity style={[styles.row]}>
-                        <Text style={styles.itemTitle}>All</Text>
-                        <AntDesign
-                            name={'down'}
-                            size={wp(5)}
-                            color={COLORS.NAVY_BLUE}
-                        />
-                    </TouchableOpacity> */}
+            <Text style={styles.itemTitle}>All</Text>
+            <AntDesign name={'down'} size={wp(5)} color={COLORS.NAVY_BLUE} />
+          </TouchableOpacity> */}
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
@@ -178,7 +190,7 @@ const EarningDetails = ({navigation}) => {
       </View>
       {datePicker && (
         <DateTimePickerModal
-          // minimumDate={''}
+          minimumDate={oneMonth}
           maximumDate={maxDate}
           isVisible={datePicker}
           locale="en_GB"

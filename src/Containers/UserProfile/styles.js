@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     width: wp(60),
     fontWeight: '500',
     fontSize: FONT_SIZE.SEMI_BLACK,
+    color: COLORS.BLACK,
   },
   followButton: {
     alignItems: 'center',
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
   followText: {
     fontSize: FONT_SIZE.REGULAR,
     fontWeight: isAndroid ? 'bold' : '500',
-    fontFamily: FONT_FAMILY.ROBOTO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
   },
   subContainer: {
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: dynamicSize(10),
-    backgroundColor: COLORS.GALLERY_PLACEHOLDER_GREY,
+    backgroundColor: COLORS.TRANSPARENT,
   },
   image: {
     width: SCREEN_WIDTH / 3 - dynamicSize(15),
@@ -149,6 +150,7 @@ const styles = StyleSheet.create({
     top: dynamicSize(7),
     right: dynamicSize(7),
     zIndex: 10,
+    backgroundColor: COLORS.TRANSPARENT,
   },
   seperator: {
     height: dynamicSize(10),
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
     color: COLORS.BLACK,
     fontSize: getFontSize(12),
     paddingHorizontal: dynamicSize(15),
-    fontFamily: isAndroid ? 'SFProText-Medium' : FONT_FAMILY.SF_PRO_MEDIUM,
+    fontFamily: isAndroid ? 'SFProText-Medium' : FONT_FAMILY.POPPINS_REGULAR,
   },
 });
 

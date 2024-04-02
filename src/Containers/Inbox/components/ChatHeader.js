@@ -14,6 +14,7 @@ import WhiteCamIcon from '../../../Assets/Icons/WhiteCamIcon.svg';
 import BackArrowIcon from '../../../Assets/Icons/WhiteBackIcon.svg';
 import {MyText, Touchable} from '../../../Component/commomComponent';
 import WhitePhoneIcon from '../../../Assets/Icons/WhitePhoneIcon.svg';
+import { FONT_FAMILY } from '../../../Utils/fontFamily';
 
 const ChatHeader = ({
   handleMore,
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     marginLeft: wp(2),
     fontSize: 20,
     color: COLORS.WHITE,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
   },
 });
 

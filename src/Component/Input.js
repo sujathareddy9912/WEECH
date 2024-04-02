@@ -128,12 +128,12 @@ const styles = StyleSheet.create({
     marginLeft: SCREEN_HEIGHT * 0.01,
     paddingVertical: isIOS ? SCREEN_HEIGHT * 0.015 : SCREEN_HEIGHT * 0.01,
     color: COLORS.TEXT_INPUT,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: FONT_SIZE.SEMI,
   },
   errorMessage: {
     paddingVertical: dynamicSize(2),
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.RED_OFFSET,
     fontSize: FONT_SIZE.REGULAR,
   },
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     borderRightColor: COLORS.TEXT_INPUT,
   },
   phoneNumber: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: FONT_SIZE.SEMI,
     marginRight: dynamicSize(5),
   },
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: FONT_SIZE.REGULAR_MEDIUM,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
   },
   asterisk: {
     color: COLORS.LIGHT_MAGENTA,
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: SCREEN_HEIGHT * 0.01,
     color: COLORS.BLACK,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: FONT_SIZE.MEDIUM,
   },
 });

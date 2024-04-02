@@ -21,7 +21,7 @@ import {
   uploadProfileVideoError,
   deleteProfileImageVideoLoading,
   deleteProfileImageVideoSuccess,
-  deleteProfileImageVideoError
+  deleteProfileImageVideoError,
 } from '../../Actions/Profile/profile.actions';
 
 import {
@@ -31,7 +31,7 @@ import {
   UPDATE_PROFILE_IMAGE_REQUEST,
   GET_PROFILE_VIDEO_REQUEST,
   UPDATE_PROFILE_VIDEO_REQUEST,
-  DELETE_PROFILE_IMAGE_VIDEO_REQUEST
+  DELETE_PROFILE_IMAGE_VIDEO_REQUEST,
 } from '../../ActionConstant/profile.constant';
 
 /** * APIs */
@@ -91,7 +91,7 @@ const deleteFavouriteImageVideosApi = async data => {
   return request({
     url: `users/delete_files`,
     method: 'delete',
-    data
+    data,
   });
 };
 
@@ -107,7 +107,6 @@ function* getProfile() {
       yield put(getProfileError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         getProfileError({
@@ -129,7 +128,6 @@ function* updateProfile(data) {
       yield put(updateProfileError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         updateProfileError({
@@ -152,7 +150,6 @@ function* getFavouriteImages(data) {
       yield put(getProfileImageError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         getProfileImageError({
@@ -174,7 +171,6 @@ function* uploadFavouriteImages(data) {
       yield put(uploadProfileImageError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         uploadProfileImageError({
@@ -196,7 +192,6 @@ function* getFavouriteVideo(data) {
       yield put(getProfileVideoError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         getProfileVideoError({
@@ -210,7 +205,6 @@ function* getFavouriteVideo(data) {
 function* uploadFavouriteVidoes(data) {
   try {
     const {payload} = data;
-    console.log(payload);
     yield put(uploadProfileVideoLoading());
     const res = yield call(uploadFavouriteVideosApi, payload);
     if (res && res.data.code === 200) {
@@ -219,7 +213,6 @@ function* uploadFavouriteVidoes(data) {
       yield put(uploadProfileVideoError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         uploadProfileVideoError({
@@ -233,16 +226,14 @@ function* uploadFavouriteVidoes(data) {
 function* deleteFavouriteImageVidoes(data) {
   try {
     const {payload} = data;
-    // console.log(payload);
-   yield put(deleteProfileImageVideoLoading());
-   const res = yield call(deleteFavouriteImageVideosApi, payload);
+    yield put(deleteProfileImageVideoLoading());
+    const res = yield call(deleteFavouriteImageVideosApi, payload);
     if (res && res.data.code === 200) {
       yield put(deleteProfileImageVideoSuccess(res.data));
     } else {
       yield put(deleteProfileImageVideoError(res.data));
     }
   } catch (error) {
-    console.log('INSIDE Dashboard ACTION CALL AFTER ERROR', error);
     if (error.data) {
       yield put(
         deleteProfileImageVideoError({
@@ -258,7 +249,10 @@ export default function* ProfileSaga() {
   yield takeLatest(UPDATE_PROFILE_REQUEST, updateProfile);
   yield takeLatest(GET_PROFILE_IMAGE_REQUEST, getFavouriteImages);
   yield takeLatest(UPDATE_PROFILE_IMAGE_REQUEST, uploadFavouriteImages);
-  yield takeLatest(GET_PROFILE_VIDEO_REQUEST, getFavouriteVideo)
+  yield takeLatest(GET_PROFILE_VIDEO_REQUEST, getFavouriteVideo);
   yield takeLatest(UPDATE_PROFILE_VIDEO_REQUEST, uploadFavouriteVidoes);
-  yield takeLatest(DELETE_PROFILE_IMAGE_VIDEO_REQUEST, deleteFavouriteImageVidoes);
+  yield takeLatest(
+    DELETE_PROFILE_IMAGE_VIDEO_REQUEST,
+    deleteFavouriteImageVidoes,
+  );
 }

@@ -1,12 +1,20 @@
 import {StatusBar} from 'native-base';
 import ImageView from 'react-native-image-viewing';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import VideoPlayer from 'react-native-media-console';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {ScrollView, Text, View, Image} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  ScrollView,
+  Text,
+  View,
+  Image,
+  TouchableWithoutFeedback,
+  ActivityIndicator,
+  TouchableOpacity,
+  Alert,
+  ImageBackground,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import styles from './styles';
@@ -20,6 +28,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import GiftIcon from '../../Assets/Icons/profileGift.svg';
 import {HelperService} from '../../Services/Utils/HelperService';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Icon from '../../Component/Icons/Icon';
+import Video from 'react-native-video';
 
 import {
   incomingCallQuery,
@@ -44,6 +54,7 @@ import requestCameraAndAudioPermission, {
   CALLING_STATUS,
   requestAudioPermission,
   getCountryDetailWithKey,
+  formatNumber,
 } from '../../Utils/helper';
 
 import {
@@ -96,12 +107,13 @@ const UserProfile = props => {
   const [loading, setLoading] = useState(false);
   const [galeryData, setGalleryData] = useState([]);
   const [otherUserDetail, setOtherUserDetail] = useState();
-  const [startCallIndicator, setStartCallIndicator] = useState(false);
   const [userStats, setUserStats] = useState({});
   const [popUpVisible, setPopUpVisible] = useState(false);
   const [reportVisible, setReportVisible] = useState(false);
   const [visible, setIsVisible] = useState(false);
   const [showVideo, setShowVideo] = useState({});
+  const [opacity, setOpacity] = useState(1);
+  const [paused, setPaused] = useState(true);
 
   const refRBSheet = useRef();
 
@@ -151,7 +163,9 @@ const UserProfile = props => {
           userId: detail?._id,
         },
         result => {
-          setUserStats({...result});
+          const formattedValue = formatNumber(result?.gifts);
+          userStats['gifts'] = formattedValue;
+          setUserStats({...result, gifts: formattedValue});
         },
       ),
     );
@@ -207,6 +221,18 @@ const UserProfile = props => {
     );
   };
 
+  const onLoadStart = () => {
+    setOpacity(1);
+  };
+
+  const onLoad = () => {
+    setOpacity(0);
+  };
+
+  const onBuffer = ({isBuffering}) => {
+    setOpacity(isBuffering ? 1 : 0);
+  };
+
   const _selectTab = type => () => setActiveTab(type);
   const _renderCoverImage = () => {
     if (detail?.coverImage) {
@@ -250,27 +276,33 @@ const UserProfile = props => {
 
   const _renderGallery = ({item, index}) => {
     return (
-      <Touchable
-        onPress={() => {}}
+      <View
         style={[
           styles.galleryItem,
           {marginHorizontal: index % 3 == 1 ? dynamicSize(10) : 0},
         ]}>
-        {item.type == 'video' && (
-          <View style={styles.absoluteVideo}>
-            <SvgIcon.SmallVideoIcon />
-          </View>
-        )}
-        {!item?.file ? (
-          <SvgIcon.GalleryPlaceholder />
-        ) : (
+        {item.type.toLowerCase() === 'video'.toLowerCase() && (
           <Touchable
-            onPress={() =>
-              item?.file && !(item.type == 'video')
-                ? setIsVisible([{uri: `${IMAGE_URL}${item?.file}`}])
-                : item.type == 'video'
-                ? handleVideo(item)
-                : null
+            style={{backgroundColor: COLORS.RED, padding: 10}}
+            onPress={() => handleVideo(item)}>
+            <ImageBackground
+              source={{uri: IMAGE_URL + item?.thumbImage}}
+              imageStyle={styles.image}
+              style={styles.image}>
+              <View style={styles.absoluteVideo}>
+                <SvgIcon.SmallVideoIcon />
+              </View>
+            </ImageBackground>
+          </Touchable>
+        )}
+        {/* {!item?.file && <SvgIcon.GalleryPlaceholder />} */}
+        {item.type.toLowerCase() === 'image'.toLowerCase() && (
+          <Touchable
+            onPress={
+              () => setIsVisible([{uri: `${IMAGE_URL}${item?.file}`}])
+
+              // ? handleVideo(item)
+              // : null
             }>
             <Image
               source={{uri: IMAGE_URL + item?.file}}
@@ -278,7 +310,7 @@ const UserProfile = props => {
             />
           </Touchable>
         )}
-      </Touchable>
+      </View>
     );
   };
 
@@ -313,12 +345,11 @@ const UserProfile = props => {
         : await requestAudioPermission();
     if (permissionGranted && detail) {
       try {
-        const userBusyorNot = await checkNodePresentOrNot(detail._id);
-        if (userBusyorNot) {
-          HelperService.showToast('User is busy on another call.');
-          return;
-        }
-        setStartCallIndicator(true);
+        //  const userBusyorNot = await checkNodePresentOrNot(detail._id);
+        //   if (userBusyorNot) {
+        //     HelperService.showToast('User is busy on another call.');
+        //     return;
+        //   }
         const param = {
           callerId: userLoginList?.user?._id,
           receiverId: detail._id,
@@ -346,7 +377,6 @@ const UserProfile = props => {
               incomingCallQuery(detail._id).set(callingParams);
               props.navigation.navigate('VideoCall', callingParams);
             }
-            setStartCallIndicator(false);
           }),
         );
       } catch (error) {
@@ -383,6 +413,14 @@ const UserProfile = props => {
     return url?.match(/\.(jpeg|jpg|gif|png)$/) != null;
   }
 
+  function rechargePopup() {
+    Alert.alert('', 'Your account balance is low,Please Recharge.', [
+      {
+        text: 'OK',
+      },
+    ]);
+  }
+
   return (
     <>
       <SafeArea
@@ -408,7 +446,7 @@ const UserProfile = props => {
             <TouchableIcon
               customIcon={
                 <Ionicons
-                  name={'ios-chevron-back-outline'}
+                  name={'chevron-back'}
                   size={dynamicSize(30)}
                   color={COLORS.WHITE}
                 />
@@ -614,15 +652,33 @@ const UserProfile = props => {
               ]}>
               <TouchableIcon
                 customIcon={<SvgIcon.AudioCallBlue />}
-                onPress={() => callingFunctionality(CALLING_TYPE.AUDIO)}
+                onPress={() => {
+                  if (detail?.callCharge < userLoginList?.user?.myBalance) {
+                    callingFunctionality(CALLING_TYPE.AUDIO);
+                  } else {
+                    rechargePopup();
+                  }
+                }}
               />
               <TouchableIcon
-                onPress={() => callingFunctionality(CALLING_TYPE.VIDEO)}
+                onPress={() => {
+                  if (detail?.videoCharge < userLoginList?.user?.myBalance) {
+                    callingFunctionality(CALLING_TYPE.VIDEO);
+                  } else {
+                    rechargePopup();
+                  }
+                }}
                 style={styles.videoCallIcon}
                 customIcon={<SvgIcon.VideoCallPink />}
               />
               <TouchableIcon
-                onPress={_createRoom}
+                onPress={() => {
+                  if (detail?.messageCharge < userLoginList?.user?.myBalance) {
+                    _createRoom();
+                  } else {
+                    rechargePopup();
+                  }
+                }}
                 customIcon={<SvgIcon.TextMsgBlue />}
               />
             </View>
@@ -646,19 +702,88 @@ const UserProfile = props => {
       <RBSheet
         ref={refRBSheet}
         openDuration={250}
-        height={SCREEN_HEIGHT * 0.4}
+        height={SCREEN_HEIGHT}
         customStyles={sheetCustomStyles}>
-        <VideoPlayer
-          disableBack={true}
-          disableFullscreen={true}
-          source={{uri: showVideo}}
-        />
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <View
+            style={[
+              videoStyles.videoContainer,
+              {paddingBottom: useSafeAreaInsets().bottom},
+            ]}>
+            <TouchableOpacity
+              style={videoStyles.videoCloseBtn}
+              onPress={() => {
+                refRBSheet.current.close();
+              }}>
+              <Icon
+                origin="AntDesign"
+                name="close"
+                size={16}
+                color={COLORS.WHITE}
+              />
+            </TouchableOpacity>
+            <TouchableWithoutFeedback onPress={() => setPaused(!paused)}>
+              <Video
+                source={{uri: showVideo}}
+                style={videoStyles.video}
+                repeat={false}
+                // paused={paused}
+                onBuffer={onBuffer}
+                onLoadStart={onLoadStart}
+                onLoad={onLoad}
+                bufferConfig={{
+                  minBufferMs: 10000,
+                  maxBufferMs: 30000,
+                  bufferForPlaybackMs: 2500,
+                  bufferForPlaybackAfterRebufferMs: 5000,
+                }}
+              />
+            </TouchableWithoutFeedback>
+            <ActivityIndicator
+              animating
+              size="large"
+              color={COLORS.PINK}
+              style={[videoStyles.activityIndicator, {opacity: opacity}]}
+            />
+          </View>
+        </View>
       </RBSheet>
     </>
   );
 };
 
 export default UserProfile;
+
+const videoStyles = {
+  activityIndicator: {
+    position: 'absolute',
+    left: (SCREEN_WIDTH * 0.7) / 2,
+    top: (SCREEN_WIDTH * 0.65) / 2,
+  },
+  video: {
+    width: SCREEN_WIDTH * 0.8,
+    height: SCREEN_WIDTH * 0.55,
+    backgroundColor: COLORS.BLACK,
+    alignSelf: 'center',
+  },
+  videoContainer: {
+    width: SCREEN_WIDTH * 0.8,
+    height: SCREEN_WIDTH * 0.7,
+    alignSelf: 'center',
+    backgroundColor: COLORS.WHITE,
+  },
+  videoCloseBtn: {
+    height: 32,
+    width: 32,
+    borderRadius: 16,
+    backgroundColor: COLORS.BLACK,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    marginRight: 8,
+    marginVertical: 4,
+  },
+};
 
 const sheetCustomStyles = {
   wrapper: {

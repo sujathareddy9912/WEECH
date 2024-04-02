@@ -19,7 +19,7 @@ import {SingleDiamond} from '../../../Assets/Icons/diamond';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../../Utils/helper';
-import {Touchable} from '../../../Component/commomComponent';
+import {Button, Touchable} from '../../../Component/commomComponent';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {dobFormat} from '../../../Utils/momentHelper';
 import moment from 'moment';
@@ -65,7 +65,7 @@ const Settlement = ({navigation}) => {
           marginRight: wp(1),
         }}
       />
-      <Text>Back</Text>
+      <Text style={{color: COLORS.BLACK}}>Back</Text>
     </TouchableOpacity>
   );
 
@@ -99,6 +99,7 @@ const Settlement = ({navigation}) => {
       </View>
     );
   };
+
   const renderHeader = () => {
     return (
       <View style={styles.itemContainer}>
@@ -162,6 +163,15 @@ const Settlement = ({navigation}) => {
           ListHeaderComponent={renderHeader}
           ListHeaderComponentStyle={styles.seperator}
         />
+        <Button
+          buttonStyle={styles.withdrawButton}
+          isDark
+          label="Withdrawal"
+          width={'75%'}
+          onPress={() => {
+            navigation.navigate('Withdrawal');
+          }}
+        />
       </View>
       {instructionVisible && (
         <View
@@ -207,8 +217,8 @@ const Settlement = ({navigation}) => {
               2. Your wallet will receive your salary every Thursday. (It may
               delay due to holidays){'\n'}
               {'\n'}
-              3. The settlement amount must be $10 and it should be integer
-              multiple of $10. The remainder will be accumulated and cashed out
+              3. The settlement amount must be $5 and it should be integer
+              multiple of $5. The remainder will be accumulated and cashed out
               in following settlement cycle
             </Text>
           </View>

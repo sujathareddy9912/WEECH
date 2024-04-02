@@ -1,12 +1,5 @@
-import React, {
-  useState,
-  useReducer,
-  useEffect,
-  useRef,
-  useCallback,
-} from 'react';
+import React, {useState, useReducer, useEffect, useRef} from 'react';
 import TextInput from '../../Component/TextInput/TextInput';
-import GradientBackground from '../../Component/GardientBackground/GardientBackGround';
 import {
   StatusBar,
   ImageBackground,
@@ -27,8 +20,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {strings} from '../../localization/config';
 import {Button} from '../../Component/commomComponent';
 import ProfileImage from './profileImage';
-import FavouriteImages from './favouriteImages';
-import FavouriteVideos from './favouriteVideos';
 import {initialState, Actions, Reducer} from './profileState';
 import {isEmpty, validateUserName} from '../../Utils/validation';
 import {
@@ -37,7 +28,6 @@ import {
   UPDATE_PROFILE_RESET,
 } from '../../ActionConstant/profile.constant';
 import {reset} from '../../Navigator/navigationHelper';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import LodingIndicator from '../../Component/LoadingIndicator/LoadingIndicator';
 import {getData, storeData} from '../../Utils/helper';
 import {showMessage} from 'react-native-flash-message';
@@ -48,6 +38,7 @@ import {
   isEdit as actionEdit,
 } from '../../Actions/Profile/profile.actions';
 import cacheImage from '../../Utils/ImageCache';
+import moment from 'moment';
 
 const {height, width} = Dimensions.get('window');
 
@@ -80,8 +71,6 @@ function Profile(props) {
   const genderRef = useRef();
   const dobRef = useRef();
   const aboutRef = useRef();
-  // const userImagesRef = useRef();
-  // const userVideosRef = useRef();
 
   const [profilePic, setProfilePic] = useState(null);
   const [countryPicker, setCountryPicker] = useState(false);
@@ -112,17 +101,6 @@ function Profile(props) {
   useEffect(() => {
     (async () => {
       if (updateProfileSuccess) {
-        let profileStatus = await getData(LOCAL_KEY.PROFILE_SETUP_STATUS);
-        // profileStatus && isSkip
-        //   ? onPressBack()
-        //   : profileStatus && !isSkip
-        //   ? reset('MainTabNavigation')
-        //   : jumpToNext()
-        // isEdit
-        //   ? isSkip
-        //     ? onPressBack()
-        //     : jumpToNext()
-        //   : reset('MainTabNavigation');
         if (!isEdit) {
           isSkip ? reset('MainTabNavigation') : jumpToNext();
         } else {
@@ -145,12 +123,6 @@ function Profile(props) {
   useEffect(() => {
     (async () => {
       if (getProfileSuccess) {
-        const serverImage = await cacheImage(
-          `https://api.weecha.uk/v1/uploads/${getProfileSuccess.user.profile}`,
-        );
-        setProfilePic({
-          uri: serverImage.uri,
-        });
         dispatch({type: Actions.NAME, payload: getProfileSuccess.user.name});
         dispatch({
           type: Actions.GENDER,
@@ -166,6 +138,12 @@ function Profile(props) {
           payload: getProfileSuccess.user.country,
         });
         dispatch({type: Actions.ABOUT, payload: getProfileSuccess.user.bio});
+        const serverImage = await cacheImage(
+          `https://api.weecha.uk/v1/uploads/${getProfileSuccess.user.profile}`,
+        );
+        setProfilePic({
+          uri: serverImage.uri,
+        });
       }
     })();
   }, [getProfileSuccess]);
@@ -179,58 +157,18 @@ function Profile(props) {
   }, [profilePic]);
 
   useEffect(() => {
-    if (state.gender === 'female') {
+    if (state.gender === 'female' && !isEdit) {
       dispatch({
         type: Actions.ABOUTERROR,
         payload: isEmpty(state.about, strings('validation.aboutError')),
       });
-      // setUserImagesError(
-      //   favouriteInfoError(
-      //     3,
-      //     userImages,
-      //     strings('validation.imageUploadError'),
-      //   ),
-      // );
-      // setUserVideosError(
-      //   favouriteInfoError(
-      //     3,
-      //     userVideos,
-      //     strings('validation.videoUploadError'),
-      //   ),
-      // );
     } else {
       dispatch({
         type: Actions.ABOUTERROR,
         payload: null,
       });
-      // setUserImagesError(null);
-      // setUserVideosError(null);
     }
   }, [state.gender]);
-
-  // const imageValidation = imagesArray => {
-  //   if (state.gender === 'female') {
-  //     setUserImagesError(
-  //       favouriteInfoError(
-  //         3,
-  //         imagesArray,
-  //         strings('validation.imageUploadError'),
-  //       ),
-  //     );
-  //   }
-  // };
-
-  // const videoValidation = videoArray => {
-  //   if (state.gender === 'female') {
-  //     setUserVideosError(
-  //       favouriteInfoError(
-  //         3,
-  //         videoArray,
-  //         strings('validation.videoUploadError'),
-  //       ),
-  //     );
-  //   }
-  // };
 
   const handleOnChange = (field, value) => {
     switch (field) {
@@ -284,28 +222,6 @@ function Profile(props) {
     _closeCountryPicker();
   };
 
-  // const favouriteInfoError = (requiredLength, favouriteItem, errorMessage) => {
-  //   return favouriteItem && favouriteItem.length > requiredLength
-  //     ? null
-  //     : errorMessage;
-  // };
-
-  // const favouriteMedia = media => {
-  //   let item = [];
-  //   for (let mediaItem of media) {
-  //     if (mediaItem.base64) {
-  //       item.push(mediaItem.base64);
-  //     }
-  //   }
-
-  //   return item;
-  // };
-
-  // const onPressBack = () => {
-  //   appdispatch(actionEdit(false));
-  //   navigation.goBack();
-  // };
-
   const onClickSave = () => {
     let aError;
     const pError = isEmpty(profilePic, strings('validation.uploadProfilePic'));
@@ -318,16 +234,6 @@ function Profile(props) {
     const gError = isEmpty(state.gender, strings('validation.requiredGender'));
     if (state.gender === 'female') {
       aError = isEmpty(state.about, strings('validation.aboutError'));
-      // piError = favouriteInfoError(
-      //   3,
-      //   userImages,
-      //   strings('validation.imageUploadError'),
-      // );
-      // pvError = favouriteInfoError(
-      //   3,
-      //   userVideos,
-      //   strings('validation.videoUploadError'),
-      // );
     }
 
     if (
@@ -336,18 +242,12 @@ function Profile(props) {
       !gError.status ||
       !dError?.status ||
       (aError && !aError?.status)
-      // ||
-      // piError
-      // ||
-      // pvError
     ) {
       setProfilePicError(pError.error);
       dispatch({type: Actions.NAMEERROR, payload: nError});
       dispatch({type: Actions.GENDERERROR, payload: gError});
       dispatch({type: Actions.DOBERROR, payload: dError});
       dispatch({type: Actions.ABOUTERROR, payload: aError});
-      //setUserImagesError(piError);
-      // setUserVideosError(pvError);
 
       const scrollInPutRef = !pError.status
         ? profilePicRef
@@ -363,15 +263,12 @@ function Profile(props) {
       return;
     }
 
-    //let userfavoriteImages = favouriteMedia(userImages);
-
     const requestData = {
       name: state.name,
       gender: state.gender,
       DateOfBirth: state.dob,
       country: state.country,
       file: profilePic.base64,
-      //multifile: userfavoriteImages,
       bio: state.about,
     };
 
@@ -387,23 +284,8 @@ function Profile(props) {
   };
 
   return (
-    // <GradientBackground>
     <>
       <LodingIndicator visible={state.loading} />
-      {/* {isEdit && (
-        <TouchableOpacity
-          style={[styles.backBtn, {top: useSafeAreaInsets().top}]}
-          onPress={onPressBack}>
-          <Icon
-            origin="AntDesign"
-            name="arrowleft"
-            size={24}
-            color={COLORS.BLACK}
-          />
-        </TouchableOpacity>
-      )}
-
-      {isEdit && <Text style={styles.header}>PROFILE SETUP</Text>} */}
       <ScrollView ref={scrollRef}>
         <StatusBar barStyle="light-content" />
         {profilePic && profilePic.uri && isEdit && (
@@ -462,7 +344,8 @@ function Profile(props) {
           <View style={[styles.datePickerContainerStyle, styles.seperator]}>
             <DateTimePicker
               ref={dobRef}
-              disabled={isEdit}
+              //disabled={isEdit}
+              maximumDate={moment().subtract(18, 'years')}
               labelStyle={styles.label}
               isRequired={true}
               placeHolderStyle={styles.placeholder}
@@ -508,9 +391,6 @@ function Profile(props) {
               getCountry={_getCountry}
               closeCountryModal={_closeCountryPicker}
             />
-            {/* {state.genderError && !state.genderError?.status && (
-              <Text style={styles.error}>{state.genderError?.error}</Text>
-            )} */}
           </View>
 
           <View style={[styles.datePickerContainerStyle, styles.seperator]}>
@@ -530,26 +410,8 @@ function Profile(props) {
               <Text style={styles.error}>{state.aboutError?.error}</Text>
             )}
           </View>
-
-          {/* <FavouriteImages
-            ref={userImagesRef}
-            userImages={userImages}
-            setUserImages={setUserImages}
-            favouriteImagesError={userImagesError}
-            isRequired={state.gender === 'female'}
-            validation={imageValidation}
-          />
-          <FavouriteVideos
-            ref={userVideosRef}
-            userVideos={userVideos}
-            setUserVideos={setUserVideos}
-            favouriteVidoesError={userVidoesError}
-            //isRequired={state.gender === 'female'}
-            validation={videoValidation}
-          /> */}
         </View>
         <Button
-          // indicator={updoadingDetails}
           onPress={() => {
             setSkip(false);
             onClickSave();
@@ -573,7 +435,6 @@ function Profile(props) {
           />
         )}
       </ScrollView>
-      {/* </GradientBackground> */}
     </>
   );
 }
@@ -643,7 +504,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     alignSelf: 'center',
-    marginTop: height * 0.05,
+    marginBottom: height * 0.05,
   },
   error: {
     fontSize: 14,

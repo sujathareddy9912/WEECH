@@ -48,6 +48,7 @@ const StartFaceVerification = ({navigation}) => {
       file: `data:image/png;base64,${imageData[0]?.base64}`,
     };
 
+
     try {
       const data = await userApiClient.post('users/face_verification', detail, {
         headers: {
@@ -55,6 +56,8 @@ const StartFaceVerification = ({navigation}) => {
         },
       });
 
+      console.log(detail)
+      //console.log('Face verification ================',data.data);
       if (data.data.status) {
         navigation.navigate('VerificationStatus', {isVerified: true});
       } else {

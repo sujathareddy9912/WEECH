@@ -20,8 +20,9 @@ import ImagePicker from 'react-native-image-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {HelperService} from '../../Services/Utils/HelperService';
 import {prop} from 'ramda';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 
-const welcomeScreen = props => {
+const WelcomeScreen = props => {
   const [checked, setChecked] = useState('Male');
   const [avatar, setavatar] = useState('');
   const [name, setname] = useState('');
@@ -186,7 +187,7 @@ const welcomeScreen = props => {
                 onChangeText={text => {
                   setname(text);
                 }}
-                style={{width: wp('60%'), fontFamily: 'AvenirLTStd-Book'}}
+                style={{width: wp('60%'), fontFamily: FONT_FAMILY.POPPINS_REGULAR}}
                 placeholder={'Enter a name'}
                 placeholderTextColor={'#5B5B5B'}
               />
@@ -201,7 +202,7 @@ const welcomeScreen = props => {
                 onChangeText={text => {
                   sethomeCountry(text);
                 }}
-                style={{width: wp('60%'), fontFamily: 'AvenirLTStd-Book'}}
+                style={{width: wp('60%'), fontFamily: FONT_FAMILY.POPPINS_REGULAR}}
                 placeholder={'Enter a country'}
                 placeholderTextColor={'#5B5B5B'}
               />
@@ -216,7 +217,7 @@ const welcomeScreen = props => {
                 onChangeText={text => {
                   sethomeTown(text);
                 }}
-                style={{width: wp('60%'), fontFamily: 'AvenirLTStd-Book'}}
+                style={{width: wp('60%'), fontFamily: FONT_FAMILY.POPPINS_REGULAR}}
                 placeholder={'Enter a home town'}
                 placeholderTextColor={'#5B5B5B'}
               />
@@ -231,7 +232,7 @@ const welcomeScreen = props => {
                 onChangeText={text => {
                   setDOB(text);
                 }}
-                style={{width: wp('60%'), fontFamily: 'AvenirLTStd-Book'}}
+                style={{width: wp('60%'), fontFamily: FONT_FAMILY.POPPINS_REGULAR}}
                 placeholder={'Enter a DOB'}
                 placeholderTextColor={'#5B5B5B'}
               />
@@ -246,7 +247,7 @@ const welcomeScreen = props => {
                 onChangeText={text => {
                   setNickname(text);
                 }}
-                style={{width: wp('60%'), fontFamily: 'AvenirLTStd-Book'}}
+                style={{width: wp('60%'), fontFamily: FONT_FAMILY.POPPINS_REGULAR}}
                 placeholder={'Enter a nickname'}
                 placeholderTextColor={'#5B5B5B'}
               />
@@ -347,4 +348,4 @@ const welcomeScreen = props => {
     </View>
   );
 };
-export default welcomeScreen;
+export default WelcomeScreen;

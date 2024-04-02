@@ -9,6 +9,7 @@ import {
 import {useDispatch} from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import {WebView} from 'react-native-webview';
 
 import {
   widthPercentageToDP as wp,
@@ -19,6 +20,7 @@ import {COLORS} from '../../../../Utils/colors';
 import {getAboutWeecha} from '../../../../Redux/Action';
 import Header from '../../../../Component/header/Header';
 import {MyText} from '../../../../Component/commomComponent';
+import {FONT_FAMILY} from '../../../../Utils/fontFamily';
 
 const AboutWeecha = ({navigation}) => {
   const [userAgreement, setUserAgreement] = useState('');
@@ -66,9 +68,11 @@ const AboutWeecha = ({navigation}) => {
       />
       <View style={styles.mainContainer}>
         {!loading ? (
-          <ScrollView contentContainerStyle={styles.container}>
-            <MyText style={styles.text}>{userAgreement}</MyText>
-          </ScrollView>
+          <WebView
+            source={{uri: 'http://web.weecha.uk/about.html'}}
+            style={styles.webViewContent}
+            scalesPageToFit={false}
+          />
         ) : (
           <ActivityIndicator size={'small'} color={COLORS.BABY_PINK} />
         )}
@@ -84,6 +88,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.WHITE,
     justifyContent: 'center',
+  },
+  webViewContent: {
+    flex: 1,
+    padding: 10,
   },
   container: {
     paddingHorizontal: wp(8),
@@ -102,5 +110,8 @@ const styles = StyleSheet.create({
     color: COLORS.BLACK,
     fontWeight: '700',
   },
-  text: {},
+  text: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    lineHeight: 24,
+  },
 });

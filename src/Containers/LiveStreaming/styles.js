@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   nameContainer: {
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.SMALL,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontWeight: '400',
   },
   padding: {
@@ -121,18 +121,17 @@ const styles = StyleSheet.create({
 
   remote: {
     flex: 1,
-    // width: SCREEN_WIDTH,
-    // height: SCREEN_HEIGHT,
   },
 
   bottomMenuContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    // paddingVertical: dynamicSize(10),
-    paddingHorizontal: dynamicSize(20),
-    // backgroundCo]]]]lor: COLORS.MEHRUN_COLOR,
-    borderTopLeftRadius: dynamicSize(10),
-    borderTopRightRadius: dynamicSize(10),
+    justifyContent: 'space-evenly',
+    paddingBottom: dynamicSize(5),
+  },
+
+  hostIconSize: {
+    height: SCREEN_HEIGHT * 0.04,
+    width: SCREEN_HEIGHT * 0.04,
   },
 
   loadingText: {
@@ -171,10 +170,6 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    // height: SCREEN_HEIGHT / 5,
-    // justifyContent: 'flex-end',
-    // maxHeight: SCREEN_HEIGHT / 2,
-    // paddingVertical: dynamicSize(10),
     paddingHorizontal: dynamicSize(10),
   },
 
@@ -187,14 +182,14 @@ const styles = StyleSheet.create({
   },
 
   username: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.REGULAR,
     textTransform: 'capitalize',
   },
 
   msg: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.WHITE,
     fontSize: FONT_SIZE.REGULAR,
   },
@@ -255,6 +250,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.LIGHT_GREYISH,
     borderRadius: 100,
   },
+  hostRightOptionsContainer: {
+    marginBottom: dynamicSize(20),
+  },
 
   translucent: {
     padding: SCREEN_HEIGHT * 0.012,
@@ -264,7 +262,7 @@ const styles = StyleSheet.create({
   },
 
   pkText: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontWeight: '900',
     color: COLORS.YELLOW,
   },
@@ -297,7 +295,7 @@ const styles = StyleSheet.create({
   },
 
   userLevel: {
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontWeight: 'bold',
     fontStyle: 'italic',
     fontSize: FONT_SIZE.MEDIUM,
@@ -307,7 +305,7 @@ const styles = StyleSheet.create({
   joinedTheLiveText: {
     marginLeft: SCREEN_HEIGHT * 0.02,
     color: COLORS.WHITE,
-    fontFamily: FONT_FAMILY.SF_PRO_REGULAR,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     fontSize: FONT_SIZE.LARGE,
     width: wp(50),
   },
@@ -387,10 +385,8 @@ const styles = StyleSheet.create({
     borderColor: COLORS.MID_LIGHT_GREY,
   },
   options: {
-    marginVertical: hp(1.5),
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
-    opacity: 0.5,
-    fontSize: 16,
+    color: COLORS.BLACK,
   },
   liveimageContainer: {
     alignSelf: 'center',
@@ -399,6 +395,99 @@ const styles = StyleSheet.create({
     marginLeft: dynamicSize(20),
     borderRadius: dynamicSize(16),
     backgroundColor: COLORS.BABY_PINK,
+  },
+  closeBtn: {
+    zIndex: 100,
+    backgroundColor: '#000',
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  chatKeyboardScrollViewContainer: {
+    flex: 1,
+    marginTop: 150,
+  },
+  chatContainer: {
+    width: SCREEN_WIDTH,
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingTop: 10,
+  },
+  heartFlagContainer: {
+    bottom: hp(17),
+    left: wp(-22),
+    position: 'absolute',
+  },
+  muteModalView: {
+    flex: 1,
+    backgroundColor: COLORS.TRANSPARENT,
+    justifyContent: 'flex-end',
+  },
+  muteDetailsContainer: {
+    paddingVertical: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    backgroundColor: COLORS.WHITE,
+    paddingHorizontal: 16,
+    gap: 8,
+  },
+  muteSelfContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  muteInfoText: {
+    fontSize: 18,
+    color: COLORS.LIGHT_GREYISH,
+    textAlign: 'center',
+  },
+  muteTimerBtn: {
+    alignItems: 'center',
+    padding: 8,
+    backgroundColor: COLORS.DENIM_BLUE,
+    borderRadius: 8,
+  },
+  // Share Options
+  shareOptionsContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    marginTop: hp(1),
+  },
+  iconContainer: {
+    width: wp(15),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  muteModalView: {
+    flex: 1,
+    backgroundColor: COLORS.TRANSPARENT,
+    justifyContent: 'flex-end',
+  },
+  muteDetailsContainer: {
+    paddingVertical: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    backgroundColor: COLORS.WHITE,
+    paddingHorizontal: 16,
+    gap: 8,
+  },
+  muteSelfContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  muteInfoText: {
+    fontSize: 18,
+    color: COLORS.LIGHT_GREYISH,
+    textAlign: 'center',
+  },
+  muteTimerBtn: {
+    alignItems: 'center',
+    padding: 8,
+    backgroundColor: COLORS.DENIM_BLUE,
+    borderRadius: 8,
   },
 });
 

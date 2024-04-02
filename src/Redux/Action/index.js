@@ -156,6 +156,12 @@ export const sendGiftAction = (payload, callBack) => ({
   callBack,
 });
 
+export const hostSendGiftAction = (payload, callBack) => ({
+  type: TYPES.HOST_GIFT_INCOME_ACTION,
+  payload,
+  callBack,
+});
+
 export const refreshDataAction = payload => ({
   type: TYPES.REFRESH_DATA_ACTION,
   payload,
@@ -480,8 +486,9 @@ export const makeUserAdmin = (payload, callBack) => ({
   callBack,
 });
 
-export const userLiveMuteFlag = () => ({
+export const userLiveMuteFlag = payload => ({
   type: TYPES.LIVE_USER_MUTE_FLAG,
+  payload,
 });
 
 export const reportUserAction = (payload, callBack) => ({
@@ -502,6 +509,23 @@ export const getAnotherUserProfile = (payload, callBack) => ({
   callBack,
 });
 
+export const updateNotificationStatus = (payload, callBack) => ({
+  type: TYPES.UPDATE_NOTIFICATION_STATUS,
+  payload,
+  callBack,
+});
+
+export const deleteVisitor = (payload, callBack) => ({
+  type: TYPES.DELETE_VISITOR,
+  payload,
+  callBack,
+});
+
+export const clearVisitor = callBack => ({
+  type: TYPES.CLEAR_VISITOR,
+  callBack,
+});
+
 export const getUserVideoListAction = (payload, callBack) => ({
   type: TYPES.GET_VIDEO_LIST,
   payload,
@@ -510,6 +534,11 @@ export const getUserVideoListAction = (payload, callBack) => ({
 
 export const getUserEarningListAction = callBack => ({
   type: TYPES.GET_USER_EARNING,
+  callBack,
+});
+
+export const getUserWalletEarningDetailsAction = callBack => ({
+  type: TYPES.GET_USER_WALLET_EARNING_DETAILS,
   callBack,
 });
 
@@ -533,6 +562,24 @@ export const getUserEarningDetailAction = (payload, callBack) => ({
 
 export const getUserSettlementDetailAction = (payload, callBack) => ({
   type: TYPES.GET_USER_SETTLEMENT_DETAIL,
+  callBack,
+  payload,
+});
+
+export const getUserWithdrawalList = (payload, callBack) => ({
+  type: TYPES.GET_USER_WITHDRAWAL_LIST,
+  callBack,
+  payload,
+});
+
+export const addUserWithdrawalReq = (payload, callBack) => ({
+  type: TYPES.ADD_USER_WITHDRAWAL_REQ,
+  callBack,
+  payload,
+});
+
+export const deleteWithdrawalList = (payload, callBack) => ({
+  type: TYPES.DELETE_WITHDRAWAL_LIST,
   callBack,
   payload,
 });
@@ -656,6 +703,12 @@ export const shareLiveLinkFriends = (payload, callBack) => ({
   callBack,
 });
 
+export const shareLiveLinkGroups = (payload, callBack) => ({
+  type: TYPES.SHARE_LIVE_LINK_IN_GROUP_CHAT,
+  payload,
+  callBack,
+});
+
 export const getGroupDetails = (payload, callBack) => ({
   type: TYPES.GET_GRP_DETAILS,
   payload,
@@ -725,6 +778,18 @@ export const getCustomerMsgsAction = (payload, callBack) => ({
 
 export const getCustomerMsgSendAction = (payload, callBack) => ({
   type: TYPES.GET_CUSTOMER_MSG_SEND_ACTION,
+  payload,
+  callBack,
+});
+
+export const getReceivedGiftListAction = (payload, callBack) => ({
+  type: TYPES.GET_RECEIVED_GIFT_LIST_ACTION,
+  payload,
+  callBack,
+});
+
+export const getSendGiftListAction = (payload, callBack) => ({
+  type: TYPES.GET_SEND_GIFT_LIST_ACTION,
   payload,
   callBack,
 });

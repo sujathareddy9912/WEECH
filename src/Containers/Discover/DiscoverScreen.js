@@ -16,8 +16,17 @@ import React, {
   createRef,
   useCallback,
 } from 'react';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import RtcEngine, {ClientRole, ChannelProfile} from 'react-native-agora';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {
+  ClientRole,
+  ChannelProfile,
+  createAgoraRtcEngine,
+  ClientRoleType,
+  ChannelProfileType,
+} from 'react-native-agora';
 
 import Card from './Card';
 import styles from './styles';
@@ -40,7 +49,6 @@ import {SvgIcon} from '../../Component/icons';
 import {SCREEN_HEIGHT} from '../../Utils/helper';
 import {dynamicSize} from '../../Utils/responsive';
 import {countryCode} from '../../Utils/countryCode';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export const agoraEngine = createRef();
 
@@ -114,14 +122,14 @@ const DiscoverScreen = props => {
   };
 
   const _initEngine = async () => {
-    agoraEngine.current = await RtcEngine.create(rtmAgoraConfig.appId);
+    agoraEngine.current = createAgoraRtcEngine();
+    agoraEngine.current.initialize({
+      appId: rtmAgoraConfig.appId,
+      channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+    });
     await agoraEngine.current.enableVideo();
     await agoraEngine.current.startPreview();
-    await agoraEngine.current?.setChannelProfile(
-      ChannelProfile.LiveBroadcasting,
-    );
-    await agoraEngine.current?.setClientRole(ClientRole.Audience);
-    // setInitialised(true)
+    await agoraEngine.current?.setClientRole(ClientRoleType.ClientRoleAudience);
     dispatch(agoraInitialisedStatusAction(true));
   };
 
@@ -164,7 +172,7 @@ const DiscoverScreen = props => {
   return (
     <>
       <StatusBar backgroundColor={COLORS.BABY_PINK} />
-      <View style={{flex: 1, backgroundColor: COLORS.WHITE}}>
+      <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerContainer}>
             <View style={styles.left}></View>
@@ -180,7 +188,7 @@ const DiscoverScreen = props => {
             </Touchable>
           </View>
         </View>
-        <View style={{height: '87%'}}>
+        <View style={{height: hp(100)}}>
           <View
             style={[
               styles.swiperContainer,

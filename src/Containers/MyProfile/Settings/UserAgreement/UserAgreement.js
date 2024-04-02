@@ -9,6 +9,7 @@ import {
 import {useDispatch} from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import {WebView} from 'react-native-webview';
 
 import {
   widthPercentageToDP as wp,
@@ -19,6 +20,7 @@ import {COLORS} from '../../../../Utils/colors';
 import Header from '../../../../Component/header/Header';
 import {getUserAgreement} from '../../../../Redux/Action';
 import {MyText} from '../../../../Component/commomComponent';
+import {FONT_FAMILY} from '../../../../Utils/fontFamily';
 
 const UserAgreement = ({navigation}) => {
   const [userAgreement, setUserAgreement] = useState('');
@@ -55,6 +57,7 @@ const UserAgreement = ({navigation}) => {
   useEffect(() => {
     fetchUserAgreement();
   }, []);
+
   return (
     <>
       <StatusBar backgroundColor="transparent" translucent={true} />
@@ -66,9 +69,11 @@ const UserAgreement = ({navigation}) => {
       />
       <View style={styles.mainContainer}>
         {!loading ? (
-          <ScrollView contentContainerStyle={styles.container}>
-            <MyText style={styles.text}>{userAgreement}</MyText>
-          </ScrollView>
+          <WebView
+            source={{uri: 'http://web.weecha.uk/user_aggrement.html'}}
+            style={styles.webViewContent}
+            scalesPageToFit={false}
+          />
         ) : (
           <ActivityIndicator size={'small'} color={COLORS.BABY_PINK} />
         )}
@@ -84,6 +89,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.WHITE,
     justifyContent: 'center',
+    paddingBottom: wp(10),
+  },
+  webViewContent: {
+    flex: 1,
+    padding: 10,
   },
   container: {
     paddingHorizontal: wp(8),
@@ -102,5 +112,8 @@ const styles = StyleSheet.create({
     color: COLORS.BLACK,
     fontWeight: '700',
   },
-  text: {},
+  text: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    lineHeight: 24,
+  },
 });

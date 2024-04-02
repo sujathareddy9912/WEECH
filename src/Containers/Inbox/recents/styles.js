@@ -7,6 +7,7 @@ import {
 import {COLORS} from '../../../Utils/colors';
 import {SCREEN_WIDTH} from '../../../Utils/helper';
 import {dynamicSize} from '../../../Utils/responsive';
+import { FONT_FAMILY } from '../../../Utils/fontFamily';
 
 export const styles = StyleSheet.create({
   avatar: {
@@ -16,7 +17,7 @@ export const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 15,
-    fontFamily: 'Poppins-Medium',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
   },
   info: {
     width: wp(55),
@@ -24,7 +25,7 @@ export const styles = StyleSheet.create({
   },
   lastMsg: {
     fontSize: 13,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     color: COLORS.TEXT_GRAY,
     marginLeft: wp(1),
   },

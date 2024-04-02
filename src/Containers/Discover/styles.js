@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: wp('5.2%'),
-    fontFamily: 'Gilroy-Bold',
+    fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
     color: 'white',
   },
   right: {
@@ -44,6 +44,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     paddingHorizontal: wp(2),
+  },
+  container: {
+    height: SCREEN_HEIGHT,
+    paddingBottom: dynamicSize(170),
+    backgroundColor: COLORS.WHITE,
   },
   header: {
     zIndex: 10,
@@ -112,7 +117,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.BLACK_OFFSET,
   },
   name: {
-    fontFamily: FONT_FAMILY.GILROY_BOLD,
+    fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
     fontSize: FONT_SIZE.LARGE,
     color: 'white',
     alignSelf: 'baseline',
@@ -125,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   smallText: {
-    fontFamily: FONT_FAMILY.GILROY_BOLD,
+    fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
     fontSize: FONT_SIZE.REGULAR_MEDIUM,
     color: COLORS.WHITE,
     marginLeft: 5,
@@ -205,6 +210,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: COLORS.WHITE,
     fontFamily: FONT_FAMILY.POPPINS_SEMIBOLD,
+  },
+  remoteView: {
+    height: '100%',
+    width: '100%',
+    zIndex: 10,
   },
 });
 

@@ -4,23 +4,18 @@ import {UserServices} from '../Services/Api/userServices';
 import {storeData} from '../Utils/helper';
 import {LOCAL_KEY} from '../Utils/localStorage';
 
-export async function printToken() {
+export async function getFCMToken() {
   const fcmToken = await messaging().getToken();
+  console.log('fcm==========', fcmToken);
+  return fcmToken;
 }
 
 export async function checkPermission() {
-  let fcmToken;
   const enabled = await messaging().hasPermission();
-
-  if (enabled == 1) {
-    fcmToken = await messaging().getToken();
-    storeData(LOCAL_KEY.FCM_TOKEN, fcmToken);
-    const data = {
-      type: Platform.OS,
-      fcmToken: fcmToken,
-    };
-
-    UserServices.saveFcmTokenApi(data);
+  if (enabled) {
+    const token = await getFCMToken();
+    storeFCMToken(token);
+    sendFCMTokenToServer(token);
   } else {
     const authStatus = await messaging().requestPermission();
     const permissionEnabled =
@@ -28,22 +23,21 @@ export async function checkPermission() {
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (permissionEnabled) {
-      fcmToken = await messaging().getToken();
-      storeData(LOCAL_KEY.FCM_TOKEN, fcmToken);
-      const data = {
-        type: Platform.OS,
-        fcmToken: fcmToken,
-      };
-
-      UserServices.saveFcmTokenApi(data);
-    } else {
-      // Alert.alert('', strings('permission.notificationDecline'), [
-      //   {
-      //     text: 'Cancel',
-      //     onPress: () => console.log('Cancel Pressed'),
-      //   },
-      //   {text: 'Go To Setting', onPress: () => Linking.openSettings()},
-      // ]);
+      const token = await getFCMToken();
+      storeFCMToken(token);
+      sendFCMTokenToServer(token);
     }
   }
+}
+
+function storeFCMToken(token) {
+  storeData(LOCAL_KEY.FCM_TOKEN, token);
+}
+
+function sendFCMTokenToServer(token) {
+  const data = {
+    type: Platform.OS,
+    fcmToken: token,
+  };
+  UserServices.saveFcmTokenApi(data);
 }

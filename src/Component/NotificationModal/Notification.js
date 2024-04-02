@@ -24,11 +24,13 @@ import {
   getAnotherUserProfile,
   getHostExtraDetailAction,
   hostDetailAction,
+  updateNotificationStatus,
 } from '../../Redux/Action';
 import {STREAM_TYPE} from '../../Utils/agoraConfig';
 import {useNavigation} from '@react-navigation/native';
 import styles from './styles';
 import {Modal} from 'react-native-paper';
+import {FONT_FAMILY} from '../../Utils/fontFamily';
 
 export function NotificationModal(props) {
   const {isVisible, notificationPress} = props;
@@ -104,7 +106,7 @@ export function NotificationModal(props) {
         ...item,
       }),
     );
-    notificationPress();
+    // notificationPress();       // #76
     navigation.navigate('liveStreaming', {
       ...item,
       type: STREAM_TYPE.AUDIENCE,
@@ -115,11 +117,21 @@ export function NotificationModal(props) {
   };
 
   const profileRedirection = item => {
+    const params = {
+      id: item?._id,
+    };
+
     dispatch(
-      getAnotherUserProfile({userId: item?.fromUserData?._id}, data => {
-        if (data?.user) {
-          notificationPress();
-          navigation.navigate('UserProfile', data?.user);
+      updateNotificationStatus(params, data => {
+        if (data?.code === 200) {
+          dispatch(
+            getAnotherUserProfile({userId: item?.fromUserData?._id}, data => {
+              if (data?.user) {
+                // notificationPress();   // #76
+                navigation.navigate('UserProfile', data?.user);
+              }
+            }),
+          );
         }
       }),
     );
@@ -133,7 +145,7 @@ export function NotificationModal(props) {
         <Image
           resizeMode={'contain'}
           style={styles.coverPicLiveUser}
-          source={{uri: `${IMAGE_URL}${item.coverImage}`}}
+          source={{uri: `${IMAGE_URL}${item?.profile}`}}
         />
         <View style={{marginLeft: dynamicSize(8)}}>
           <View style={styles.liveTypeText}>
@@ -217,14 +229,22 @@ export function NotificationModal(props) {
       <View style={styles.mainContainer}>
         <TouchableOpacity activeOpacity={1} style={styles.headerContainer}>
           <View style={styles.headingStyle}>
-            <Text style={{color: '#979797', fontWeight: '600'}}>
+            <Text
+              style={{
+                color: COLORS.BLACK,
+                fontFamily: FONT_FAMILY.POPPINS_BOLD,
+              }}>
               Notification
             </Text>
           </View>
           <TouchableOpacity
             style={styles.notificationContainer}
             onPress={notificationPress}>
-              <Entypo name={'cross'} color={COLORS.DARK_RED} size={dynamicSize(18)} />
+            <Entypo
+              name={'cross'}
+              color={COLORS.DARK_RED}
+              size={dynamicSize(18)}
+            />
           </TouchableOpacity>
         </TouchableOpacity>
 

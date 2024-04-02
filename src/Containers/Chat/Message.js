@@ -7,6 +7,7 @@ import {
 import moment from 'moment';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { FONT_FAMILY } from '../../Utils/fontFamily';
 
 const Message = props => {
   const [thumbnailVideo, setThumbnailVideo] = useState('');
@@ -81,7 +82,7 @@ const Message = props => {
         {props.item.body.text.length > 0 && (
           <Text
             style={[
-              {fontFamily: 'Mulish-Regular', fontSize: 14},
+              {fontFamily: FONT_FAMILY.POPPINS_REGULAR, fontSize: 14},
               props.item.sentBy === props?.userId
                 ? {color: 'white'}
                 : {color: 'rgba(15, 24, 40, 1)'},
@@ -98,7 +99,7 @@ const Message = props => {
           ]}>
           <Text
             style={[
-              {fontFamily: 'Lato-Regular', fontSize: 10},
+              {fontFamily: FONT_FAMILY.POPPINS_REGULAR, fontSize: 10},
               props.item.sentBy === props?.userId
                 ? {color: 'white'}
                 : {color: 'rgba(173, 181, 189, 1)'},
@@ -118,7 +119,7 @@ const Message = props => {
               />
               <Text
                 style={{
-                  fontFamily: 'Lato-Regular',
+                  fontFamily: FONT_FAMILY.POPPINS_REGULAR,
                   fontSize: 10,
                   color: 'white',
                 }}>

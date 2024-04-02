@@ -85,7 +85,7 @@ const EarningDetails = ({navigation}) => {
           marginRight: wp(1),
         }}
       />
-      <Text>Back</Text>
+      <Text style={{color: COLORS.BLACK}}>Back</Text>
     </TouchableOpacity>
   );
 

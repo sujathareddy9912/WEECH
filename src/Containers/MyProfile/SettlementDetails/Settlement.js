@@ -19,7 +19,7 @@ import {SingleDiamond} from '../../../Assets/Icons/diamond';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../../Utils/helper';
-import {Touchable} from '../../../Component/commomComponent';
+import {Button, Touchable} from '../../../Component/commomComponent';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {dobFormat} from '../../../Utils/momentHelper';
 import moment from 'moment';
@@ -65,7 +65,7 @@ const Settlement = ({navigation}) => {
           marginRight: wp(1),
         }}
       />
-      <Text>Back</Text>
+      <Text style={{color: COLORS.BLACK}}>Back</Text>
     </TouchableOpacity>
   );
 
@@ -99,6 +99,7 @@ const Settlement = ({navigation}) => {
       </View>
     );
   };
+
   const renderHeader = () => {
     return (
       <View style={styles.itemContainer}>
@@ -161,6 +162,15 @@ const Settlement = ({navigation}) => {
           ItemSeparatorComponent={itemSeperator}
           ListHeaderComponent={renderHeader}
           ListHeaderComponentStyle={styles.seperator}
+        />
+        <Button
+          buttonStyle={styles.withdrawButton}
+          isDark
+          label="Withdrawal"
+          width={'75%'}
+          onPress={() => {
+            navigation.navigate('Withdrawal');
+          }}
         />
       </View>
       {instructionVisible && (

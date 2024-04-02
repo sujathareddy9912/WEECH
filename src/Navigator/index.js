@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useMemo, useState} from 'react';
 import {Linking} from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
@@ -107,7 +108,71 @@ function AppStack() {
   const [loginToken, setToken] = useState(null);
   const [profileStatus, setProfileStatus] = useState(null);
 
+  const NAVIGATION_IDS = ['MainTabNavigation', 'Login', 'moment'];
+
   // LINKING
+
+  // const linking = {
+  //   prefixes: ['weecha://'],
+  //   config: {
+  //     screens: {
+  //       MainTabNavigation: 'MainTabNavigation',
+  //       AuthStack: {
+  //         screens: {
+  //           Login: 'Login',
+  //         },
+  //       },
+  //     },
+  //   },
+  // };
+
+  // const notificationNavigation = async result => {
+  //   const token = await getData(LOCAL_KEY.TOKEN);
+  //   const {data} = result;
+
+  //   if (data.type === 'moment' && token) {
+  //     Linking.openURL('weecha://MainTabNavigation');
+  //   } else {
+  //     Linking.openURL('weecha://Login');
+  //   }
+  // };
+
+  // messaging().onNotificationOpenedApp(remoteMessage => {
+  //   console.log(
+  //     'When the application is running, but in the background',
+  //     remoteMessage,
+  //   );
+  //   if (remoteMessage) {
+  //     notificationNavigation(remoteMessage);
+  //   }
+  // });
+
+  // messaging()
+  //   .getInitialNotification()
+  //   .then(remoteMessage => {
+  //     console.log(
+  //       'When the application is opened from a quit state',
+  //       remoteMessage,
+  //     );
+  //     if (remoteMessage) {
+  //       notificationNavigation(remoteMessage);
+  //     }
+  //   });
+
+  async function buildDeepLinkFromNotificationData(data) {
+    const token = await getData(LOCAL_KEY.TOKEN);
+
+    const navigationId = data;
+    if (!NAVIGATION_IDS.includes(navigationId)) {
+      console.warn('Unverified navigationId', navigationId);
+      return null;
+    }
+    if (data === 'moment' && token) {
+      return 'weecha://MainTabNavigation';
+    }
+    console.warn('Missing postId');
+    return 'weecha://Login';
+  }
 
   const linking = {
     prefixes: ['weecha://'],
@@ -121,40 +186,40 @@ function AppStack() {
         },
       },
     },
-  };
-
-  const notificationNavigation = async result => {
-    const token = await getData(LOCAL_KEY.TOKEN);
-    const {data} = result;
-
-    if (data.type === 'moment' && token) {
-      Linking.openURL('weecha://MainTabNavigation');
-    } else {
-      Linking.openURL('weecha://Login');
-    }
-  };
-
-  messaging().onNotificationOpenedApp(remoteMessage => {
-    console.log(
-      'When the application is running, but in the background',
-      remoteMessage,
-    );
-    if (remoteMessage) {
-      notificationNavigation(remoteMessage);
-    }
-  });
-
-  messaging()
-    .getInitialNotification()
-    .then(remoteMessage => {
-      console.log(
-        'When the application is opened from a quit state',
-        remoteMessage,
-      );
-      if (remoteMessage) {
-        notificationNavigation(remoteMessage);
+    async getInitialURL() {
+      const url = await Linking.getInitialURL();
+      if (typeof url === 'string') {
+        return url;
       }
-    });
+      //getInitialNotification: When the application is opened from a quit state.
+      const message = await messaging().getInitialNotification();
+      const deeplinkURL = buildDeepLinkFromNotificationData(
+        message?.data?.type,
+      );
+      if (typeof deeplinkURL === 'string') {
+        return deeplinkURL;
+      }
+    },
+    subscribe(listener) {
+      const onReceiveURL = ({url}) => listener(url);
+
+      // Listen to incoming links from deep linking
+      const linkingSubscription = Linking.addEventListener('url', onReceiveURL);
+
+      //onNotificationOpenedApp: When the application is running, but in the background.
+      const unsubscribe = messaging().onNotificationOpenedApp(remoteMessage => {
+        const url = buildDeepLinkFromNotificationData(remoteMessage.data.type);
+        if (typeof url === 'string') {
+          listener(url);
+        }
+      });
+
+      return () => {
+        linkingSubscription.remove();
+        unsubscribe();
+      };
+    },
+  };
 
   useEffect(() => {
     const _fetchLoginToken = async () => {
@@ -191,7 +256,9 @@ function AppStack() {
   const initialRouteName = useMemo(() => {
     if (loginToken) {
       return profileStatus ? 'ProfileSetup' : 'MainTabNavigation';
-    } else return 'AuthStack';
+    } else {
+      return 'AuthStack';
+    }
   }, [loginToken]);
 
   const _onReady = () => {

@@ -43,13 +43,13 @@ export function* sentOtp(param) {
         icon: 'success',
       });
     } else {
-     // HelperService.showToast(resp?.message);
-     showMessage({
-      description: resp?.message,
-      message: 'Unable to Send OTP',
-      type: 'danger',
-      icon: 'info',
-    });
+      // HelperService.showToast(resp?.message);
+      showMessage({
+        description: resp?.message,
+        message: 'Unable to Send OTP',
+        type: 'danger',
+        icon: 'info',
+      });
       param.callBack(false);
     }
   } catch (error) {
@@ -77,6 +77,7 @@ export function* userLogin({payload, callBack}) {
       const data = {user: resp.user, tokens: resp.tokens};
       yield put(loginSuccessAction(data));
       callBack();
+      console.log('eeeeeeee', resp.user);
       if (resp.user.first_time) {
         reset('ProfileSetup', {isEdit: false});
       } else {
@@ -116,23 +117,23 @@ export function* userRegistration(param) {
       yield put(loginSuccessAction(data));
       param.callBack(true);
     } else {
-     // HelperService.showToast(resp?.message);
-     showMessage({
-      description: resp?.message,
+      // HelperService.showToast(resp?.message);
+      showMessage({
+        description: resp?.message,
+        message: 'Signup Error',
+        type: 'danger',
+        icon: 'info',
+      });
+      param.callBack(false);
+    }
+  } catch (error) {
+    // HelperService.showToast(error?.message);
+    showMessage({
+      description: error?.message,
       message: 'Signup Error',
       type: 'danger',
       icon: 'info',
     });
-      param.callBack(false);
-    }
-  } catch (error) {
-   // HelperService.showToast(error?.message);
-   showMessage({
-    description: error?.message,
-    message: 'Signup Error',
-    type: 'danger',
-    icon: 'info',
-  });
     param.callBack(false);
   }
 }
@@ -177,7 +178,7 @@ export function* updateUserProfile(param) {
     const resp = yield call(CommonService.updateUserProfile, payload);
 
     if (resp && resp.code == 200) {
-     // storeData(LOCAL_KEY.PROFILE_SETUP_STATUS, 'false');
+      // storeData(LOCAL_KEY.PROFILE_SETUP_STATUS, 'false');
       yield put(CommonActions.updateUserProfileSuccess(resp));
       callBack(resp);
     } else {

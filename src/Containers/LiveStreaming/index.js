@@ -508,36 +508,53 @@ const LiveStreaming = ({navigation, route}) => {
         data?.type === 'reconnect_live_stream' &&
         data?.detail?.id !== userLoginList?.user?._id
       ) {
-        agoraEngineRef.current?.leaveChannel();
+        //agoraEngineRef.current?.leaveChannel();
 
-        agoraEngineRef.current = createAgoraRtcEngine();
-        await agoraEngineRef.current?.setChannelProfile(
+        //   agoraEngineRef.current = createAgoraRtcEngine();
+        //   await agoraEngineRef.current?.setChannelProfile(
+        //     ChannelProfileType.ChannelProfileLiveBroadcasting,
+        //   );
+        //   await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(
+        //     VideoStreamType.VideoStreamHigh,
+        //   );
+        //   await agoraEngineRef.current.enableVideo();
+        //   await agoraEngineRef.current.startPreview();
+        //   await agoraEngineRef.current?.setClientRole(
+        //     isBroadcaster
+        //       ? ClientRoleType.ClientRoleBroadcaster
+        //       : ClientRoleType.ClientRoleAudience,
+        //   );
+
+        //   agoraEngineRef.current.addListener('onUserJoined', (uid, elapsed) => {
+        //     // If new user
+        //     if (peerIds.indexOf(uid) === -1) {
+        //       setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));
+        //     }
+        //   });
+        //   agoraEngineRef.current.addListener(
+        //     'onRemoteVideoStateChanged',
+        //     (uid, state) => {
+        //       if (uid === 1) setBroadcasterVideoState(state);
+        //     },
+        //   );
+        //   _startCall();
+
+        //  agoraEngineRef.current;
+        // agoraEngine.initialize({
+        //   appId: rtmAgoraConfig.appId,
+        //   channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+        // });
+
+        agoraEngineRef?.current.setClientRole(
+          ClientRoleType.ClientRoleAudience,
+        );
+
+        agoraEngineRef?.current.setChannelProfile(
           ChannelProfileType.ChannelProfileLiveBroadcasting,
         );
-        await agoraEngineRef.current?.setRemoteDefaultVideoStreamType(
-          VideoStreamType.VideoStreamHigh,
-        );
-        await agoraEngineRef.current.enableVideo();
-        await agoraEngineRef.current.startPreview();
-        await agoraEngineRef.current?.setClientRole(
-          isBroadcaster
-            ? ClientRoleType.ClientRoleBroadcaster
-            : ClientRoleType.ClientRoleAudience,
-        );
-
-        agoraEngineRef.current.addListener('onUserJoined', (uid, elapsed) => {
-          // If new user
-          if (peerIds.indexOf(uid) === -1) {
-            setState(prevState => ({...prevState, peerIds: [...peerIds, uid]}));
-          }
+        agoraEngineRef.current?.joinChannel(channelToken, channelName, 0, {
+          clientRoleType: ClientRoleType.ClientRoleAudience,
         });
-        agoraEngineRef.current.addListener(
-          'onRemoteVideoStateChanged',
-          (uid, state) => {
-            if (uid === 1) setBroadcasterVideoState(state);
-          },
-        );
-        _startCall();
       }
     });
 
@@ -658,20 +675,41 @@ const LiveStreaming = ({navigation, route}) => {
   };
 
   const reconnectAgro = async () => {
-    agoraEngineRef.current?.leaveChannel();
-    await agoraEngineRef.current?.removeAllListeners();
+    // agoraEngineRef.current?.leaveChannel();
+    // await agoraEngineRef.current?.removeAllListeners();
     //await agoraEngineRef.current?.release();
-    agoraEngineRef.current.initialize({
+    agoraEngineRef.current = createAgoraRtcEngine();
+    const agoraEngine = agoraEngineRef.current;
+
+    agoraEngine.registerEventHandler({
+      onJoinChannelSuccess: () => {
+        console.log('Successfully joined the channel ' + channelName);
+      },
+      onUserJoined: (_connection, Uid) => {
+        console.log('Remote user joined with uid ' + Uid);
+      },
+      onUserOffline: (_connection, Uid) => {
+        console.log('Remote user left the channel. uid: ' + Uid);
+      },
+      onRejoinChannelSuccess: (conne, uid) => {
+        console.log('Remote user left the channel conn. uid: ' + conne, uid);
+      },
+    });
+    agoraEngine.initialize({
       appId: rtmAgoraConfig.appId,
       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
     });
-    await agoraEngineRef.current.enableVideo();
-    await agoraEngineRef.current.startPreview();
-    await agoraEngineRef.current?.setClientRole(
-      isBroadcaster
-        ? ClientRoleType.ClientRoleBroadcaster
-        : ClientRoleType.ClientRoleAudience,
+    console.log(agoraEngine);
+    agoraEngine.enableVideo();
+    agoraEngine.startPreview();
+    agoraEngine.setClientRole(ClientRoleType.ClientRoleBroadcaster);
+
+    agoraEngine.setChannelProfile(
+      ChannelProfileType.ChannelProfileLiveBroadcasting,
     );
+    agoraEngineRef.current?.joinChannel(channelToken, channelName, 1, {
+      clientRoleType: ClientRoleType.ClientRoleBroadcaster,
+    });
 
     updateFirebase();
 
